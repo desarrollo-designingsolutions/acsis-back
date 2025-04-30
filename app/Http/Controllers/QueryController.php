@@ -6,6 +6,7 @@ use App\Http\Resources\Country\CountrySelectResource;
 use App\Repositories\CityRepository;
 use App\Repositories\CountryRepository;
 use App\Repositories\StateRepository;
+use App\Repositories\TypeEntityRepository;
 use App\Repositories\UserRepository;
 use App\Traits\HttpResponseTrait;
 use Illuminate\Http\Request;
@@ -16,6 +17,7 @@ class QueryController extends Controller
 
     public function __construct(
         protected CountryRepository $countryRepository,
+        protected TypeEntityRepository $typeEntityRepository,
         protected StateRepository $stateRepository,
         protected CityRepository $cityRepository,
         protected UserRepository $userRepository,
@@ -73,6 +75,18 @@ class QueryController extends Controller
                         'title' => $item->name,
                     ];
                 }),
+            ];
+        });
+    }
+
+    public function selectTypeEntity($request)
+    {
+        return $this->execute(function () use ($request) {
+            $typeEntities = $this->typeEntityRepository->find($request->all());
+
+            return [
+                'code' => 200,
+                'typeEntities' => $typeEntities,
             ];
         });
     }

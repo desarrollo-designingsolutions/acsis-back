@@ -17,5 +17,6 @@ class RoutesApi
         'routes/user.php',
         'routes/role.php',
         'routes/notification.php',
+        'routes/entity.php',
     ];
 }

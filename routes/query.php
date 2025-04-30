@@ -8,6 +8,7 @@ Route::post('/selectInfiniteCountries', [QueryController::class, 'selectInfinite
 Route::get('/selectStates/{country_id}', [QueryController::class, 'selectStates']);
 Route::get('/selectCities/{state_id}', [QueryController::class, 'selectCities']);
 Route::get('/selectCities/country/{country_id}', [QueryController::class, 'selectCitiesCountry']);
+Route::get('/selectTypeEntity', [QueryController::class, 'selectTypeEntity']);
 // Lista de Pais, Departamentos y Ciudades
 
 // Route::post('/selectInifiniteInsurance', [QueryController::class, 'selectInifiniteInsurance']);

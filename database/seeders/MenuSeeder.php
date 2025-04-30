@@ -54,6 +54,14 @@ class MenuSeeder extends Seeder
                 'father' => 3,
                 'requiredPermission' => 'menu.role',
             ],
+            [
+                'id' => 6,
+                'order' => 60,
+                'title' => 'Entidades',
+                'to' => 'Entity-List',
+                'icon' => 'tabler-align-box-bottom-center',
+                'requiredPermission' => 'menu.entity',
+            ],
         ];
 
         // Inicializar la barra de progreso

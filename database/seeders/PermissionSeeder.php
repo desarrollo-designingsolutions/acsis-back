@@ -47,6 +47,12 @@ class PermissionSeeder extends Seeder
                 'description' => 'Visualizar Menú Roles',
                 'menu_id' => 5,
             ],
+            [
+                'id' => 6,
+                'name' => 'menu.entity',
+                'description' => 'Visualizar Menú Entidades',
+                'menu_id' => 6,
+            ],
         ];
 
         // Inicializar la barra de progreso
