@@ -47,6 +47,12 @@ class PermissionSeeder extends Seeder
                 'description' => 'Visualizar Menú Roles',
                 'menu_id' => 5,
             ],
+            [
+                'id' => 6,
+                'name' => 'serviceVendor.list',
+                'description' => 'Visualizar Menú Prestadores',
+                'menu_id' => 6,
+            ],
         ];
 
         // Inicializar la barra de progreso

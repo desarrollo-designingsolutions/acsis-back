@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\Constants;
 use App\Http\Requests\Authentication\PassportAuthLoginRequest;
 use App\Http\Requests\Authentication\PassportAuthPasswordResetLinkRequest;
 use App\Http\Requests\Authentication\PassportAuthSendResetLinkRequest;
@@ -109,7 +110,7 @@ class PassportAuthController extends Controller
             $company = $user->company;
 
             $photo = null;
-            if ($user->company?->logo && Storage::disk('public')->exists($user->company->logo)) {
+            if ($user->company?->logo && Storage::disk(Constants::DISK_FILES)->exists($user->company->logo)) {
                 $photo = $user->company->logo;
             }
 

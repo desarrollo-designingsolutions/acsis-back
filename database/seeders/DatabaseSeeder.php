@@ -27,6 +27,7 @@ class DatabaseSeeder extends Seeder
             RoleSeeder::class,
             CompanySeeder::class,
             UserSeeder::class,
+            TypeVendorSeeder::class,
         ]);
 
         $client = new ClientRepository;

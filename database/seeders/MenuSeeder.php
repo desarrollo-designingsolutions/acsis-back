@@ -54,6 +54,14 @@ class MenuSeeder extends Seeder
                 'father' => 3,
                 'requiredPermission' => 'menu.role',
             ],
+            [
+                'id' => 6,
+                'order' => 60,
+                'title' => 'Prestadores',
+                'to' => 'ServiceVendor-List',
+                'icon' => 'tabler-building-hospital',
+                'requiredPermission' => 'serviceVendor.list',
+            ],
         ];
 
         // Inicializar la barra de progreso
