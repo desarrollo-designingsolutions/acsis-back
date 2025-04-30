@@ -6,6 +6,7 @@ use App\Helpers\Constants;
 use App\Models\ServiceVendor;
 use App\QueryBuilder\Filters\QueryFilters;
 use App\QueryBuilder\Sort\IsActiveSort;
+use App\QueryBuilder\Sort\RelatedTableSort;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\AllowedSort;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -22,45 +23,46 @@ class ServiceVendorRepository extends BaseRepository
         $cacheKey = $this->cacheService->generateKey("{$this->model->getTable()}_paginate", $request, 'string');
 
         // return $this->cacheService->remember($cacheKey, function () {
-            $query = QueryBuilder::for($this->model->query())
-                ->with(['type_vendor:id,name'])
-                ->select(['id', 'name', 'nit', 'address', 'phone', 'email', 'is_active', "type_vendor_id"])
-                ->allowedFilters([
-                    'is_active',
-                    'nit',
-                    AllowedFilter::callback('inputGeneral', function ($query, $value) {
-                        $query->where(function ($subQuery) use ($value) {
-                            $subQuery->orWhere('name', 'like', "%$value%");
-                            $subQuery->orWhere('nit', 'like', "%$value%");
-                            $subQuery->orWhere('email', 'like', "%$value%");
-                            $subQuery->orWhere('phone', 'like', "%$value%");
+        $query = QueryBuilder::for($this->model->query())
+            ->with(['type_vendor:id,name'])
+            ->select(['service_vendors.id', 'service_vendors.name', 'nit', 'address', 'phone', 'email', 'service_vendors.is_active', "type_vendor_id"])
+            ->allowedFilters([
+                'is_active',
+                'nit',
+                AllowedFilter::callback('inputGeneral', function ($query, $value) {
+                    $query->where(function ($subQuery) use ($value) {
+                        $subQuery->orWhere('service_vendors.name', 'like', "%$value%");
+                        $subQuery->orWhere('nit', 'like', "%$value%");
+                        $subQuery->orWhere('email', 'like', "%$value%");
+                        $subQuery->orWhere('phone', 'like', "%$value%");
 
-                            $subQuery->orWhereHas('type_vendor', function($subQuery2) use ($value) {
-                                $subQuery2->where('name', 'like', "%$value%");
-                            });
-
-                            QueryFilters::filterByText($subQuery, $value, 'is_active', [
-                                'activo' => 1,
-                                'inactivo' => 0,
-                            ]);
+                        $subQuery->orWhereHas('type_vendor', function ($subQuery2) use ($value) {
+                            $subQuery2->where('name', 'like', "%$value%");
                         });
-                    }),
-                ])
-                ->allowedSorts([
-                    'name',
-                    'nit',
-                    'email',
-                    'phone',
-                    AllowedSort::custom('is_active', new IsActiveSort),
-                ]);
 
-                if (empty($request['typeData'])) {
-                    $query = $query->paginate(request()->perPage ?? Constants::ITEMS_PER_PAGE);
-                } else {
-                    $query = $query->get();
-                }
+                        QueryFilters::filterByText($subQuery, $value, 'is_active', [
+                            'activo' => 1,
+                            'inactivo' => 0,
+                        ]);
+                    });
+                }),
+            ])
+            ->allowedSorts([
+                'name',
+                'nit',
+                'email',
+                'phone',
+                AllowedSort::custom('type_vendor_name', new RelatedTableSort('service_vendors', 'type_vendors', 'name', 'type_vendor_id')),
+                AllowedSort::custom('is_active', new IsActiveSort),
+            ]);
 
-            return $query;
+        if (empty($request['typeData'])) {
+            $query = $query->paginate(request()->perPage ?? Constants::ITEMS_PER_PAGE);
+        } else {
+            $query = $query->get();
+        }
+
+        return $query;
         // }, Constants::REDIS_TTL);
     }
 
