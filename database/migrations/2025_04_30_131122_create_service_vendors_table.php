@@ -11,10 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('type_entities', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->foreignUuid('company_id')->constrained();
+        Schema::create('service_vendors', function (Blueprint $table) {
+            $table->uuid("id")->primary();
+            $table->foreignUuid('company_id')->nullable()->constrained('companies');
             $table->string('name');
+            $table->string('nit');
+            $table->foreignUuid('type_vendor_id')->nullable()->constrained('type_vendors');
+            $table->string('address');
+            $table->string('phone');
+            $table->string('email');
             $table->boolean('is_active')->default(true);
             $table->timestamps();
             $table->softDeletes();
@@ -26,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('type_entities');
+        Schema::dropIfExists('service_vendors');
     }
 };

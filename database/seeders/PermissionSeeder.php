@@ -31,20 +31,20 @@ class PermissionSeeder extends Seeder
             ],
             [
                 'id' => 3,
-                'name' => 'menu.user.father',
-                'description' => 'Visualizar Menú Acceso de usuarios',
+                'name' => 'menu.user',
+                'description' => 'Visualizar Menú Usuarios',
                 'menu_id' => 3,
             ],
             [
                 'id' => 4,
-                'name' => 'menu.user',
-                'description' => 'Visualizar Menú Usuarios',
+                'name' => 'menu.role',
+                'description' => 'Visualizar Menú Roles',
                 'menu_id' => 4,
             ],
             [
                 'id' => 5,
-                'name' => 'menu.role',
-                'description' => 'Visualizar Menú Roles',
+                'name' => 'serviceVendor.list',
+                'description' => 'Visualizar Menú Prestadores',
                 'menu_id' => 5,
             ],
             [

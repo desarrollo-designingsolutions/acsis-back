@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\Country\CountrySelectResource;
+use App\Http\Resources\TypeVendor\TypeVendorSelectInfiniteResource;
 use App\Repositories\CityRepository;
 use App\Repositories\CountryRepository;
 use App\Repositories\StateRepository;
 use App\Repositories\TypeEntityRepository;
+use App\Repositories\TypeVendorRepository;
 use App\Repositories\UserRepository;
 use App\Traits\HttpResponseTrait;
 use Illuminate\Http\Request;
@@ -21,6 +23,7 @@ class QueryController extends Controller
         protected StateRepository $stateRepository,
         protected CityRepository $cityRepository,
         protected UserRepository $userRepository,
+        protected TypeVendorRepository $typeVendorRepository,
     ) {}
 
     public function selectInfiniteCountries(Request $request)

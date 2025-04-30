@@ -11,16 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('entities', function (Blueprint $table) {
+        Schema::create('files', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->foreignUuid('company_id')->constrained();
-            $table->string('corporate_name');
-            $table->string('nit')->nullable();
-            $table->string('address')->nullable();
-            $table->string('phone')->nullable();
-            $table->string('email')->nullable();
-            $table->foreignUuid('type_entity_id')->nullable()->constrained( 'type_entities');
-            $table->boolean('is_active')->default(true);
+            $table->foreignUuid('user_id')->constrained();
+            $table->uuidMorphs('fileable');
+            $table->text('pathname');
+            $table->text('filename');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -31,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('entities');
+        Schema::dropIfExists('files');
     }
 };

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\EntityExcelExport;
 use App\Http\Requests\Entity\EntityStoreRequest;
 use App\Http\Resources\Entity\EntityFormResource;
 use App\Http\Resources\Entity\EntityListResource;
@@ -13,6 +14,7 @@ use App\Services\CacheService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 class EntityController extends Controller
 {
@@ -139,6 +141,25 @@ class EntityController extends Controller
             return [
                 'code' => 200,
                 'message' => 'Entidad ' . $msg . ' con éxito',
+            ];
+        });
+    }
+
+    public function excelExport(Request $request)
+    {
+        return $this->execute(function () use ($request) {
+
+            $request['typeData'] = 'all';
+
+            $entities = $this->entityRepository->paginate($request->all());
+
+            $excel = Excel::raw(new EntityExcelExport($entities), \Maatwebsite\Excel\Excel::XLSX);
+
+            $excelBase64 = base64_encode($excel);
+
+            return [
+                'code' => 200,
+                'excel' => $excelBase64,
             ];
         });
     }

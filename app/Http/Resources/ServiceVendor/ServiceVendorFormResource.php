@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Resources\Entity;
+namespace App\Http\Resources\ServiceVendor;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class EntityListResource extends JsonResource
+class ServiceVendorFormResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -14,14 +14,14 @@ class EntityListResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-
         return [
             'id' => $this->id,
-            'corporate_name' => $this->corporate_name,
+            'name' => $this->name,
             'nit' => $this->nit,
+            'phone' => $this->phone,
+            'address' => $this->address,
             'email' => $this->email,
-            'type_entity_name' => $this->typeEntity?->name,
-            'is_active' => $this->is_active,
+            'type_vendor_id' => $this->type_vendor_id,
         ];
     }
 }

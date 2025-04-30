@@ -25,4 +25,6 @@ Route::middleware(['check.permission:menu.entity'])->group(function () {
     Route::delete('/entity/delete/{id}', [EntityController::class, 'delete']);
 
     Route::post('/entity/changeStatus', [EntityController::class, 'changeStatus']);
+
+    Route::get('/entity/excelExport', [EntityController::class, 'excelExport']);
 });

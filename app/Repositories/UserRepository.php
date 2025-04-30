@@ -4,8 +4,6 @@ namespace App\Repositories;
 
 use App\Helpers\Constants;
 use App\Models\User;
-use App\QueryBuilder\Filters\QueryFilters;
-use App\QueryBuilder\Sort\DynamicConcatSort;
 use App\QueryBuilder\Sort\IsActiveSort;
 use App\QueryBuilder\Sort\RelatedTableSort;
 use App\QueryBuilder\Sort\UserFullNameSort;

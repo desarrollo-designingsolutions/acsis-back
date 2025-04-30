@@ -33,26 +33,25 @@ class MenuSeeder extends Seeder
                 'id' => 3,
                 'order' => 30,
                 'title' => 'Usuarios',
-                'icon' => 'tabler-user-shield',
-                'requiredPermission' => 'menu.user.father',
+                'to' => 'User-List',
+                'icon' => 'tabler-user',
+                'requiredPermission' => 'menu.user',
             ],
             [
                 'id' => 4,
                 'order' => 40,
-                'title' => 'Usuarios',
-                'to' => 'User-List',
-                'icon' => '',
-                'father' => 3,
-                'requiredPermission' => 'menu.user',
+                'title' => 'Roles',
+                'to' => 'Role-List',
+                'icon' => 'tabler-shield',
+                'requiredPermission' => 'menu.role',
             ],
             [
                 'id' => 5,
                 'order' => 50,
-                'title' => 'Roles',
-                'to' => 'Role-List',
-                'icon' => '',
-                'father' => 3,
-                'requiredPermission' => 'menu.role',
+                'title' => 'Prestadores',
+                'to' => 'ServiceVendor-List',
+                'icon' => 'tabler-building-hospital',
+                'requiredPermission' => 'serviceVendor.list',
             ],
             [
                 'id' => 6,
@@ -77,9 +76,10 @@ class MenuSeeder extends Seeder
             $data->order = $value['order'];
             $data->title = $value['title'];
             $data->to = $value['to'] ?? null;
-            $data->icon = $value['icon'];
+            $data->icon = $value['icon'] ?? null;
             $data->father = $value['father'] ?? null;
-            $data->requiredPermission = $value['requiredPermission'];
+            $data->requiredPermission = $value['requiredPermission'] ?? null;
+            $data->heading = $value['heading'] ?? false;
             $data->save();
         }
 

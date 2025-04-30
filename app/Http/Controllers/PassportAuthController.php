@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\Constants;
 use App\Http\Requests\Authentication\PassportAuthLoginRequest;
 use App\Http\Requests\Authentication\PassportAuthPasswordResetLinkRequest;
 use App\Http\Requests\Authentication\PassportAuthSendResetLinkRequest;
@@ -109,7 +110,7 @@ class PassportAuthController extends Controller
             $company = $user->company;
 
             $photo = null;
-            if ($user->company?->logo && Storage::disk('public')->exists($user->company->logo)) {
+            if ($user->company?->logo && Storage::disk(Constants::DISK_FILES)->exists($user->company->logo)) {
                 $photo = $user->company->logo;
             }
 
@@ -130,6 +131,7 @@ class PassportAuthController extends Controller
                 ]);
 
                 foreach ($menu as $key => $value) {
+                    $arrayMenu[$key]['id'] = $value->id;
                     $arrayMenu[$key]['title'] = $value->title;
                     $arrayMenu[$key]['to']['name'] = $value->to;
                     $arrayMenu[$key]['icon']['icon'] = $value->icon ?? 'mdi-arrow-right-thin-circle-outline';
@@ -152,6 +154,33 @@ class PassportAuthController extends Controller
                     }
                 }
             }
+
+            // Reglas de headings a insertar antes de ciertos IDs
+            $headingsToInsert = [
+                'Principal' => [1],
+                'Gestión' => [5, 6],
+            ];
+
+            $inserted = [];
+            $resultMenu = []; // nuevo array resultante
+
+            foreach ($arrayMenu as $item) {
+                // Verifica si hay que insertar algún heading antes de este ítem
+                foreach ($headingsToInsert as $heading => $ids) {
+                    if (
+                        isset($item['id']) &&
+                        in_array($item['id'], $ids) &&
+                        !in_array($heading, $inserted)
+                    ) {
+                        $resultMenu[] = ['heading' => $heading, 'to' => ['name' => '']];
+                        $inserted[] = $heading;
+                    }
+                }
+
+                $resultMenu[] = $item; // luego insertamos el ítem real
+            }
+
+            $arrayMenu = $resultMenu; // actualizar el menú final
 
             $access_token = $user->createToken('authToken');
 
@@ -187,7 +216,7 @@ class PassportAuthController extends Controller
             // Generar el enlace de restablecimiento
             $token = Password::getRepository()->create($user);
 
-            $action_url = env('SYSTEM_URL_FRONT').'ResetPassword/'.$token.'?email='.urlencode($request->input('email'));
+            $action_url = env('SYSTEM_URL_FRONT') . 'ResetPassword/' . $token . '?email=' . urlencode($request->input('email'));
 
             // Enviar el correo usando el job de Brevo
             BrevoProcessSendEmail::dispatch(

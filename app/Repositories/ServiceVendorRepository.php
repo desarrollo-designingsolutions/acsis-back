@@ -3,16 +3,17 @@
 namespace App\Repositories;
 
 use App\Helpers\Constants;
-use App\Models\Entity;
+use App\Models\ServiceVendor;
+use App\QueryBuilder\Filters\QueryFilters;
 use App\QueryBuilder\Sort\IsActiveSort;
 use App\QueryBuilder\Sort\RelatedTableSort;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\AllowedSort;
 use Spatie\QueryBuilder\QueryBuilder;
 
-class EntityRepository extends BaseRepository
+class ServiceVendorRepository extends BaseRepository
 {
-    public function __construct(Entity $modelo)
+    public function __construct(ServiceVendor $modelo)
     {
         parent::__construct($modelo);
     }
@@ -21,37 +22,48 @@ class EntityRepository extends BaseRepository
     {
         $cacheKey = $this->cacheService->generateKey("{$this->model->getTable()}_paginate", $request, 'string');
 
-        return $this->cacheService->remember($cacheKey, function () use($request) {
-            $query = QueryBuilder::for($this->model->query())
-                ->allowedFilters([
-                    'is_active',
-                    AllowedFilter::callback('inputGeneral', function ($query, $value) {
-                        $query->where(function ($q) use ($value) {
-                            $q->orWhere('corporate_name', 'like', "%$value%");
-                            $q->orWhere('nit', 'like', "%$value%");
-                            $q->orWhere('email', 'like', "%$value%");
-                            $q->orWhereHas('typeEntity', function ($subQuery) use ($value) {
-                                $subQuery->where('type_entities.name', 'like', "%$value%");
-                            });
+        // return $this->cacheService->remember($cacheKey, function () {
+        $query = QueryBuilder::for($this->model->query())
+            ->with(['type_vendor:id,name'])
+            ->select(['service_vendors.id', 'service_vendors.name', 'nit', 'address', 'phone', 'email', 'service_vendors.is_active', "type_vendor_id"])
+            ->allowedFilters([
+                'is_active',
+                'nit',
+                AllowedFilter::callback('inputGeneral', function ($query, $value) {
+                    $query->where(function ($subQuery) use ($value) {
+                        $subQuery->orWhere('service_vendors.name', 'like', "%$value%");
+                        $subQuery->orWhere('nit', 'like', "%$value%");
+                        $subQuery->orWhere('email', 'like', "%$value%");
+                        $subQuery->orWhere('phone', 'like', "%$value%");
+
+                        $subQuery->orWhereHas('type_vendor', function ($subQuery2) use ($value) {
+                            $subQuery2->where('name', 'like', "%$value%");
                         });
-                    }),
-                ])
-                ->allowedSorts([
-                    'corporate_name',
-                    'nit',
-                    'email',
-                    AllowedSort::custom('type_entity_name', new RelatedTableSort('entities', 'type_entities', 'name', 'type_entity_id')),
-                    AllowedSort::custom('is_active', new IsActiveSort),
-                ]);
 
-                if (empty($request['typeData'])) {
-                    $query = $query->paginate(request()->perPage ?? Constants::ITEMS_PER_PAGE);
-                } else {
-                    $query = $query->get();
-                }
+                        QueryFilters::filterByText($subQuery, $value, 'is_active', [
+                            'activo' => 1,
+                            'inactivo' => 0,
+                        ]);
+                    });
+                }),
+            ])
+            ->allowedSorts([
+                'name',
+                'nit',
+                'email',
+                'phone',
+                AllowedSort::custom('type_vendor_name', new RelatedTableSort('service_vendors', 'type_vendors', 'name', 'type_vendor_id')),
+                AllowedSort::custom('is_active', new IsActiveSort),
+            ]);
 
-            return $query;
-        }, Constants::REDIS_TTL);
+        if (empty($request['typeData'])) {
+            $query = $query->paginate(request()->perPage ?? Constants::ITEMS_PER_PAGE);
+        } else {
+            $query = $query->get();
+        }
+
+        return $query;
+        // }, Constants::REDIS_TTL);
     }
 
     public function store(array $request, $id = null)
