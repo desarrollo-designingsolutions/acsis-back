@@ -221,12 +221,13 @@ class FileController extends Controller
                 return response()->json(['code' => 400, 'message' => 'No se encontraron archivos'], 400);
             }
 
+            $user_id = $request->input('user_id');
             $company_id = $request->input('company_id');
             $modelType = $request->input('fileable_type');
             $modelId = $request->input('fileable_id');
 
             // Validar parámetros requeridos
-            if (! $company_id || ! $modelType || ! $modelId) {
+            if (! $user_id || ! $company_id || ! $modelType || ! $modelId) {
                 return response()->json(['code' => 400, 'message' => 'Faltan parámetros requeridos'], 400);
             }
 
@@ -262,10 +263,10 @@ class FileController extends Controller
                 );
 
                 $data = [
+                    'user_id' => $user_id,
                     'company_id' => $company_id,
                     'fileable_type' => $modelClass,
                     'fileable_id' => $modelId,
-                    'support_type_id' => $request->input('support_type_id', null),
                     'channel' => 'filing_invoice.' . $modelId,
                 ];
 
@@ -300,6 +301,7 @@ class FileController extends Controller
     {
         // Caso genérico por defecto
         $basePath = "companies/company_{$company_id}/{$modelType}/{$modelInstance->id}/files/{$originalName}";
+        $finalName = $originalName;
 
         // Caso específico para FilingInvoice
         if ($modelType === 'FilingInvoice') {

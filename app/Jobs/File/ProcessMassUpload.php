@@ -61,16 +61,18 @@ class ProcessMassUpload implements ShouldQueue
         }
 
         $fileRepository->store([
+            'user_id' => $this->data['user_id'],
             'company_id' => $this->data['company_id'],
             'fileable_type' => $this->data['fileable_type'],
             'fileable_id' => $this->data['fileable_id'],
-            'support_type_id' => $this->data['support_type_id'],
             'pathname' => $this->finalPath,
             'filename' => $this->fileName,
         ]);
 
         // Calcular progreso global basado en archivos procesados
         $progress = ($this->fileNumber / $this->totalFiles) * 100;
+
+        logMessage("Progreso de carga: {$progress}% para el archivo {$this->fileName}");
 
         FileUploadProgress::dispatch(
             $this->uploadId,
