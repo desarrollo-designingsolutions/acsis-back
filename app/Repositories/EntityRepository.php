@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Helpers\Constants;
 use App\Models\Entity;
+use App\QueryBuilder\Filters\QueryFilters;
 use App\QueryBuilder\Sort\IsActiveSort;
 use App\QueryBuilder\Sort\RelatedTableSort;
 use Spatie\QueryBuilder\AllowedFilter;
@@ -23,16 +24,24 @@ class EntityRepository extends BaseRepository
 
         return $this->cacheService->remember($cacheKey, function () use($request) {
             $query = QueryBuilder::for($this->model->query())
+            ->with(['typeEntity:id,name'])
+            ->select(['entities.id', 'entities.corporate_name', 'nit', 'address', 'phone', 'email', 'entities.is_active', "type_entity_id"])
                 ->allowedFilters([
                     'is_active',
                     AllowedFilter::callback('inputGeneral', function ($query, $value) {
-                        $query->where(function ($q) use ($value) {
-                            $q->orWhere('corporate_name', 'like', "%$value%");
-                            $q->orWhere('nit', 'like', "%$value%");
-                            $q->orWhere('email', 'like', "%$value%");
-                            $q->orWhereHas('typeEntity', function ($subQuery) use ($value) {
-                                $subQuery->where('type_entities.name', 'like', "%$value%");
+                        $query->where(function ($subQuery) use ($value) {
+                            $subQuery->orWhere('corporate_name', 'like', "%$value%");
+                            $subQuery->orWhere('nit', 'like', "%$value%");
+                            $subQuery->orWhere('email', 'like', "%$value%");
+
+                            $subQuery->orWhereHas('typeEntity', function ($subQuery2) use ($value) {
+                                $subQuery2->where('name', 'like', "%$value%");
                             });
+
+                            QueryFilters::filterByText($subQuery, $value, 'is_active', [
+                                'activo' => 1,
+                                'inactivo' => 0,
+                            ]);
                         });
                     }),
                 ])
