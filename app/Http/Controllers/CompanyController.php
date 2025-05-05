@@ -58,7 +58,7 @@ class CompanyController extends Controller
 
             if ($request->file('logo')) {
                 $file = $request->file('logo');
-                $ruta = 'companies/company_'.$company->id.$request->input('logo');
+                $ruta = 'companies/company_' . $company->id . $request->input('logo');
 
                 $logo = $file->store($ruta, Constants::DISK_FILES);
                 $company->logo = $logo;
@@ -94,7 +94,7 @@ class CompanyController extends Controller
 
             if ($request->file('logo')) {
                 $file = $request->file('logo');
-                $ruta = 'companies/company_'.$company->id.$request->input('logo');
+                $ruta = 'companies/company_' . $company->id . $request->input('logo');
                 $logo = $file->store($ruta, Constants::DISK_FILES);
                 $company->logo = $logo;
                 $company->save();
@@ -124,7 +124,6 @@ class CompanyController extends Controller
             } else {
                 $msg = 'El registro no existe';
             }
-            DB::commit();
 
             return [
                 'code' => 200,
@@ -140,11 +139,9 @@ class CompanyController extends Controller
 
             ($model->is_active == 1) ? $msg = 'habilitada' : $msg = 'inhabilitada';
 
-            DB::commit();
-
             return [
                 'code' => 200,
-                'message' => 'Compañia '.$msg.' con éxito',
+                'message' => 'Compañia ' . $msg . ' con éxito',
             ];
         });
     }

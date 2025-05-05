@@ -121,14 +121,13 @@ class InvoiceController extends Controller
                 //     ]));
                 // }
 
-            $this->cacheService->clearByPrefix($this->key_redis_project . 'string:invoices*');
+                $this->cacheService->clearByPrefix($this->key_redis_project . 'string:invoices*');
 
                 $invoice->delete();
                 $msg = 'Registro eliminado correctamente';
             } else {
                 $msg = 'El registro no existe';
             }
-            DB::commit();
 
             return [
                 'code' => 200,
@@ -143,8 +142,6 @@ class InvoiceController extends Controller
             $model = $this->invoiceRepository->changeState($request->input('id'), strval($request->input('value')), $request->input('field'));
 
             ($model->is_active == 1) ? $msg = 'habilitada' : $msg = 'inhabilitada';
-
-            DB::commit();
 
             return [
                 'code' => 200,
