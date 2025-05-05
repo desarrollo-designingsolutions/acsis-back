@@ -3,9 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\Country\CountrySelectResource;
+use App\Http\Resources\Entity\EntitySelectResource;
+use App\Http\Resources\ServiceVendor\ServiceVendorSelectResource;
 use App\Http\Resources\TypeVendor\TypeVendorSelectInfiniteResource;
 use App\Repositories\CityRepository;
 use App\Repositories\CountryRepository;
+use App\Repositories\EntityRepository;
+use App\Repositories\ServiceVendorRepository;
 use App\Repositories\StateRepository;
 use App\Repositories\TypeEntityRepository;
 use App\Repositories\TypeVendorRepository;
@@ -24,6 +28,8 @@ class QueryController extends Controller
         protected CityRepository $cityRepository,
         protected UserRepository $userRepository,
         protected TypeVendorRepository $typeVendorRepository,
+        protected EntityRepository $entityRepository,
+        protected ServiceVendorRepository $serviceVendorRepository,
     ) {}
 
     public function selectInfiniteCountries(Request $request)
@@ -90,6 +96,36 @@ class QueryController extends Controller
             return [
                 'code' => 200,
                 'typeEntities' => $typeEntities,
+            ];
+        });
+    }
+
+    public function selectInfiniteEntities(Request $request)
+    {
+        return $this->execute(function () use ($request) {
+
+            $entities = $this->entityRepository->paginate($request->all());
+
+            $dataCountries = EntitySelectResource::collection($entities);
+
+            return [
+                'entities_arrayInfo' => $dataCountries,
+                'entities_countLinks' => $entities->lastPage(),
+            ];
+        });
+    }
+
+    public function selectInfiniteServiceVendor(Request $request)
+    {
+        return $this->execute(function () use ($request) {
+
+            $serviceVendors = $this->serviceVendorRepository->paginate($request->all());
+
+            $dataCountries = ServiceVendorSelectResource::collection($serviceVendors);
+
+            return [
+                'serviceVendors_arrayInfo' => $dataCountries,
+                'serviceVendors_countLinks' => $serviceVendors->lastPage(),
             ];
         });
     }

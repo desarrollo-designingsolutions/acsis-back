@@ -20,5 +20,6 @@ class RoutesApi
         'routes/entity.php',
         'routes/serviceVendor.php',
         'routes/file.php',
+        'routes/invoice.php',
     ];
 }

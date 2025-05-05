@@ -27,4 +27,6 @@ Route::middleware(['check.permission:menu.entity'])->group(function () {
     Route::post('/entity/changeStatus', [EntityController::class, 'changeStatus']);
 
     Route::get('/entity/excelExport', [EntityController::class, 'excelExport']);
+
+    Route::get('/entity/getNit/{id}', [EntityController::class, 'getNit']);
 });

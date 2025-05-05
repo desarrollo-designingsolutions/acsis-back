@@ -51,7 +51,17 @@ class EntityRepository extends BaseRepository
                     'email',
                     AllowedSort::custom('type_entity_name', new RelatedTableSort('entities', 'type_entities', 'name', 'type_entity_id')),
                     AllowedSort::custom('is_active', new IsActiveSort),
-                ]);
+                ])->where(function ($query) use ($request) {
+
+                    if (isset($request['searchQueryInfinite']) && ! empty($request['searchQueryInfinite'])) {
+                        $query->orWhere('corporate_name', 'like', '%' . $request['searchQueryInfinite'] . '%');
+                    }
+    
+                    if (! empty($request['company_id'])) {
+                        $query->where('company_id', $request['company_id']);
+                    }
+    
+                });
 
                 if (empty($request['typeData'])) {
                     $query = $query->paginate(request()->perPage ?? Constants::ITEMS_PER_PAGE);
