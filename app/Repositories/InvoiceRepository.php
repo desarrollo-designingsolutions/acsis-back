@@ -3,7 +3,7 @@
 namespace App\Repositories;
 
 use App\Helpers\Constants;
-use App\Models\ServiceVendor;
+use App\Models\Invoice;
 use App\QueryBuilder\Filters\QueryFilters;
 use App\QueryBuilder\Sort\IsActiveSort;
 use App\QueryBuilder\Sort\RelatedTableSort;
@@ -11,9 +11,9 @@ use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\AllowedSort;
 use Spatie\QueryBuilder\QueryBuilder;
 
-class ServiceVendorRepository extends BaseRepository
+class InvoiceRepository extends BaseRepository
 {
-    public function __construct(ServiceVendor $modelo)
+    public function __construct(Invoice $modelo)
     {
         parent::__construct($modelo);
     }
@@ -22,22 +22,30 @@ class ServiceVendorRepository extends BaseRepository
     {
         $cacheKey = $this->cacheService->generateKey("{$this->model->getTable()}_paginate", $request, 'string');
 
-        // return $this->cacheService->remember($cacheKey, function () {
+        return $this->cacheService->remember($cacheKey, function () use($request) {
         $query = QueryBuilder::for($this->model->query())
-            ->with(['type_vendor:id,name'])
-            ->select(['service_vendors.id', 'service_vendors.name', 'nit', 'address', 'phone', 'email', 'service_vendors.is_active', "type_vendor_id"])
+            ->with(['patients', 'entities'])
+            ->select(['invoices.id', 'invoices.entity_id', 'invoices.type', 'invoices.patient_id', 'invoices.invoice_number', 'invoices.value_glosa', 'invoices.value_approved', 'invoices.invoice_date', 'invoices.radication_date', 'invoices.is_active'])
             ->allowedFilters([
                 'is_active',
-                'nit',
                 AllowedFilter::callback('inputGeneral', function ($query, $value) {
                     $query->where(function ($subQuery) use ($value) {
-                        $subQuery->orWhere('service_vendors.name', 'like', "%$value%");
-                        $subQuery->orWhere('nit', 'like', "%$value%");
-                        $subQuery->orWhere('email', 'like', "%$value%");
-                        $subQuery->orWhere('phone', 'like', "%$value%");
+                        $subQuery->orWhere('invoices.id', 'like', "%$value%");
+                        $subQuery->orWhere('invoice_number', 'like', "%$value%");
+                        $subQuery->orWhere('type', 'like', "%$value%");
 
-                        $subQuery->orWhereHas('type_vendor', function ($subQuery2) use ($value) {
-                            $subQuery2->where('name', 'like', "%$value%");
+                        $subQuery->orWhere(function ($subQuery2) use ($value) {
+                            $normalizedValue = preg_replace('/[\$\s\.,]/', '', $value);
+                            $subQuery2->orWhere('value_glosa', 'like', "%$normalizedValue%");
+                            $subQuery2->orWhere('value_approved', 'like', "%$normalizedValue%");
+                        });
+
+                        $subQuery->orWhereHas('patients', function ($subQuery2) use ($value) {
+                            $subQuery2->whereRaw("CONCAT(patients.first_name, ' ', patients.second_name, ' ', patients.first_surname, ' ', patients.second_surname) LIKE ?", ["%{$value}%"]);
+                        });
+
+                        $subQuery->orWhereHas('entities', function ($subQuery2) use ($value) {
+                            $subQuery2->where('entities.corporate_name', 'like', "%$value%");
                         });
 
                         QueryFilters::filterByText($subQuery, $value, 'is_active', [
@@ -48,22 +56,18 @@ class ServiceVendorRepository extends BaseRepository
                 }),
             ])
             ->allowedSorts([
-                'name',
-                'nit',
-                'email',
-                'phone',
-                AllowedSort::custom('type_vendor_name', new RelatedTableSort('service_vendors', 'type_vendors', 'name', 'type_vendor_id')),
+                'invoices.id',
+                'invoice_number',
+                'type',
+                'value_glosa',
+                'value_approved',
+                AllowedSort::custom('entity_name', new RelatedTableSort('invoices', 'entities', 'corporate_name', 'entity_id')),
+                AllowedSort::custom('patient_name', new RelatedTableSort('invoices', 'patients', 'first_name', 'patient_id')),
                 AllowedSort::custom('is_active', new IsActiveSort),
             ])->where(function ($query) use ($request) {
-
-                if (isset($request['searchQueryInfinite']) && ! empty($request['searchQueryInfinite'])) {
-                    $query->orWhere('name', 'like', '%' . $request['searchQueryInfinite'] . '%');
-                }
-
                 if (! empty($request['company_id'])) {
-                    $query->where('company_id', $request['company_id']);
+                    $query->where('invoices.company_id', $request['company_id']);
                 }
-
             });
 
         if (empty($request['typeData'])) {
@@ -73,7 +77,7 @@ class ServiceVendorRepository extends BaseRepository
         }
 
         return $query;
-        // }, Constants::REDIS_TTL);
+        }, Constants::REDIS_TTL);
     }
 
     public function store(array $request, $id = null)

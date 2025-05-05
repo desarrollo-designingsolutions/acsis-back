@@ -53,6 +53,12 @@ class PermissionSeeder extends Seeder
                 'description' => 'Visualizar Menú Entidades',
                 'menu_id' => 6,
             ],
+            [
+                'id' => 7,
+                'name' => 'menu.invoice',
+                'description' => 'Visualizar Menú Facturación',
+                'menu_id' => 7,
+            ],
         ];
 
         // Inicializar la barra de progreso

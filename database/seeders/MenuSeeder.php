@@ -61,6 +61,14 @@ class MenuSeeder extends Seeder
                 'icon' => 'tabler-align-box-bottom-center',
                 'requiredPermission' => 'menu.entity',
             ],
+            [
+                'id' => 7,
+                'order' => 70,
+                'title' => 'Facturación',
+                'to' => 'Invoice-List',
+                'icon' => 'tabler-file-invoice',
+                'requiredPermission' => 'menu.invoice',
+            ],
         ];
 
         // Inicializar la barra de progreso
