@@ -109,7 +109,7 @@ class PatientRepository extends BaseRepository
                 'value' => $value->$fieldValue,
                 'title' => $value->document . ' - ' . $value->$fieldTitle,
                 'id' => $value->id,
-                'type_document' => new TypeDocumentSelectResource($value->TypeDocument),
+                'type_document' => new TypeDocumentSelectResource($value->typeDocument),
                 'document' => $value->document,
                 'first_name' => $value->first_name,
                 'second_name' => $value->second_name,

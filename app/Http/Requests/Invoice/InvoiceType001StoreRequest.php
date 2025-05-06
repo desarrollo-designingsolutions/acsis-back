@@ -7,7 +7,7 @@ use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class InvoiceStoreRequest extends FormRequest
+class InvoiceType001StoreRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -20,6 +20,7 @@ class InvoiceStoreRequest extends FormRequest
             'service_vendor_id' => 'required',
             'entity_id' => 'required',
             'invoice_number' => 'required',
+            'radication_number' => 'required',
             'invoice_date' => 'required',
             'type' => 'required',
             'radication_date' => 'required',
@@ -42,6 +43,7 @@ class InvoiceStoreRequest extends FormRequest
             'service_vendor_id.required' => 'El campo es obligatorio',
             'entity_id.required' => 'El campo es obligatorio',
             'invoice_number.required' => 'El campo es obligatorio',
+            'radication_number.required' => 'El campo es obligatorio',
             'invoice_date.required' => 'El campo es obligatorio',
             'type.required' => 'El campo es obligatorio',
             'radication_date.required' => 'El campo es obligatorio',

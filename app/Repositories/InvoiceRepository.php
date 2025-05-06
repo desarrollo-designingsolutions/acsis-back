@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Helpers\Constants;
 use App\Models\Invoice;
+use App\QueryBuilder\Filters\DateRangeFilter;
 use App\QueryBuilder\Filters\QueryFilters;
 use App\QueryBuilder\Sort\IsActiveSort;
 use App\QueryBuilder\Sort\RelatedTableSort;
@@ -25,7 +26,7 @@ class InvoiceRepository extends BaseRepository
         return $this->cacheService->remember($cacheKey, function () use($request) {
         $query = QueryBuilder::for($this->model->query())
             ->with(['patients', 'entities'])
-            ->select(['invoices.id', 'invoices.entity_id', 'invoices.type', 'invoices.patient_id', 'invoices.invoice_number', 'invoices.value_glosa', 'invoices.value_approved', 'invoices.invoice_date', 'invoices.radication_date', 'invoices.is_active'])
+            ->select(['invoices.id', 'invoices.entity_id', 'invoices.type', 'invoices.patient_id', 'invoices.invoice_number', 'invoices.radication_number', 'invoices.value_glosa', 'invoices.value_approved', 'invoices.invoice_date', 'invoices.radication_date', 'invoices.is_active'])
             ->allowedFilters([
                 'is_active',
                 AllowedFilter::callback('inputGeneral', function ($query, $value) {
@@ -54,8 +55,10 @@ class InvoiceRepository extends BaseRepository
                         ]);
                     });
                 }),
+                AllowedFilter::custom('invoices.radication_date', new DateRangeFilter),
             ])
             ->allowedSorts([
+                'invoices.radication_date',
                 'invoices.id',
                 'invoice_number',
                 'type',
