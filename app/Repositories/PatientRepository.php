@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Helpers\Constants;
+use App\Http\Resources\TypeDocument\TypeDocumentSelectResource;
 use App\Models\Patient;
 use App\QueryBuilder\Filters\QueryFilters;
 use App\QueryBuilder\Sort\IsActiveSort;
@@ -22,37 +23,36 @@ class PatientRepository extends BaseRepository
     {
         $cacheKey = $this->cacheService->generateKey("{$this->model->getTable()}_paginate", $request, 'string');
 
-        return $this->cacheService->remember($cacheKey, function () use($request) {
-        $query = QueryBuilder::for($this->model->query())
-            ->select(['id', 'document'])
-            ->allowedFilters([
-                AllowedFilter::callback('inputGeneral', function ($query, $value) {
-                    $query->where(function ($subQuery) use ($value) {
-                        $subQuery->orWhere('document', 'like', "%$value%");
-                    });
-                }),
-            ])
-            ->allowedSorts([
-                'document',
-            ])->where(function ($query) use ($request) {
+        return $this->cacheService->remember($cacheKey, function () use ($request) {
+            $query = QueryBuilder::for($this->model->query())
+                ->select(['id', 'document'])
+                ->allowedFilters([
+                    AllowedFilter::callback('inputGeneral', function ($query, $value) {
+                        $query->where(function ($subQuery) use ($value) {
+                            $subQuery->orWhere('document', 'like', "%$value%");
+                        });
+                    }),
+                ])
+                ->allowedSorts([
+                    'document',
+                ])->where(function ($query) use ($request) {
 
-                if (isset($request['searchQueryInfinite']) && ! empty($request['searchQueryInfinite'])) {
-                    $query->orWhere('document', 'like', '%' . $request['searchQueryInfinite'] . '%');
-                }
+                    if (isset($request['searchQueryInfinite']) && ! empty($request['searchQueryInfinite'])) {
+                        $query->orWhere('document', 'like', '%' . $request['searchQueryInfinite'] . '%');
+                    }
 
-                if (! empty($request['company_id'])) {
-                    $query->where('company_id', $request['company_id']);
-                }
+                    if (! empty($request['company_id'])) {
+                        $query->where('company_id', $request['company_id']);
+                    }
+                });
 
-            });
+            if (empty($request['typeData'])) {
+                $query = $query->paginate(request()->perPage ?? Constants::ITEMS_PER_PAGE);
+            } else {
+                $query = $query->get();
+            }
 
-        if (empty($request['typeData'])) {
-            $query = $query->paginate(request()->perPage ?? Constants::ITEMS_PER_PAGE);
-        } else {
-            $query = $query->get();
-        }
-
-        return $query;
+            return $query;
         }, Constants::REDIS_TTL);
     }
 
@@ -80,26 +80,41 @@ class PatientRepository extends BaseRepository
 
     public function selectList($request = [], $with = [], $select = [], $fieldValue = 'id', $fieldTitle = 'name', $limit = null)
     {
-        $data = $this->model->with($with)->where(function ($query) use ($request) {
+        $query = $this->model->with($with)->where(function ($query) use ($request) {
             if (! empty($request['idsAllowed'])) {
                 $query->whereIn('id', $request['idsAllowed']);
             }
-
-            if (! empty($request['string'])) {
-                $query->orWhere('document', 'like', '%'.$request['string'].'%');
+            if (! empty($request['company_id'])) {
+                $query->where('company_id', $request['company_id']);
             }
         });
-        
 
+        $query->where(function ($query) use ($request) {
+            if (! empty($request['string'])) {
+                $value = strval($request['string']);
+                $query->orWhere('document', 'like', '%' . $value . '%');
+                $query->orWhere('first_name', 'like', '%' . $value . '%');
+                $query->orWhere('second_name', 'like', '%' . $value . '%');
+                $query->orWhere('first_surname', 'like', '%' . $value . '%');
+                $query->orWhere('second_surname', 'like', '%' . $value . '%');
+            }
+        });
         // Aplica el límite si está definido
         if ($limit !== null) {
-            $data->limit($limit);
+            $query->limit($limit);
         }
 
-        $data = $data->get()->map(function ($value) use ($with, $select, $fieldValue, $fieldTitle) {
+        $data = $query->get()->map(function ($value) use ($with, $select, $fieldValue, $fieldTitle) {
             $data = [
                 'value' => $value->$fieldValue,
-                'title' => $value->$fieldTitle,
+                'title' => $value->document . ' - ' . $value->$fieldTitle,
+                'id' => $value->id,
+                'type_document' => new TypeDocumentSelectResource($value->TypeDocument),
+                'document' => $value->document,
+                'first_name' => $value->first_name,
+                'second_name' => $value->second_name,
+                'first_surname' => $value->first_surname,
+                'second_surname' => $value->second_surname,
             ];
 
             if (count($select) > 0) {

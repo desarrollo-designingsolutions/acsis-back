@@ -19,13 +19,18 @@ class InvoiceStoreRequest extends FormRequest
         $rules = [
             'service_vendor_id' => 'required',
             'entity_id' => 'required',
-            'patient_id' => 'required',
             'invoice_number' => 'required',
             'invoice_date' => 'required',
             'type' => 'required',
             'radication_date' => 'required',
             'value_approved' => 'required',
             'value_glosa' => 'required',
+            'type_document_id' => 'required',
+            'document' => 'required',
+            'first_name' => 'required',
+            'second_name' => 'required',
+            'first_surname' => 'required',
+            'second_surname' => 'required',
         ];
 
         return $rules;
@@ -36,13 +41,18 @@ class InvoiceStoreRequest extends FormRequest
         return [
             'service_vendor_id.required' => 'El campo es obligatorio',
             'entity_id.required' => 'El campo es obligatorio',
-            'patient_id.required' => 'El campo es obligatorio',
             'invoice_number.required' => 'El campo es obligatorio',
             'invoice_date.required' => 'El campo es obligatorio',
             'type.required' => 'El campo es obligatorio',
             'radication_date.required' => 'El campo es obligatorio',
             'value_approved.required' => 'El campo es obligatorio',
             'value_glosa.required' => 'El campo es obligatorio',
+            'type_document_id.required' => 'El campo es obligatorio',
+            'document.required' => 'El campo es obligatorio',
+            'first_name.required' => 'El campo es obligatorio',
+            'second_name.required' => 'El campo es obligatorio',
+            'first_surname.required' => 'El campo es obligatorio',
+            'second_surname.required' => 'El campo es obligatorio',
         ];
     }
 
@@ -51,7 +61,7 @@ class InvoiceStoreRequest extends FormRequest
         $this->merge([
             'service_vendor_id' => is_array($this->serviceVendor) && isset($this->serviceVendor['value']) ? $this->serviceVendor['value'] : $this->serviceVendor,
             'entity_id' => is_array($this->entity) && isset($this->entity['value']) ? $this->entity['value'] : $this->entity,
-            'patient_id' => '1',
+            'type_document_id' => is_array($this->typeDocument) && isset($this->typeDocument['value']) ? $this->typeDocument['value'] : $this->typeDocument,
         ]);
     }
 

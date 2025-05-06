@@ -8,22 +8,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Patient extends Model
+class Service extends Model
 {
     use Cacheable, HasFactory, HasUuids, SoftDeletes;
-
-    public function getFullNameAttribute()
-    {
-        return $this->first_name.' '.$this->second_name.' '.$this->first_surname.' '.$this->second_surname;
-    }
 
     public function company()
     {
         return $this->belongsTo(Company::class);
-    }
-
-    public function TypeDocument()
-    {
-        return $this->belongsTo(TypeDocument::class);
     }
 }

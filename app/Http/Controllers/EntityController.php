@@ -113,14 +113,13 @@ class EntityController extends Controller
             $entity = $this->entityRepository->find($id);
             if ($entity) {
 
-            $this->cacheService->clearByPrefix($this->key_redis_project . 'string:entities*');
+                $this->cacheService->clearByPrefix($this->key_redis_project . 'string:entities*');
 
                 $entity->delete();
                 $msg = 'Registro eliminado correctamente';
             } else {
                 $msg = 'El registro no existe';
             }
-            DB::commit();
 
             return [
                 'code' => 200,
@@ -135,8 +134,6 @@ class EntityController extends Controller
             $model = $this->entityRepository->changeState($request->input('id'), strval($request->input('value')), $request->input('field'));
 
             ($model->is_active == 1) ? $msg = 'habilitada' : $msg = 'inhabilitada';
-
-            DB::commit();
 
             return [
                 'code' => 200,

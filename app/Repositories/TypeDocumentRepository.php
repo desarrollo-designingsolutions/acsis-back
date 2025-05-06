@@ -78,13 +78,23 @@ class TypeDocumentRepository extends BaseRepository
         return $data;
     }
 
-    public function selectList($request = [], $with = [], $select = [], $fieldValue = 'id', $fieldTitle = 'name')
+    public function selectList($request = [], $with = [], $select = [], $fieldValue = 'id', $fieldTitle = 'name', $limit = null)
     {
-        $data = $this->model->with($with)->where(function ($query) use ($request) {
+        $query = $this->model->with($with)->where(function ($query) use ($request) {
             if (! empty($request['idsAllowed'])) {
                 $query->whereIn('id', $request['idsAllowed']);
             }
-        })->get()->map(function ($value) use ($with, $select, $fieldValue, $fieldTitle) {
+            if (! empty($request['string'])) {
+                $query->where( 'name', 'like', '%' . $request['string'] . '%');
+            }
+        });
+
+        // Aplica el límite si está definido
+        if ($limit !== null) {
+            $query->limit($limit);
+        }
+
+        $data = $query->get()->map(function ($value) use ($with, $select, $fieldValue, $fieldTitle) {
             $data = [
                 'value' => $value->$fieldValue,
                 'title' => $value->$fieldTitle,

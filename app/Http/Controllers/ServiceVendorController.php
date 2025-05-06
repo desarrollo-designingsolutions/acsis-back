@@ -26,7 +26,7 @@ class ServiceVendorController extends Controller
     public function paginate(Request $request)
     {
         return $this->execute(function () use ($request) {
-             $data = $this->serviceVendorRepository->paginate($request->all());
+            $data = $this->serviceVendorRepository->paginate($request->all());
             $tableData = ServiceVendorPaginateResource::collection($data);
 
             return [
@@ -117,7 +117,6 @@ class ServiceVendorController extends Controller
             } else {
                 $msg = 'El registro no existe';
             }
-            DB::commit();
 
             return [
                 'code' => 200,
@@ -133,8 +132,6 @@ class ServiceVendorController extends Controller
 
             ($model->is_active == 1) ? $msg = 'habilitada' : $msg = 'inhabilitada';
 
-            DB::commit();
-
             return [
                 'code' => 200,
                 'message' => 'Proveedor ' . $msg . ' con éxito',
@@ -147,7 +144,7 @@ class ServiceVendorController extends Controller
         return $this->execute(function () use ($request) {
             $request['typeData'] = 'all';
 
-             $data = $this->serviceVendorRepository->paginate($request->all());
+            $data = $this->serviceVendorRepository->paginate($request->all());
 
             $excel = Excel::raw(new ServiceVendorExcelExport($data), \Maatwebsite\Excel\Excel::XLSX);
 

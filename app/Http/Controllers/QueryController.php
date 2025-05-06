@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\CodeGlosa\CodeGlosaSelectInfiniteResource;
 use App\Http\Resources\Country\CountrySelectResource;
 use App\Http\Resources\Entity\EntitySelectResource;
 use App\Http\Resources\ServiceVendor\ServiceVendorSelectResource;
 use App\Http\Resources\TypeDocument\TypeDocumentSelectResource;
 use App\Http\Resources\TypeVendor\TypeVendorSelectInfiniteResource;
 use App\Repositories\CityRepository;
+use App\Repositories\CodeGlosaRepository;
 use App\Repositories\CountryRepository;
 use App\Repositories\EntityRepository;
 use App\Repositories\p;
@@ -36,6 +38,7 @@ class QueryController extends Controller
         protected ServiceVendorRepository $serviceVendorRepository,
         protected TypeDocumentRepository $typeDocumentRepository,
         protected PatientRepository $patientRepository,
+        protected CodeGlosaRepository $codeGlosaRepository,
     ) {}
 
     public function selectInfiniteCountries(Request $request)
@@ -153,18 +156,25 @@ class QueryController extends Controller
 
     public function autoCompleteDataPatients(Request $request)
     {
-        // return $this->execute(function () use ($request) {
-        //     $data = $this->patientRepository->selectList($request->all(), limit: 10, fieldTitle: 'full_name');
+        return $this->execute(function () use ($request) {
+            $data = $this->patientRepository->selectList($request->all(), fieldTitle: "full_name", limit: 10);
 
-        //     return ['code' => 200, 'data' => $data];
-        // });
+            return [
+                'code' => 200,
+                'data' => $data,
+            ];
+        });
+    }
+    public function selectInfiniteCodeGlosa(Request $request)
+    {
+        $request['is_active'] = 1;
+        $codeGlosa = $this->codeGlosaRepository->list($request->all());
+        $dataCodeGlosa = CodeGlosaSelectInfiniteResource::collection($codeGlosa);
 
-        try {
-            $data = $this->patientRepository->selectList($request->all(), limit: 10, fieldTitle: 'full_name');
-
-            return response()->json(['code' => 200, 'data' => $data]);
-        } catch (\Throwable $th) {
-            return response()->json(['code' => 500, 'message' => $th->getMessage()]);
-        }
+        return [
+            'code' => 200,
+            'codeGlosa_arrayInfo' => $dataCodeGlosa,
+            'codeGlosa_countLinks' => $codeGlosa->lastPage(),
+        ];
     }
 }
