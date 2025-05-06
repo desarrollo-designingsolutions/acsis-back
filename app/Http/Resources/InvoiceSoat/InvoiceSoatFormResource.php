@@ -2,9 +2,6 @@
 
 namespace App\Http\Resources\InvoiceSoat;
 
-use App\Http\Resources\Entity\EntitySelectResource;
-use App\Http\Resources\ServiceVendor\ServiceVendorSelectResource;
-use App\Http\Resources\TypeDocument\TypeDocumentSelectResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
