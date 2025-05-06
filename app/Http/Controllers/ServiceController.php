@@ -52,7 +52,6 @@ class ServiceController extends Controller
 
             $post["total_value"] = $post["quantity"] * $post["unit_value"];
 
-            return $post["unit_value"];
             $service = $this->serviceRepository->store($post);
 
             return [

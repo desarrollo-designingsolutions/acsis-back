@@ -22,5 +22,6 @@ class RoutesApi
         'routes/file.php',
         'routes/invoice.php',
         'routes/service.php',
+        'routes/glosa.php',
     ];
 }

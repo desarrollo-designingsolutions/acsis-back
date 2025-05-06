@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\CodeGlosa\CodeGlosaSelectInfiniteResource;
 use App\Http\Resources\Country\CountrySelectResource;
 use App\Http\Resources\Entity\EntitySelectResource;
 use App\Http\Resources\ServiceVendor\ServiceVendorSelectResource;
 use App\Http\Resources\TypeVendor\TypeVendorSelectInfiniteResource;
 use App\Repositories\CityRepository;
+use App\Repositories\CodeGlosaRepository;
 use App\Repositories\CountryRepository;
 use App\Repositories\EntityRepository;
 use App\Repositories\ServiceVendorRepository;
@@ -30,6 +32,7 @@ class QueryController extends Controller
         protected TypeVendorRepository $typeVendorRepository,
         protected EntityRepository $entityRepository,
         protected ServiceVendorRepository $serviceVendorRepository,
+        protected CodeGlosaRepository $codeGlosaRepository,
     ) {}
 
     public function selectInfiniteCountries(Request $request)
@@ -126,6 +129,31 @@ class QueryController extends Controller
             return [
                 'serviceVendors_arrayInfo' => $dataCountries,
                 'serviceVendors_countLinks' => $serviceVendors->lastPage(),
+            ];
+        });
+    }
+
+    public function selectInfiniteCodeGlosa(Request $request)
+    {
+        $request['is_active'] = 1;
+        $codeGlosa = $this->codeGlosaRepository->list($request->all());
+        $dataCodeGlosa = CodeGlosaSelectInfiniteResource::collection($codeGlosa);
+
+        return [
+            'code' => 200,
+            'codeGlosa_arrayInfo' => $dataCodeGlosa,
+            'codeGlosa_countLinks' => $codeGlosa->lastPage(),
+        ];
+    }
+
+    public function searchClient(Request $request)
+    {
+        return $this->execute(function () use ($request) {
+            $data = $this->codeGlosaRepository->selectList($request->all(), fieldTitle: "description", limit: 10);
+
+            return [
+                'code' => 200,
+                'data' => $data,
             ];
         });
     }

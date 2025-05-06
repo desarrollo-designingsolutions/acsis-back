@@ -14,3 +14,7 @@ Route::post('/selectInfiniteServiceVendor', [QueryController::class, 'selectInfi
 // Lista de Pais, Departamentos y Ciudades
 
 // Route::post('/selectInifiniteInsurance', [QueryController::class, 'selectInifiniteInsurance']);
+Route::post('/selectInfiniteCodeGlosa', [QueryController::class, 'selectInfiniteCodeGlosa']);
+
+
+Route::get('/searchClient', [QueryController::class, 'searchClient']);
