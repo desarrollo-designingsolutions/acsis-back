@@ -2,20 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\Assignment\TypeInvoiceEnum;
+use App\Enums\Invoice\TypeInvoiceEnum;
 use App\Exports\EntityExcelExport;
-use App\Http\Requests\Entity\EntityStoreRequest;
-use App\Http\Requests\Invoice\InvoiceStoreRequest;
-use App\Http\Resources\Entity\EntityFormResource;
+use App\Exports\InvoiceExcelExport;
+use App\Http\Requests\Invoice\InvoiceType001StoreRequest;
+use App\Http\Requests\Invoice\InvoiceType002StoreRequest;
 use App\Http\Resources\Invoice\InvoiceListResource;
-use App\Http\Resources\TypeEntity\TypeEntitySelectResource;
+use App\Http\Resources\Invoice\InvoiceType001FormResource;
+use App\Http\Resources\Invoice\InvoiceType002FormResource;
+use App\Http\Resources\InvoiceSoat\InvoiceSoatFormResource;
 use App\Repositories\InvoiceRepository;
+use App\Repositories\InvoiceSoatRepository;
+use App\Repositories\PatientRepository;
 use App\Traits\HttpResponseTrait;
 use App\Repositories\TypeEntityRepository;
 use App\Services\CacheService;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 
 class InvoiceController extends Controller
@@ -29,6 +31,8 @@ class InvoiceController extends Controller
         protected QueryController $queryController,
         protected TypeEntityRepository $typeEntityRepository,
         protected CacheService $cacheService,
+        protected PatientRepository $patientRepository,
+        protected InvoiceSoatRepository $invoiceSoatRepository,
     ) {
         $this->key_redis_project = env('KEY_REDIS_PROJECT');
     }
@@ -50,7 +54,7 @@ class InvoiceController extends Controller
         });
     }
 
-    public function create()
+    public function createType001()
     {
         return $this->execute(function () {
             return [
@@ -59,15 +63,26 @@ class InvoiceController extends Controller
         });
     }
 
-    public function store(InvoiceStoreRequest $request)
+    public function storeType001(InvoiceType001StoreRequest $request)
     {
         return $this->runTransaction(function () use ($request) {
 
-            $post = $request->except(['entity', 'serviceVendor']);
+            $post = $request->except(['entity', 'serviceVendor', 'typeDocument', 'type_document_id', 'document', 'first_name', 'first_surname', 'second_name', 'second_surname']);
+
+            if(empty($request['patient_id'])){
+
+                $post2 = $request->only(['company_id', 'type_document_id', 'document', 'first_name', 'first_surname', 'second_name', 'second_surname']);
+
+                $patient = $this->patientRepository->store($post2);
+
+                $post['patient_id'] = $patient->id;
+            }
+
+            $post['typeable_type'] = 'App\\Models\\'. $post['type'];
+
+            // $post['typeable_id'] = $soat['id']; 
 
             $invoice = $this->invoiceRepository->store($post);
-
-            $this->cacheService->clearByPrefix($this->key_redis_project . 'string:invoices*');
 
             return [
                 'code' => 200,
@@ -76,34 +91,138 @@ class InvoiceController extends Controller
         });
     }
 
-    public function edit($id)
+    public function editType001($id)
     {
         return $this->execute(function () use ($id) {
-            $entity = $this->invoiceRepository->find($id);
-            $form = new EntityFormResource($entity);
-
-            $typeEntities = $this->typeEntityRepository->list(['typeData' => 'all']);
-            $dataTypeEntities = TypeEntitySelectResource::collection($typeEntities);
+            $invoice = $this->invoiceRepository->find($id);
+            $form = new InvoiceType001FormResource($invoice);
 
             return [
                 'code' => 200,
                 'form' => $form,
-                'typeEntities' => $dataTypeEntities,
             ];
         });
     }
 
-    public function update(EntityStoreRequest $request, $id)
+    public function updateType001(InvoiceType001StoreRequest $request, $id)
     {
-        return $this->runTransaction(function () use ($request, $id) {
+        return $this->runTransaction(function () use ($request) {
 
-            $entity = $this->invoiceRepository->store($request->all(), $id);
+            $post = $request->except(['entity', 'serviceVendor', 'typeDocument', 'type_document_id', 'document', 'first_name', 'first_surname', 'second_name', 'second_surname']);
 
-            $this->cacheService->clearByPrefix($this->key_redis_project . 'string:entities*');
+            if(empty($request['patient_id'])){
+
+                $post2 = $request->only(['company_id', 'type_document_id', 'document', 'first_name', 'first_surname', 'second_name', 'second_surname']);
+
+                $patient = $this->patientRepository->store($post2);
+
+                $post['patient_id'] = $patient->id;
+            }
+
+            $post['typeable_type'] = 'App\\Models\\'. $post['type'];
+
+            // $post['typeable_id'] = $soat['id']; 
+
+            $invoice = $this->invoiceRepository->store($post);
 
             return [
                 'code' => 200,
-                'message' => 'Entidad modificada correctamente',
+                'message' => 'Factura modificada correctamente',
+            ];
+        });
+    }
+
+    public function createType002()
+    {
+        return $this->execute(function () {
+            return [
+                'code' => 200,
+            ];
+        });
+    }
+
+    public function storeType002(InvoiceType002StoreRequest $request)
+    {
+        return $this->runTransaction(function () use ($request) {
+
+            $post = $request->except(['entity', 'serviceVendor', 'typeDocument', 'type_document_id', 'document', 'first_name', 'first_surname', 'second_name', 'second_surname', 'soat']);
+
+            if(empty($request['patient_id'])){
+
+                $post2 = $request->only(['company_id', 'type_document_id', 'document', 'first_name', 'first_surname', 'second_name', 'second_surname']);
+
+                $patient = $this->patientRepository->store($post2);
+
+                $post['patient_id'] = $patient->id;
+            }
+
+            $dataSoat = $request->input('soat');
+
+            $dataSoat['company_id'] = $request->input('company_id');
+
+            $soat = $this->invoiceSoatRepository->store($dataSoat);
+
+            $post['typeable_type'] = 'App\\Models\\'. $post['type'];
+
+            $post['typeable_id'] = $soat['id']; 
+
+            $invoice = $this->invoiceRepository->store($post);
+
+            return [
+                'code' => 200,
+                'message' => 'Factura agregada correctamente',
+            ];
+        });
+    }
+
+    public function editType002($id)
+    {
+        return $this->execute(function () use ($id) {
+            $invoice = $this->invoiceRepository->find($id);
+            $form = new InvoiceType002FormResource($invoice);
+
+            $soat = $this->invoiceSoatRepository->find($form->typeable_id);
+
+            $soat = new InvoiceSoatFormResource($soat);
+
+            return [
+                'code' => 200,
+                'form' => $form,
+                'soat' => $soat,
+            ];
+        });
+    }
+
+    public function updateType002(InvoiceType002StoreRequest $request, $id)
+    {
+        return $this->runTransaction(function () use ($request) {
+
+            $post = $request->except(['entity', 'serviceVendor', 'typeDocument', 'type_document_id', 'document', 'first_name', 'first_surname', 'second_name', 'second_surname', 'soat']);
+
+            if(empty($request['patient_id'])){
+
+                $post2 = $request->only(['company_id', 'type_document_id', 'document', 'first_name', 'first_surname', 'second_name', 'second_surname']);
+
+                $patient = $this->patientRepository->store($post2);
+
+                $post['patient_id'] = $patient->id;
+            }
+
+            $dataSoat = $request->input('soat');
+
+            $dataSoat['company_id'] = $request->input('company_id');
+
+            $soat = $this->invoiceSoatRepository->store($dataSoat);
+
+            $post['typeable_type'] = 'App\\Models\\'. $post['type'];
+
+            $post['typeable_id'] = $soat['id']; 
+
+            $invoice = $this->invoiceRepository->store($post);
+
+            return [
+                'code' => 200,
+                'message' => 'Factura modificada correctamente',
             ];
         });
     }
@@ -120,8 +239,6 @@ class InvoiceController extends Controller
                 //         'message' => 'No se puede eliminar la factura, porque tiene relación de datos en otros módulos',
                 //     ]));
                 // }
-
-                $this->cacheService->clearByPrefix($this->key_redis_project . 'string:invoices*');
 
                 $invoice->delete();
                 $msg = 'Registro eliminado correctamente';
@@ -145,7 +262,7 @@ class InvoiceController extends Controller
 
             return [
                 'code' => 200,
-                'message' => 'Entidad ' . $msg . ' con éxito',
+                'message' => 'Factura ' . $msg . ' con éxito',
             ];
         });
     }
@@ -158,7 +275,7 @@ class InvoiceController extends Controller
 
             $entities = $this->invoiceRepository->paginate($request->all());
 
-            $excel = Excel::raw(new EntityExcelExport($entities), \Maatwebsite\Excel\Excel::XLSX);
+            $excel = Excel::raw(new InvoiceExcelExport($entities), \Maatwebsite\Excel\Excel::XLSX);
 
             $excelBase64 = base64_encode($excel);
 
@@ -175,8 +292,8 @@ class InvoiceController extends Controller
 
             $TypeInvoiceEnumValues = array_map(function ($case) {
                 return [
-                    'value' => $case->value,
-                    'description' => $case->description(),
+                    'id' => $case->value,
+                    'name' => $case->description(),
                 ];
             }, TypeInvoiceEnum::cases());
 

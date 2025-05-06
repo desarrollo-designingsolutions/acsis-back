@@ -11,15 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('patients', function (Blueprint $table) {
+        Schema::create('invoice_soats', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->foreignUuid('company_id')->constrained();
-            $table->foreignUuid('type_document_id')->constrained();
-            $table->string('document')->nullable();
-            $table->string('first_name')->nullable();
-            $table->string('second_name')->nullable();
-            $table->string('first_surname')->nullable();
-            $table->string('second_surname')->nullable();
+            $table->string('policy_number');
+            $table->text('accident_date');
+            $table->text('start_date');
+            $table->text('end_date');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -30,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('patients');
+        Schema::dropIfExists('invoice_soats');
     }
 };

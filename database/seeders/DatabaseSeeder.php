@@ -21,24 +21,25 @@ class DatabaseSeeder extends Seeder
         // 5. php artisan db:seed --class=WorldSeeder
 
         $this->call([
-            // WorldSeeder::class,
-            // MenuSeeder::class,
-            // PermissionSeeder::class,
-            // RoleSeeder::class,
-            // CompanySeeder::class,
-            // UserSeeder::class,
-            // TypeVendorSeeder::class,
-            // TypeEntitySeeder::class,
+            WorldSeeder::class,
+            MenuSeeder::class,
+            PermissionSeeder::class,
+            RoleSeeder::class,
+            CompanySeeder::class,
+            UserSeeder::class,
+            TypeVendorSeeder::class,
+            TypeEntitySeeder::class,
+            TypeDocumentSeeder::class,
 
-            // TypeCodeGlosaSeeder::class,
-            // GeneralCodeGlosaSeeder::class,
-            // CodeGlosaSeeder::class,
+            TypeCodeGlosaSeeder::class,
+            GeneralCodeGlosaSeeder::class,
+            CodeGlosaSeeder::class,
             CupsRipsSeeder::class,
         ]);
 
-        // $client = new ClientRepository;
+        $client = new ClientRepository;
 
-        // $client->createPasswordGrantClient(null, 'Laravel Personal Grant Client', 'https://localhost');
-        // $client->createPersonalAccessClient(null, 'Laravel Password Access Client', 'https://localhost');
+        $client->createPasswordGrantClient(null, 'Laravel Personal Grant Client', 'https://localhost');
+        $client->createPersonalAccessClient(null, 'Laravel Password Access Client', 'https://localhost');
     }
 }

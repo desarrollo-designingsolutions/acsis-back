@@ -21,4 +21,9 @@ class Patient extends Model
     {
         return $this->belongsTo(Company::class);
     }
+
+    public function typeDocument()
+    {
+        return $this->belongsTo(TypeDocument::class);
+    }
 }

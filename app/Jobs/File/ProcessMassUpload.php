@@ -72,7 +72,7 @@ class ProcessMassUpload implements ShouldQueue
         // Calcular progreso global basado en archivos procesados
         $progress = ($this->fileNumber / $this->totalFiles) * 100;
 
-        logMessage("Progreso de carga: {$progress}% para el archivo {$this->fileName}");
+        // logMessage("Progreso de carga: {$progress}% para el archivo {$this->fileName}");
 
         FileUploadProgress::dispatch(
             $this->uploadId,

@@ -7,13 +7,18 @@ use App\Http\Resources\Country\CountrySelectResource;
 use App\Http\Resources\CupsRips\CupsRipsSelectInfiniteResource;
 use App\Http\Resources\Entity\EntitySelectResource;
 use App\Http\Resources\ServiceVendor\ServiceVendorSelectResource;
+use App\Http\Resources\TypeDocument\TypeDocumentSelectResource;
+use App\Http\Resources\TypeVendor\TypeVendorSelectInfiniteResource;
 use App\Repositories\CityRepository;
 use App\Repositories\CodeGlosaRepository;
 use App\Repositories\CountryRepository;
 use App\Repositories\CupsRipsRepository;
 use App\Repositories\EntityRepository;
+use App\Repositories\p;
+use App\Repositories\PatientRepository;
 use App\Repositories\ServiceVendorRepository;
 use App\Repositories\StateRepository;
+use App\Repositories\TypeDocumentRepository;
 use App\Repositories\TypeEntityRepository;
 use App\Repositories\TypeVendorRepository;
 use App\Repositories\UserRepository;
@@ -33,6 +38,8 @@ class QueryController extends Controller
         protected TypeVendorRepository $typeVendorRepository,
         protected EntityRepository $entityRepository,
         protected ServiceVendorRepository $serviceVendorRepository,
+        protected TypeDocumentRepository $typeDocumentRepository,
+        protected PatientRepository $patientRepository,
         protected CodeGlosaRepository $codeGlosaRepository,
         protected CupsRipsRepository $cupsRipsRepository,
     ) {}
@@ -135,6 +142,32 @@ class QueryController extends Controller
         });
     }
 
+    public function selectInfiniteTypeDocument(Request $request)
+    {
+        return $this->execute(function () use ($request) {
+
+            $typeDocuments = $this->typeDocumentRepository->paginate($request->all());
+
+            $dataCountries = TypeDocumentSelectResource::collection($typeDocuments);
+
+            return [
+                'typeDocuments_arrayInfo' => $dataCountries,
+                'typeDocuments_countLinks' => $typeDocuments->lastPage(),
+            ];
+        });
+    }
+
+    public function autoCompleteDataPatients(Request $request)
+    {
+        return $this->execute(function () use ($request) {
+            $data = $this->patientRepository->selectList($request->all(), fieldTitle: "full_name", limit: 10);
+
+            return [
+                'code' => 200,
+                'data' => $data,
+            ];
+        });
+    }
     public function selectInfiniteCodeGlosa(Request $request)
     {
         $request['is_active'] = 1;
@@ -158,17 +191,5 @@ class QueryController extends Controller
             'cupsRips_arrayInfo' => $dataCupsRips,
             'cupsRips_countLinks' => $cupsRips->lastPage(),
         ];
-    }
-
-    public function searchClient(Request $request)
-    {
-        return $this->execute(function () use ($request) {
-            $data = $this->codeGlosaRepository->selectList($request->all(), fieldTitle: "description", limit: 10);
-
-            return [
-                'code' => 200,
-                'data' => $data,
-            ];
-        });
     }
 }
