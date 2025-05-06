@@ -25,6 +25,7 @@ class GlosaMasiveStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'servicesIds' => 'required|array|min:1',
             'glosas' => 'required|array|min:1',
 
             'glosas.*.user_id' => 'required',
@@ -32,12 +33,17 @@ class GlosaMasiveStoreRequest extends FormRequest
             'glosas.*.observation' => 'required',
 
             'glosas.*.partialValue' => 'required|numeric|gt:0|lte:100',
+            'glosas.*.date' => 'required|date',
         ];
     }
 
     public function messages(): array
     {
         return [
+            'servicesIds.required' => " El campo glosas es obligatorio",
+            'servicesIds.array' => 'El campo glosas debe ser un arreglo',
+            'servicesIds.min' => 'Debe enviar al menos una glosa',
+
             'glosas.required' => 'Debe enviar al menos una glosa',
             'glosas.array' => 'El campo glosas debe ser un arreglo',
 
@@ -49,24 +55,31 @@ class GlosaMasiveStoreRequest extends FormRequest
             'glosas.*.partialValue.numeric' => 'El valor glosa debe ser numérico',
             'glosas.*.partialValue.gt' => 'El valor glosa debe ser mayor a cero',
             'glosas.*.partialValue.lte' => 'El valor glosa no puede ser mayor a 100',
+            'glosas.*.date.required' => 'El campo es obligatorio',
         ];
     }
 
     protected function prepareForValidation(): void
     {
-        if ($this->has('glosas') && is_array($this->glosas)) {
+        $merge = [];
+        if ($this->has('glosas') && is_string($this->glosas)) {
             $glosas = array_map(function ($glosa) {
                 return [
                     ...$glosa,
                     'code_glosa_id' => isset($glosa['codeGlosa']['value']) ? $glosa['codeGlosa']['value'] : ($glosa['code_glosa_id'] ?? null),
                     'partialValue' => is_string($glosa['partialValue']) ? str_replace(',', '.', $glosa['partialValue']) : $glosa['partialValue'],
                 ];
-            }, $this->glosas);
+            }, json_decode($this->glosas, 1));
 
-            $this->merge([
-                'glosas' => $glosas,
-            ]);
+            $merge["glosas"] =  $glosas;
         }
+        if ($this->has('servicesIds') && is_string($this->servicesIds)) {
+            $servicesIds = json_decode($this->servicesIds, 1);
+
+            $merge["servicesIds"] = $servicesIds;
+        }
+
+        $this->merge($merge);
     }
 
     public function failedValidation(Validator $validator)

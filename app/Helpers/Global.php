@@ -61,7 +61,7 @@ function generatePastelColor($opacity = 1.0)
 function truncate_text($text, $maxLength = 15)
 {
     if (strlen($text) > $maxLength) {
-        return substr($text, 0, $maxLength).'...';
+        return substr($text, 0, $maxLength) . '...';
     }
 
     return $text;
@@ -80,6 +80,9 @@ function formattedElement($element)
     // Convertir el valor en función de su contenido
     switch ($element) {
         case 'null':
+            $element = null;
+            break;
+        case 'undefined':
             $element = null;
             break;
         case 'true':

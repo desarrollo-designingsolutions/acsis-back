@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\Cacheable;
 use App\Traits\Searchable;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -9,7 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Glosa extends Model
 {
-    use HasFactory, HasUuids, Searchable;
+    use HasFactory, HasUuids, Searchable, Cacheable;
 
     protected $guarded = [];
 

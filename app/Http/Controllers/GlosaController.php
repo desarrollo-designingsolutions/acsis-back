@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\Constants;
 use App\Http\Requests\Glosa\GlosaMasiveStoreRequest;
 use App\Http\Requests\Glosa\GlosaStoreRequest;
 use App\Http\Resources\Glosa\GlosaFormResource;
@@ -59,8 +60,17 @@ class GlosaController extends Controller
     {
 
         return $this->runTransaction(function () use ($request) {
+            $post = $request->except(["file"]);
+            $glosa = $this->glosaRepository->store($post);
 
-            $glosa = $this->glosaRepository->store($request->all());
+            if ($request->file('file')) {
+                $file = $request->file('file');
+                $ruta = 'companies/company_' . $glosa->company_id . '/glosas/glosa_' . $glosa->id . $request->input('file');
+
+                $file = $file->store($ruta, Constants::DISK_FILES);
+                $glosa->file = $file;
+                $glosa->save();
+            }
 
             return [
                 'code' => 200,
@@ -86,9 +96,18 @@ class GlosaController extends Controller
     public function update(GlosaStoreRequest $request, $id)
     {
         return $this->runTransaction(function () use ($request) {
-            $post = $request->except([]);
 
+            $post = $request->except(["file"]);
             $glosa = $this->glosaRepository->store($post);
+
+            if ($request->file('file')) {
+                $file = $request->file('file');
+                $ruta = 'companies/company_' . $glosa->company_id . '/glosas/glosa_' . $glosa->id . $request->input('file');
+
+                $file = $file->store($ruta, Constants::DISK_FILES);
+                $glosa->file = $file;
+                $glosa->save();
+            }
 
             return [
                 'code' => 200,
@@ -102,8 +121,6 @@ class GlosaController extends Controller
         return $this->runTransaction(function () use ($id) {
             $glosa = $this->glosaRepository->find($id);
             if ($glosa) {
-
-                $service_id = $glosa->service_id;
 
                 $glosa->delete();
 
@@ -139,13 +156,13 @@ class GlosaController extends Controller
         return $this->runTransaction(function () use ($request) {
 
             $servicesIDs = $request->input('servicesIds');
-
+            $glosas = $request->input('glosas');
             $company_id = $request->input('company_id');
 
             foreach ($servicesIDs as $key => $serviceId) {
                 $service = $this->serviceRepository->find($serviceId);
 
-                foreach ($request->input('glosas') as $key => $value) {
+                foreach ($glosas as $key => $value) {
                     $data = [
                         'user_id' => $value['user_id'],
                         'company_id' => $company_id,
@@ -153,8 +170,19 @@ class GlosaController extends Controller
                         'code_glosa_id' => $value['code_glosa_id'],
                         'glosa_value' => $value['partialValue'] * $service->total_value / 100,
                         'observation' => $value['observation'],
+                        'date' => $value['date'],
                     ];
-                    $this->glosaRepository->store($data);
+
+                    $glosa = $this->glosaRepository->store($data);
+
+                    if ($request->file('file_file' . $key)) {
+                        $file = $request->file('file_file' . $key);
+                        $ruta = 'companies/company_' . $glosa->company_id . '/glosas/glosa_' . $glosa->id . $request->input('file_file' . $key);
+
+                        $file = $file->store($ruta, Constants::DISK_FILES);
+                        $glosa->file = $file;
+                        $glosa->save();
+                    }
                 }
             }
 
@@ -163,6 +191,6 @@ class GlosaController extends Controller
                 'code' => 200,
                 'message' => 'Glosa/s agregada/s correctamente',
             ];
-        });
+        }, debug: false);
     }
 }

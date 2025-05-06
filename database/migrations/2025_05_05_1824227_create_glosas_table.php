@@ -19,6 +19,8 @@ return new class extends Migration
             $table->foreignUuid('code_glosa_id')->nullable()->constrained();
             $table->decimal('glosa_value', 15, 2)->nullable();
             $table->text('observation')->nullable();
+            $table->date('date');
+            $table->string('file')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

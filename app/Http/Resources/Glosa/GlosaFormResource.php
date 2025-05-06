@@ -22,6 +22,8 @@ class GlosaFormResource extends JsonResource
             'code_glosa_id' => new CodeGlosaSelectInfiniteResource($this->code_glosa),
             'glosa_value' => $this->glosa_value,
             'observation' => $this->observation,
+            'file' => $this->file,
+            'date' => $this->date,
         ];
     }
 }
