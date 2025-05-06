@@ -69,7 +69,7 @@ class InvoiceController extends Controller
 
             $post = $request->except(['entity', 'serviceVendor', 'typeDocument', 'type_document_id', 'document', 'first_name', 'first_surname', 'second_name', 'second_surname']);
 
-            if(empty($request['patient_id'])){
+            if (empty($request['patient_id'])) {
 
                 $post2 = $request->only(['company_id', 'type_document_id', 'document', 'first_name', 'first_surname', 'second_name', 'second_surname']);
 
@@ -78,9 +78,11 @@ class InvoiceController extends Controller
                 $post['patient_id'] = $patient->id;
             }
 
-            $post['typeable_type'] = 'App\\Models\\'. $post['type'];
+            $post['typeable_type'] = 'App\\Models\\' . $post['type'];
 
-            // $post['typeable_id'] = $soat['id']; 
+            // $post['typeable_id'] = $soat['id'];
+
+            $post['remaining_balance'] = $post['total'];
 
             $invoice = $this->invoiceRepository->store($post);
 
@@ -110,7 +112,7 @@ class InvoiceController extends Controller
 
             $post = $request->except(['entity', 'serviceVendor', 'typeDocument', 'type_document_id', 'document', 'first_name', 'first_surname', 'second_name', 'second_surname']);
 
-            if(empty($request['patient_id'])){
+            if (empty($request['patient_id'])) {
 
                 $post2 = $request->only(['company_id', 'type_document_id', 'document', 'first_name', 'first_surname', 'second_name', 'second_surname']);
 
@@ -119,11 +121,16 @@ class InvoiceController extends Controller
                 $post['patient_id'] = $patient->id;
             }
 
-            $post['typeable_type'] = 'App\\Models\\'. $post['type'];
+            $post['typeable_type'] = 'App\\Models\\' . $post['type'];
 
-            // $post['typeable_id'] = $soat['id']; 
+            // $post['typeable_id'] = $soat['id'];
+
 
             $invoice = $this->invoiceRepository->store($post);
+
+            if (!$invoice->invoice_payments()->exists()) {
+                $post['remaining_balance'] = $post['total'];
+            }
 
             return [
                 'code' => 200,
@@ -147,7 +154,7 @@ class InvoiceController extends Controller
 
             $post = $request->except(['entity', 'serviceVendor', 'typeDocument', 'type_document_id', 'document', 'first_name', 'first_surname', 'second_name', 'second_surname', 'soat']);
 
-            if(empty($request['patient_id'])){
+            if (empty($request['patient_id'])) {
 
                 $post2 = $request->only(['company_id', 'type_document_id', 'document', 'first_name', 'first_surname', 'second_name', 'second_surname']);
 
@@ -162,9 +169,11 @@ class InvoiceController extends Controller
 
             $soat = $this->invoiceSoatRepository->store($dataSoat);
 
-            $post['typeable_type'] = 'App\\Models\\'. $post['type'];
+            $post['typeable_type'] = 'App\\Models\\' . $post['type'];
 
-            $post['typeable_id'] = $soat['id']; 
+            $post['typeable_id'] = $soat['id'];
+
+            $post['remaining_balance'] = $post['total'];
 
             $invoice = $this->invoiceRepository->store($post);
 
@@ -199,7 +208,7 @@ class InvoiceController extends Controller
 
             $post = $request->except(['entity', 'serviceVendor', 'typeDocument', 'type_document_id', 'document', 'first_name', 'first_surname', 'second_name', 'second_surname', 'soat']);
 
-            if(empty($request['patient_id'])){
+            if (empty($request['patient_id'])) {
 
                 $post2 = $request->only(['company_id', 'type_document_id', 'document', 'first_name', 'first_surname', 'second_name', 'second_surname']);
 
@@ -214,11 +223,15 @@ class InvoiceController extends Controller
 
             $soat = $this->invoiceSoatRepository->store($dataSoat);
 
-            $post['typeable_type'] = 'App\\Models\\'. $post['type'];
+            $post['typeable_type'] = 'App\\Models\\' . $post['type'];
 
-            $post['typeable_id'] = $soat['id']; 
+            $post['typeable_id'] = $soat['id'];
 
             $invoice = $this->invoiceRepository->store($post);
+
+            if (!$invoice->invoice_payments()->exists()) {
+                $post['remaining_balance'] = $post['total'];
+            }
 
             return [
                 'code' => 200,

@@ -43,7 +43,7 @@ class InvoicePaymentController extends Controller
     {
         return $this->execute(function () use ($invoice_id) {
 
-            $invoice = $this->invoiceRepository->find($invoice_id, select: ['id', 'total']);
+            $invoice = $this->invoiceRepository->find($invoice_id, select: ['id', 'remaining_balance']);
 
             return [
                 'code' => 200,
@@ -58,7 +58,7 @@ class InvoicePaymentController extends Controller
         return $this->runTransaction(function () use ($request) {
 
             $post = $request->except(["file"]);
-            return  $invoicePayment = $this->invoicePaymentRepository->store($post);
+            $invoicePayment = $this->invoicePaymentRepository->store($post);
 
             if ($request->file('file')) {
                 $file = $request->file('file');
@@ -68,6 +68,10 @@ class InvoicePaymentController extends Controller
                 $invoicePayment->file = $file;
                 $invoicePayment->save();
             }
+
+            $invoice = $this->invoiceRepository->find($invoicePayment->invoice_id, select: ['id', 'remaining_balance']);
+            $invoice->remaining_balance = $invoice->remaining_balance - $invoicePayment->value_paid;
+            $invoice->save();
 
             return [
                 'code' => 200,
@@ -83,7 +87,7 @@ class InvoicePaymentController extends Controller
             $invoicePayment = $this->invoicePaymentRepository->find($id);
             $form = new InvoicePaymentFormResource($invoicePayment);
 
-            $invoice = $this->invoiceRepository->find($invoicePayment->invoice_id);
+            $invoice = $this->invoiceRepository->find($invoicePayment->invoice_id, select: ['id', 'remaining_balance']);
 
             return [
                 'code' => 200,
@@ -108,6 +112,10 @@ class InvoicePaymentController extends Controller
                 $invoicePayment->file = $file;
                 $invoicePayment->save();
             }
+
+            $invoice = $this->invoiceRepository->find($invoicePayment->invoice_id, select: ['id', 'remaining_balance']);
+            $invoice->remaining_balance = $invoice->remaining_balance - $invoicePayment->value_paid;
+            $invoice->save();
 
             return [
                 'code' => 200,

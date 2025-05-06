@@ -22,20 +22,24 @@ class Invoice extends Model
     {
         return $this->belongsTo(Company::class);
     }
-    
+
     public function entities()
     {
         return $this->belongsTo(Entity::class, 'entity_id');
     }
-    
+
     public function patients()
     {
         return $this->belongsTo(Patient::class, 'patient_id');
     }
-    
+
     public function serviceVendors()
     {
         return $this->belongsTo(ServiceVendor::class, 'service_vendor_id');
     }
 
+    public function invoice_payments()
+    {
+        return $this->hasMany(InvoicePayment::class);
+    }
 }
