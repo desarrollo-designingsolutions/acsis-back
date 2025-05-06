@@ -54,10 +54,6 @@ class FileRepository extends BaseRepository
                     AllowedFilter::callback('inputGeneral', function ($query, $value) use ($request) {
                         $query->where(function ($query) use ($value, $request) {
                             $query->orWhere('filename', 'like', "%$value%");
-
-                            $query->orWhereHas('supportType', function ($subQuery) use ($value, $request) {
-                                $subQuery->where('name', 'like', "%$value%");
-                            });
                         });
                     }),
                 ])
