@@ -6,6 +6,7 @@ use App\Helpers\Constants;
 use App\Models\Glosa;
 use App\QueryBuilder\Filters\QueryFilters;
 use App\QueryBuilder\Sort\DynamicConcatSort;
+use App\QueryBuilder\Sort\RelatedTableSort;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\AllowedSort;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -40,9 +41,6 @@ class GlosaRepository extends BaseRepository
                             $query->orWhereHas('code_glosa', function ($subQuery) use ($value) {
                                 $subQuery->where('description', 'like', "%$value%");
                             });
-                            $query->orWhereHas('service', function ($subQuery) use ($value) {
-                                $subQuery->where('description', 'like', "%$value%");
-                            });
                             $query->orWhereHas('user', function ($subQuery) use ($value) {
                                 $subQuery->whereRaw("CONCAT(users.name, ' ', users.surname) LIKE ?", ["%{$value}%"]);
                             });
@@ -54,7 +52,12 @@ class GlosaRepository extends BaseRepository
                     'observation',
                     'glosa_value',
                     AllowedSort::custom('user_full_name', new DynamicConcatSort("users.name, ' ', users.surname")),
-                    AllowedSort::custom('service_description', new DynamicConcatSort('services.description')),
+                    AllowedSort::custom('code_glosa_description', new RelatedTableSort(
+                        'glosas',
+                        'code_glosas',
+                        'description',
+                        'code_glosa_id',
+                    )),
                 ])
                 ->where(function ($query) use ($request) {
                     if (isset($request['service_id']) && ! empty($request['service_id'])) {
@@ -71,7 +74,6 @@ class GlosaRepository extends BaseRepository
     {
         $data = $this->model->with($with)->where(function ($query) {})
             ->where(function ($query) use ($request) {
-                filterComponent($query, $request);
 
                 if (! empty($request['company_id'])) {
                     $query->where('company_id', $request['company_id']);
