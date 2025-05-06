@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Helpers\Constants;
 use App\Models\Glosa;
+use App\QueryBuilder\Filters\QueryFilters;
 use App\QueryBuilder\Sort\DynamicConcatSort;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\AllowedSort;
@@ -29,6 +30,9 @@ class GlosaRepository extends BaseRepository
                         $query->where(function ($query) use ($value) {
                             $query->orWhere('glosas.observation', 'like', "%$value%");
 
+                            QueryFilters::filterByDMYtoYMD($query, $value, 'date');
+
+
                             $query->orWhere(function ($subQuery) use ($value) {
                                 $normalizedValue = preg_replace('/[\$\s\.,]/', '', $value);
                                 $subQuery->where('glosa_value', 'like', "%$normalizedValue%");
@@ -46,6 +50,7 @@ class GlosaRepository extends BaseRepository
                     }),
                 ])
                 ->allowedSorts([
+                    'date',
                     'observation',
                     'glosa_value',
                     AllowedSort::custom('user_full_name', new DynamicConcatSort("users.name, ' ', users.surname")),

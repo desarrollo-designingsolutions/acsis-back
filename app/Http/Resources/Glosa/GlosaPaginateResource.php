@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Glosa;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -22,6 +23,8 @@ class GlosaPaginateResource extends JsonResource
             'code_glosa_description' => $this->code_glosa?->description,
             'glosa_value' => formatNumber($this->glosa_value),
             'observation' => $this->observation,
+            'date' =>  Carbon::parse($this->date)->format("d-m-Y"),
+
         ];
     }
 }

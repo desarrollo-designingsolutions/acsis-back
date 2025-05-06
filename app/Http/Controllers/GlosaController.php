@@ -124,8 +124,6 @@ class GlosaController extends Controller
                 $msg = 'El registro no existe';
             }
 
-            DB::commit();
-
             return [
                 'code' => 200,
                 'message' => $msg,

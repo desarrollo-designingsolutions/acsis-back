@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Helpers\Constants;
 use App\Models\InvoicePayment;
+use App\QueryBuilder\Filters\QueryFilters;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
@@ -24,8 +25,10 @@ class InvoicePaymentRepository extends BaseRepository
             ->allowedFilters([
                 AllowedFilter::callback('inputGeneral', function ($query, $value) {
                     $query->where(function ($query) use ($value) {
-                        $query->orWhere('date_payment', 'like', "%$value%");
                         $query->orWhere('observations', 'like', "%$value%");
+
+                        QueryFilters::filterByDMYtoYMD($query, $value, 'date_payment');
+
 
                         $query->orWhere(function ($subQuery) use ($value) {
                             $normalizedValue = preg_replace('/[\$\s\.,]/', '', $value);
@@ -40,8 +43,8 @@ class InvoicePaymentRepository extends BaseRepository
                 'observations',
             ])
             ->where(function ($query) use ($request) {
-                if (isset($request['service_id']) && ! empty($request['service_id'])) {
-                    $query->where('service_id', $request['service_id']);
+                if (isset($request['invoice_id']) && ! empty($request['invoice_id'])) {
+                    $query->where('invoice_id', $request['invoice_id']);
                 }
             })
             ->paginate(request()->perPage ?? Constants::ITEMS_PER_PAGE);

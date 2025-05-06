@@ -14,7 +14,7 @@ Route::middleware(['check.permission:menu.invoice'])->group(function () {
 
     Route::get('/invoicePayment/paginate', [InvoicePaymentController::class, 'paginate']);
 
-    Route::get('/invoicePayment/create', [InvoicePaymentController::class, 'create']);
+    Route::get('/invoicePayment/create/{invoice_id}', [InvoicePaymentController::class, 'create']);
 
     Route::post('/invoicePayment/store', [InvoicePaymentController::class, 'store']);
 

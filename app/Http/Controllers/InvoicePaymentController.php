@@ -7,24 +7,25 @@ use App\Http\Requests\InvoicePayment\InvoicePaymentStoreRequest;
 use App\Http\Resources\InvoicePayment\InvoicePaymentFormResource;
 use App\Http\Resources\InvoicePayment\InvoicePaymentPaginateResource;
 use App\Repositories\InvoicePaymentRepository;
+use App\Repositories\InvoiceRepository;
 use App\Services\CacheService;
 use App\Traits\HttpResponseTrait;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class InvoicePaymentController extends Controller
 {
     use HttpResponseTrait;
 
     public function __construct(
-        protected InvoicePaymentRepository $InvoicePaymentRepository,
+        protected InvoiceRepository $invoiceRepository,
+        protected InvoicePaymentRepository $invoicePaymentRepository,
         protected CacheService $cacheService,
     ) {}
 
     public function paginate(Request $request)
     {
         return $this->execute(function () use ($request) {
-            $data = $this->InvoicePaymentRepository->paginate($request->all());
+            $data = $this->invoicePaymentRepository->paginate($request->all());
             $tableData = InvoicePaymentPaginateResource::collection($data);
 
             return [
@@ -38,12 +39,15 @@ class InvoicePaymentController extends Controller
         });
     }
 
-    public function create()
+    public function create($invoice_id)
     {
-        return $this->execute(function () {
+        return $this->execute(function () use ($invoice_id) {
+
+            $invoice = $this->invoiceRepository->find($invoice_id, select: ['id', 'total']);
 
             return [
                 'code' => 200,
+                'invoice' => $invoice,
             ];
         });
     }
@@ -52,16 +56,17 @@ class InvoicePaymentController extends Controller
     {
 
         return $this->runTransaction(function () use ($request) {
+
             $post = $request->except(["file"]);
-            $InvoicePayment = $this->InvoicePaymentRepository->store($post);
+            return  $invoicePayment = $this->invoicePaymentRepository->store($post);
 
             if ($request->file('file')) {
                 $file = $request->file('file');
-                $ruta = 'companies/company_' . $InvoicePayment->company_id . '/InvoicePayments/InvoicePayment_' . $InvoicePayment->id . $request->input('file');
+                $ruta = 'companies/company_' . $invoicePayment->company_id . '/InvoicePayments/InvoicePayment_' . $invoicePayment->id . $request->input('file');
 
                 $file = $file->store($ruta, Constants::DISK_FILES);
-                $InvoicePayment->file = $file;
-                $InvoicePayment->save();
+                $invoicePayment->file = $file;
+                $invoicePayment->save();
             }
 
             return [
@@ -75,12 +80,15 @@ class InvoicePaymentController extends Controller
     {
         return $this->execute(function () use ($id) {
 
-            $InvoicePayment = $this->InvoicePaymentRepository->find($id);
-            $form = new InvoicePaymentFormResource($InvoicePayment);
+            $invoicePayment = $this->invoicePaymentRepository->find($id);
+            $form = new InvoicePaymentFormResource($invoicePayment);
+
+            $invoice = $this->invoiceRepository->find($invoicePayment->invoice_id);
 
             return [
                 'code' => 200,
                 'form' => $form,
+                'invoice' => $invoice,
             ];
         });
     }
@@ -90,15 +98,15 @@ class InvoicePaymentController extends Controller
         return $this->runTransaction(function () use ($request) {
 
             $post = $request->except(["file"]);
-            $InvoicePayment = $this->InvoicePaymentRepository->store($post);
+            $invoicePayment = $this->invoicePaymentRepository->store($post);
 
             if ($request->file('file')) {
                 $file = $request->file('file');
-                $ruta = 'companies/company_' . $InvoicePayment->company_id . '/InvoicePayments/InvoicePayment_' . $InvoicePayment->id . $request->input('file');
+                $ruta = 'companies/company_' . $invoicePayment->company_id . '/InvoicePayments/InvoicePayment_' . $invoicePayment->id . $request->input('file');
 
                 $file = $file->store($ruta, Constants::DISK_FILES);
-                $InvoicePayment->file = $file;
-                $InvoicePayment->save();
+                $invoicePayment->file = $file;
+                $invoicePayment->save();
             }
 
             return [
@@ -111,33 +119,20 @@ class InvoicePaymentController extends Controller
     public function delete($id)
     {
         return $this->runTransaction(function () use ($id) {
-            $InvoicePayment = $this->InvoicePaymentRepository->find($id);
-            if ($InvoicePayment) {
+            $invoicePayment = $this->invoicePaymentRepository->find($id);
+            if ($invoicePayment) {
 
-                $InvoicePayment->delete();
+                $invoicePayment->delete();
 
                 $msg = 'Registro eliminado correctamente';
             } else {
                 $msg = 'El registro no existe';
             }
 
-            DB::commit();
-
             return [
                 'code' => 200,
                 'message' => $msg,
             ];
         }, 200);
-    }
-
-
-    public function createMasive()
-    {
-        return $this->execute(function () {
-
-            return [
-                'code' => 200,
-            ];
-        });
     }
 }

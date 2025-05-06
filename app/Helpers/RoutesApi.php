@@ -23,5 +23,6 @@ class RoutesApi
         'routes/invoice.php',
         'routes/service.php',
         'routes/glosa.php',
+        'routes/invoicePayment.php',
     ];
 }

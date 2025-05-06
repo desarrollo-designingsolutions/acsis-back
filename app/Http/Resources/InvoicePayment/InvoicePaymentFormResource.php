@@ -16,6 +16,11 @@ class InvoicePaymentFormResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'invoice_id' => $this->invoice_id,
+            'value_paid' => $this->value_paid,
+            'date_payment' => $this->date_payment,
+            'observations' => $this->observations,
+            'file' => $this->file,
         ];
     }
 }

@@ -27,8 +27,10 @@ class InvoicePaymentStoreRequest extends FormRequest
     {
 
         $rules = [
-            'company_id' => 'required',
-            'date' => 'required',
+            'invoice_id' => 'required',
+            'value_paid' => 'required',
+            'date_payment' => 'required',
+            'observations' => 'required',
         ];
 
         return $rules;
@@ -37,14 +39,21 @@ class InvoicePaymentStoreRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'company_id.required' => 'El campo es obligatorio',
-            'date.required' => 'El campo es obligatorio',
+            'invoice_id.required' => 'El campo es obligatorio',
+            'value_paid.required' => 'El campo es obligatorio',
+            'date_payment.required' => 'El campo es obligatorio',
+            'observations.required' => 'El campo es obligatorio',
         ];
     }
 
     protected function prepareForValidation(): void
     {
-        $this->merge([]);
+        $this->merge([
+            'invoice_id' => formattedElement($this->invoice_id),
+            'value_paid' => formattedElement($this->value_paid),
+            'date_payment' => formattedElement($this->date_payment),
+            'observations' => formattedElement($this->observations),
+        ]);
     }
 
     public function failedValidation(Validator $validator)
