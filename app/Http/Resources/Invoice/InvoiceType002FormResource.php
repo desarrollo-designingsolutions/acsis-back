@@ -28,6 +28,7 @@ class InvoiceType002FormResource extends JsonResource
             'radication_number' => $this->radication_number,
             'value_glosa'      => $this->value_glosa,
             'value_approved' => $this->value_approved,
+            'total' => $this->total,
             'invoice_date' => $this->invoice_date,
             'radication_date' => $this->radication_date,
             'typeable_id' => $this->typeable_id,
