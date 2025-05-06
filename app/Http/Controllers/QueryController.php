@@ -5,12 +5,16 @@ namespace App\Http\Controllers;
 use App\Http\Resources\Country\CountrySelectResource;
 use App\Http\Resources\Entity\EntitySelectResource;
 use App\Http\Resources\ServiceVendor\ServiceVendorSelectResource;
+use App\Http\Resources\TypeDocument\TypeDocumentSelectResource;
 use App\Http\Resources\TypeVendor\TypeVendorSelectInfiniteResource;
 use App\Repositories\CityRepository;
 use App\Repositories\CountryRepository;
 use App\Repositories\EntityRepository;
+use App\Repositories\p;
+use App\Repositories\PatientRepository;
 use App\Repositories\ServiceVendorRepository;
 use App\Repositories\StateRepository;
+use App\Repositories\TypeDocumentRepository;
 use App\Repositories\TypeEntityRepository;
 use App\Repositories\TypeVendorRepository;
 use App\Repositories\UserRepository;
@@ -30,6 +34,8 @@ class QueryController extends Controller
         protected TypeVendorRepository $typeVendorRepository,
         protected EntityRepository $entityRepository,
         protected ServiceVendorRepository $serviceVendorRepository,
+        protected TypeDocumentRepository $typeDocumentRepository,
+        protected PatientRepository $patientRepository,
     ) {}
 
     public function selectInfiniteCountries(Request $request)
@@ -128,5 +134,37 @@ class QueryController extends Controller
                 'serviceVendors_countLinks' => $serviceVendors->lastPage(),
             ];
         });
+    }
+
+    public function selectInfiniteTypeDocument(Request $request)
+    {
+        return $this->execute(function () use ($request) {
+
+            $typeDocuments = $this->typeDocumentRepository->paginate($request->all());
+
+            $dataCountries = TypeDocumentSelectResource::collection($typeDocuments);
+
+            return [
+                'typeDocuments_arrayInfo' => $dataCountries,
+                'typeDocuments_countLinks' => $typeDocuments->lastPage(),
+            ];
+        });
+    }
+
+    public function autoCompleteDataPatients(Request $request)
+    {
+        // return $this->execute(function () use ($request) {
+        //     $data = $this->patientRepository->selectList($request->all(), limit: 10, fieldTitle: 'full_name');
+
+        //     return ['code' => 200, 'data' => $data];
+        // });
+
+        try {
+            $data = $this->patientRepository->selectList($request->all(), limit: 10, fieldTitle: 'full_name');
+
+            return response()->json(['code' => 200, 'data' => $data]);
+        } catch (\Throwable $th) {
+            return response()->json(['code' => 500, 'message' => $th->getMessage()]);
+        }
     }
 }

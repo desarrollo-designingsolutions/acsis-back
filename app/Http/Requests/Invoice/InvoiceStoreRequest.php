@@ -17,11 +17,12 @@ class InvoiceStoreRequest extends FormRequest
     public function rules(): array
     {
         $rules = [
-            'serviceVendor' => 'required',
-            'entity' => 'required',
-            // 'patient' => 'required',
+            'service_vendor_id' => 'required',
+            'entity_id' => 'required',
+            'patient_id' => 'required',
             'invoice_number' => 'required',
             'invoice_date' => 'required',
+            'type' => 'required',
             'radication_date' => 'required',
             'value_approved' => 'required',
             'value_glosa' => 'required',
@@ -33,11 +34,12 @@ class InvoiceStoreRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'serviceVendor.required' => 'El campo es obligatorio',
-            'entity.required' => 'El campo es obligatorio',
-            'patient.required' => 'El campo es obligatorio',
+            'service_vendor_id.required' => 'El campo es obligatorio',
+            'entity_id.required' => 'El campo es obligatorio',
+            'patient_id.required' => 'El campo es obligatorio',
             'invoice_number.required' => 'El campo es obligatorio',
             'invoice_date.required' => 'El campo es obligatorio',
+            'type.required' => 'El campo es obligatorio',
             'radication_date.required' => 'El campo es obligatorio',
             'value_approved.required' => 'El campo es obligatorio',
             'value_glosa.required' => 'El campo es obligatorio',
@@ -47,8 +49,8 @@ class InvoiceStoreRequest extends FormRequest
     protected function prepareForValidation(): void
     {
         $this->merge([
-            'service_vendor_id' => $this->input('serviceVendor.value'),
-            'entity_id' => $this->input('entity.value'),
+            'service_vendor_id' => is_array($this->serviceVendor) && isset($this->serviceVendor['value']) ? $this->serviceVendor['value'] : $this->serviceVendor,
+            'entity_id' => is_array($this->entity) && isset($this->entity['value']) ? $this->entity['value'] : $this->entity,
             'patient_id' => '1',
         ]);
     }

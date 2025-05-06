@@ -2,6 +2,9 @@
 
 namespace App\Http\Resources\Invoice;
 
+use App\Enums\Invoice\TypeInvoiceEnum;
+use App\Http\Resources\Entity\EntitySelectResource;
+use App\Http\Resources\ServiceVendor\ServiceVendorSelectResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -14,16 +17,20 @@ class InvoiceFormResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $typeCase = collect(TypeInvoiceEnum::cases())
+        ->first(fn($c) => (string)$c->value === (string)$this->type);
+        logMessage($this->service_vendor_id);
+
         return [
             'id' => $this->id,
-            'entity_name' => $this->entities?->corporate_name,
+            'serviceVendor' => new ServiceVendorSelectResource($this->serviceVendors),
+            'entity' => new EntitySelectResource($this->entities),
+            // 'patient' => new ServiceVendorSelectResource($this->patients),
             'invoice_number' => $this->invoice_number,
-            'type' => $this->type,
+            'value_glosa'      => $this->value_glosa,
             'value_approved' => $this->value_approved,
-            'value_glosa' => $this->value_glosa,
+            'invoice_date' => $this->invoice_date,
             'radication_date' => $this->radication_date,
-            'patient_id' => $this->patients?->full_name,
-            'is_active' => $this->is_active,
         ];
     }
 }

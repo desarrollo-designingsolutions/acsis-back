@@ -2,18 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\Assignment\TypeInvoiceEnum;
+use App\Enums\Invoice\TypeInvoiceEnum;
 use App\Exports\EntityExcelExport;
-use App\Http\Requests\Entity\EntityStoreRequest;
 use App\Http\Requests\Invoice\InvoiceStoreRequest;
-use App\Http\Resources\Entity\EntityFormResource;
+use App\Http\Resources\Invoice\InvoiceFormResource;
 use App\Http\Resources\Invoice\InvoiceListResource;
-use App\Http\Resources\TypeEntity\TypeEntitySelectResource;
 use App\Repositories\InvoiceRepository;
 use App\Traits\HttpResponseTrait;
 use App\Repositories\TypeEntityRepository;
 use App\Services\CacheService;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
@@ -79,31 +76,29 @@ class InvoiceController extends Controller
     public function edit($id)
     {
         return $this->execute(function () use ($id) {
-            $entity = $this->invoiceRepository->find($id);
-            $form = new EntityFormResource($entity);
-
-            $typeEntities = $this->typeEntityRepository->list(['typeData' => 'all']);
-            $dataTypeEntities = TypeEntitySelectResource::collection($typeEntities);
+            $invoice = $this->invoiceRepository->find($id);
+            $form = new InvoiceFormResource($invoice);
 
             return [
                 'code' => 200,
                 'form' => $form,
-                'typeEntities' => $dataTypeEntities,
             ];
         });
     }
 
-    public function update(EntityStoreRequest $request, $id)
+    public function update(InvoiceStoreRequest $request, $id)
     {
-        return $this->runTransaction(function () use ($request, $id) {
+        return $this->runTransaction(function () use ($request) {
 
-            $entity = $this->invoiceRepository->store($request->all(), $id);
+            $post = $request->except(['entity', 'serviceVendor']);
 
-            $this->cacheService->clearByPrefix($this->key_redis_project . 'string:entities*');
+            $invoice = $this->invoiceRepository->store($post);
+
+            $this->cacheService->clearByPrefix($this->key_redis_project . 'string:invoices*');
 
             return [
                 'code' => 200,
-                'message' => 'Entidad modificada correctamente',
+                'message' => 'Factura modificada correctamente',
             ];
         });
     }
@@ -178,8 +173,8 @@ class InvoiceController extends Controller
 
             $TypeInvoiceEnumValues = array_map(function ($case) {
                 return [
-                    'value' => $case->value,
-                    'description' => $case->description(),
+                    'id' => $case->value,
+                    'name' => $case->description(),
                 ];
             }, TypeInvoiceEnum::cases());
 

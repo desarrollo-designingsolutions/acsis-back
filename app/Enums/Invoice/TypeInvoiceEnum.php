@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Enums\Assignment;
+namespace App\Enums\Invoice;
 
 use App\Attributes\BackgroundColor;
 use App\Attributes\Description;

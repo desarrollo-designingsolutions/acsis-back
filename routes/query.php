@@ -11,6 +11,9 @@ Route::get('/selectCities/country/{country_id}', [QueryController::class, 'selec
 Route::get('/selectTypeEntity', [QueryController::class, 'selectTypeEntity']);
 Route::post('/selectInfiniteEntities', [QueryController::class, 'selectInfiniteEntities']);
 Route::post('/selectInfiniteServiceVendor', [QueryController::class, 'selectInfiniteServiceVendor']);
+Route::post('/selectInfiniteTypeDocument', [QueryController::class, 'selectInfiniteTypeDocument']);
 // Lista de Pais, Departamentos y Ciudades
 
 // Route::post('/selectInifiniteInsurance', [QueryController::class, 'selectInifiniteInsurance']);
+
+Route::get('/autoCompleteDataPatients', [QueryController::class, 'autoCompleteDataPatients']);

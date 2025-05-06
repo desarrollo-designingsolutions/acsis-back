@@ -3,10 +3,10 @@
 namespace Database\Seeders;
 
 use App\Helpers\Constants;
-use App\Models\TypeEntity;
+use App\Models\TypeDocument;
 use Illuminate\Database\Seeder;
 
-class TypeEntitySeeder extends Seeder
+class TypeDocumentSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -15,16 +15,13 @@ class TypeEntitySeeder extends Seeder
     {
         $arrayData = [
             [
-                'name' => 'Proveedor',
+                'name' => 'CC',
             ],
             [
-                'name' => 'Contratista',
+                'name' => 'CE',
             ],
             [
-                'name' => 'Crítico',
-            ],
-            [
-                'name' => 'Comunitario',
+                'name' => 'Pasaporte',
             ],
         ];
 
@@ -33,10 +30,9 @@ class TypeEntitySeeder extends Seeder
         $bar = $this->command->getOutput()->createProgressBar(count($arrayData));
 
         foreach ($arrayData as $key => $value) {
-            $data = new TypeEntity;
+            $data = new TypeDocument;
             $data->company_id = Constants::COMPANY_UUID;
             $data->name = $value['name'];
-            $data->is_active = 1;
             $data->save();
         }
 
