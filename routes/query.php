@@ -15,6 +15,7 @@ Route::post('/selectInfiniteServiceVendor', [QueryController::class, 'selectInfi
 
 // Route::post('/selectInifiniteInsurance', [QueryController::class, 'selectInifiniteInsurance']);
 Route::post('/selectInfiniteCodeGlosa', [QueryController::class, 'selectInfiniteCodeGlosa']);
+Route::post('/selectInfiniteCupsRips', [QueryController::class, 'selectInfiniteCupsRips']);
 
 
 Route::get('/searchClient', [QueryController::class, 'searchClient']);

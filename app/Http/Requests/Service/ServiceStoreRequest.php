@@ -17,8 +17,7 @@ class ServiceStoreRequest extends FormRequest
     public function rules(): array
     {
         $rules = [
-            'code' => 'required',
-            'description' => 'required',
+            'cups_rip_id' => 'required',
             'quantity' => 'required',
             'unit_value' => 'required',
         ];
@@ -29,13 +28,21 @@ class ServiceStoreRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'name.required' => 'El campo es obligatorio',
+            'cups_rip_id.required' => 'El campo es obligatorio',
+            'quantity.required' => 'El campo es obligatorio',
+            'unit_value.required' => 'El campo es obligatorio',
         ];
     }
 
     protected function prepareForValidation(): void
     {
-        $this->merge([]);
+        $merge  = [];
+
+        if ($this->has('cups_rip_id')) {
+            $merge["cups_rip_id"] = is_array($this->cups_rip_id) ? $this->cups_rip_id['value'] : $this->cups_rip_id;
+        }
+
+        $this->merge($merge);
     }
 
     public function failedValidation(Validator $validator)
