@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\CodeGlosa\CodeGlosaSelectInfiniteResource;
 use App\Http\Resources\Country\CountrySelectResource;
+use App\Http\Resources\CupsRips\CupsRipsSelectInfiniteResource;
 use App\Http\Resources\Entity\EntitySelectResource;
 use App\Http\Resources\ServiceVendor\ServiceVendorSelectResource;
 use App\Http\Resources\TypeDocument\TypeDocumentSelectResource;
@@ -11,6 +12,7 @@ use App\Http\Resources\TypeVendor\TypeVendorSelectInfiniteResource;
 use App\Repositories\CityRepository;
 use App\Repositories\CodeGlosaRepository;
 use App\Repositories\CountryRepository;
+use App\Repositories\CupsRipsRepository;
 use App\Repositories\EntityRepository;
 use App\Repositories\p;
 use App\Repositories\PatientRepository;
@@ -39,6 +41,7 @@ class QueryController extends Controller
         protected TypeDocumentRepository $typeDocumentRepository,
         protected PatientRepository $patientRepository,
         protected CodeGlosaRepository $codeGlosaRepository,
+        protected CupsRipsRepository $cupsRipsRepository,
     ) {}
 
     public function selectInfiniteCountries(Request $request)
@@ -175,6 +178,18 @@ class QueryController extends Controller
             'code' => 200,
             'codeGlosa_arrayInfo' => $dataCodeGlosa,
             'codeGlosa_countLinks' => $codeGlosa->lastPage(),
+        ];
+    }
+
+    public function selectInfiniteCupsRips(Request $request)
+    {
+        $cupsRips = $this->cupsRipsRepository->list($request->all());
+        $dataCupsRips = CupsRipsSelectInfiniteResource::collection($cupsRips);
+
+        return [
+            'code' => 200,
+            'cupsRips_arrayInfo' => $dataCupsRips,
+            'cupsRips_countLinks' => $cupsRips->lastPage(),
         ];
     }
 }

@@ -4,7 +4,9 @@ namespace App\Repositories;
 
 use App\Helpers\Constants;
 use App\Models\Service;
+use App\QueryBuilder\Sort\RelatedTableSort;
 use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\AllowedSort;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class ServiceRepository extends BaseRepository
@@ -22,10 +24,40 @@ class ServiceRepository extends BaseRepository
         $query = QueryBuilder::for($this->model->query())
             ->allowedFilters([
                 AllowedFilter::callback('inputGeneral', function ($query, $value) use ($request) {
-                    $query->where(function ($query) use ($request) {});
+                    $query->where(function ($subQuery) use ($value) {
+                        $subQuery->orWhere('quantity', 'like', "%$value%");
+
+                        $subQuery->orWhere(function ($subQuery) use ($value) {
+                            $normalizedValue = preg_replace('/[\$\s\.,]/', '', $value);
+                            $subQuery->orWhere('unit_value', 'like', "%$normalizedValue%");
+                            $subQuery->orWhere('total_value', 'like', "%$normalizedValue%");
+                        });
+
+
+                        $subQuery->orWhereHas('cups_rip', function ($subQuery2) use ($value) {
+                            $subQuery2->where('nombre', 'like', "%$value%");
+                            $subQuery2->orWhere('codigo', 'like', "%$value%");
+                        });
+                    });
                 }),
             ])
-            ->allowedSorts([])
+            ->allowedSorts([
+                "quantity",
+                "unit_value",
+                "total_value",
+                AllowedSort::custom('cups_rip_codigo', new RelatedTableSort(
+                    'services',
+                    'cups_rips',
+                    'codigo',
+                    'cups_rip_id',
+                )),
+                AllowedSort::custom('cups_rip_nombre', new RelatedTableSort(
+                    'services',
+                    'cups_rips',
+                    'nombre',
+                    'cups_rip_id',
+                )),
+            ])
             ->where(function ($query) use ($request) {
                 if (isset($request['service_id']) && ! empty($request['service_id'])) {
                     $query->orWhere('service_id', $request['service_id']);

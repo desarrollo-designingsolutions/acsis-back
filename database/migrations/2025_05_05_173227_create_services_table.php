@@ -15,8 +15,7 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->foreignUuid('company_id')->constrained();
             $table->foreignUuid('invoice_id')->constrained();
-            $table->string('code');
-            $table->text('description');
+            $table->foreignUuid('cups_rip_id')->constrained();
             $table->integer('quantity')->default(0);
             $table->decimal('unit_value', 15, 2)->default(0);
             $table->decimal('total_value', 15, 2)->default(0);

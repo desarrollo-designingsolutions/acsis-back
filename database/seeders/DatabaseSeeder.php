@@ -31,9 +31,10 @@ class DatabaseSeeder extends Seeder
             // TypeEntitySeeder::class,
             // TypeDocumentSeeder::class,
 
-            TypeCodeGlosaSeeder::class,
-            GeneralCodeGlosaSeeder::class,
-            CodeGlosaSeeder::class,
+            // TypeCodeGlosaSeeder::class,
+            // GeneralCodeGlosaSeeder::class,
+            // CodeGlosaSeeder::class,
+            CupsRipsSeeder::class,
         ]);
 
         // $client = new ClientRepository;

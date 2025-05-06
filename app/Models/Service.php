@@ -16,4 +16,9 @@ class Service extends Model
     {
         return $this->belongsTo(Company::class);
     }
+
+    public function cups_rip()
+    {
+        return $this->belongsTo(CupsRips::class);
+    }
 }

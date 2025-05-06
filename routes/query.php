@@ -18,4 +18,5 @@ Route::post('/selectInfiniteTypeDocument', [QueryController::class, 'selectInfin
 
 Route::get('/autoCompleteDataPatients', [QueryController::class, 'autoCompleteDataPatients']);
 Route::post('/selectInfiniteCodeGlosa', [QueryController::class, 'selectInfiniteCodeGlosa']);
+Route::post('/selectInfiniteCupsRips', [QueryController::class, 'selectInfiniteCupsRips']);
 
