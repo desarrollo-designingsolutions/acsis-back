@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Resources\Glosa;
+namespace App\Http\Resources\InvoicePayment;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class GlosaListResource extends JsonResource
+class InvoicePaymentFormResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,12 +16,6 @@ class GlosaListResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'name' => $this->name,
-            'nit' => $this->nit,
-            'address' => $this->address,
-            'phone' => $this->phone,
-            'email' => $this->email,
-            'is_active' => $this->is_active,
         ];
     }
 }

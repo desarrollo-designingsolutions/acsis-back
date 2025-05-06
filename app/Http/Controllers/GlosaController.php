@@ -10,8 +10,6 @@ use App\Http\Resources\Glosa\GlosaPaginateResource;
 use App\Repositories\CodeGlosaRepository;
 use App\Repositories\GlosaRepository;
 use App\Repositories\ServiceRepository;
-use App\Repositories\UserRepository;
-use App\Services\CacheService;
 use App\Traits\HttpResponseTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -21,12 +19,9 @@ class GlosaController extends Controller
     use HttpResponseTrait;
 
     public function __construct(
-        protected UserRepository $userRepository,
         protected CodeGlosaRepository $codeGlosaRepository,
         protected GlosaRepository $glosaRepository,
-        protected QueryController $queryController,
         protected ServiceRepository $serviceRepository,
-        protected CacheService $cacheService,
     ) {}
 
     public function paginate(Request $request)
@@ -142,11 +137,9 @@ class GlosaController extends Controller
     public function createMasive()
     {
         return $this->execute(function () {
-            $selectInfiniteCodeGlosas = $this->queryController->selectInfiniteCodeGlosa(request());
 
             return [
                 'code' => 200,
-                ...$selectInfiniteCodeGlosas,
             ];
         });
     }

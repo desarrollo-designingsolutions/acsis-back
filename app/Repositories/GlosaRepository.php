@@ -24,8 +24,6 @@ class GlosaRepository extends BaseRepository
 
             $query = QueryBuilder::for($this->model->query())
                 ->select('glosas.*')
-                // ->join("users", "users.id", "=", "user_id")
-                // ->join("services", "services.id", "=", "service_id")
                 ->allowedFilters([
                     AllowedFilter::callback('inputGeneral', function ($query, $value) {
                         $query->where(function ($query) use ($value) {
@@ -76,7 +74,7 @@ class GlosaRepository extends BaseRepository
             })
             ->where(function ($query) use ($request) {
                 if (isset($request['searchQueryInfinite']) && ! empty($request['searchQueryInfinite'])) {
-                    $query->orWhere('name', 'like', '%'.$request['searchQueryInfinite'].'%');
+                    $query->orWhere('name', 'like', '%' . $request['searchQueryInfinite'] . '%');
                 }
             });
 
