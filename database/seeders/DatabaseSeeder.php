@@ -31,6 +31,12 @@ class DatabaseSeeder extends Seeder
             TypeEntitySeeder::class,
             TypeDocumentSeeder::class,
             TipoNotaSeeder::class,
+            TipoIdPisisSeeder::class,
+            RipsTipoUsuarioVersion2Seeder::class,
+            SexoSeeder::class,
+            PaisSeeder::class,
+            MunicipioSeeder::class,
+            ZonaVersion2Seeder::class,
 
             TypeCodeGlosaSeeder::class,
             GeneralCodeGlosaSeeder::class,

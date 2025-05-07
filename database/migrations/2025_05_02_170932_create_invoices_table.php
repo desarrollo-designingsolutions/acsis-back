@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('type')->nullable();
             $table->string('typeable_type')->nullable();
             $table->string('typeable_id')->nullable();
+            $table->string('path_json')->nullable();
             $table->string('invoice_number')->nullable();
             $table->string('radication_number')->nullable();
             $table->string('note_number')->nullable();
