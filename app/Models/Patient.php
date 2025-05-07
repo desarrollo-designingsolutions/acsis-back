@@ -26,4 +26,39 @@ class Patient extends Model
     {
         return $this->belongsTo(TypeDocument::class);
     }
+
+    public function sexo()
+    {
+        return $this->belongsTo(Sexo::class);
+    }
+
+    public function rips_tipo_usuario_version2()
+    {
+        return $this->belongsTo(RipsTipoUsuarioVersion2::class);
+    }
+
+    public function pais_residency()
+    {
+        return $this->belongsTo(Pais::class);
+    }
+
+    public function municipio_residency()
+    {
+        return $this->belongsTo(Municipio::class);
+    }
+
+    public function zona_version2()
+    {
+        return $this->belongsTo(ZonaVersion2::class);
+    }
+
+    public function tipo_id_pisi()
+    {
+        return $this->belongsTo(TipoIdPisis::class);
+    }
+
+    public function pais_origin()
+    {
+        return $this->belongsTo(Pais::class);
+    }
 }

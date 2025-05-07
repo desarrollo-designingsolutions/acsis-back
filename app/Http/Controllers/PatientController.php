@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Exports\EntityExcelExport;
 use App\Http\Requests\Entity\EntityStoreRequest;
+use App\Http\Requests\Entity\PatientStoreRequest;
 use App\Http\Resources\Entity\EntityFormResource;
 use App\Http\Resources\Entity\EntityListResource;
 use App\Http\Resources\Patient\PatientListResource;
@@ -60,16 +61,17 @@ class PatientController extends Controller
         });
     }
 
-    public function store(EntityStoreRequest $request)
+    public function store(PatientStoreRequest $request)
     {
         return $this->runTransaction(function () use ($request) {
-            $entity = $this->entityRepository->store($request->all());
+            return $request;
+            $patient = $this->patientRepository->store($request->all());
 
-            $this->cacheService->clearByPrefix($this->key_redis_project . 'string:entities*');
+            $this->cacheService->clearByPrefix($this->key_redis_project . 'string:patients*');
 
             return [
                 'code' => 200,
-                'message' => 'Entidad agregada correctamente',
+                'message' => 'Paciente agregado correctamente',
             ];
         });
     }
