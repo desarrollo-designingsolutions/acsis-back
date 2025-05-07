@@ -17,9 +17,11 @@ use App\Repositories\InvoiceSoatRepository;
 use App\Repositories\MunicipioRepository;
 use App\Repositories\PaisRepository;
 use App\Repositories\PatientRepository;
+use App\Repositories\RipsTipoUsuarioVersion2Repository;
 use App\Repositories\ServiceVendorRepository;
 use App\Repositories\SexoRepository;
 use App\Repositories\TipoDocumentoRepository;
+use App\Repositories\TipoIdPisisRepository;
 use App\Repositories\TipoNotaRepository;
 use App\Repositories\TipoUsuarioRepository;
 use App\Traits\HttpResponseTrait;
@@ -46,10 +48,11 @@ class InvoiceController extends Controller
         protected ServiceVendorRepository $serviceVendorRepository,
         protected TipoNotaRepository $tipoNotaRepository,
         protected SexoRepository $sexoRepository,
-        protected TipoUsuarioRepository $tipoUsuarioRepository,
+        protected RipsTipoUsuarioVersion2Repository $ripsTipoUsuarioVersion2Repository,
         protected PaisRepository $paisRepository,
         protected MunicipioRepository $municipioRepository,
         protected ZonaVersion2Repository $zonaVersion2Repository,
+        protected TipoIdPisisRepository $tipoIdPisisRepository,
     ) {
         $this->key_redis_project = env('KEY_REDIS_PROJECT');
     }
@@ -238,11 +241,12 @@ class InvoiceController extends Controller
         $serviceVendor = $this->serviceVendorRepository->find($post['service_vendor_id'], select: ['id', 'nit']);
         $tipoNota = $this->tipoNotaRepository->find($post['tipo_nota_id'], select: ['id', 'codigo']);
         $sexo = $this->sexoRepository->find($post['sexo_id'], select: ['id', 'codigo']);
-        $tipoUsuario = $this->tipoUsuarioRepository->find($post['tipo_usuario_id'], select: ['id', 'codigo']);
+        $tipoUsuario = $this->ripsTipoUsuarioVersion2Repository->find($post['tipo_usuario_id'], select: ['id', 'codigo']);
         $pais_residency = $this->paisRepository->find($post['pais_residency_id'], select: ['id', 'codigo']);
         $pais_origin = $this->paisRepository->find($post['pais_origin_id'], select: ['id', 'codigo']);
-        $municipio = $this->municipioRepository->find($post['pais_origin_id'], select: ['id', 'codigo']);
-        $zonaVersion2 = $this->zonaVersion2Repository->find($post['pais_origin_id'], select: ['id', 'codigo']);
+        $municipio = $this->municipioRepository->find($post['municipio_residency_id'], select: ['id', 'codigo']);
+        $zonaVersion2 = $this->zonaVersion2Repository->find($post['residency_zone_id'], select: ['id', 'codigo']);
+        $tipoIdPisis = $this->tipoIdPisisRepository->find($post['pais_origin_id'], select: ['id', 'codigo']);
         $patient = $invoice->patient;
 
         // Base invoice data
