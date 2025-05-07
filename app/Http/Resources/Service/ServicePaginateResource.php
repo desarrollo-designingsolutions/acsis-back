@@ -16,6 +16,7 @@ class ServicePaginateResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'invoice_id' => $this->invoice_id,
             'cups_rip_codigo' => $this->cups_rip?->codigo,
             'cups_rip_nombre' => $this->cups_rip?->nombre,
             'quantity' => $this->quantity,

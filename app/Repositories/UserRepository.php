@@ -82,7 +82,7 @@ class UserRepository extends BaseRepository
 
         $cacheKey = $this->cacheService->generateKey("{$this->model->getTable()}_list", $request);
 
-        return $this->cacheService->remember($cacheKey, function () {
+        return $this->cacheService->remember($cacheKey, function () use ($request) {
             $query = QueryBuilder::for($this->model->query())
                 ->select('users.id', 'users.name', 'users.surname', 'users.email', 'users.role_id', 'users.is_active')
                 ->allowedFilters([
