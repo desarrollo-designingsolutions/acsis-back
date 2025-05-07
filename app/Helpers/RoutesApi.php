@@ -24,5 +24,6 @@ class RoutesApi
         'routes/service.php',
         'routes/glosa.php',
         'routes/invoicePayment.php',
+        'routes/patient.php',
     ];
 }
