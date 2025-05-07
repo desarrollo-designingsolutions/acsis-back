@@ -17,11 +17,20 @@ class PatientStoreRequest extends FormRequest
     public function rules(): array
     {
         $rules = [
-            // 'corporate_name' => 'required',
-            // 'nit' => 'required',
-            // 'phone' => 'required',
-            // 'address' => 'required',
-            // 'type_entity_id' => 'required',
+            'tipo_id_pisi_id' => 'required',
+            'document' => 'required',
+            'rips_tipo_usuario_version2_id' => 'required',
+            'birth_date' => 'required|date',
+            'sexo_id' => 'required',
+            'pais_residency_id' => 'required',
+            'municipio_residency_id' => 'required',
+            'zona_version2_id' => 'required',
+            'incapacity' => 'required',
+            'pais_origin_id' => 'required',
+            'first_name' => 'required',
+            'second_name' => 'required',
+            'first_surname' => 'required',
+            'second_surname' => 'required',
         ];
 
         return $rules;
@@ -30,20 +39,36 @@ class PatientStoreRequest extends FormRequest
     public function messages(): array
     {
         return [
-            // 'corporate_name.required' => 'El campo es obligatorio',
-            // 'nit.required' => 'El campo es obligatorio',
-            // 'phone.required' => 'El campo es obligatorio',
-            // 'address.required' => 'El campo es obligatorio',
-            // 'email.unique' => 'El Email ya existe',
-            // 'email.email' => 'El campo debe contener un correo valido',
-            // 'type_entity_id.required' => 'El campo es obligatorio',
-
+            'tipo_id_pisi_id.required' => 'El campo es obligatorio',
+            'document.required' => 'El campo es obligatorio',
+            'rips_tipo_usuario_version2_id.required' => 'El campo es obligatorio',
+            'birth_date.required' => 'El campo es obligatorio',
+            'birth_date.date' => 'El campo debe ser una fecha',
+            'sexo_id.required' => 'El campo es obligatorio',
+            'pais_residency_id.required' => 'El campo es obligatorio',
+            'municipio_residency_id.required' => 'El campo es obligatorio',
+            'zona_version2_id.required' => 'El campo es obligatorio',
+            'incapacity.required' => 'El campo es obligatorio',
+            'pais_origin_id.required' => 'El campo es obligatorio',
+            'first_name.required' => 'El campo es obligatorio',
+            'second_name.required' => 'El campo es obligatorio',
+            'first_surname.required' => 'El campo es obligatorio',
+            'second_surname.required' => 'El campo es obligatorio',
         ];
     }
 
     protected function prepareForValidation(): void
     {
-        $this->merge([]);
+        $this->merge([
+            'tipo_id_pisi_id' => getValueSelectInfinite($this->tipo_id_pisi_id),
+            'rips_tipo_usuario_version2_id' => getValueSelectInfinite($this->rips_tipo_usuario_version2_id),
+            'sexo_id' => getValueSelectInfinite($this->sexo_id),
+            'pais_residency_id' => getValueSelectInfinite($this->pais_residency_id),
+            'municipio_residency_id' => getValueSelectInfinite($this->municipio_residency_id),
+            'zona_version2_id' => getValueSelectInfinite($this->zona_version2_id),
+            'incapacity' => $this->incapacity === 'Si' ? 1 : 0,
+            'pais_origin_id' => getValueSelectInfinite($this->pais_origin_id),
+        ]);
     }
 
     public function failedValidation(Validator $validator)

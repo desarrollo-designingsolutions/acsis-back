@@ -416,7 +416,7 @@ class InvoiceController extends Controller
             $exists = $this->invoiceRepository->validateInvoiceNumber($request->all());
 
             return [
-                'message_licences' => 'El número de factura ya existe.',
+                'message_invoice' => 'El número de factura ya existe.',
                 'exists' => $exists,
             ];
         });
