@@ -16,7 +16,7 @@ class PatientSelectResource extends JsonResource
     {
         return [
             'value' => $this->id,
-            'title' => $this->document.' - '.$this->full_name,
+            'title' => $this->document . ' - ' . $this->full_name,
         ];
     }
 }

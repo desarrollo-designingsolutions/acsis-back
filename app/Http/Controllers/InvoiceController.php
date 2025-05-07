@@ -45,12 +45,6 @@ class InvoiceController extends Controller
         protected InvoiceSoatRepository $invoiceSoatRepository,
         protected ServiceVendorRepository $serviceVendorRepository,
         protected TipoNotaRepository $tipoNotaRepository,
-        protected SexoRepository $sexoRepository,
-        protected RipsTipoUsuarioVersion2Repository $ripsTipoUsuarioVersion2Repository,
-        protected PaisRepository $paisRepository,
-        protected MunicipioRepository $municipioRepository,
-        protected ZonaVersion2Repository $zonaVersion2Repository,
-        protected TipoIdPisisRepository $tipoIdPisisRepository,
     ) {
         $this->key_redis_project = env('KEY_REDIS_PROJECT');
     }
@@ -163,67 +157,11 @@ class InvoiceController extends Controller
             $post['remaining_balance'] = $post['total'];
             $invoice = $this->invoiceRepository->store($post);
 
-
-
             // Build JSON structure
-            $jsonData = $this->buildInvoiceJson($post, $invoice);
+            $jsonData = $this->buildInvoiceJson($invoice->id);
 
             // Store JSON file
-            $this->storeJsonFile($post, $invoice, $jsonData);
-
-            //////////////////////////////////////////////////
-
-            // $service_vendor = $this->serviceVendorRepository->find($post['service_vendor_id'], select: ['id', 'nit']);
-            // $tipo_nota = $this->tipoNotaRepository->find($post['tipo_nota_id'], select: ['id', 'codigo']);
-            // $patient = $invoice->patient;
-
-            // $data = [
-            //     "numDocumentoIdObligado" => $service_vendor->nit,
-            //     "numFactura" => $post["invoice_number"],
-            //     "TipoNota" => $tipo_nota->codigo,
-            //     "numNota" => $post["note_number"],
-            // ];
-
-            // $info = convertNullToEmptyString([
-            //     "numDocumentoIdObligado" => $data["numDocumentoIdObligado"],
-            //     "numFactura" => $data["numFactura"],
-            //     "TipoNota" => $data["TipoNota"],
-            //     "numNota" => $data["numNota"],
-            // ]);
-
-            // $users = [];
-
-            // $users[] = [
-            //     "codSexo" => "",
-            //     "consecutivo" => 1,
-            //     "incapacidad" => $patient->incapacity,
-            //     "tipoUsuario" => "",
-            //     "codPaisOrigen" => "",
-            //     "fechaNacimiento" => $patient->birth_date,
-            //     "codPaisResidencia" => "",
-            //     "codMunicipioResidencia" => "",
-            //     "numDocumentoIdentificacion" => $patient->document,
-            //     "tipoDocumentoIdentificacion" => "",
-            //     "codZonaTerritorialResidencia" => "",
-            //     "servicios" => [
-            //         'consultas' => [],
-            //         'procedimientos' => [],
-            //         'medicamentos' => [],
-            //         'urgencias' => [],
-            //         'otrosServicios' => [],
-            //         'hospitalizacion' => [],
-            //         'recienNacidos' => []
-            //     ]
-            // ];
-
-            // $info["usuarios"] = [$users];
-
-            // // Define file name and path for JSON file
-            // $nameFile = $post["invoice_number"] . '.json';
-            // $ruta = 'companies/company_' . $post["company_id"] . '/invoices/invoice_' . $invoice->id . '/' . $nameFile;
-
-            // // Store JSON contents to the file system
-            // Storage::disk('public')->put($ruta, json_encode($info)); //guardo el archivo
+            $this->storeJsonFile($invoice, $jsonData);
 
             return [
                 'code' => 200,
@@ -234,36 +172,38 @@ class InvoiceController extends Controller
     /**
      * Build the JSON structure for the invoice
      */
-    private function buildInvoiceJson(array $post, $invoice): array
+    private function buildInvoiceJson($invoice_id): array
     {
-        $invoice->load("patient");
-        $invoice->patient->load("sexo");
-        $invoice->patient->load("rips_tipo_usuario_version2");
-        $invoice->patient->load("pais_residency");
-        $invoice->patient->load("municipio_residency");
-        $invoice->patient->load("zona_version2");
-        $invoice->patient->load("tipo_id_pisi");
-        $invoice->patient->load("pais_origin");
+        $invoice = $this->invoiceRepository->find($invoice_id, [
+            "tipoNota",
+            "serviceVendor",
+            "patient",
+            "patient.sexo",
+            "patient.rips_tipo_usuario_version2",
+            "patient.pais_residency",
+            "patient.municipio_residency",
+            "patient.zona_version2",
+            "patient.tipo_id_pisi",
+            "patient.pais_origin",
+        ]);
 
         $patient = $invoice->patient;
-
-        $sexo = $invoice->patient->sexo->codigo;
-        $tipoUsuario = $invoice->patient->rips_tipo_usuario_version2->codigo;
-
-        $pais_residency = $invoice->patient->pais_residency->codigo;
-        $pais_origin = $invoice->patient->pais_origin->codigo;
-        $municipio = $invoice->patient->municipio_residency->codigo;
-        $zonaVersion2 = $invoice->patient->zona_version2->codigo;
-        $tipoIdPisis = $invoice->patient->tipo_id_pisi->codigo;
-        $tipoNota = $invoice->tipoNota->codigo;
-        $serviceVendor = $invoice->serviceVendor->nit;
+        $sexo = $invoice->patient->sexo;
+        $tipoUsuario = $invoice->patient->rips_tipo_usuario_version2;
+        $pais_residency = $invoice->patient->pais_residency;
+        $pais_origin = $invoice->patient->pais_origin;
+        $municipio = $invoice->patient->municipio_residency;
+        $zonaVersion2 = $invoice->patient->zona_version2;
+        $tipoIdPisis = $invoice->patient->tipo_id_pisi;
+        $tipoNota = $invoice->tipoNota;
+        $serviceVendor = $invoice->serviceVendor;
 
         // Base invoice data
         $baseData = [
             'numDocumentoIdObligado' => $serviceVendor->nit,
-            'numFactura' => $post['invoice_number'],
+            'numFactura' => $invoice->invoice_number,
             'TipoNota' => $tipoNota->codigo,
-            'numNota' => $post['note_number'],
+            'numNota' => $invoice->note_number
         ];
 
         // Convert null values to empty strings
@@ -301,24 +241,36 @@ class InvoiceController extends Controller
     }
 
     /**
-     * Store or update the JSON file
+     * Store or update the JSON file and save path in invoice
      */
-    private function storeJsonFile(array $post, $invoice, array $jsonData): void
+    private function storeJsonFile($invoice, array $jsonData): void
     {
-        $nameFile = $post['invoice_number'] . '.json';
-        $path = "companies/company_{$post['company_id']}/invoices/invoice_{$invoice->id}/{$nameFile}";
+        $nameFile = $invoice->invoice_number . '.json';
+        $path = "companies/company_{$invoice->company_id}/invoices/invoice_{$invoice->id}/{$nameFile}";
+        $disk = Constants::DISK_FILES;
+
+        // Check if invoice has an existing path_json that differs from the new path
+        if ($invoice->path_json && $invoice->path_json !== $path) {
+            // Attempt to delete the old file
+            if (Storage::disk($disk)->exists($invoice->path_json)) {
+                Storage::disk($disk)->delete($invoice->path_json);
+            }
+        }
 
         // Check if file exists
-        if (Storage::disk(Constants::DISK_FILES)->exists($path)) {
+        if (Storage::disk($disk)->exists($path)) {
             // Read existing JSON and merge with new data
-            $existingData = json_decode(Storage::disk(Constants::DISK_FILES)->get($path), true);
+            $existingData = json_decode(Storage::disk($disk)->get($path), true);
             $mergedData = array_merge($existingData, $jsonData);
         } else {
             $mergedData = $jsonData;
         }
 
         // Store JSON contents
-        Storage::disk(Constants::DISK_FILES)->put($path, json_encode($mergedData, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+        Storage::disk($disk)->put($path, json_encode($mergedData, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+
+        // Update path_json in the invoice
+        $this->invoiceRepository->store(['path_json' => $path], $invoice->id);
     }
 
 
@@ -362,6 +314,12 @@ class InvoiceController extends Controller
             if (!$invoice->invoice_payments()->exists()) {
                 $post['remaining_balance'] = $post['total'];
             }
+
+            // Build JSON structure
+            $jsonData = $this->buildInvoiceJson($invoice->id);
+
+            // Store JSON file
+            $this->storeJsonFile($invoice, $jsonData);
 
             return [
                 'code' => 200,
@@ -447,7 +405,7 @@ class InvoiceController extends Controller
         });
     }
 
-    public function validateLicensePlate(Request $request)
+    public function validateInvoiceNumber(Request $request)
     {
         return $this->execute(function () use ($request) {
 
@@ -455,7 +413,7 @@ class InvoiceController extends Controller
                 'invoice_number' => 'required|string',
             ]);
 
-            $exists = $this->invoiceRepository->validateLicensePlate($request->all());
+            $exists = $this->invoiceRepository->validateInvoiceNumber($request->all());
 
             return [
                 'message_licences' => 'El número de factura ya existe.',

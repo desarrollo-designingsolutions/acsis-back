@@ -30,6 +30,13 @@ class DatabaseSeeder extends Seeder
             TypeVendorSeeder::class,
             TypeEntitySeeder::class,
             TypeDocumentSeeder::class,
+
+
+            TypeCodeGlosaSeeder::class,
+            GeneralCodeGlosaSeeder::class,
+            CodeGlosaSeeder::class,
+            CupsRipsSeeder::class,
+
             TipoNotaSeeder::class,
             TipoIdPisisSeeder::class,
             RipsTipoUsuarioVersion2Seeder::class,
@@ -38,10 +45,6 @@ class DatabaseSeeder extends Seeder
             MunicipioSeeder::class,
             ZonaVersion2Seeder::class,
 
-            TypeCodeGlosaSeeder::class,
-            GeneralCodeGlosaSeeder::class,
-            CodeGlosaSeeder::class,
-            CupsRipsSeeder::class,
         ]);
 
         $client = new ClientRepository;
