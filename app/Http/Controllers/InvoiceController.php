@@ -20,10 +20,8 @@ use App\Repositories\PatientRepository;
 use App\Repositories\RipsTipoUsuarioVersion2Repository;
 use App\Repositories\ServiceVendorRepository;
 use App\Repositories\SexoRepository;
-use App\Repositories\TipoDocumentoRepository;
 use App\Repositories\TipoIdPisisRepository;
 use App\Repositories\TipoNotaRepository;
-use App\Repositories\TipoUsuarioRepository;
 use App\Traits\HttpResponseTrait;
 use App\Repositories\TypeEntityRepository;
 use App\Repositories\ZonaVersion2Repository;
@@ -238,16 +236,27 @@ class InvoiceController extends Controller
      */
     private function buildInvoiceJson(array $post, $invoice): array
     {
-        $serviceVendor = $this->serviceVendorRepository->find($post['service_vendor_id'], select: ['id', 'nit']);
-        $tipoNota = $this->tipoNotaRepository->find($post['tipo_nota_id'], select: ['id', 'codigo']);
-        $sexo = $this->sexoRepository->find($post['sexo_id'], select: ['id', 'codigo']);
-        $tipoUsuario = $this->ripsTipoUsuarioVersion2Repository->find($post['tipo_usuario_id'], select: ['id', 'codigo']);
-        $pais_residency = $this->paisRepository->find($post['pais_residency_id'], select: ['id', 'codigo']);
-        $pais_origin = $this->paisRepository->find($post['pais_origin_id'], select: ['id', 'codigo']);
-        $municipio = $this->municipioRepository->find($post['municipio_residency_id'], select: ['id', 'codigo']);
-        $zonaVersion2 = $this->zonaVersion2Repository->find($post['residency_zone_id'], select: ['id', 'codigo']);
-        $tipoIdPisis = $this->tipoIdPisisRepository->find($post['pais_origin_id'], select: ['id', 'codigo']);
+        $invoice->load("patient");
+        $invoice->patient->load("sexo");
+        $invoice->patient->load("rips_tipo_usuario_version2");
+        $invoice->patient->load("pais_residency");
+        $invoice->patient->load("municipio_residency");
+        $invoice->patient->load("zona_version2");
+        $invoice->patient->load("tipo_id_pisi");
+        $invoice->patient->load("pais_origin");
+
         $patient = $invoice->patient;
+
+        $sexo = $invoice->patient->sexo->codigo;
+        $tipoUsuario = $invoice->patient->rips_tipo_usuario_version2->codigo;
+
+        $pais_residency = $invoice->patient->pais_residency->codigo;
+        $pais_origin = $invoice->patient->pais_origin->codigo;
+        $municipio = $invoice->patient->municipio_residency->codigo;
+        $zonaVersion2 = $invoice->patient->zona_version2->codigo;
+        $tipoIdPisis = $invoice->patient->tipo_id_pisi->codigo;
+        $tipoNota = $invoice->tipoNota->codigo;
+        $serviceVendor = $invoice->serviceVendor->nit;
 
         // Base invoice data
         $baseData = [
@@ -272,7 +281,7 @@ class InvoiceController extends Controller
                 'codPaisResidencia' => $pais_residency->codigo,
                 'codMunicipioResidencia' => $municipio->codigo,
                 'numDocumentoIdentificacion' => $patient->document,
-                'tipoDocumentoIdentificacion' => "",
+                'tipoDocumentoIdentificacion' => $tipoIdPisis->codigo,
                 'codZonaTerritorialResidencia' => $zonaVersion2->codigo,
                 'servicios' => [
                     'consultas' => [],
