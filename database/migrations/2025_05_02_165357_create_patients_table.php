@@ -14,14 +14,14 @@ return new class extends Migration
         Schema::create('patients', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->foreignUuid('company_id')->constrained();
-            $table->foreignUuid('tipo_documento_id')->constrained('tipo_id_pisis');
+            $table->foreignUuid('tipo_id_pisi_id')->constrained('tipo_id_pisis');
             $table->string('document')->nullable();
-            $table->foreignUuid('tipo_usuario_id')->constrained('rips_tipo_usuario_version2s');
+            $table->foreignUuid('rips_tipo_usuario_version2_id')->constrained('rips_tipo_usuario_version2s');
             $table->date('birth_date')->nullable();
             $table->foreignUuid('sexo_id')->constrained('sexos');
             $table->foreignUuid('pais_residency_id')->constrained('pais');
             $table->foreignUuid('municipio_residency_id')->constrained('municipios');
-            $table->foreignUuid('residency_zone_id')->constrained('zona_version2s');
+            $table->foreignUuid('zona_version2_id')->constrained('zona_version2s');
             $table->boolean('incapacity')->default(false);
             $table->foreignUuid('pais_origin_id')->constrained('pais');
             $table->string('first_name')->nullable();
