@@ -99,7 +99,9 @@ class InvoicePaymentController extends Controller
 
     public function update(InvoicePaymentStoreRequest $request, $id)
     {
-        return $this->runTransaction(function () use ($request) {
+        return $this->runTransaction(function () use ($request, $id) {
+
+            $invoicePayment_old = $this->invoicePaymentRepository->find($id, select: ['id', 'value_paid']);
 
             $post = $request->except(["file"]);
             $invoicePayment = $this->invoicePaymentRepository->store($post);
@@ -114,7 +116,7 @@ class InvoicePaymentController extends Controller
             }
 
             $invoice = $this->invoiceRepository->find($invoicePayment->invoice_id, select: ['id', 'remaining_balance']);
-            $invoice->remaining_balance = $invoice->remaining_balance - $invoicePayment->value_paid;
+            $invoice->remaining_balance = ($invoicePayment_old->value_paid + $invoice->remaining_balance) - $invoicePayment->value_paid;
             $invoice->save();
 
             return [

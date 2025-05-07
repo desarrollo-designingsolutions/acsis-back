@@ -59,11 +59,11 @@ class ServiceRepository extends BaseRepository
                 )),
             ])
             ->where(function ($query) use ($request) {
-                if (isset($request['service_id']) && ! empty($request['service_id'])) {
-                    $query->orWhere('service_id', $request['service_id']);
+                if (isset($request['invoice_id']) && ! empty($request['invoice_id'])) {
+                    $query->where('invoice_id', $request['invoice_id']);
                 }
                 if (isset($request['company_id']) && ! empty($request['company_id'])) {
-                    $query->orWhere('company_id', $request['company_id']);
+                    $query->where('company_id', $request['company_id']);
                 }
             })
             ->paginate(request()->perPage ?? Constants::ITEMS_PER_PAGE);
