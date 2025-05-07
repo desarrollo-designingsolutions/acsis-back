@@ -14,11 +14,17 @@ use App\Http\Resources\Invoice\InvoiceType002FormResource;
 use App\Http\Resources\InvoiceSoat\InvoiceSoatFormResource;
 use App\Repositories\InvoiceRepository;
 use App\Repositories\InvoiceSoatRepository;
+use App\Repositories\MunicipioRepository;
+use App\Repositories\PaisRepository;
 use App\Repositories\PatientRepository;
 use App\Repositories\ServiceVendorRepository;
+use App\Repositories\SexoRepository;
+use App\Repositories\TipoDocumentoRepository;
 use App\Repositories\TipoNotaRepository;
+use App\Repositories\TipoUsuarioRepository;
 use App\Traits\HttpResponseTrait;
 use App\Repositories\TypeEntityRepository;
+use App\Repositories\ZonaVersion2Repository;
 use App\Services\CacheService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -39,6 +45,11 @@ class InvoiceController extends Controller
         protected InvoiceSoatRepository $invoiceSoatRepository,
         protected ServiceVendorRepository $serviceVendorRepository,
         protected TipoNotaRepository $tipoNotaRepository,
+        protected SexoRepository $sexoRepository,
+        protected TipoUsuarioRepository $tipoUsuarioRepository,
+        protected PaisRepository $paisRepository,
+        protected MunicipioRepository $municipioRepository,
+        protected ZonaVersion2Repository $zonaVersion2Repository,
     ) {
         $this->key_redis_project = env('KEY_REDIS_PROJECT');
     }
@@ -226,6 +237,12 @@ class InvoiceController extends Controller
     {
         $serviceVendor = $this->serviceVendorRepository->find($post['service_vendor_id'], select: ['id', 'nit']);
         $tipoNota = $this->tipoNotaRepository->find($post['tipo_nota_id'], select: ['id', 'codigo']);
+        $sexo = $this->sexoRepository->find($post['sexo_id'], select: ['id', 'codigo']);
+        $tipoUsuario = $this->tipoUsuarioRepository->find($post['tipo_usuario_id'], select: ['id', 'codigo']);
+        $pais_residency = $this->paisRepository->find($post['pais_residency_id'], select: ['id', 'codigo']);
+        $pais_origin = $this->paisRepository->find($post['pais_origin_id'], select: ['id', 'codigo']);
+        $municipio = $this->municipioRepository->find($post['pais_origin_id'], select: ['id', 'codigo']);
+        $zonaVersion2 = $this->zonaVersion2Repository->find($post['pais_origin_id'], select: ['id', 'codigo']);
         $patient = $invoice->patient;
 
         // Base invoice data
@@ -242,17 +259,17 @@ class InvoiceController extends Controller
         // Build user data
         $users = [
             [
-                'codSexo' => '',
+                'codSexo' => $sexo->codigo,
                 'consecutivo' => 1,
                 'incapacidad' => $patient->incapacity,
-                'tipoUsuario' => '',
-                'codPaisOrigen' => '',
+                'tipoUsuario' => $tipoUsuario->codigo,
+                'codPaisOrigen' => $pais_origin->codigo,
                 'fechaNacimiento' => $patient->birth_date,
-                'codPaisResidencia' => '',
-                'codMunicipioResidencia' => '',
+                'codPaisResidencia' => $pais_residency->codigo,
+                'codMunicipioResidencia' => $municipio->codigo,
                 'numDocumentoIdentificacion' => $patient->document,
-                'tipoDocumentoIdentificacion' => '',
-                'codZonaTerritorialResidencia' => '',
+                'tipoDocumentoIdentificacion' => "",
+                'codZonaTerritorialResidencia' => $zonaVersion2->codigo,
                 'servicios' => [
                     'consultas' => [],
                     'procedimientos' => [],

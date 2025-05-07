@@ -5,11 +5,7 @@ namespace App\Repositories;
 use App\Helpers\Constants;
 use App\Http\Resources\TypeDocument\TypeDocumentSelectResource;
 use App\Models\RipsTipoUsuarioVersion2;
-use App\QueryBuilder\Filters\QueryFilters;
-use App\QueryBuilder\Sort\IsActiveSort;
-use App\QueryBuilder\Sort\RelatedTableSort;
 use Spatie\QueryBuilder\AllowedFilter;
-use Spatie\QueryBuilder\AllowedSort;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class TipoUsuarioRepository extends BaseRepository
@@ -25,15 +21,13 @@ class TipoUsuarioRepository extends BaseRepository
 
         return $this->cacheService->remember($cacheKey, function () use ($request) {
             $query = QueryBuilder::for($this->model->query())
-                ->select(['id','codigo', 'nombre'])
+                ->select(['id', 'codigo', 'nombre'])
                 ->allowedFilters([
                     AllowedFilter::callback('inputGeneral', function ($query, $value) {
-                        $query->where(function ($subQuery) use ($value) {
-                        });
+                        $query->where(function ($subQuery) use ($value) {});
                     }),
                 ])
-                ->allowedSorts([
-                ]);
+                ->allowedSorts([]);
 
             if (empty($request['typeData'])) {
                 $query = $query->paginate(request()->perPage ?? Constants::ITEMS_PER_PAGE);
