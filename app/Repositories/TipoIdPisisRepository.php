@@ -12,7 +12,7 @@ use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\AllowedSort;
 use Spatie\QueryBuilder\QueryBuilder;
 
-class TipoDocumentoRepository extends BaseRepository
+class TipoIdPisisRepository extends BaseRepository
 {
     public function __construct(TipoIdPisis $modelo)
     {

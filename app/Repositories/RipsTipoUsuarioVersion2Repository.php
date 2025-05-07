@@ -8,7 +8,7 @@ use App\Models\RipsTipoUsuarioVersion2;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
-class TipoUsuarioRepository extends BaseRepository
+class RipsTipoUsuarioVersion2Repository extends BaseRepository
 {
     public function __construct(RipsTipoUsuarioVersion2 $modelo)
     {
