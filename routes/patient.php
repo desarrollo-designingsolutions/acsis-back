@@ -24,9 +24,5 @@ Route::middleware(['check.permission:menu.patient'])->group(function () {
 
     Route::delete('/patient/delete/{id}', [PatientController::class, 'delete']);
 
-    Route::post('/patient/changeStatus', [PatientController::class, 'changeStatus']);
-
     Route::get('/patient/excelExport', [PatientController::class, 'excelExport']);
-
-    Route::get('/patient/getNit/{id}', [PatientController::class, 'getNit']);
 });

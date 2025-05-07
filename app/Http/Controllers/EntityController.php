@@ -10,26 +10,19 @@ use App\Http\Resources\TypeEntity\TypeEntitySelectResource;
 use App\Repositories\EntityRepository;
 use App\Traits\HttpResponseTrait;
 use App\Repositories\TypeEntityRepository;
-use App\Services\CacheService;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 
 class EntityController extends Controller
 {
     use HttpResponseTrait;
 
-    private $key_redis_project;
 
     public function __construct(
         protected EntityRepository $entityRepository,
         protected QueryController $queryController,
         protected TypeEntityRepository $typeEntityRepository,
-        protected CacheService $cacheService,
-    ) {
-        $this->key_redis_project = env('KEY_REDIS_PROJECT');
-    }
+    ) {}
 
     public function paginate(Request $request)
     {
@@ -66,8 +59,6 @@ class EntityController extends Controller
         return $this->runTransaction(function () use ($request) {
             $entity = $this->entityRepository->store($request->all());
 
-            $this->cacheService->clearByPrefix($this->key_redis_project . 'string:entities*');
-
             return [
                 'code' => 200,
                 'message' => 'Entidad agregada correctamente',
@@ -98,8 +89,6 @@ class EntityController extends Controller
 
             $entity = $this->entityRepository->store($request->all(), $id);
 
-            $this->cacheService->clearByPrefix($this->key_redis_project . 'string:entities*');
-
             return [
                 'code' => 200,
                 'message' => 'Entidad modificada correctamente',
@@ -112,8 +101,6 @@ class EntityController extends Controller
         return $this->runTransaction(function () use ($id) {
             $entity = $this->entityRepository->find($id);
             if ($entity) {
-
-                $this->cacheService->clearByPrefix($this->key_redis_project . 'string:entities*');
 
                 $entity->delete();
                 $msg = 'Registro eliminado correctamente';

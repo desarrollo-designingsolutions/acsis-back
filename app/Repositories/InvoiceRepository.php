@@ -133,7 +133,7 @@ class InvoiceRepository extends BaseRepository
         return $data;
     }
 
-    public function validateLicensePlate($request = []): bool
+    public function validateInvoiceNumber($request = []): bool
     {
         $data = $this->model
             ->where(function ($query) use ($request) {

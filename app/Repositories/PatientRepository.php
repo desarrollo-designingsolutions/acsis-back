@@ -6,6 +6,7 @@ use App\Helpers\Constants;
 use App\Http\Resources\TypeDocument\TypeDocumentSelectResource;
 use App\Models\Patient;
 use App\QueryBuilder\Filters\QueryFilters;
+use App\QueryBuilder\Sort\DynamicConcatSort;
 use App\QueryBuilder\Sort\IsActiveSort;
 use App\QueryBuilder\Sort\RelatedTableSort;
 use Spatie\QueryBuilder\AllowedFilter;
@@ -30,11 +31,13 @@ class PatientRepository extends BaseRepository
                     AllowedFilter::callback('inputGeneral', function ($query, $value) {
                         $query->where(function ($subQuery) use ($value) {
                             $subQuery->orWhere('document', 'like', "%$value%");
+                            $subQuery->orWhereRaw("CONCAT(first_name, ' ', second_name, ' ', first_surname, ' ', second_surname) LIKE ?", ["%{$value}%"]);
                         });
                     }),
                 ])
                 ->allowedSorts([
                     'document',
+                    AllowedSort::custom('full_name', new DynamicConcatSort("first_name, ' ', second_name, ' ', first_surname, ' ', second_surname")),
                 ])->where(function ($query) use ($request) {
 
                     if (isset($request['searchQueryInfinite']) && ! empty($request['searchQueryInfinite'])) {

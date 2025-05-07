@@ -281,7 +281,7 @@ class InvoiceController extends Controller
         });
     }
 
-    public function validateLicensePlate(Request $request)
+    public function validateInvoiceNumber(Request $request)
     {
         return $this->execute(function () use ($request) {
 
@@ -289,10 +289,10 @@ class InvoiceController extends Controller
                 'invoice_number' => 'required|string',
             ]);
 
-            $exists = $this->invoiceRepository->validateLicensePlate($request->all());
+            $exists = $this->invoiceRepository->validateInvoiceNumber($request->all());
 
             return [
-                'message_licences' => 'El número de factura ya existe.',
+                'message_invoice' => 'El número de factura ya existe.',
                 'exists' => $exists,
             ];
         });

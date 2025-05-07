@@ -24,7 +24,7 @@ class InvoiceType002FormResource extends JsonResource
         return [
             'id' => $this->id,
             'service_vendor_id' => new ServiceVendorSelectResource($this->serviceVendor),
-            'entity_id' => new EntitySelectResource($this->entities),
+            'entity_id' => new EntitySelectResource($this->entity),
             'patient_id' => new PatientSelectResource($this->patient),
             'tipo_nota_id' => new TipoNotaSelectResource($this->tipoNota),
             'note_number' => $this->note_number,

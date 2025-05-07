@@ -2,37 +2,24 @@
 
 namespace App\Http\Controllers;
 
-use App\Exports\EntityExcelExport;
-use App\Http\Requests\Entity\EntityStoreRequest;
-use App\Http\Requests\Entity\PatientStoreRequest;
-use App\Http\Resources\Entity\EntityFormResource;
-use App\Http\Resources\Entity\EntityListResource;
+use App\Exports\PatientExcelExport;
+use App\Http\Requests\Patient\PatientStoreRequest;
+use App\Http\Resources\Patient\PatientFormResource;
 use App\Http\Resources\Patient\PatientListResource;
-use App\Http\Resources\TypeEntity\TypeEntitySelectResource;
-use App\Repositories\EntityRepository;
 use App\Repositories\PatientRepository;
 use App\Traits\HttpResponseTrait;
 use App\Repositories\TypeEntityRepository;
-use App\Services\CacheService;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 
 class PatientController extends Controller
 {
     use HttpResponseTrait;
 
-    private $key_redis_project;
-
     public function __construct(
         protected PatientRepository $patientRepository,
-        protected QueryController $queryController,
         protected TypeEntityRepository $typeEntityRepository,
-        protected CacheService $cacheService,
-    ) {
-        $this->key_redis_project = env('KEY_REDIS_PROJECT');
-    }
+    ) {}
 
     public function paginate(Request $request)
     {
@@ -64,10 +51,8 @@ class PatientController extends Controller
     public function store(PatientStoreRequest $request)
     {
         return $this->runTransaction(function () use ($request) {
-            return $request;
-            $patient = $this->patientRepository->store($request->all());
 
-            $this->cacheService->clearByPrefix($this->key_redis_project . 'string:patients*');
+            $patient = $this->patientRepository->store($request->all(), null);
 
             return [
                 'code' => 200,
@@ -79,31 +64,25 @@ class PatientController extends Controller
     public function edit($id)
     {
         return $this->execute(function () use ($id) {
-            $entity = $this->entityRepository->find($id);
-            $form = new EntityFormResource($entity);
-
-            $typeEntities = $this->typeEntityRepository->list(['typeData' => 'all']);
-            $dataTypeEntities = TypeEntitySelectResource::collection($typeEntities);
+            $patient = $this->patientRepository->find($id);
+            $form = new PatientFormResource($patient);
 
             return [
                 'code' => 200,
                 'form' => $form,
-                'typeEntities' => $dataTypeEntities,
             ];
         });
     }
 
-    public function update(EntityStoreRequest $request, $id)
+    public function update(PatientStoreRequest $request, $id)
     {
         return $this->runTransaction(function () use ($request, $id) {
 
-            $entity = $this->entityRepository->store($request->all(), $id);
-
-            $this->cacheService->clearByPrefix($this->key_redis_project . 'string:entities*');
+            $patient = $this->patientRepository->store($request->all(), $id);
 
             return [
                 'code' => 200,
-                'message' => 'Entidad modificada correctamente',
+                'message' => 'Paciente modificado correctamente',
             ];
         });
     }
@@ -111,12 +90,17 @@ class PatientController extends Controller
     public function delete($id)
     {
         return $this->runTransaction(function () use ($id) {
-            $entity = $this->entityRepository->find($id);
-            if ($entity) {
+            $patient = $this->patientRepository->find($id);
+            if ($patient) {
 
-                $this->cacheService->clearByPrefix($this->key_redis_project . 'string:entities*');
+                // Verificar si hay registros relacionados
+                if ($patient->invoices()->exists()) {
+                    throw new \Exception(json_encode([
+                        'message' => 'No se puede eliminar la paciente, porque tiene relación de datos en otros módulos',
+                    ]));
+                }
 
-                $entity->delete();
+                $patient->delete();
                 $msg = 'Registro eliminado correctamente';
             } else {
                 $msg = 'El registro no existe';
@@ -129,29 +113,15 @@ class PatientController extends Controller
         }, 200);
     }
 
-    public function changeStatus(Request $request)
-    {
-        return $this->runTransaction(function () use ($request) {
-            $model = $this->entityRepository->changeState($request->input('id'), strval($request->input('value')), $request->input('field'));
-
-            ($model->is_active == 1) ? $msg = 'habilitada' : $msg = 'inhabilitada';
-
-            return [
-                'code' => 200,
-                'message' => 'Entidad ' . $msg . ' con éxito',
-            ];
-        });
-    }
-
     public function excelExport(Request $request)
     {
         return $this->execute(function () use ($request) {
 
             $request['typeData'] = 'all';
 
-            $entities = $this->entityRepository->paginate($request->all());
+            $patient = $this->patientRepository->paginate($request->all());
 
-            $excel = Excel::raw(new EntityExcelExport($entities), \Maatwebsite\Excel\Excel::XLSX);
+            $excel = Excel::raw(new PatientExcelExport($patient), \Maatwebsite\Excel\Excel::XLSX);
 
             $excelBase64 = base64_encode($excel);
 
@@ -161,19 +131,4 @@ class PatientController extends Controller
             ];
         });
     }
-
-    public function getNit($id)
-    {
-        return $this->execute(function () use ($id) {
-
-            $entities = $this->entityRepository->find($id);
-
-            return [
-                'code' => 200,
-                'nit' => $entities->nit,
-            ];
-        });
-    }
- 
-    
 }
