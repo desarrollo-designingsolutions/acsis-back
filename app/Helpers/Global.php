@@ -103,3 +103,10 @@ function getValueSelectInfinite($field, $value = 'value')
 {
     return isset($field) && is_array($field) ? $field[$value] : $field;
 }
+
+function convertNullToEmptyString(array $data): array
+{
+    return array_map(function ($item) {
+        return $item === null ? '' : $item;
+    }, $data);
+}

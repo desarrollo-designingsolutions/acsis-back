@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Enums\Invoice\TypeInvoiceEnum;
 use App\Exports\EntityExcelExport;
 use App\Exports\InvoiceExcelExport;
+use App\Helpers\Constants;
 use App\Http\Requests\Invoice\InvoiceType001StoreRequest;
 use App\Http\Requests\Invoice\InvoiceType002StoreRequest;
 use App\Http\Resources\Invoice\InvoiceListResource;
@@ -14,10 +15,13 @@ use App\Http\Resources\InvoiceSoat\InvoiceSoatFormResource;
 use App\Repositories\InvoiceRepository;
 use App\Repositories\InvoiceSoatRepository;
 use App\Repositories\PatientRepository;
+use App\Repositories\ServiceVendorRepository;
+use App\Repositories\TipoNotaRepository;
 use App\Traits\HttpResponseTrait;
 use App\Repositories\TypeEntityRepository;
 use App\Services\CacheService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 
 class InvoiceController extends Controller
@@ -33,6 +37,8 @@ class InvoiceController extends Controller
         protected CacheService $cacheService,
         protected PatientRepository $patientRepository,
         protected InvoiceSoatRepository $invoiceSoatRepository,
+        protected ServiceVendorRepository $serviceVendorRepository,
+        protected TipoNotaRepository $tipoNotaRepository,
     ) {
         $this->key_redis_project = env('KEY_REDIS_PROJECT');
     }
@@ -134,28 +140,158 @@ class InvoiceController extends Controller
     {
         return $this->runTransaction(function () use ($request) {
 
-            $post = $request->except(['entity', 'patient', 'TipoNota', 'serviceVendor','soat']);
+            // Extract and prepare data
+            $post = $request->except(['entity', 'patient', 'TipoNota', 'serviceVendor', 'soat']);
+            $dataSoat = array_merge($request->input('soat'), ['company_id' => $request->input('company_id')]);
 
-            $dataSoat = $request->input('soat');
-
-            $dataSoat['company_id'] = $request->input('company_id');
-
+            // Store SOAT and invoice
             $soat = $this->invoiceSoatRepository->store($dataSoat);
-
             $post['typeable_type'] = 'App\\Models\\' . $post['type'];
-
             $post['typeable_id'] = $soat['id'];
-
             $post['remaining_balance'] = $post['total'];
-
             $invoice = $this->invoiceRepository->store($post);
+
+
+
+            // Build JSON structure
+            $jsonData = $this->buildInvoiceJson($post, $invoice);
+
+            // Store JSON file
+            $this->storeJsonFile($post, $invoice, $jsonData);
+
+            //////////////////////////////////////////////////
+
+            // $service_vendor = $this->serviceVendorRepository->find($post['service_vendor_id'], select: ['id', 'nit']);
+            // $tipo_nota = $this->tipoNotaRepository->find($post['tipo_nota_id'], select: ['id', 'codigo']);
+            // $patient = $invoice->patient;
+
+            // $data = [
+            //     "numDocumentoIdObligado" => $service_vendor->nit,
+            //     "numFactura" => $post["invoice_number"],
+            //     "TipoNota" => $tipo_nota->codigo,
+            //     "numNota" => $post["note_number"],
+            // ];
+
+            // $info = convertNullToEmptyString([
+            //     "numDocumentoIdObligado" => $data["numDocumentoIdObligado"],
+            //     "numFactura" => $data["numFactura"],
+            //     "TipoNota" => $data["TipoNota"],
+            //     "numNota" => $data["numNota"],
+            // ]);
+
+            // $users = [];
+
+            // $users[] = [
+            //     "codSexo" => "",
+            //     "consecutivo" => 1,
+            //     "incapacidad" => $patient->incapacity,
+            //     "tipoUsuario" => "",
+            //     "codPaisOrigen" => "",
+            //     "fechaNacimiento" => $patient->birth_date,
+            //     "codPaisResidencia" => "",
+            //     "codMunicipioResidencia" => "",
+            //     "numDocumentoIdentificacion" => $patient->document,
+            //     "tipoDocumentoIdentificacion" => "",
+            //     "codZonaTerritorialResidencia" => "",
+            //     "servicios" => [
+            //         'consultas' => [],
+            //         'procedimientos' => [],
+            //         'medicamentos' => [],
+            //         'urgencias' => [],
+            //         'otrosServicios' => [],
+            //         'hospitalizacion' => [],
+            //         'recienNacidos' => []
+            //     ]
+            // ];
+
+            // $info["usuarios"] = [$users];
+
+            // // Define file name and path for JSON file
+            // $nameFile = $post["invoice_number"] . '.json';
+            // $ruta = 'companies/company_' . $post["company_id"] . '/invoices/invoice_' . $invoice->id . '/' . $nameFile;
+
+            // // Store JSON contents to the file system
+            // Storage::disk('public')->put($ruta, json_encode($info)); //guardo el archivo
 
             return [
                 'code' => 200,
                 'message' => 'Factura agregada correctamente',
             ];
-        });
+        }, debug: false);
     }
+    /**
+     * Build the JSON structure for the invoice
+     */
+    private function buildInvoiceJson(array $post, $invoice): array
+    {
+        $serviceVendor = $this->serviceVendorRepository->find($post['service_vendor_id'], select: ['id', 'nit']);
+        $tipoNota = $this->tipoNotaRepository->find($post['tipo_nota_id'], select: ['id', 'codigo']);
+        $patient = $invoice->patient;
+
+        // Base invoice data
+        $baseData = [
+            'numDocumentoIdObligado' => $serviceVendor->nit,
+            'numFactura' => $post['invoice_number'],
+            'TipoNota' => $tipoNota->codigo,
+            'numNota' => $post['note_number'],
+        ];
+
+        // Convert null values to empty strings
+        $info = convertNullToEmptyString($baseData);
+
+        // Build user data
+        $users = [
+            [
+                'codSexo' => '',
+                'consecutivo' => 1,
+                'incapacidad' => $patient->incapacity,
+                'tipoUsuario' => '',
+                'codPaisOrigen' => '',
+                'fechaNacimiento' => $patient->birth_date,
+                'codPaisResidencia' => '',
+                'codMunicipioResidencia' => '',
+                'numDocumentoIdentificacion' => $patient->document,
+                'tipoDocumentoIdentificacion' => '',
+                'codZonaTerritorialResidencia' => '',
+                'servicios' => [
+                    'consultas' => [],
+                    'procedimientos' => [],
+                    'medicamentos' => [],
+                    'urgencias' => [],
+                    'otrosServicios' => [],
+                    'hospitalizacion' => [],
+                    'recienNacidos' => []
+                ]
+            ]
+        ];
+
+        $info['usuarios'] = $users;
+
+        return $info;
+    }
+
+    /**
+     * Store or update the JSON file
+     */
+    private function storeJsonFile(array $post, $invoice, array $jsonData): void
+    {
+        $nameFile = $post['invoice_number'] . '.json';
+        $path = "companies/company_{$post['company_id']}/invoices/invoice_{$invoice->id}/{$nameFile}";
+
+        // Check if file exists
+        if (Storage::disk(Constants::DISK_FILES)->exists($path)) {
+            // Read existing JSON and merge with new data
+            $existingData = json_decode(Storage::disk(Constants::DISK_FILES)->get($path), true);
+            $mergedData = array_merge($existingData, $jsonData);
+        } else {
+            $mergedData = $jsonData;
+        }
+
+        // Store JSON contents
+        Storage::disk(Constants::DISK_FILES)->put($path, json_encode($mergedData, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+    }
+
+
 
     public function editType002($id)
     {

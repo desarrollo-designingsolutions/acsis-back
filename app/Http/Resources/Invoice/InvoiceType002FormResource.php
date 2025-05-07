@@ -2,12 +2,10 @@
 
 namespace App\Http\Resources\Invoice;
 
-use App\Enums\Invoice\TypeInvoiceEnum;
 use App\Http\Resources\Entity\EntitySelectResource;
 use App\Http\Resources\Patient\PatientSelectResource;
 use App\Http\Resources\ServiceVendor\ServiceVendorSelectResource;
 use App\Http\Resources\TipoNota\TipoNotaSelectResource;
-use App\Http\Resources\TypeDocument\TypeDocumentSelectResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -25,7 +23,7 @@ class InvoiceType002FormResource extends JsonResource
         return [
             'id' => $this->id,
             'service_vendor_id' => new ServiceVendorSelectResource($this->serviceVendor),
-            'entity_id' => new EntitySelectResource($this->entities),
+            'entity_id' => new EntitySelectResource($this->entity),
             'patient_id' => new PatientSelectResource($this->patient),
             'tipo_nota_id' => new TipoNotaSelectResource($this->tipoNota),
             'note_number' => $this->note_number,
