@@ -9,11 +9,11 @@ use App\Http\Resources\Entity\EntitySelectResource;
 use App\Http\Resources\Municipio\MunicipioSelectResource;
 use App\Http\Resources\Pais\PaisSelectResource;
 use App\Http\Resources\Patient\PatientSelectResource;
+use App\Http\Resources\RipsTipoUsuarioVersion2\RipsTipoUsuarioVersion2SelectResource;
 use App\Http\Resources\ServiceVendor\ServiceVendorSelectResource;
 use App\Http\Resources\Sexo\SexoSelectResource;
-use App\Http\Resources\TipoDocumento\TipoDocumentoSelectResource;
+use App\Http\Resources\TipoIdPisis\TipoIdPisisSelectResource;
 use App\Http\Resources\TipoNota\TipoNotaSelectResource;
-use App\Http\Resources\TipoUsuario\TipoUsuarioSelectResource;
 use App\Http\Resources\TypeDocument\TypeDocumentSelectResource;
 use App\Http\Resources\ZonaVersion2\ZonaVersion2SelectResource;
 use App\Repositories\CityRepository;
@@ -24,12 +24,12 @@ use App\Repositories\EntityRepository;
 use App\Repositories\MunicipioRepository;
 use App\Repositories\PaisRepository;
 use App\Repositories\PatientRepository;
+use App\Repositories\RipsTipoUsuarioVersion2Repository;
 use App\Repositories\ServiceVendorRepository;
 use App\Repositories\SexoRepository;
 use App\Repositories\StateRepository;
-use App\Repositories\TipoDocumentoRepository;
+use App\Repositories\TipoIdPisisRepository;
 use App\Repositories\TipoNotaRepository;
-use App\Repositories\TipoUsuarioRepository;
 use App\Repositories\TypeDocumentRepository;
 use App\Repositories\TypeEntityRepository;
 use App\Repositories\TypeVendorRepository;
@@ -56,8 +56,8 @@ class QueryController extends Controller
         protected CodeGlosaRepository $codeGlosaRepository,
         protected CupsRipsRepository $cupsRipsRepository,
         protected TipoNotaRepository $tipoNotaRepository,
-        protected TipoDocumentoRepository $tipoDocumentoRepository,
-        protected TipoUsuarioRepository $tipoUsuarioRepository,
+        protected TipoIdPisisRepository $tipoIdPisisRepository,
+        protected RipsTipoUsuarioVersion2Repository $ripsTipoUsuarioVersion2Repository,
         protected SexoRepository $sexoRepository,
         protected PaisRepository $paisRepository,
         protected MunicipioRepository $municipioRepository,
@@ -239,25 +239,25 @@ class QueryController extends Controller
 
     public function selectInfiniteTipoDocumento(Request $request)
     {
-        $tipoDocumento = $this->tipoDocumentoRepository->paginate($request->all());
-        $data = TipoDocumentoSelectResource::collection($tipoDocumento);
+        $tipoIdPisis = $this->tipoIdPisisRepository->paginate($request->all());
+        $data = TipoIdPisisSelectResource::collection($tipoIdPisis);
 
         return [
             'code' => 200,
-            'tipoDocumentos_arrayInfo' => $data,
-            'tipoDocumentos_countLinks' => $tipoDocumento->lastPage(),
+            'tipoIdPisiss_arrayInfo' => $data,
+            'tipoIdPisiss_countLinks' => $tipoIdPisis->lastPage(),
         ];
     }
 
     public function selectInfiniteTipoUsuario(Request $request)
     {
-        $tipoUsuario = $this->tipoUsuarioRepository->paginate($request->all());
-        $data = TipoUsuarioSelectResource::collection($tipoUsuario);
+        $ripsTipoUsuarioVersion2 = $this->ripsTipoUsuarioVersion2Repository->paginate($request->all());
+        $data = RipsTipoUsuarioVersion2SelectResource::collection($ripsTipoUsuarioVersion2);
 
         return [
             'code' => 200,
-            'tipoUsuarios_arrayInfo' => $data,
-            'tipoUsuarios_countLinks' => $tipoUsuario->lastPage(),
+            'ripsTipoUsuarioVersion2s_arrayInfo' => $data,
+            'ripsTipoUsuarioVersion2s_countLinks' => $ripsTipoUsuarioVersion2->lastPage(),
         ];
     }
 
@@ -280,8 +280,8 @@ class QueryController extends Controller
 
         return [
             'code' => 200,
-            'paiss_arrayInfo' => $data,
-            'paiss_countLinks' => $pais->lastPage(),
+            'paises_arrayInfo' => $data,
+            'paises_countLinks' => $pais->lastPage(),
         ];
     }
 

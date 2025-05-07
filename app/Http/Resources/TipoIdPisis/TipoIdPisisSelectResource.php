@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Resources\TipoUsuario;
+namespace App\Http\Resources\TipoIdPisis;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class TipoUsuarioSelectResource extends JsonResource
+class TipoIdPisisSelectResource extends JsonResource
 {
     /**
      * Transform the resource into an array.

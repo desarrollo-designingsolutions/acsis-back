@@ -53,12 +53,9 @@ class PatientController extends Controller
     public function create()
     {
         return $this->execute(function () {
-            $typeEntities = $this->typeEntityRepository->list(['typeData' => 'all']);
-            $dataTypeEntities = TypeEntitySelectResource::collection($typeEntities);
 
             return [
                 'code' => 200,
-                'typeEntities' => $dataTypeEntities,
             ];
         });
     }

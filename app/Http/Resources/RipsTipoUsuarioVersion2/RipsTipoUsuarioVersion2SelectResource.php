@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Resources\TipoDocumento;
+namespace App\Http\Resources\RipsTipoUsuarioVersion2;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class TipoDocumentoSelectResource extends JsonResource
+class RipsTipoUsuarioVersion2SelectResource extends JsonResource
 {
     /**
      * Transform the resource into an array.

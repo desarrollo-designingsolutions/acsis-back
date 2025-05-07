@@ -4,7 +4,7 @@ namespace App\Repositories;
 
 use App\Helpers\Constants;
 use App\Http\Resources\TypeDocument\TypeDocumentSelectResource;
-use App\Models\TipoIdPisis;
+use App\Models\RipsTipoUsuarioVersion2;
 use App\QueryBuilder\Filters\QueryFilters;
 use App\QueryBuilder\Sort\IsActiveSort;
 use App\QueryBuilder\Sort\RelatedTableSort;
@@ -12,9 +12,9 @@ use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\AllowedSort;
 use Spatie\QueryBuilder\QueryBuilder;
 
-class TipoDocumentoRepository extends BaseRepository
+class RipsTipoUsuarioVersion2Repository extends BaseRepository
 {
-    public function __construct(TipoIdPisis $modelo)
+    public function __construct(RipsTipoUsuarioVersion2 $modelo)
     {
         parent::__construct($modelo);
     }
