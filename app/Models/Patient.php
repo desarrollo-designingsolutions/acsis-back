@@ -61,5 +61,6 @@ class Patient extends Model
     {
         return $this->belongsTo(Pais::class);
     }
+
     
 }
