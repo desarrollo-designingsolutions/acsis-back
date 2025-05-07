@@ -23,17 +23,17 @@ class Invoice extends Model
         return $this->belongsTo(Company::class);
     }
 
-    public function entities()
+    public function entity()
     {
         return $this->belongsTo(Entity::class, 'entity_id');
     }
 
-    public function patients()
+    public function patient()
     {
         return $this->belongsTo(Patient::class, 'patient_id');
     }
 
-    public function serviceVendors()
+    public function serviceVendor()
     {
         return $this->belongsTo(ServiceVendor::class, 'service_vendor_id');
     }
@@ -41,5 +41,10 @@ class Invoice extends Model
     public function invoice_payments()
     {
         return $this->hasMany(InvoicePayment::class);
+    }
+
+    public function tipoNota()
+    {
+        return $this->belongsTo(TipoNota::class, 'tipo_nota_id');
     }
 }

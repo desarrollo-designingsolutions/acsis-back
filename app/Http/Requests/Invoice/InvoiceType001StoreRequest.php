@@ -27,9 +27,7 @@ class InvoiceType001StoreRequest extends FormRequest
             'invoice_date' => 'required',
             'type' => 'required',
             'radication_date' => 'required',
-            'value_paid' => 'required',
             'value_glosa' => 'required',
-            'total' => 'required',
         ];
 
         return $rules;
@@ -48,19 +46,17 @@ class InvoiceType001StoreRequest extends FormRequest
             'invoice_date.required' => 'El campo es obligatorio',
             'type.required' => 'El campo es obligatorio',
             'radication_date.required' => 'El campo es obligatorio',
-            'value_paid.required' => 'El campo es obligatorio',
             'value_glosa.required' => 'El campo es obligatorio',
-            'total.required' => 'El campo es obligatorio',
         ];
     }
 
     protected function prepareForValidation(): void
     {
         $this->merge([
-            'service_vendor_id' => is_array($this->serviceVendor) && isset($this->serviceVendor['value']) ? $this->serviceVendor['value'] : $this->serviceVendor,
-            'entity_id' => is_array($this->entity) && isset($this->entity['value']) ? $this->entity['value'] : $this->entity,
-            'patient_id' => is_array($this->patient) && isset($this->patient['value']) ? $this->patient['value'] : $this->patient,
-            'tipo_nota_id' => is_array($this->TipoNota) && isset($this->TipoNota['value']) ? $this->TipoNota['value'] : $this->TipoNota,
+            'service_vendor_id' => getValueSelectInfinite($this->service_vendor_id),
+            'entity_id' => getValueSelectInfinite($this->entity_id),
+            'patient_id' => getValueSelectInfinite($this->patient_id),
+            'tipo_nota_id' => getValueSelectInfinite($this->tipo_nota_id),
         ]);
     }
 

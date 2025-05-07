@@ -22,6 +22,8 @@ Route::middleware(['check.permission:menu.invoice'])->group(function () {
 
     Route::get('/invoice/loadBtnCreate', [InvoiceController::class, 'loadBtnCreate']);
 
+    Route::post('/invoice/validateInvoiceNumber', [InvoiceController::class, 'validateInvoiceNumber']);
+
         /*
     |--------------------------------------------------------------------------
     | INVOICE_TYPE_001 - Evento

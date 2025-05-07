@@ -25,7 +25,7 @@ class InvoiceRepository extends BaseRepository
 
         return $this->cacheService->remember($cacheKey, function () use ($request) {
             $query = QueryBuilder::for($this->model->query())
-                ->with(['patients', 'entities'])
+                ->with(['patient', 'entity'])
                 ->select(['invoices.id', 'invoices.entity_id', 'invoices.type', 'invoices.patient_id', 'invoices.invoice_number', 'invoices.radication_number', 'invoices.value_glosa', 'invoices.value_paid', 'invoices.invoice_date', 'invoices.radication_date', 'invoices.is_active'])
                 ->allowedFilters([
                     'is_active',
@@ -41,11 +41,11 @@ class InvoiceRepository extends BaseRepository
                                 $subQuery2->orWhere('value_paid', 'like', "%$normalizedValue%");
                             });
 
-                            $subQuery->orWhereHas('patients', function ($subQuery2) use ($value) {
+                            $subQuery->orWhereHas('patient', function ($subQuery2) use ($value) {
                                 $subQuery2->whereRaw("CONCAT(patients.first_name, ' ', patients.second_name, ' ', patients.first_surname, ' ', patients.second_surname) LIKE ?", ["%{$value}%"]);
                             });
 
-                            $subQuery->orWhereHas('entities', function ($subQuery2) use ($value) {
+                            $subQuery->orWhereHas('entity', function ($subQuery2) use ($value) {
                                 $subQuery2->where('entities.corporate_name', 'like', "%$value%");
                             });
 
@@ -131,5 +131,20 @@ class InvoiceRepository extends BaseRepository
         });
 
         return $data;
+    }
+
+    public function validateLicensePlate($request = []): bool
+    {
+        $data = $this->model
+            ->where(function ($query) use ($request) {
+                if (! empty($request['company_id'])) {
+                    $query->where('company_id', $request['company_id']);
+                }
+                if (! empty($request['invoice_number'])) {
+                    $query->where('invoice_number', $request['invoice_number']);
+                }
+            })->first();
+
+        return $data !== null; // Retorna true si la licencia cumple con ambas condiciones
     }
 }

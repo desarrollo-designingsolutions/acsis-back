@@ -4,7 +4,9 @@ namespace App\Http\Resources\Invoice;
 
 use App\Enums\Invoice\TypeInvoiceEnum;
 use App\Http\Resources\Entity\EntitySelectResource;
+use App\Http\Resources\Patient\PatientSelectResource;
 use App\Http\Resources\ServiceVendor\ServiceVendorSelectResource;
+use App\Http\Resources\TipoNota\TipoNotaSelectResource;
 use App\Http\Resources\TypeDocument\TypeDocumentSelectResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -22,8 +24,11 @@ class InvoiceType001FormResource extends JsonResource
 
         return [
             'id' => $this->id,
-            'serviceVendor' => new ServiceVendorSelectResource($this->serviceVendors),
-            'entity' => new EntitySelectResource($this->entities),
+            'service_vendor_id' => new ServiceVendorSelectResource($this->serviceVendor),
+            'entity_id' => new EntitySelectResource($this->entity),
+            'patient_id' => new PatientSelectResource($this->patient),
+            'tipo_nota_id' => new TipoNotaSelectResource($this->tipoNota),
+            'note_number' => $this->note_number,
             'invoice_number' => $this->invoice_number,
             'radication_number' => $this->radication_number,
             'value_glosa'      => $this->value_glosa,
@@ -31,13 +36,6 @@ class InvoiceType001FormResource extends JsonResource
             'total' => $this->total,
             'invoice_date' => $this->invoice_date,
             'radication_date' => $this->radication_date,
-            'patient_id' => $this->patients?->id,
-            'typeDocument' => new TypeDocumentSelectResource($this->patients?->typeDocument),
-            'document' => $this->patients?->document,
-            'first_name' => $this->patients?->first_name,
-            'second_name' => $this->patients?->second_name,
-            'first_surname' => $this->patients?->first_surname,
-            'second_surname' => $this->patients?->second_surname,
         ];
     }
 }

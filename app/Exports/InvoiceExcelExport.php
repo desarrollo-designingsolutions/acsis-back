@@ -29,13 +29,13 @@ class InvoiceExcelExport implements FromView, ShouldAutoSize, WithEvents
                 ->first(fn($c) => (string)$c->value === (string)$value->type);
 
             return [
-                'entity_name' => $value->entities?->corporate_name,
+                'entity_name' => $value->entity?->corporate_name,
                 'invoice_number' => $value->invoice_number,
                 'type_name'      => $typeCase?->description() ?? 'Desconocido',
                 'value_paid' => formatNumber($value->value_paid),
                 'value_glosa' => formatNumber($value->value_glosa),
                 'radication_date' => $value->radication_date,
-                'patient_name' => $value->patients?->full_name,
+                'patient_name' => $value->patient?->full_name,
                 'is_active' => $value->is_active ? 'Activo' : 'Inactivo',
             ];
         });
