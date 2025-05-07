@@ -6,25 +6,35 @@ use App\Http\Resources\CodeGlosa\CodeGlosaSelectInfiniteResource;
 use App\Http\Resources\Country\CountrySelectResource;
 use App\Http\Resources\CupsRips\CupsRipsSelectInfiniteResource;
 use App\Http\Resources\Entity\EntitySelectResource;
+use App\Http\Resources\Municipio\MunicipioSelectResource;
+use App\Http\Resources\Pais\PaisSelectResource;
 use App\Http\Resources\Patient\PatientSelectResource;
 use App\Http\Resources\ServiceVendor\ServiceVendorSelectResource;
+use App\Http\Resources\Sexo\SexoSelectResource;
+use App\Http\Resources\TipoDocumento\TipoDocumentoSelectResource;
 use App\Http\Resources\TipoNota\TipoNotaSelectResource;
+use App\Http\Resources\TipoUsuario\TipoUsuarioSelectResource;
 use App\Http\Resources\TypeDocument\TypeDocumentSelectResource;
-use App\Http\Resources\TypeVendor\TypeVendorSelectInfiniteResource;
+use App\Http\Resources\ZonaVersion2\ZonaVersion2SelectResource;
 use App\Repositories\CityRepository;
 use App\Repositories\CodeGlosaRepository;
 use App\Repositories\CountryRepository;
 use App\Repositories\CupsRipsRepository;
 use App\Repositories\EntityRepository;
-use App\Repositories\p;
+use App\Repositories\MunicipioRepository;
+use App\Repositories\PaisRepository;
 use App\Repositories\PatientRepository;
 use App\Repositories\ServiceVendorRepository;
+use App\Repositories\SexoRepository;
 use App\Repositories\StateRepository;
+use App\Repositories\TipoDocumentoRepository;
 use App\Repositories\TipoNotaRepository;
+use App\Repositories\TipoUsuarioRepository;
 use App\Repositories\TypeDocumentRepository;
 use App\Repositories\TypeEntityRepository;
 use App\Repositories\TypeVendorRepository;
 use App\Repositories\UserRepository;
+use App\Repositories\ZonaVersion2Repository;
 use App\Traits\HttpResponseTrait;
 use Illuminate\Http\Request;
 
@@ -46,6 +56,12 @@ class QueryController extends Controller
         protected CodeGlosaRepository $codeGlosaRepository,
         protected CupsRipsRepository $cupsRipsRepository,
         protected TipoNotaRepository $tipoNotaRepository,
+        protected TipoDocumentoRepository $tipoDocumentoRepository,
+        protected TipoUsuarioRepository $tipoUsuarioRepository,
+        protected SexoRepository $sexoRepository,
+        protected PaisRepository $paisRepository,
+        protected MunicipioRepository $municipioRepository,
+        protected ZonaVersion2Repository $zonaVersion2Repository,
     ) {}
 
     public function selectInfiniteCountries(Request $request)
@@ -218,6 +234,78 @@ class QueryController extends Controller
             'code' => 200,
             'tipoNotas_arrayInfo' => $data,
             'tipoNotas_countLinks' => $tipoNota->lastPage(),
+        ];
+    }
+
+    public function selectInfiniteTipoDocumento(Request $request)
+    {
+        $tipoDocumento = $this->tipoDocumentoRepository->paginate($request->all());
+        $data = TipoDocumentoSelectResource::collection($tipoDocumento);
+
+        return [
+            'code' => 200,
+            'tipoDocumentos_arrayInfo' => $data,
+            'tipoDocumentos_countLinks' => $tipoDocumento->lastPage(),
+        ];
+    }
+
+    public function selectInfiniteTipoUsuario(Request $request)
+    {
+        $tipoUsuario = $this->tipoUsuarioRepository->paginate($request->all());
+        $data = TipoUsuarioSelectResource::collection($tipoUsuario);
+
+        return [
+            'code' => 200,
+            'tipoUsuarios_arrayInfo' => $data,
+            'tipoUsuarios_countLinks' => $tipoUsuario->lastPage(),
+        ];
+    }
+
+    public function selectInfiniteSexo(Request $request)
+    {
+        $sexo = $this->sexoRepository->paginate($request->all());
+        $data = SexoSelectResource::collection($sexo);
+
+        return [
+            'code' => 200,
+            'sexos_arrayInfo' => $data,
+            'sexos_countLinks' => $sexo->lastPage(),
+        ];
+    }
+
+    public function selectInfinitePais(Request $request)
+    {
+        $pais = $this->paisRepository->paginate($request->all());
+        $data = PaisSelectResource::collection($pais);
+
+        return [
+            'code' => 200,
+            'paiss_arrayInfo' => $data,
+            'paiss_countLinks' => $pais->lastPage(),
+        ];
+    }
+
+    public function selectInfiniteMunicipio(Request $request)
+    {
+        $municipio = $this->municipioRepository->paginate($request->all());
+        $data = MunicipioSelectResource::collection($municipio);
+
+        return [
+            'code' => 200,
+            'municipios_arrayInfo' => $data,
+            'municipios_countLinks' => $municipio->lastPage(),
+        ];
+    }
+
+    public function selectInfiniteZonaVersion2(Request $request)
+    {
+        $zonaVersion2 = $this->zonaVersion2Repository->paginate($request->all());
+        $data = ZonaVersion2SelectResource::collection($zonaVersion2);
+
+        return [
+            'code' => 200,
+            'zonaVersion2s_arrayInfo' => $data,
+            'zonaVersion2s_countLinks' => $zonaVersion2->lastPage(),
         ];
     }
 }

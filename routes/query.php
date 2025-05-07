@@ -22,3 +22,10 @@ Route::post('/selectInfiniteCupsRips', [QueryController::class, 'selectInfiniteC
 Route::post('/selectInfinitePatients', [QueryController::class, 'selectInfinitePatients']);
 Route::post('/selectInfinitetipoNota', [QueryController::class, 'selectInfinitetipoNota']);
 
+Route::post('/selectInfiniteTipoDocumento', [QueryController::class, 'selectInfiniteTipoDocumento']);
+Route::post('/selectInfiniteTipoUsuario', [QueryController::class, 'selectInfiniteTipoUsuario']);
+Route::post('/selectInfiniteSexo', [QueryController::class, 'selectInfiniteSexo']);
+Route::post('/selectInfinitePais', [QueryController::class, 'selectInfinitePais']);
+Route::post('/selectInfiniteMunicipio', [QueryController::class, 'selectInfiniteMunicipio']);
+Route::post('/selectInfiniteZonaVersion2', [QueryController::class, 'selectInfiniteZonaVersion2']);
+
