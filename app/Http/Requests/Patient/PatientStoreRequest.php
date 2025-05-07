@@ -37,6 +37,7 @@ class PatientStoreRequest extends FormRequest
             // 'email.unique' => 'El Email ya existe',
             // 'email.email' => 'El campo debe contener un correo valido',
             // 'type_entity_id.required' => 'El campo es obligatorio',
+            
         ];
     }
 
