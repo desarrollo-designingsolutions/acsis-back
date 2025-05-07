@@ -6,7 +6,9 @@ use App\Http\Resources\CodeGlosa\CodeGlosaSelectInfiniteResource;
 use App\Http\Resources\Country\CountrySelectResource;
 use App\Http\Resources\CupsRips\CupsRipsSelectInfiniteResource;
 use App\Http\Resources\Entity\EntitySelectResource;
+use App\Http\Resources\Patient\PatientSelectResource;
 use App\Http\Resources\ServiceVendor\ServiceVendorSelectResource;
+use App\Http\Resources\TipoNota\TipoNotaSelectResource;
 use App\Http\Resources\TypeDocument\TypeDocumentSelectResource;
 use App\Http\Resources\TypeVendor\TypeVendorSelectInfiniteResource;
 use App\Repositories\CityRepository;
@@ -18,6 +20,7 @@ use App\Repositories\p;
 use App\Repositories\PatientRepository;
 use App\Repositories\ServiceVendorRepository;
 use App\Repositories\StateRepository;
+use App\Repositories\TipoNotaRepository;
 use App\Repositories\TypeDocumentRepository;
 use App\Repositories\TypeEntityRepository;
 use App\Repositories\TypeVendorRepository;
@@ -42,6 +45,7 @@ class QueryController extends Controller
         protected PatientRepository $patientRepository,
         protected CodeGlosaRepository $codeGlosaRepository,
         protected CupsRipsRepository $cupsRipsRepository,
+        protected TipoNotaRepository $tipoNotaRepository,
     ) {}
 
     public function selectInfiniteCountries(Request $request)
@@ -190,6 +194,30 @@ class QueryController extends Controller
             'code' => 200,
             'cupsRips_arrayInfo' => $dataCupsRips,
             'cupsRips_countLinks' => $cupsRips->lastPage(),
+        ];
+    }
+
+    public function selectInfinitePatients(Request $request)
+    {
+        $patients = $this->patientRepository->paginate($request->all());
+        $data = PatientSelectResource::collection($patients);
+
+        return [
+            'code' => 200,
+            'patients_arrayInfo' => $data,
+            'patients_countLinks' => $patients->lastPage(),
+        ];
+    }
+
+    public function selectInfinitetipoNota(Request $request)
+    {
+        $tipoNota = $this->tipoNotaRepository->paginate($request->all());
+        $data = TipoNotaSelectResource::collection($tipoNota);
+
+        return [
+            'code' => 200,
+            'tipoNotas_arrayInfo' => $data,
+            'tipoNotas_countLinks' => $tipoNota->lastPage(),
         ];
     }
 }

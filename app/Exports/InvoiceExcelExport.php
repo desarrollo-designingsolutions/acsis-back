@@ -32,7 +32,7 @@ class InvoiceExcelExport implements FromView, ShouldAutoSize, WithEvents
                 'entity_name' => $value->entities?->corporate_name,
                 'invoice_number' => $value->invoice_number,
                 'type_name'      => $typeCase?->description() ?? 'Desconocido',
-                'value_approved' => formatNumber($value->value_approved),
+                'value_paid' => formatNumber($value->value_paid),
                 'value_glosa' => formatNumber($value->value_glosa),
                 'radication_date' => $value->radication_date,
                 'patient_name' => $value->patients?->full_name,

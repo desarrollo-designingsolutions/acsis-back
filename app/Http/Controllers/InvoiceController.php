@@ -67,16 +67,7 @@ class InvoiceController extends Controller
     {
         return $this->runTransaction(function () use ($request) {
 
-            $post = $request->except(['entity', 'serviceVendor', 'typeDocument', 'type_document_id', 'document', 'first_name', 'first_surname', 'second_name', 'second_surname']);
-
-            if (empty($request['patient_id'])) {
-
-                $post2 = $request->only(['company_id', 'type_document_id', 'document', 'first_name', 'first_surname', 'second_name', 'second_surname']);
-
-                $patient = $this->patientRepository->store($post2);
-
-                $post['patient_id'] = $patient->id;
-            }
+            $post = $request->except(['entity', 'patient', 'TipoNota', 'serviceVendor']);
 
             $post['typeable_type'] = 'App\\Models\\' . $post['type'];
 
@@ -110,16 +101,7 @@ class InvoiceController extends Controller
     {
         return $this->runTransaction(function () use ($request) {
 
-            $post = $request->except(['entity', 'serviceVendor', 'typeDocument', 'type_document_id', 'document', 'first_name', 'first_surname', 'second_name', 'second_surname']);
-
-            if (empty($request['patient_id'])) {
-
-                $post2 = $request->only(['company_id', 'type_document_id', 'document', 'first_name', 'first_surname', 'second_name', 'second_surname']);
-
-                $patient = $this->patientRepository->store($post2);
-
-                $post['patient_id'] = $patient->id;
-            }
+            $post = $request->except(['entity', 'patient', 'TipoNota', 'serviceVendor']);
 
             $post['typeable_type'] = 'App\\Models\\' . $post['type'];
 
@@ -152,16 +134,7 @@ class InvoiceController extends Controller
     {
         return $this->runTransaction(function () use ($request) {
 
-            $post = $request->except(['entity', 'serviceVendor', 'typeDocument', 'type_document_id', 'document', 'first_name', 'first_surname', 'second_name', 'second_surname', 'soat']);
-
-            if (empty($request['patient_id'])) {
-
-                $post2 = $request->only(['company_id', 'type_document_id', 'document', 'first_name', 'first_surname', 'second_name', 'second_surname']);
-
-                $patient = $this->patientRepository->store($post2);
-
-                $post['patient_id'] = $patient->id;
-            }
+            $post = $request->except(['entity', 'patient', 'TipoNota', 'serviceVendor','soat']);
 
             $dataSoat = $request->input('soat');
 
@@ -206,16 +179,7 @@ class InvoiceController extends Controller
     {
         return $this->runTransaction(function () use ($request) {
 
-            $post = $request->except(['entity', 'serviceVendor', 'typeDocument', 'type_document_id', 'document', 'first_name', 'first_surname', 'second_name', 'second_surname', 'soat']);
-
-            if (empty($request['patient_id'])) {
-
-                $post2 = $request->only(['company_id', 'type_document_id', 'document', 'first_name', 'first_surname', 'second_name', 'second_surname']);
-
-                $patient = $this->patientRepository->store($post2);
-
-                $post['patient_id'] = $patient->id;
-            }
+            $post = $request->except(['entity', 'patient', 'TipoNota', 'serviceVendor', 'soat']);
 
             $dataSoat = $request->input('soat');
 

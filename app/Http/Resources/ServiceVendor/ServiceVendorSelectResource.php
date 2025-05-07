@@ -16,7 +16,7 @@ class ServiceVendorSelectResource extends JsonResource
     {
         return [
             'value' => $this->id,
-            'title' => $this->name,
+            'title' => $this->nit.' - '.$this->name,
         ];
     }
 }

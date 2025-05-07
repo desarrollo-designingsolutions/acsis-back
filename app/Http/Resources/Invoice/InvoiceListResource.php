@@ -24,7 +24,7 @@ class InvoiceListResource extends JsonResource
             'invoice_number' => $this->invoice_number,
             'type_id'        => $this->type,
             'type_name'      => $typeCase?->description() ?? 'Desconocido',
-            'value_approved' => formatNumber($this->value_approved),
+            'value_paid' => formatNumber($this->value_paid),
             'value_glosa' => formatNumber($this->value_glosa),
             'radication_date' => $this->radication_date,
             'patient_name' => $this->patients?->full_name,

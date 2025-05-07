@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Resources\Entity;
+namespace App\Http\Resources\Patient;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class EntitySelectResource extends JsonResource
+class PatientSelectResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,7 +16,7 @@ class EntitySelectResource extends JsonResource
     {
         return [
             'value' => $this->id,
-            'title' => $this->nit.' - '.$this->corporate_name,
+            'title' => $this->document.' - '.$this->full_name,
         ];
     }
 }

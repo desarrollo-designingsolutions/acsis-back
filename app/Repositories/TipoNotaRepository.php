@@ -4,7 +4,7 @@ namespace App\Repositories;
 
 use App\Helpers\Constants;
 use App\Http\Resources\TypeDocument\TypeDocumentSelectResource;
-use App\Models\Patient;
+use App\Models\TipoNota;
 use App\QueryBuilder\Filters\QueryFilters;
 use App\QueryBuilder\Sort\IsActiveSort;
 use App\QueryBuilder\Sort\RelatedTableSort;
@@ -12,9 +12,9 @@ use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\AllowedSort;
 use Spatie\QueryBuilder\QueryBuilder;
 
-class PatientRepository extends BaseRepository
+class TipoNotaRepository extends BaseRepository
 {
-    public function __construct(Patient $modelo)
+    public function __construct(TipoNota $modelo)
     {
         parent::__construct($modelo);
     }
@@ -25,26 +25,15 @@ class PatientRepository extends BaseRepository
 
         return $this->cacheService->remember($cacheKey, function () use ($request) {
             $query = QueryBuilder::for($this->model->query())
-                ->select(['id', 'document', 'first_name', 'second_name', 'first_surname', 'second_surname'])
+                ->select(['id','codigo', 'nombre'])
                 ->allowedFilters([
                     AllowedFilter::callback('inputGeneral', function ($query, $value) {
                         $query->where(function ($subQuery) use ($value) {
-                            $subQuery->orWhere('document', 'like', "%$value%");
                         });
                     }),
                 ])
                 ->allowedSorts([
-                    'document',
-                ])->where(function ($query) use ($request) {
-
-                    if (isset($request['searchQueryInfinite']) && ! empty($request['searchQueryInfinite'])) {
-                        $query->orWhere('document', 'like', '%' . $request['searchQueryInfinite'] . '%');
-                    }
-
-                    if (! empty($request['company_id'])) {
-                        $query->where('company_id', $request['company_id']);
-                    }
-                });
+                ]);
 
             if (empty($request['typeData'])) {
                 $query = $query->paginate(request()->perPage ?? Constants::ITEMS_PER_PAGE);

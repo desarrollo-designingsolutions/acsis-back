@@ -26,7 +26,7 @@ class InvoiceRepository extends BaseRepository
         return $this->cacheService->remember($cacheKey, function () use ($request) {
             $query = QueryBuilder::for($this->model->query())
                 ->with(['patients', 'entities'])
-                ->select(['invoices.id', 'invoices.entity_id', 'invoices.type', 'invoices.patient_id', 'invoices.invoice_number', 'invoices.radication_number', 'invoices.value_glosa', 'invoices.value_approved', 'invoices.invoice_date', 'invoices.radication_date', 'invoices.is_active'])
+                ->select(['invoices.id', 'invoices.entity_id', 'invoices.type', 'invoices.patient_id', 'invoices.invoice_number', 'invoices.radication_number', 'invoices.value_glosa', 'invoices.value_paid', 'invoices.invoice_date', 'invoices.radication_date', 'invoices.is_active'])
                 ->allowedFilters([
                     'is_active',
                     AllowedFilter::callback('inputGeneral', function ($query, $value) {
@@ -38,7 +38,7 @@ class InvoiceRepository extends BaseRepository
                             $subQuery->orWhere(function ($subQuery2) use ($value) {
                                 $normalizedValue = preg_replace('/[\$\s\.,]/', '', $value);
                                 $subQuery2->orWhere('value_glosa', 'like', "%$normalizedValue%");
-                                $subQuery2->orWhere('value_approved', 'like', "%$normalizedValue%");
+                                $subQuery2->orWhere('value_paid', 'like', "%$normalizedValue%");
                             });
 
                             $subQuery->orWhereHas('patients', function ($subQuery2) use ($value) {
@@ -63,7 +63,7 @@ class InvoiceRepository extends BaseRepository
                     'invoice_number',
                     'type',
                     'value_glosa',
-                    'value_approved',
+                    'value_paid',
                     AllowedSort::custom('entity_name', new RelatedTableSort('invoices', 'entities', 'corporate_name', 'entity_id')),
                     AllowedSort::custom('patient_name', new RelatedTableSort('invoices', 'patients', 'first_name', 'patient_id')),
                     AllowedSort::custom('is_active', new IsActiveSort),

@@ -30,6 +30,7 @@ class DatabaseSeeder extends Seeder
             TypeVendorSeeder::class,
             TypeEntitySeeder::class,
             TypeDocumentSeeder::class,
+            TipoNotaSeeder::class,
 
             TypeCodeGlosaSeeder::class,
             GeneralCodeGlosaSeeder::class,
