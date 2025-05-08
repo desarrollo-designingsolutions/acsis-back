@@ -42,6 +42,7 @@ class PatientRepository extends BaseRepository
 
                     if (isset($request['searchQueryInfinite']) && ! empty($request['searchQueryInfinite'])) {
                         $query->orWhere('document', 'like', '%' . $request['searchQueryInfinite'] . '%');
+                        $query->orWhereRaw("CONCAT(first_name, ' ', second_name, ' ', first_surname, ' ', second_surname) LIKE ?", '%' . $request['searchQueryInfinite'] . '%');
                     }
 
                     if (! empty($request['company_id'])) {

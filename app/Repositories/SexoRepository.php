@@ -25,15 +25,22 @@ class SexoRepository extends BaseRepository
 
         return $this->cacheService->remember($cacheKey, function () use ($request) {
             $query = QueryBuilder::for($this->model->query())
-                ->select(['id','codigo', 'nombre'])
+                ->select(['id', 'codigo', 'nombre'])
                 ->allowedFilters([
                     AllowedFilter::callback('inputGeneral', function ($query, $value) {
                         $query->where(function ($subQuery) use ($value) {
+                            $subQuery->orWhere('codigo', 'like', "%$value%");
+                            $subQuery->orWhere('nombre', 'like', "%$value%");
                         });
                     }),
                 ])
-                ->allowedSorts([
-                ]);
+                ->allowedSorts([])
+                ->where(function ($query) use ($request) {
+                    if (isset($request['searchQueryInfinite']) && ! empty($request['searchQueryInfinite'])) {
+                        $query->orWhere('codigo', 'like', '%' . $request['searchQueryInfinite'] . '%');
+                        $query->orWhere('nombre', 'like', '%' . $request['searchQueryInfinite'] . '%');
+                    }
+                });
 
             if (empty($request['typeData'])) {
                 $query = $query->paginate(request()->perPage ?? Constants::ITEMS_PER_PAGE);
