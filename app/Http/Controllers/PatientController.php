@@ -54,9 +54,12 @@ class PatientController extends Controller
 
             $patient = $this->patientRepository->store($request->all(), null);
 
+            $patient->name = $patient->full_name;
+
             return [
                 'code' => 200,
                 'message' => 'Paciente agregado correctamente',
+                'data' => $patient,
             ];
         });
     }
