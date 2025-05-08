@@ -9,7 +9,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Sexo extends Model
 {
-    use Cacheable,HasFactory,HasUuids;
+    use Cacheable, HasFactory, HasUuids;
 
-
+    protected $customCachePrefixes = [
+        'string:{table}_searchOne*',
+    ];
 }

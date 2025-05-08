@@ -116,4 +116,61 @@ class RipsTipoUsuarioVersion2Repository extends BaseRepository
 
         return $data;
     }
+
+    public function  searchOne($request = [], $with = [], $select = ["*"], $format = null)
+    {
+        $params = [
+            'request' => $request,
+            'with' => $with,
+            'select' => $select,
+            'format' => $format,
+        ];
+
+        $cacheKey = $this->cacheService->generateKey("{$this->model->getTable()}_searchOne", $params, 'string');
+
+        return $this->cacheService->remember($cacheKey, function () use ($request, $with, $select, $format) {
+
+            $query = $this->model->query();
+
+            if ($format) {
+                switch ($format) {
+                    case 'selectInfinite':
+                        $query = $query->select(['id', 'codigo', 'nombre']);
+                        break;
+                    default:
+                        $query = $query->select($select);
+                        break;
+                }
+            } else {
+                $query = $query->select($select);
+            }
+
+            // Construcción de la consulta
+            $query = $query->with($with)->where(function ($query) use ($request) {
+                if (!empty($request['codigo'])) {
+                    $query->where('codigo', $request['codigo']);
+                }
+            });
+
+            // Obtener el primer resultado
+            $data = $query->first();
+
+            // Formatear el resultado según el formato especificado
+            if ($data && $format) {
+                switch ($format) {
+                    case 'selectInfinite':
+                        return [
+                            'value' => $data->id,
+                            'title' => $data->codigo . ' - ' . $data->nombre,
+                            'code' => $data->codigo,
+                        ];
+                    default:
+                        // Si el formato no es reconocido, retorna el objeto original
+                        return $data;
+                }
+            }
+
+            return $data;
+        }, Constants::REDIS_TTL);
+    }
 }

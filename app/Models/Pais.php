@@ -9,7 +9,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Pais extends Model
 {
-    use Cacheable, HasFactory,HasUuids;
+    use Cacheable, HasFactory, HasUuids;
 
-
+    protected $customCachePrefixes = [
+        'string:{table}_searchOne*',
+    ];
 }

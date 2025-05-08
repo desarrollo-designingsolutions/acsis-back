@@ -24,7 +24,9 @@ Route::middleware(['check.permission:menu.invoice'])->group(function () {
 
     Route::post('/invoice/validateInvoiceNumber', [InvoiceController::class, 'validateInvoiceNumber']);
 
-        /*
+    Route::post('/invoice/getInfoJson', [InvoiceController::class, 'getInfoJson']);
+
+    /*
     |--------------------------------------------------------------------------
     | INVOICE_TYPE_001 - Evento
     |--------------------------------------------------------------------------
@@ -38,7 +40,7 @@ Route::middleware(['check.permission:menu.invoice'])->group(function () {
 
     Route::post('/invoice/INVOICE_TYPE_001/update/{id}', [InvoiceController::class, 'updateType001']);
 
-        /*
+    /*
     |--------------------------------------------------------------------------
     | INVOICE_TYPE_002 - Soat
     |--------------------------------------------------------------------------

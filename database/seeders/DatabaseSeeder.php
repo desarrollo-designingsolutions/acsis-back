@@ -45,6 +45,19 @@ class DatabaseSeeder extends Seeder
             MunicipioSeeder::class,
             ZonaVersion2Seeder::class,
 
+            ModalidadAtencionSeeder::class,
+            GrupoServicioSeeder::class,
+            ServicioSeeder::class,
+            RipsFinalidadConsultaVersion2Seeder::class,
+            RipsCausaExternaVersion2Seeder::class,
+            Cie10Seeder::class,
+            RipsTipoDiagnosticoPrincipalVersion2Seeder::class,
+            ConceptoRecaudoSeeder::class,
+            ViaIngresoUsuarioSeeder::class,
+            TipoMedicamentoPosVersion2Seeder::class,
+            UmmSeeder::class,
+            TipoOtrosServiciosSeeder::class,
+
         ]);
 
         $client = new ClientRepository;
