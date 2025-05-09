@@ -27,6 +27,7 @@ class CodeGlosaRepository extends BaseRepository
                 })
                 ->where(function ($query) use ($request) {
                     if (isset($request['searchQueryInfinite']) && ! empty($request['searchQueryInfinite'])) {
+                        $query->where('code', 'like', '%' . $request['searchQueryInfinite'] . '%');
                         $query->orWhere('description', 'like', '%' . $request['searchQueryInfinite'] . '%');
                     }
                 });

@@ -24,7 +24,6 @@ class GlosaPaginateResource extends JsonResource
             'glosa_value' => formatNumber($this->glosa_value),
             'observation' => $this->observation,
             'date' =>  Carbon::parse($this->date)->format("d-m-Y"),
-
         ];
     }
 }

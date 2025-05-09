@@ -12,7 +12,6 @@ use App\Repositories\GlosaRepository;
 use App\Repositories\ServiceRepository;
 use App\Traits\HttpResponseTrait;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class GlosaController extends Controller
 {
@@ -22,6 +21,7 @@ class GlosaController extends Controller
         protected CodeGlosaRepository $codeGlosaRepository,
         protected GlosaRepository $glosaRepository,
         protected ServiceRepository $serviceRepository,
+        protected QueryController $queryController,
     ) {}
 
     public function paginate(Request $request)
@@ -45,8 +45,10 @@ class GlosaController extends Controller
     {
         return $this->execute(function () {
 
+            $codeGlosa = $this->queryController->selectInfiniteCodeGlosa(request());
             return [
                 'code' => 200,
+                ...$codeGlosa
             ];
         });
     }
@@ -75,6 +77,22 @@ class GlosaController extends Controller
     }
 
     public function edit($id)
+    {
+        return $this->execute(function () use ($id) {
+
+            $glosa = $this->glosaRepository->find($id);
+            $form = new GlosaFormResource($glosa);
+
+            $codeGlosa = $this->queryController->selectInfiniteCodeGlosa(request());
+            return [
+                'code' => 200,
+                'form' => $form,
+                ...$codeGlosa
+            ];
+        });
+    }
+
+    public function show($id)
     {
         return $this->execute(function () use ($id) {
 

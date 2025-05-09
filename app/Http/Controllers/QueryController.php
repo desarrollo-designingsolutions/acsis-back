@@ -72,127 +72,108 @@ class QueryController extends Controller
 
     public function selectInfiniteCountries(Request $request)
     {
-        return $this->execute(function () use ($request) {
-            $countries = $this->countryRepository->list($request->all());
+        $countries = $this->countryRepository->list($request->all());
+        $dataCountries = CountrySelectResource::collection($countries);
 
-            $dataCountries = CountrySelectResource::collection($countries);
-
-            return [
-                'countries_arrayInfo' => $dataCountries,
-                'countries_countLinks' => $countries->lastPage(),
-            ];
-        });
+        return [
+            'countries_arrayInfo' => $dataCountries,
+            'countries_countLinks' => $countries->lastPage(),
+        ];
     }
 
     public function selectStates($country_id)
     {
-        return $this->execute(function () use ($country_id) {
-            $states = $this->stateRepository->selectList($country_id);
+        $states = $this->stateRepository->selectList($country_id);
 
-            return [
-                'code' => 200,
-                'states' => $states,
-            ];
-        });
+        return [
+            'code' => 200,
+            'states' => $states,
+        ];
     }
 
     public function selectCities($state_id)
     {
-        return $this->execute(function () use ($state_id) {
-            $cities = $this->cityRepository->selectList($state_id);
+        $cities = $this->cityRepository->selectList($state_id);
 
-            return [
-                'code' => 200,
-                'cities' => $cities,
-            ];
-        });
+        return [
+            'code' => 200,
+            'cities' => $cities,
+        ];
     }
 
     public function selectCitiesCountry($country_id)
     {
-        return $this->execute(function () use ($country_id) {
-            $country = $this->countryRepository->find($country_id, ['cities']);
+        $country = $this->countryRepository->find($country_id, ['cities']);
 
-            return [
-                'code' => 200,
-                'message' => 'Datos Encontrados',
-                'cities' => $country['cities']->map(function ($item) {
-                    return [
-                        'value' => $item->id,
-                        'title' => $item->name,
-                    ];
-                }),
-            ];
-        });
+        return [
+            'code' => 200,
+            'message' => 'Datos Encontrados',
+            'cities' => $country['cities']->map(function ($item) {
+                return [
+                    'value' => $item->id,
+                    'title' => $item->name,
+                ];
+            }),
+        ];
     }
 
     public function selectTypeEntity($request)
     {
-        return $this->execute(function () use ($request) {
-            $typeEntities = $this->typeEntityRepository->find($request->all());
+        $typeEntities = $this->typeEntityRepository->find($request->all());
 
-            return [
-                'code' => 200,
-                'typeEntities' => $typeEntities,
-            ];
-        });
+        return [
+            'code' => 200,
+            'typeEntities' => $typeEntities,
+        ];
     }
 
     public function selectInfiniteEntities(Request $request)
     {
-        return $this->execute(function () use ($request) {
 
-            $entities = $this->entityRepository->paginate($request->all());
+        $entities = $this->entityRepository->paginate($request->all());
 
-            $dataCountries = EntitySelectResource::collection($entities);
+        $dataCountries = EntitySelectResource::collection($entities);
 
-            return [
-                'entities_arrayInfo' => $dataCountries,
-                'entities_countLinks' => $entities->lastPage(),
-            ];
-        });
+        return [
+            'entities_arrayInfo' => $dataCountries,
+            'entities_countLinks' => $entities->lastPage(),
+        ];
     }
 
     public function selectInfiniteServiceVendor(Request $request)
     {
-        return $this->execute(function () use ($request) {
 
-            $serviceVendors = $this->serviceVendorRepository->paginate($request->all());
+        $serviceVendors = $this->serviceVendorRepository->paginate($request->all());
 
-            $dataCountries = ServiceVendorSelectResource::collection($serviceVendors);
+        $dataCountries = ServiceVendorSelectResource::collection($serviceVendors);
 
-            return [
-                'serviceVendors_arrayInfo' => $dataCountries,
-                'serviceVendors_countLinks' => $serviceVendors->lastPage(),
-            ];
-        });
+        return [
+            'serviceVendors_arrayInfo' => $dataCountries,
+            'serviceVendors_countLinks' => $serviceVendors->lastPage(),
+        ];
     }
 
     public function selectInfiniteTypeDocument(Request $request)
     {
-        return $this->execute(function () use ($request) {
 
-            $typeDocuments = $this->typeDocumentRepository->paginate($request->all());
+        $typeDocuments = $this->typeDocumentRepository->paginate($request->all());
 
-            $dataCountries = TypeDocumentSelectResource::collection($typeDocuments);
+        $dataCountries = TypeDocumentSelectResource::collection($typeDocuments);
 
-            return [
-                'typeDocuments_arrayInfo' => $dataCountries,
-                'typeDocuments_countLinks' => $typeDocuments->lastPage(),
-            ];
-        });
+        return [
+            'typeDocuments_arrayInfo' => $dataCountries,
+            'typeDocuments_countLinks' => $typeDocuments->lastPage(),
+        ];
     }
 
     public function autoCompleteDataPatients(Request $request)
     {
-        return $this->execute(function () use ($request) {
-            $data = $this->patientRepository->selectList($request->all(), fieldTitle: "full_name", limit: 10);
+        $data = $this->patientRepository->selectList($request->all(), fieldTitle: "full_name", limit: 10);
 
-            return [
-                'code' => 200,
-                'data' => $data,
-            ];
-        });
+        return [
+            'code' => 200,
+            'data' => $data,
+        ];
     }
     public function selectInfiniteCodeGlosa(Request $request)
     {

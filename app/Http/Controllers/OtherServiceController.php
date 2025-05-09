@@ -95,10 +95,10 @@ class OtherServiceController extends Controller
             $postService = [
                 "id" => $request->input("service_id"),
                 "company_id" => $request->input("company_id"),
-                "invoice_id" => $request->input("invoice_id"),
-                "total_value" => $request->input("vrServicio"),
-                "serviceable_type" => 'App\\Models\\OtherService',
                 "serviceable_id" => $otherService->id,
+                "quantity" => $request->input("cantidadOS"),
+                "unit_value" => $request->input("vrUnitOS"),
+                "total_value" => $request->input("vrServicio"),
             ];
 
             $service = $this->serviceRepository->store($postService);

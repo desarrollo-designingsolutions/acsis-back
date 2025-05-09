@@ -20,56 +20,56 @@ class ServiceRepository extends BaseRepository
     {
         $cacheKey = $this->cacheService->generateKey("{$this->model->getTable()}_paginate", $request, 'string');
 
-        // return $this->cacheService->remember($cacheKey, function () use ($request) {
-        $query = QueryBuilder::for($this->model->query())
-            ->allowedFilters([
-                AllowedFilter::callback('inputGeneral', function ($query, $value) use ($request) {
-                    $query->where(function ($subQuery) use ($value) {
-                        $subQuery->orWhere('quantity', 'like', "%$value%");
+        return $this->cacheService->remember($cacheKey, function () use ($request) {
+            $query = QueryBuilder::for($this->model->query())
+                ->allowedFilters([
+                    AllowedFilter::callback('inputGeneral', function ($query, $value) use ($request) {
+                        $query->where(function ($subQuery) use ($value) {
+                            $subQuery->orWhere('quantity', 'like', "%$value%");
 
-                        $subQuery->orWhere(function ($subQuery) use ($value) {
-                            $normalizedValue = preg_replace('/[\$\s\.,]/', '', $value);
-                            $subQuery->orWhere('unit_value', 'like', "%$normalizedValue%");
-                            $subQuery->orWhere('total_value', 'like', "%$normalizedValue%");
+                            $subQuery->orWhere(function ($subQuery) use ($value) {
+                                $normalizedValue = preg_replace('/[\$\s\.,]/', '', $value);
+                                $subQuery->orWhere('unit_value', 'like', "%$normalizedValue%");
+                                $subQuery->orWhere('total_value', 'like', "%$normalizedValue%");
+                            });
+
+
+                            $subQuery->orWhereHas('cups_rip', function ($subQuery2) use ($value) {
+                                $subQuery2->where('nombre', 'like', "%$value%");
+                                $subQuery2->orWhere('codigo', 'like', "%$value%");
+                            });
                         });
+                    }),
+                ])
+                ->allowedSorts([
+                    "quantity",
+                    "unit_value",
+                    "total_value",
+                    AllowedSort::custom('cups_rip_codigo', new RelatedTableSort(
+                        'services',
+                        'cups_rips',
+                        'codigo',
+                        'cups_rip_id',
+                    )),
+                    AllowedSort::custom('cups_rip_nombre', new RelatedTableSort(
+                        'services',
+                        'cups_rips',
+                        'nombre',
+                        'cups_rip_id',
+                    )),
+                ])
+                ->where(function ($query) use ($request) {
+                    if (isset($request['invoice_id']) && ! empty($request['invoice_id'])) {
+                        $query->where('invoice_id', $request['invoice_id']);
+                    }
+                    if (isset($request['company_id']) && ! empty($request['company_id'])) {
+                        $query->where('company_id', $request['company_id']);
+                    }
+                })
+                ->paginate(request()->perPage ?? Constants::ITEMS_PER_PAGE);
 
-
-                        $subQuery->orWhereHas('cups_rip', function ($subQuery2) use ($value) {
-                            $subQuery2->where('nombre', 'like', "%$value%");
-                            $subQuery2->orWhere('codigo', 'like', "%$value%");
-                        });
-                    });
-                }),
-            ])
-            ->allowedSorts([
-                "quantity",
-                "unit_value",
-                "total_value",
-                AllowedSort::custom('cups_rip_codigo', new RelatedTableSort(
-                    'services',
-                    'cups_rips',
-                    'codigo',
-                    'cups_rip_id',
-                )),
-                AllowedSort::custom('cups_rip_nombre', new RelatedTableSort(
-                    'services',
-                    'cups_rips',
-                    'nombre',
-                    'cups_rip_id',
-                )),
-            ])
-            ->where(function ($query) use ($request) {
-                if (isset($request['invoice_id']) && ! empty($request['invoice_id'])) {
-                    $query->where('invoice_id', $request['invoice_id']);
-                }
-                if (isset($request['company_id']) && ! empty($request['company_id'])) {
-                    $query->where('company_id', $request['company_id']);
-                }
-            })
-            ->paginate(request()->perPage ?? Constants::ITEMS_PER_PAGE);
-
-        return $query;
-        // }, Constants::REDIS_TTL);
+            return $query;
+        }, Constants::REDIS_TTL);
     }
 
     public function store(array $request)

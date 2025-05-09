@@ -20,6 +20,8 @@ Route::middleware(['check.permission:menu.invoice'])->group(function () {
 
     Route::get('/glosa/{id}/edit', [GlosaController::class, 'edit']);
 
+    Route::get('/glosa/{id}/show', [GlosaController::class, 'show']);
+
     Route::post('/glosa/update/{id}', [GlosaController::class, 'update']);
 
     Route::delete('/glosa/delete/{id}', [GlosaController::class, 'delete']);

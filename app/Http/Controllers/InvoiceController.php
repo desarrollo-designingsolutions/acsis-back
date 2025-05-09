@@ -15,6 +15,7 @@ use App\Repositories\Cie10Repository;
 use App\Repositories\ConceptoRecaudoRepository;
 use App\Repositories\CondicionyDestinoUsuarioEgresoRepository;
 use App\Repositories\CupsRipsRepository;
+use App\Repositories\EntityRepository;
 use App\Repositories\GrupoServicioRepository;
 use App\Repositories\InvoiceRepository;
 use App\Repositories\InvoiceSoatRepository;
@@ -79,6 +80,7 @@ class InvoiceController extends Controller
         protected TipoMedicamentoPosVersion2Repository $tipoMedicamentoPosVersion2Repository,
         protected UmmRepository $ummRepository,
         protected TipoOtrosServiciosRepository $tipoOtrosServiciosRepository,
+        protected EntityRepository $entityRepository,
 
     ) {
         $this->key_redis_project = env('KEY_REDIS_PROJECT');
@@ -104,6 +106,7 @@ class InvoiceController extends Controller
     public function createType001()
     {
         return $this->execute(function () {
+
             return [
                 'code' => 200,
             ];
@@ -171,8 +174,18 @@ class InvoiceController extends Controller
     public function createType002()
     {
         return $this->execute(function () {
+
+            $serviceVendors = $this->queryController->selectInfiniteServiceVendor(request());
+            $entities = $this->queryController->selectInfiniteEntities(request());
+            $tipoNotas = $this->queryController->selectInfinitetipoNota(request());
+            $patients = $this->queryController->selectInfinitePatients(request());
+
             return [
                 'code' => 200,
+                ...$serviceVendors,
+                ...$entities,
+                ...$tipoNotas,
+                ...$patients,
             ];
         });
     }
@@ -320,10 +333,21 @@ class InvoiceController extends Controller
             $soat = $this->invoiceSoatRepository->find($form->typeable_id);
             $soat = new InvoiceSoatFormResource($soat);
 
+
+            $serviceVendors = $this->queryController->selectInfiniteServiceVendor(request());
+            $entities = $this->queryController->selectInfiniteEntities(request());
+            $tipoNotas = $this->queryController->selectInfinitetipoNota(request());
+            $patients = $this->queryController->selectInfinitePatients(request());
+
+
             return [
                 'code' => 200,
                 'form' => $form,
                 'soat' => $soat,
+                ...$serviceVendors,
+                ...$entities,
+                ...$tipoNotas,
+                ...$patients,
             ];
         });
     }
