@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Enums\Service\TypeServiceEnum;
+use App\Events\InvoiceRowUpdatedNow;
 use App\Http\Requests\OtherService\OtherServiceStoreRequest;
 use App\Http\Resources\OtherService\OtherServiceFormResource;
+use App\Repositories\InvoiceRepository;
 use App\Repositories\OtherServiceRepository;
 use App\Repositories\ServiceRepository;
 use App\Traits\HttpResponseTrait;
@@ -17,6 +19,7 @@ class OtherServiceController extends Controller
     public function __construct(
         protected OtherServiceRepository $otherServiceRepository,
         protected ServiceRepository $serviceRepository,
+        protected InvoiceRepository $invoiceRepository,
         protected QueryController $queryController,
     ) {}
 

@@ -12,6 +12,30 @@ class Service extends Model
 {
     use Cacheable, HasFactory, HasUuids, SoftDeletes;
 
+    /**
+     * Boot del modelo para registrar eventos.
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::created(function ($service) {
+            Invoice::updateTotalFromServices($service->invoice_id);
+        });
+
+        static::updated(function ($service) {
+            Invoice::updateTotalFromServices($service->invoice_id);
+        });
+
+        static::deleted(function ($service) {
+            Invoice::updateTotalFromServices($service->invoice_id);
+        });
+
+        static::saved(function ($service) {
+            Invoice::updateTotalFromServices($service->invoice_id);
+        });
+    }
+
     public function company()
     {
         return $this->belongsTo(Company::class);

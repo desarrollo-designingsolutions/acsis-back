@@ -121,10 +121,6 @@ class InvoiceController extends Controller
 
             $post['typeable_type'] = 'App\\Models\\' . $post['type'];
 
-            // $post['typeable_id'] = $soat['id'];
-
-            $post['remaining_balance'] = $post['total'];
-
             $invoice = $this->invoiceRepository->store($post);
 
             return [
@@ -160,10 +156,6 @@ class InvoiceController extends Controller
 
             $invoice = $this->invoiceRepository->store($post);
 
-            if (!$invoice->invoice_payments()->exists()) {
-                $post['remaining_balance'] = $post['total'];
-            }
-
             return [
                 'code' => 200,
                 'message' => 'Factura modificada correctamente',
@@ -195,14 +187,14 @@ class InvoiceController extends Controller
         return $this->runTransaction(function () use ($request) {
 
             // Extract and prepare data
-            $post = $request->except(['entity', 'patient', 'TipoNota', 'serviceVendor', 'soat']);
+            $post = $request->except(['entity', 'patient', 'TipoNota', 'serviceVendor', 'soat', "value_paid", "total", "remaining_balance"]);
             $dataSoat = array_merge($request->input('soat'), ['company_id' => $request->input('company_id')]);
 
             // Store SOAT and invoice
             $soat = $this->invoiceSoatRepository->store($dataSoat);
             $post['typeable_type'] = 'App\\Models\\' . $post['type'];
             $post['typeable_id'] = $soat['id'];
-            $post['remaining_balance'] = $post['total'];
+
             $invoice = $this->invoiceRepository->store($post);
 
             // Build JSON structure
@@ -211,9 +203,13 @@ class InvoiceController extends Controller
             // Store JSON file
             $this->storeJsonFile($invoice, $jsonData);
 
+
+
             return [
                 'code' => 200,
                 'message' => 'Factura agregada correctamente',
+                'form' => $invoice,
+                'soat' => $soat,
             ];
         }, debug: false);
     }
@@ -356,7 +352,7 @@ class InvoiceController extends Controller
     {
         return $this->runTransaction(function () use ($request) {
 
-            $post = $request->except(['entity', 'patient', 'TipoNota', 'serviceVendor', 'soat']);
+            $post = $request->except(['entity', 'patient', 'TipoNota', 'serviceVendor', 'soat', "value_paid", "total", "remaining_balance"]);
 
             $dataSoat = $request->input('soat');
 
@@ -370,9 +366,6 @@ class InvoiceController extends Controller
 
             $invoice = $this->invoiceRepository->store($post);
 
-            if (!$invoice->invoice_payments()->exists()) {
-                $post['remaining_balance'] = $post['total'];
-            }
 
             // Build JSON structure
             $jsonData = $this->buildInvoiceJson($invoice->id);
@@ -383,6 +376,8 @@ class InvoiceController extends Controller
             return [
                 'code' => 200,
                 'message' => 'Factura modificada correctamente',
+                'form' => $invoice,
+                'soat' => $soat,
             ];
         });
     }

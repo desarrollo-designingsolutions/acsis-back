@@ -64,6 +64,7 @@ class ServiceVendorController extends Controller
             return [
                 'code' => 200,
                 'message' => 'Proveedor agregado correctamente',
+                'form' => $serviceVendor,
             ];
         });
     }
@@ -96,6 +97,7 @@ class ServiceVendorController extends Controller
             return [
                 'code' => 200,
                 'message' => 'Proveedor modificado correctamente',
+                'form' => $serviceVendor,
             ];
         });
     }

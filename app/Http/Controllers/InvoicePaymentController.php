@@ -69,10 +69,6 @@ class InvoicePaymentController extends Controller
                 $invoicePayment->save();
             }
 
-            $invoice = $this->invoiceRepository->find($invoicePayment->invoice_id, select: ['id', 'remaining_balance']);
-            $invoice->remaining_balance = $invoice->remaining_balance - $invoicePayment->value_paid;
-            $invoice->save();
-
             return [
                 'code' => 200,
                 'message' => 'InvoicePayment agregada correctamente',
@@ -115,9 +111,6 @@ class InvoicePaymentController extends Controller
                 $invoicePayment->save();
             }
 
-            $invoice = $this->invoiceRepository->find($invoicePayment->invoice_id, select: ['id', 'remaining_balance']);
-            $invoice->remaining_balance = ($invoicePayment_old->value_paid + $invoice->remaining_balance) - $invoicePayment->value_paid;
-            $invoice->save();
 
             return [
                 'code' => 200,

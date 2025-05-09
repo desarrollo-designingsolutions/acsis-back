@@ -32,8 +32,6 @@ class FileUploadProgress implements ShouldBroadcastNow
         $this->totalFiles = $totalFiles;
         $this->progress = $progress;
         $this->filePath = $filePath;
-
-        logMessage("aaaaaaaaaaaa");
     }
 
     public function broadcastOn()

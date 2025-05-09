@@ -32,6 +32,7 @@ class InvoiceType002FormResource extends JsonResource
             'value_glosa'      => $this->value_glosa,
             'value_paid' => $this->value_paid,
             'total' => $this->total,
+            'remaining_balance' => $this->remaining_balance,
             'invoice_date' => $this->invoice_date,
             'radication_date' => $this->radication_date,
             'typeable_id' => $this->typeable_id,
