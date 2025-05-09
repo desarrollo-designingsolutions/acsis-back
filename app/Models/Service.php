@@ -17,8 +17,18 @@ class Service extends Model
         return $this->belongsTo(Company::class);
     }
 
-    public function cups_rip()
+    public function invoice()
     {
-        return $this->belongsTo(CupsRips::class);
+        return $this->belongsTo(Invoice::class);
+    }
+
+    public function serviceable()
+    {
+        return $this->morphTo();
+    }
+
+    public function glosas()
+    {
+        return $this->hasMany(Glosa::class);
     }
 }

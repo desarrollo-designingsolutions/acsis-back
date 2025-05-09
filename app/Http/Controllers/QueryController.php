@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\CodeGlosa\CodeGlosaSelectInfiniteResource;
+use App\Http\Resources\ConceptoRecaudo\ConceptoRecaudoSelectResource;
 use App\Http\Resources\Country\CountrySelectResource;
 use App\Http\Resources\CupsRips\CupsRipsSelectInfiniteResource;
 use App\Http\Resources\Entity\EntitySelectResource;
@@ -14,10 +15,12 @@ use App\Http\Resources\ServiceVendor\ServiceVendorSelectResource;
 use App\Http\Resources\Sexo\SexoSelectResource;
 use App\Http\Resources\TipoIdPisis\TipoIdPisisSelectResource;
 use App\Http\Resources\TipoNota\TipoNotaSelectResource;
+use App\Http\Resources\TipoOtrosServicios\TipoOtrosServiciosSelectResource;
 use App\Http\Resources\TypeDocument\TypeDocumentSelectResource;
 use App\Http\Resources\ZonaVersion2\ZonaVersion2SelectResource;
 use App\Repositories\CityRepository;
 use App\Repositories\CodeGlosaRepository;
+use App\Repositories\ConceptoRecaudoRepository;
 use App\Repositories\CountryRepository;
 use App\Repositories\CupsRipsRepository;
 use App\Repositories\EntityRepository;
@@ -30,6 +33,7 @@ use App\Repositories\SexoRepository;
 use App\Repositories\StateRepository;
 use App\Repositories\TipoIdPisisRepository;
 use App\Repositories\TipoNotaRepository;
+use App\Repositories\TipoOtrosServiciosRepository;
 use App\Repositories\TypeDocumentRepository;
 use App\Repositories\TypeEntityRepository;
 use App\Repositories\TypeVendorRepository;
@@ -62,6 +66,8 @@ class QueryController extends Controller
         protected PaisRepository $paisRepository,
         protected MunicipioRepository $municipioRepository,
         protected ZonaVersion2Repository $zonaVersion2Repository,
+        protected TipoOtrosServiciosRepository $tipoOtrosServiciosRepository,
+        protected ConceptoRecaudoRepository $conceptoRecaudoRepository,
     ) {}
 
     public function selectInfiniteCountries(Request $request)
@@ -306,6 +312,30 @@ class QueryController extends Controller
             'code' => 200,
             'zonaVersion2s_arrayInfo' => $data,
             'zonaVersion2s_countLinks' => $zonaVersion2->lastPage(),
+        ];
+    }
+
+    public function selectInfiniteTipoOtrosServicios(Request $request)
+    {
+        $tipoOtrosServicios = $this->tipoOtrosServiciosRepository->list($request->all());
+        $data = TipoOtrosServiciosSelectResource::collection($tipoOtrosServicios);
+
+        return [
+            'code' => 200,
+            'tipoOtrosServicios_arrayInfo' => $data,
+            'tipoOtrosServicios_countLinks' => $tipoOtrosServicios->lastPage(),
+        ];
+    }
+
+    public function selectInfiniteConceptoRecaudo(Request $request)
+    {
+        $conceptoRecaudo = $this->conceptoRecaudoRepository->list($request->all());
+        $data = ConceptoRecaudoSelectResource::collection($conceptoRecaudo);
+
+        return [
+            'code' => 200,
+            'conceptoRecaudo_arrayInfo' => $data,
+            'conceptoRecaudo_countLinks' => $conceptoRecaudo->lastPage(),
         ];
     }
 }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\OtherServiceController;
 use App\Http\Controllers\ServiceController;
 use Illuminate\Support\Facades\Route;
 
@@ -14,15 +15,21 @@ Route::middleware(['check.permission:menu.invoice'])->group(function () {
 
     Route::get('/service/paginate', [ServiceController::class, 'paginate']);
 
-    Route::get('/service/create', [ServiceController::class, 'create']);
-
-    Route::post('/service/store', [ServiceController::class, 'store']);
-
-    Route::get('/service/{id}/edit', [ServiceController::class, 'edit']);
-
-    Route::post('/service/update/{id}', [ServiceController::class, 'update']);
-
     Route::delete('/service/delete/{id}', [ServiceController::class, 'delete']);
 
-    Route::post('/service/changeStatus', [ServiceController::class, 'changeStatus']);
+    Route::get('/service/loadBtnCreate', [ServiceController::class, 'loadBtnCreate']);
+
+    /*
+    |--------------------------------------------------------------------------
+    | OtherService
+    |--------------------------------------------------------------------------
+    */
+
+    Route::get('/service/otherService/create', [OtherServiceController::class, 'create']);
+
+    Route::post('/service/otherService/store', [OtherServiceController::class, 'store']);
+
+    Route::get('/service/otherService/{service_id}/edit', [OtherServiceController::class, 'edit']);
+
+    Route::post('/service/otherService/update/{id}', [OtherServiceController::class, 'update']);
 });

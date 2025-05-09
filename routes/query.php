@@ -29,3 +29,5 @@ Route::post('/selectInfinitePais', [QueryController::class, 'selectInfinitePais'
 Route::post('/selectInfiniteMunicipio', [QueryController::class, 'selectInfiniteMunicipio']);
 Route::post('/selectInfiniteZonaVersion2', [QueryController::class, 'selectInfiniteZonaVersion2']);
 
+Route::post('/selectInfiniteTipoOtrosServicios', [QueryController::class, 'selectInfiniteTipoOtrosServicios']);
+Route::post('/selectInfiniteConceptoRecaudo', [QueryController::class, 'selectInfiniteConceptoRecaudo']);

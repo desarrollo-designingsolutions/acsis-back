@@ -31,7 +31,7 @@ class CodeGlosaRepository extends BaseRepository
                     }
                 });
 
-            $data = $data->orderBy('id', 'desc');
+
             if (empty($request['typeData'])) {
                 $data = $data->paginate($request['perPage'] ?? 10);
             } else {

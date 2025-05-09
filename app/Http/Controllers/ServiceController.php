@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\Service\TypeServiceEnum;
 use App\Http\Requests\Service\ServiceStoreRequest;
 use App\Http\Resources\Service\ServiceFormResource;
 use App\Http\Resources\Service\ServicePaginateResource;
@@ -34,62 +35,6 @@ class ServiceController extends Controller
         });
     }
 
-    public function create(Request $request)
-    {
-        return $this->execute(function () use ($request) {
-
-            return [
-                'code' => 200,
-            ];
-        });
-    }
-
-    public function store(ServiceStoreRequest $request)
-    {
-        return $this->runTransaction(function () use ($request) {
-
-            $post = $request->except([]);
-
-            $post["total_value"] = $post["quantity"] * $post["unit_value"];
-
-            $service = $this->serviceRepository->store($post);
-
-            return [
-                'code' => 200,
-                'message' => 'Servicio agregado correctamente',
-            ];
-        });
-    }
-
-    public function edit(Request $request, $id)
-    {
-        return $this->execute(function () use ($id, $request) {
-
-            $service = $this->serviceRepository->find($id);
-            $form = new ServiceFormResource($service);
-
-            return [
-                'code' => 200,
-                'form' => $form,
-            ];
-        });
-    }
-
-    public function update(ServiceStoreRequest $request, $id)
-    {
-        return $this->runTransaction(function () use ($request, $id) {
-
-            $post = $request->except([]);
-            $post["total_value"] = $post["quantity"] * $post["unit_value"];
-
-            $service = $this->serviceRepository->store($post, $id);
-
-            return [
-                'code' => 200,
-                'message' => 'Servicio modificado correctamente',
-            ];
-        });
-    }
 
     public function delete($id)
     {
@@ -104,6 +49,8 @@ class ServiceController extends Controller
                 // }
 
                 $service->delete();
+                $service->serviceable()->delete();
+                $service->glosas()->delete();
                 $msg = 'Registro eliminado correctamente';
             } else {
                 $msg = 'El registro no existe';
@@ -116,16 +63,21 @@ class ServiceController extends Controller
         }, 200);
     }
 
-    public function changeStatus(Request $request)
-    {
-        return $this->runTransaction(function () use ($request) {
-            $model = $this->serviceRepository->changeState($request->input('id'), strval($request->input('value')), $request->input('field'));
 
-            ($model->is_active == 1) ? $msg = 'habilitada' : $msg = 'inhabilitada';
+    public function loadBtnCreate(Request $request)
+    {
+        return $this->execute(function () use ($request) {
+
+            $typeServiceEnumValues = array_map(function ($case) {
+                return [
+                    'type' => $case->value,
+                    'name' => $case->description(),
+                ];
+            }, TypeServiceEnum::cases());
 
             return [
                 'code' => 200,
-                'message' => 'Servicio ' . $msg . ' con éxito',
+                'typeServiceEnumValues' => $typeServiceEnumValues,
             ];
         });
     }

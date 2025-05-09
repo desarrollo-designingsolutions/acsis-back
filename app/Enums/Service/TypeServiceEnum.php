@@ -1,0 +1,35 @@
+<?php
+
+namespace App\Enums\Service;
+
+use App\Attributes\BackgroundColor;
+use App\Attributes\Description;
+use App\Traits\AttributableEnum;
+use App\Attributes\Model;
+
+enum TypeServiceEnum: string
+{
+    use AttributableEnum;
+
+    #[Description('Consultas')]
+    case SERVICE_TYPE_001 = 'SERVICE_TYPE_001';
+
+    #[Description('Procedimientos')]
+    case SERVICE_TYPE_002 = 'SERVICE_TYPE_002';
+
+    #[Description('Urgencias')]
+    case SERVICE_TYPE_003 = 'SERVICE_TYPE_003';
+
+    #[Description('Hospitalización')]
+    case SERVICE_TYPE_004 = 'SERVICE_TYPE_004';
+
+    #[Description('Recien nacidos')]
+    case SERVICE_TYPE_005 = 'SERVICE_TYPE_005';
+
+    #[Description('Medicamentos')]
+    case SERVICE_TYPE_006 = 'SERVICE_TYPE_006';
+
+    #[Description('Otros servicios')]
+    #[Model('App\\Models\\OtherService')]
+    case SERVICE_TYPE_007 = 'SERVICE_TYPE_007';
+}

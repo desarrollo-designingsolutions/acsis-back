@@ -7,10 +7,11 @@ use App\Traits\Searchable;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Glosa extends Model
 {
-    use HasFactory, HasUuids, Searchable, Cacheable;
+    use HasFactory, HasUuids, Searchable, Cacheable, SoftDeletes;
 
     protected $guarded = [];
 
