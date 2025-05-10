@@ -19,6 +19,7 @@ class PatientController extends Controller
     public function __construct(
         protected PatientRepository $patientRepository,
         protected TypeEntityRepository $typeEntityRepository,
+        protected QueryController $queryController,
     ) {}
 
     public function paginate(Request $request)
@@ -42,8 +43,21 @@ class PatientController extends Controller
     {
         return $this->execute(function () {
 
+            $tipoDocumento = $this->queryController->selectInfiniteTipoDocumento(request());
+            $tipoUsuario = $this->queryController->selectInfiniteTipoUsuario(request());
+            $sexo = $this->queryController->selectInfiniteSexo(request());
+            $pais = $this->queryController->selectInfinitePais(request());
+            $municipio = $this->queryController->selectInfiniteMunicipio(request());
+            $zonaVersion2 = $this->queryController->selectInfiniteZonaVersion2(request());
+
             return [
                 'code' => 200,
+                ...$tipoDocumento,
+                ...$tipoUsuario,
+                ...$sexo,
+                ...$pais,
+                ...$municipio,
+                ...$zonaVersion2,
             ];
         });
     }
@@ -70,9 +84,22 @@ class PatientController extends Controller
             $patient = $this->patientRepository->find($id);
             $form = new PatientFormResource($patient);
 
+            $tipoDocumento = $this->queryController->selectInfiniteTipoDocumento(request());
+            $tipoUsuario = $this->queryController->selectInfiniteTipoUsuario(request());
+            $sexo = $this->queryController->selectInfiniteSexo(request());
+            $pais = $this->queryController->selectInfinitePais(request());
+            $municipio = $this->queryController->selectInfiniteMunicipio(request());
+            $zonaVersion2 = $this->queryController->selectInfiniteZonaVersion2(request());
+
             return [
                 'code' => 200,
                 'form' => $form,
+                ...$tipoDocumento,
+                ...$tipoUsuario,
+                ...$sexo,
+                ...$pais,
+                ...$municipio,
+                ...$zonaVersion2,
             ];
         });
     }
