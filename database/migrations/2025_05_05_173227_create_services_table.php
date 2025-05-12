@@ -18,9 +18,13 @@ return new class extends Migration
             $table->string('type');
             $table->string('serviceable_type')->nullable();
             $table->string('serviceable_id')->nullable();
+            $table->string('codigo_servicio')->nullable();
+            $table->string('nombre_servicio')->nullable();
             $table->integer('quantity')->default(0);
             $table->decimal('unit_value', 15, 2)->default(0);
             $table->decimal('total_value', 15, 2)->default(0);
+            $table->decimal('value_glosa', 15, 2)->default(0);
+            $table->decimal('value_approved', 15, 2)->default(0);
             $table->timestamps();
             $table->softDeletes();
         });

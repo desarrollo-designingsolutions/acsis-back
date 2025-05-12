@@ -1,7 +1,12 @@
 <?php
 
+use App\Events\ChangeInvoiceAuditData;
+use App\Models\Invoice;
+use App\Models\Service;
+use App\Services\CacheService;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Redis;
 
 function logMessage($message)
 {
@@ -109,4 +114,41 @@ function convertNullToEmptyString(array $data): array
     return array_map(function ($item) {
         return $item === null ? '' : $item;
     }, $data);
+}
+
+
+function changeServiceData($service_id)
+{
+    $service = Service::with(["invoice"])->find($service_id);
+
+    // Calcular el valor total de las glosas para el servicio
+    $value_glosa = $service->glosas->sum('glosa_value');
+
+    // Asegurarse de que value_glosa no exceda total_value
+    if ($value_glosa > $service->total_value) {
+        $value_glosa = $service->total_value;
+    }
+
+    // Calcular el valor aprobado
+    $value_approved = $service->total_value - $value_glosa;
+
+    // Actualizar la BD MySQL para el servicio
+    $service->update([
+        'value_glosa' => $value_glosa,
+        'value_approved' => $value_approved,
+    ]);
+
+    // Obtener todos los servicios de la factura
+    $services = $service->invoice->services;
+
+    // Sumar los valores de value_glosa y value_approved de todos los servicios
+    $total_value_glosa = $services->sum('value_glosa');
+    $total_value_approved = $services->sum('value_approved');
+
+    // Actualizar el campo value_glosa en la factura
+    $service->invoice->update([
+        'value_glosa' => $total_value_glosa,
+    ]);
+
+    Invoice::updateTotalFromServices($service->invoice_id);
 }

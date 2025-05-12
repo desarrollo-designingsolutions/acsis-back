@@ -27,5 +27,4 @@ Route::middleware(['check.permission:serviceVendor.list'])->group(function () {
     Route::post('/serviceVendor/changeStatus', [ServiceVendorController::class, 'changeStatus']);
 
     Route::get('/serviceVendor/excelExport', [ServiceVendorController::class, 'excelExport']);
-
 });

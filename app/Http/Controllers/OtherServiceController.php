@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Enums\Service\TypeServiceEnum;
-use App\Events\InvoiceRowUpdatedNow;
 use App\Http\Requests\OtherService\OtherServiceStoreRequest;
 use App\Http\Resources\OtherService\OtherServiceFormResource;
 use App\Repositories\InvoiceRepository;
@@ -29,11 +28,13 @@ class OtherServiceController extends Controller
 
             $tipoOtrosServicios = $this->queryController->selectInfiniteTipoOtrosServicios(request());
             $conceptoRecaudo = $this->queryController->selectInfiniteConceptoRecaudo(request());
+            $cupsRips = $this->queryController->selectInfiniteCupsRips(request());
 
             return [
                 'code' => 200,
                 ...$tipoOtrosServicios,
                 ...$conceptoRecaudo,
+                ...$cupsRips,
             ];
         });
     }
@@ -52,6 +53,8 @@ class OtherServiceController extends Controller
                 "type" => TypeServiceEnum::SERVICE_TYPE_007,
                 "serviceable_type" => TypeServiceEnum::SERVICE_TYPE_007->model(),
                 "serviceable_id" => $otherService->id,
+                "codigo_servicio" => $request->input("codTecnologiaSalud"),
+                "nombre_servicio" => $request->input("nomTecnologiaSalud"),
                 "quantity" => $request->input("cantidadOS"),
                 "unit_value" => $request->input("vrUnitOS"),
                 "total_value" => $request->input("vrServicio"),
@@ -77,12 +80,13 @@ class OtherServiceController extends Controller
 
             $tipoOtrosServicios = $this->queryController->selectInfiniteTipoOtrosServicios(request());
             $conceptoRecaudo = $this->queryController->selectInfiniteConceptoRecaudo(request());
-
+            $cupsRips = $this->queryController->selectInfiniteCupsRips(request());
             return [
                 'code' => 200,
                 'form' => $form,
                 ...$tipoOtrosServicios,
                 ...$conceptoRecaudo,
+                ...$cupsRips,
             ];
         });
     }
@@ -99,6 +103,8 @@ class OtherServiceController extends Controller
                 "id" => $request->input("service_id"),
                 "company_id" => $request->input("company_id"),
                 "serviceable_id" => $otherService->id,
+                "codigo_servicio" => $request->input("codTecnologiaSalud"),
+                "nombre_servicio" => $request->input("nomTecnologiaSalud"),
                 "quantity" => $request->input("cantidadOS"),
                 "unit_value" => $request->input("vrUnitOS"),
                 "total_value" => $request->input("vrServicio"),

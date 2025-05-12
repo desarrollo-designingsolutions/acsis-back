@@ -17,6 +17,8 @@ class CupsRipsSelectInfiniteResource extends JsonResource
         return [
             'value' => $this->id,
             'title' => $this->codigo . ' - ' . $this->nombre,
+            'codigo' => $this->codigo,
+            'nombre' => $this->nombre,
         ];
     }
 }

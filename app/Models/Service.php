@@ -12,6 +12,8 @@ class Service extends Model
 {
     use Cacheable, HasFactory, HasUuids, SoftDeletes;
 
+    protected $guarded = [];
+
     /**
      * Boot del modelo para registrar eventos.
      */
@@ -55,4 +57,6 @@ class Service extends Model
     {
         return $this->hasMany(Glosa::class);
     }
+
+    public function updateValueGosaFromServices() {}
 }

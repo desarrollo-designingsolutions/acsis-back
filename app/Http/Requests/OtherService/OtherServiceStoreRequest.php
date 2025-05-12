@@ -62,6 +62,9 @@ class OtherServiceStoreRequest extends FormRequest
         if ($this->has('conceptoRecaudo_id')) {
             $merge["conceptoRecaudo_id"] = getValueSelectInfinite($this->conceptoRecaudo_id);
         }
+        if ($this->has('codTecnologiaSalud')) {
+            $merge["codTecnologiaSalud"] = getValueSelectInfinite($this->codTecnologiaSalud, "codigo");
+        }
 
         $this->merge($merge);
     }

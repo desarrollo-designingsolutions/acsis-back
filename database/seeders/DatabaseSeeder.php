@@ -21,29 +21,29 @@ class DatabaseSeeder extends Seeder
         // 5. php artisan db:seed --class=WorldSeeder
 
         $this->call([
-            // WorldSeeder::class,
-            // MenuSeeder::class,
-            // PermissionSeeder::class,
-            // RoleSeeder::class,
-            // CompanySeeder::class,
-            // UserSeeder::class,
-            // TypeVendorSeeder::class,
-            // TypeEntitySeeder::class,
-            // TypeDocumentSeeder::class,
+            WorldSeeder::class,
+            MenuSeeder::class,
+            PermissionSeeder::class,
+            RoleSeeder::class,
+            CompanySeeder::class,
+            UserSeeder::class,
+            TypeVendorSeeder::class,
+            TypeEntitySeeder::class,
+            TypeDocumentSeeder::class,
 
 
-            // TypeCodeGlosaSeeder::class,
-            // GeneralCodeGlosaSeeder::class,
-            // CodeGlosaSeeder::class,
-            // CupsRipsSeeder::class,
+            TypeCodeGlosaSeeder::class,
+            GeneralCodeGlosaSeeder::class,
+            CodeGlosaSeeder::class,
+            CupsRipsSeeder::class,
 
-            // TipoNotaSeeder::class,
-            // TipoIdPisisSeeder::class,
-            // RipsTipoUsuarioVersion2Seeder::class,
-            // SexoSeeder::class,
-            // PaisSeeder::class,
-            // MunicipioSeeder::class,
-            // ZonaVersion2Seeder::class,
+            TipoNotaSeeder::class,
+            TipoIdPisisSeeder::class,
+            RipsTipoUsuarioVersion2Seeder::class,
+            SexoSeeder::class,
+            PaisSeeder::class,
+            MunicipioSeeder::class,
+            ZonaVersion2Seeder::class,
 
             ModalidadAtencionSeeder::class,
             GrupoServicioSeeder::class,
@@ -60,9 +60,9 @@ class DatabaseSeeder extends Seeder
 
         ]);
 
-        // $client = new ClientRepository;
+        $client = new ClientRepository;
 
-        // $client->createPasswordGrantClient(null, 'Laravel Personal Grant Client', 'https://localhost');
-        // $client->createPersonalAccessClient(null, 'Laravel Password Access Client', 'https://localhost');
+        $client->createPasswordGrantClient(null, 'Laravel Personal Grant Client', 'https://localhost');
+        $client->createPersonalAccessClient(null, 'Laravel Password Access Client', 'https://localhost');
     }
 }

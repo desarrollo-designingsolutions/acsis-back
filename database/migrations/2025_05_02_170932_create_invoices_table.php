@@ -14,10 +14,10 @@ return new class extends Migration
         Schema::create('invoices', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->foreignUuid('company_id')->constrained();
-            $table->foreignUuid('service_vendor_id')->constrained()->nullable();
-            $table->foreignUuid('entity_id')->constrained()->nullable();
-            $table->foreignUuid('patient_id')->constrained()->nullable();
-            $table->foreignUuid('tipo_nota_id')->constrained()->nullable();
+            $table->foreignUuid('service_vendor_id')->nullable()->constrained();
+            $table->foreignUuid('entity_id')->nullable()->constrained();
+            $table->foreignUuid('patient_id')->nullable()->constrained();
+            $table->foreignUuid('tipo_nota_id')->nullable()->constrained();
             $table->string('type')->nullable();
             $table->string('typeable_type')->nullable();
             $table->string('typeable_id')->nullable();

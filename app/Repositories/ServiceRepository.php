@@ -26,17 +26,13 @@ class ServiceRepository extends BaseRepository
                     AllowedFilter::callback('inputGeneral', function ($query, $value) use ($request) {
                         $query->where(function ($subQuery) use ($value) {
                             $subQuery->orWhere('quantity', 'like', "%$value%");
+                            $subQuery->orWhere('codigo_servicio', 'like', "%$value%");
+                            $subQuery->orWhere('nombre_servicio', 'like', "%$value%");
 
                             $subQuery->orWhere(function ($subQuery) use ($value) {
                                 $normalizedValue = preg_replace('/[\$\s\.,]/', '', $value);
                                 $subQuery->orWhere('unit_value', 'like', "%$normalizedValue%");
                                 $subQuery->orWhere('total_value', 'like', "%$normalizedValue%");
-                            });
-
-
-                            $subQuery->orWhereHas('cups_rip', function ($subQuery2) use ($value) {
-                                $subQuery2->where('nombre', 'like', "%$value%");
-                                $subQuery2->orWhere('codigo', 'like', "%$value%");
                             });
                         });
                     }),
@@ -45,18 +41,8 @@ class ServiceRepository extends BaseRepository
                     "quantity",
                     "unit_value",
                     "total_value",
-                    AllowedSort::custom('cups_rip_codigo', new RelatedTableSort(
-                        'services',
-                        'cups_rips',
-                        'codigo',
-                        'cups_rip_id',
-                    )),
-                    AllowedSort::custom('cups_rip_nombre', new RelatedTableSort(
-                        'services',
-                        'cups_rips',
-                        'nombre',
-                        'cups_rip_id',
-                    )),
+                    "codigo_servicio",
+                    "nombre_servicio",
                 ])
                 ->where(function ($query) use ($request) {
                     if (isset($request['invoice_id']) && ! empty($request['invoice_id'])) {

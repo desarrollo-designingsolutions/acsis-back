@@ -3,7 +3,9 @@
 namespace App\Http\Resources\OtherService;
 
 use App\Http\Resources\ConceptoRecaudo\ConceptoRecaudoSelectResource;
+use App\Http\Resources\CupsRips\CupsRipsSelectInfiniteResource;
 use App\Http\Resources\TipoOtrosServicios\TipoOtrosServiciosSelectResource;
+use App\Models\CupsRips;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -16,6 +18,10 @@ class OtherServiceFormResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+
+        $cupsRips = CupsRips::where("codigo", $this->codTecnologiaSalud)->first();
+        $codTecnologiaSalud = new CupsRipsSelectInfiniteResource($cupsRips);
+
         return [
             'id' => $this->id,
             'invoice_id' => $this->service->invoice_id,
@@ -23,8 +29,8 @@ class OtherServiceFormResource extends JsonResource
             "idMIPRES" => $this->idMIPRES,
             "fechaSuministroTecnologia" => $this->fechaSuministroTecnologia,
             "tipoOS_id" => new TipoOtrosServiciosSelectResource($this->tipoOtrosServicio),
-            "codTecnologiaSalud" => $this->codTecnologiaSalud,
-            "nomTecnologiaSalud" => $this->nomTecnologiaSalud,
+            "codTecnologiaSalud" => $codTecnologiaSalud,
+            "nomTecnologiaSalud" =>  $this->nomTecnologiaSalud,
             "cantidadOS" => $this->cantidadOS,
             "vrUnitOS" => $this->vrUnitOS,
             "valorPagoModerador" => $this->valorPagoModerador,

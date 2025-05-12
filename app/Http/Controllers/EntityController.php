@@ -62,6 +62,8 @@ class EntityController extends Controller
             return [
                 'code' => 200,
                 'message' => 'Entidad agregada correctamente',
+                'form' => $entity,
+
             ];
         });
     }
@@ -92,6 +94,7 @@ class EntityController extends Controller
             return [
                 'code' => 200,
                 'message' => 'Entidad modificada correctamente',
+                'form' => $entity,
             ];
         });
     }

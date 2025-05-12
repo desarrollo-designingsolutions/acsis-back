@@ -41,6 +41,7 @@ class InvoiceRowUpdatedNow implements ShouldBroadcastNow
             'id' => $this->invoice->id,
             'total' => $this->invoice->total,
             'value_paid' => $this->invoice->value_paid,
+            'value_glosa' => $this->invoice->value_glosa,
             'remaining_balance' => $this->invoice->remaining_balance,
         ];
     }

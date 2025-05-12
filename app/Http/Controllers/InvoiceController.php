@@ -187,7 +187,7 @@ class InvoiceController extends Controller
         return $this->runTransaction(function () use ($request) {
 
             // Extract and prepare data
-            $post = $request->except(['entity', 'patient', 'TipoNota', 'serviceVendor', 'soat', "value_paid", "total", "remaining_balance"]);
+            $post = $request->except(['entity', 'patient', 'TipoNota', 'serviceVendor', 'soat', "value_paid", "total", "remaining_balance", 'value_glosa']);
             $dataSoat = array_merge($request->input('soat'), ['company_id' => $request->input('company_id')]);
 
             // Store SOAT and invoice
@@ -246,7 +246,7 @@ class InvoiceController extends Controller
         $baseData = [
             'numDocumentoIdObligado' => $serviceVendor->nit,
             'numFactura' => $invoice->invoice_number,
-            'TipoNota' => $tipoNota->codigo,
+            'TipoNota' => $tipoNota->codigo ?? "",
             'numNota' => $invoice->note_number
         ];
 
@@ -352,7 +352,7 @@ class InvoiceController extends Controller
     {
         return $this->runTransaction(function () use ($request) {
 
-            $post = $request->except(['entity', 'patient', 'TipoNota', 'serviceVendor', 'soat', "value_paid", "total", "remaining_balance"]);
+            $post = $request->except(['entity', 'patient', 'TipoNota', 'serviceVendor', 'soat', "value_paid", "total", "remaining_balance", 'value_glosa']);
 
             $dataSoat = $request->input('soat');
 

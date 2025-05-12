@@ -28,9 +28,7 @@ class PatientStoreRequest extends FormRequest
             'incapacity' => 'required',
             'pais_origin_id' => 'required',
             'first_name' => 'required',
-            'second_name' => 'required',
             'first_surname' => 'required',
-            'second_surname' => 'required',
         ];
 
         return $rules;
@@ -51,9 +49,7 @@ class PatientStoreRequest extends FormRequest
             'incapacity.required' => 'El campo es obligatorio',
             'pais_origin_id.required' => 'El campo es obligatorio',
             'first_name.required' => 'El campo es obligatorio',
-            'second_name.required' => 'El campo es obligatorio',
             'first_surname.required' => 'El campo es obligatorio',
-            'second_surname.required' => 'El campo es obligatorio',
         ];
     }
 
