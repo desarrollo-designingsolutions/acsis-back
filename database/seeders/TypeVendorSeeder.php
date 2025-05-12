@@ -37,6 +37,7 @@ class TypeVendorSeeder extends Seeder
             $data->name = $value['name'];
             $data->company_id = Constants::COMPANY_UUID;
             $data->save();
+            $bar->advance();
         }
 
         $bar->finish(); // Finalizar la barra

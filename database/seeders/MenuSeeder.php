@@ -97,6 +97,7 @@ class MenuSeeder extends Seeder
             $data->requiredPermission = $value['requiredPermission'] ?? null;
             $data->heading = $value['heading'] ?? false;
             $data->save();
+            $bar->advance();
         }
 
         $bar->finish(); // Finalizar la barra

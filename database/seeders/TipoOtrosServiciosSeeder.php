@@ -29,6 +29,10 @@ class TipoOtrosServiciosSeeder extends Seeder
         }
 
         if ($sheet) {
+            // Inicializar la barra de progreso
+            $this->command->info('Starting Seed Data ...');
+            $bar = $this->command->getOutput()->createProgressBar(count($sheet));
+
             unset($sheet[0]);
             foreach ($sheet as $dataSheet) {
                 TipoOtrosServicios::updateOrCreate(
@@ -38,7 +42,9 @@ class TipoOtrosServiciosSeeder extends Seeder
                         'descripcion' => $dataSheet[3],
                     ]
                 );
+                $bar->advance();
             }
+            $bar->finish(); // Finalizar la barra
         }
     }
 }

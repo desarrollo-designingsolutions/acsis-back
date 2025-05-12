@@ -13,7 +13,7 @@ class PaisSeeder extends Seeder
     public function run(): void
     {
 
-        $dataArray = [
+        $arrayData = [
             ['id' => '1', 'codigo' => '004', 'nombre' => 'AFGANISTÁN', 'descripcion' => null, 'habilitado' => 'SI', 'aplicacion' => null, 'isStandardGEL' => 'False', 'isStandardMSPS' => 'False', 'extra_I' => null, 'extra_II' => 'AF', 'extra_III' => 'AFG', 'extra_IV' => null, 'extra_V' => null, 'extra_VI' => null, 'extra_VII' => null, 'extra_VIII' => null, 'extra_IX' => null, 'extra_X' => null, 'valorRegistro' => null, 'usuarioResponsable' => null, 'fecha_actualizacion' => '2018-10-03 02:02:21 PM', 'isPublicPrivate' => null],
             ['id' => '2', 'codigo' => '008', 'nombre' => 'ALBANIA', 'descripcion' => null, 'habilitado' => 'SI', 'aplicacion' => null, 'isStandardGEL' => 'False', 'isStandardMSPS' => 'False', 'extra_I' => null, 'extra_II' => 'AL', 'extra_III' => 'ALB', 'extra_IV' => null, 'extra_V' => null, 'extra_VI' => null, 'extra_VII' => null, 'extra_VIII' => null, 'extra_IX' => null, 'extra_X' => null, 'valorRegistro' => null, 'usuarioResponsable' => null, 'fecha_actualizacion' => '2018-10-03 02:02:21 PM', 'isPublicPrivate' => null],
             ['id' => '3', 'codigo' => '010', 'nombre' => 'ANTÁRTIDA', 'descripcion' => null, 'habilitado' => 'SI', 'aplicacion' => null, 'isStandardGEL' => 'False', 'isStandardMSPS' => 'False', 'extra_I' => null, 'extra_II' => 'AQ', 'extra_III' => 'ATA', 'extra_IV' => null, 'extra_V' => null, 'extra_VI' => null, 'extra_VII' => null, 'extra_VIII' => null, 'extra_IX' => null, 'extra_X' => null, 'valorRegistro' => null, 'usuarioResponsable' => null, 'fecha_actualizacion' => '2018-10-03 02:02:21 PM', 'isPublicPrivate' => null],
@@ -264,12 +264,12 @@ class PaisSeeder extends Seeder
             ['id' => '248', 'codigo' => '887', 'nombre' => 'YEMEN', 'descripcion' => null, 'habilitado' => 'SI', 'aplicacion' => null, 'isStandardGEL' => 'False', 'isStandardMSPS' => 'False', 'extra_I' => null, 'extra_II' => 'YE', 'extra_III' => 'YEM', 'extra_IV' => null, 'extra_V' => null, 'extra_VI' => null, 'extra_VII' => null, 'extra_VIII' => null, 'extra_IX' => null, 'extra_X' => null, 'valorRegistro' => null, 'usuarioResponsable' => null, 'fecha_actualizacion' => '2018-10-03 02:02:21 PM', 'isPublicPrivate' => null],
             ['id' => '249', 'codigo' => '894', 'nombre' => 'ZAMBIA', 'descripcion' => null, 'habilitado' => 'SI', 'aplicacion' => null, 'isStandardGEL' => 'False', 'isStandardMSPS' => 'False', 'extra_I' => null, 'extra_II' => 'ZM', 'extra_III' => 'ZMB', 'extra_IV' => null, 'extra_V' => null, 'extra_VI' => null, 'extra_VII' => null, 'extra_VIII' => null, 'extra_IX' => null, 'extra_X' => null, 'valorRegistro' => null, 'usuarioResponsable' => null, 'fecha_actualizacion' => '2018-10-03 02:02:21 PM', 'isPublicPrivate' => null],
         ];
-        
+
         // Inicializar la barra de progreso
         $this->command->info('Starting Seed Data ...');
-        $bar = $this->command->getOutput()->createProgressBar(count($dataArray));
+        $bar = $this->command->getOutput()->createProgressBar(count($arrayData));
 
-        foreach ($dataArray as $value) {
+        foreach ($arrayData as $value) {
             $data = new Pais();
             $data->codigo = $value['codigo'];
             $data->nombre = $value['nombre'];
@@ -293,10 +293,10 @@ class PaisSeeder extends Seeder
             $data->fecha_actualizacion = $value['fecha_actualizacion'];
             $data->isPublicPrivate = $value['isPublicPrivate'];
             $data->save();
-
+            $bar->advance();
         }
-        
+
         $bar->finish(); // Finalizar la barra
-        
+
     }
 }

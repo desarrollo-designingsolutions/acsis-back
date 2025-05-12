@@ -38,6 +38,7 @@ class TypeEntitySeeder extends Seeder
             $data->name = $value['name'];
             $data->is_active = 1;
             $data->save();
+            $bar->advance();
         }
 
         $bar->finish(); // Finalizar la barra

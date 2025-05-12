@@ -13,7 +13,7 @@ class UmmSeeder extends Seeder
     public function run(): void
     {
 
-        $dataArray = [
+        $arrayData = [
             ['id' => '1', 'codigo' => '1', 'nombre' => 'EID50', 'descripcion' => 'dosis infecciosa de embrión 50', 'habilitado' => 'SI', 'aplicacion' => null, 'isStandardGEL' => 'False', 'isStandardMSPS' => 'False', 'extra_I' => null, 'extra_II' => 'FALSO', 'extra_III' => 'FALSO', 'extra_IV' => null, 'extra_V' => null, 'extra_VI' => null, 'extra_VII' => null, 'extra_VIII' => null, 'extra_IX' => null, 'extra_X' => null, 'valorRegistro' => null, 'usuarioResponsable' => null, 'fecha_Actualizacion' => '2023-03-26 06:24:05 PM', 'isPublicPrivate' => 'False', 'created_at' => null, 'updated_at' => null],
             ['id' => '2', 'codigo' => '10', 'nombre' => 'Bq', 'descripcion' => 'bequerel(ios)', 'habilitado' => 'SI', 'aplicacion' => null, 'isStandardGEL' => 'False', 'isStandardMSPS' => 'False', 'extra_I' => null, 'extra_II' => 'FALSO', 'extra_III' => 'FALSO', 'extra_IV' => null, 'extra_V' => null, 'extra_VI' => null, 'extra_VII' => null, 'extra_VIII' => null, 'extra_IX' => null, 'extra_X' => null, 'valorRegistro' => null, 'usuarioResponsable' => null, 'fecha_Actualizacion' => '2023-03-26 06:24:05 PM', 'isPublicPrivate' => 'False', 'created_at' => null, 'updated_at' => null],
             ['id' => '3', 'codigo' => '100', 'nombre' => 'l', 'descripcion' => 'litro(s)', 'habilitado' => 'SI', 'aplicacion' => null, 'isStandardGEL' => 'False', 'isStandardMSPS' => 'False', 'extra_I' => null, 'extra_II' => 'FALSO', 'extra_III' => 'FALSO', 'extra_IV' => null, 'extra_V' => null, 'extra_VI' => null, 'extra_VII' => null, 'extra_VIII' => null, 'extra_IX' => null, 'extra_X' => null, 'valorRegistro' => null, 'usuarioResponsable' => null, 'fecha_Actualizacion' => '2023-03-26 06:24:05 PM', 'isPublicPrivate' => 'False', 'created_at' => null, 'updated_at' => null],
@@ -288,7 +288,11 @@ class UmmSeeder extends Seeder
             ['id' => '272', 'codigo' => '99', 'nombre' => 'LfU/ml', 'descripcion' => 'unidades de floculación (lime flocculation unit(s))/mililitro', 'habilitado' => 'NO', 'aplicacion' => null, 'isStandardGEL' => 'False', 'isStandardMSPS' => 'False', 'extra_I' => null, 'extra_II' => 'FALSO', 'extra_III' => 'FALSO', 'extra_IV' => null, 'extra_V' => null, 'extra_VI' => null, 'extra_VII' => null, 'extra_VIII' => null, 'extra_IX' => null, 'extra_X' => null, 'valorRegistro' => null, 'usuarioResponsable' => null, 'fecha_Actualizacion' => '2023-03-26 06:24:05 PM', 'isPublicPrivate' => 'False', 'created_at' => null, 'updated_at' => null],
         ];
 
-        foreach ($dataArray as $value) {
+        // Inicializar la barra de progreso
+        $this->command->info('Starting Seed Data ...');
+        $bar = $this->command->getOutput()->createProgressBar(count($arrayData));
+
+        foreach ($arrayData as $value) {
             $data = new Umm();
             $data->codigo = $value['codigo'];
             $data->nombre = $value['nombre'];
@@ -313,7 +317,8 @@ class UmmSeeder extends Seeder
             $data->isPublicPrivate = $value['isPublicPrivate'];
 
             $data->save();
-
+            $bar->advance();
         }
+        $bar->finish(); // Finalizar la barra
     }
 }

@@ -42,6 +42,7 @@ class RoleSeeder extends Seeder
 
             // Asignar todos los permisos al primer rol
             $model->givePermissionTo($permissionAll);
+            $bar->advance();
         }
 
         $bar->finish(); // Finalizar la barra

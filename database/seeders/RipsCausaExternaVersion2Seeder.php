@@ -13,7 +13,7 @@ class RipsCausaExternaVersion2Seeder extends Seeder
     public function run(): void
     {
 
-        $dataArray = [
+        $arrayData = [
             ['id' => '1', 'codigo' => '21', 'nombre' => 'Accidente de trabajo', 'descripcion' => null, 'habilitado' => 'SI', 'aplicacion' => null, 'isStandardGEL' => 'False', 'isStandardMSPS' => 'False', 'extra_I' => 'SI', 'extra_II' => 'NA', 'extra_III' => 'SI', 'extra_IV' => 'SI', 'extra_V' => 'NA', 'extra_VI' => null, 'extra_VII' => null, 'extra_VIII' => null, 'extra_IX' => null, 'extra_X' => null, 'valorRegistro' => null, 'usuarioResponsable' => null, 'fecha_actualizacion' => '2022-06-16 04:17:45 PM', 'isPublicPrivate' => null, 'created_at' => null, 'updated_at' => null],
             ['id' => '2', 'codigo' => '22', 'nombre' => 'Accidente en el hogar', 'descripcion' => null, 'habilitado' => 'SI', 'aplicacion' => null, 'isStandardGEL' => 'False', 'isStandardMSPS' => 'False', 'extra_I' => 'SI', 'extra_II' => 'NA', 'extra_III' => 'SI', 'extra_IV' => 'SI', 'extra_V' => 'NA', 'extra_VI' => null, 'extra_VII' => null, 'extra_VIII' => null, 'extra_IX' => null, 'extra_X' => null, 'valorRegistro' => null, 'usuarioResponsable' => null, 'fecha_actualizacion' => '2022-06-16 04:17:45 PM', 'isPublicPrivate' => null, 'created_at' => null, 'updated_at' => null],
             ['id' => '3', 'codigo' => '23', 'nombre' => 'Accidente de tránsito de origen común', 'descripcion' => null, 'habilitado' => 'SI', 'aplicacion' => null, 'isStandardGEL' => 'False', 'isStandardMSPS' => 'False', 'extra_I' => 'SI', 'extra_II' => 'NA', 'extra_III' => 'SI', 'extra_IV' => 'SI', 'extra_V' => 'NA', 'extra_VI' => null, 'extra_VII' => null, 'extra_VIII' => null, 'extra_IX' => null, 'extra_X' => null, 'valorRegistro' => null, 'usuarioResponsable' => null, 'fecha_actualizacion' => '2022-06-16 04:17:45 PM', 'isPublicPrivate' => null, 'created_at' => null, 'updated_at' => null],
@@ -43,7 +43,13 @@ class RipsCausaExternaVersion2Seeder extends Seeder
             ['id' => '27', 'codigo' => '47', 'nombre' => 'Accidente de Munición Sin Explotar- MUSE', 'descripcion' => null, 'habilitado' => 'SI', 'aplicacion' => null, 'isStandardGEL' => 'False', 'isStandardMSPS' => 'False', 'extra_I' => 'SI', 'extra_II' => 'NA', 'extra_III' => 'SI', 'extra_IV' => 'SI', 'extra_V' => 'NA', 'extra_VI' => null, 'extra_VII' => null, 'extra_VIII' => null, 'extra_IX' => null, 'extra_X' => null, 'valorRegistro' => null, 'usuarioResponsable' => null, 'fecha_actualizacion' => '2022-06-16 04:17:45 PM', 'isPublicPrivate' => null, 'created_at' => null, 'updated_at' => null],
             ['id' => '28', 'codigo' => '48', 'nombre' => 'Otra víctima de conflicto armado colombiano', 'descripcion' => null, 'habilitado' => 'SI', 'aplicacion' => null, 'isStandardGEL' => 'False', 'isStandardMSPS' => 'False', 'extra_I' => 'SI', 'extra_II' => 'NA', 'extra_III' => 'SI', 'extra_IV' => 'SI', 'extra_V' => 'NA', 'extra_VI' => null, 'extra_VII' => null, 'extra_VIII' => null, 'extra_IX' => null, 'extra_X' => null, 'valorRegistro' => null, 'usuarioResponsable' => null, 'fecha_actualizacion' => '2022-06-16 04:17:45 PM', 'isPublicPrivate' => null, 'created_at' => null, 'updated_at' => null],
         ];
-        foreach ($dataArray as $value) {
+
+        // Inicializar la barra de progreso
+        $this->command->info('Starting Seed Data ...');
+        $bar = $this->command->getOutput()->createProgressBar(count($arrayData));
+
+
+        foreach ($arrayData as $value) {
             $data = new RipsCausaExternaVersion2();
             $data->codigo = $value['codigo'];
             $data->nombre = $value['nombre'];
@@ -68,7 +74,8 @@ class RipsCausaExternaVersion2Seeder extends Seeder
             $data->isPublicPrivate = $value['isPublicPrivate'];
 
             $data->save();
-
+            $bar->advance();
         }
+        $bar->finish(); // Finalizar la barra
     }
 }

@@ -34,6 +34,7 @@ class TypeDocumentSeeder extends Seeder
             $data->company_id = Constants::COMPANY_UUID;
             $data->name = $value['name'];
             $data->save();
+            $bar->advance();
         }
 
         $bar->finish(); // Finalizar la barra

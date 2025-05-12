@@ -30,6 +30,10 @@ class RipsTipoDiagnosticoPrincipalVersion2Seeder extends Seeder
         }
 
         if ($sheet) {
+            // Inicializar la barra de progreso
+            $this->command->info('Starting Seed Data ...');
+            $bar = $this->command->getOutput()->createProgressBar(count($sheet));
+
             unset($sheet[0]);
             foreach ($sheet as $dataSheet) {
                 RipsTipoDiagnosticoPrincipalVersion2::updateOrCreate(
@@ -39,7 +43,9 @@ class RipsTipoDiagnosticoPrincipalVersion2Seeder extends Seeder
                         'descripcion' => $dataSheet[3],
                     ]
                 );
+                $bar->advance();
             }
+            $bar->finish(); // Finalizar la barra
         }
     }
 }

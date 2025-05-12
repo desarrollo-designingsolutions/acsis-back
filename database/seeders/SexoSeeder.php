@@ -13,18 +13,18 @@ class SexoSeeder extends Seeder
     public function run(): void
     {
 
-        $dataArray = [
+        $arrayData = [
             ['id' => '1', 'codigo' => 'H', 'nombre' => 'Hombre', 'descripcion' => null, 'habilitado' => 'SI', 'aplicacion' => null, 'isStandardGEL' => 'False', 'isStandardMSPS' => 'False', 'extra_I' => '1', 'extra_II' => '01', 'extra_III' => 'M', 'extra_IV' => null, 'extra_V' => null, 'extra_VI' => null, 'extra_VII' => null, 'extra_VIII' => null, 'extra_IX' => null, 'extra_X' => null, 'valorRegistro' => null, 'usuarioResponsable' => null, 'fecha_Actualizacion' => '2021-08-13 03:14:01 PM', 'isPublicPrivate' => 'False'],
             ['id' => '2', 'codigo' => 'I', 'nombre' => 'Indeterminado o Intersexual', 'descripcion' => null, 'habilitado' => 'SI', 'aplicacion' => null, 'isStandardGEL' => 'False', 'isStandardMSPS' => 'False', 'extra_I' => '3', 'extra_II' => '03', 'extra_III' => 'I', 'extra_IV' => null, 'extra_V' => null, 'extra_VI' => null, 'extra_VII' => null, 'extra_VIII' => null, 'extra_IX' => null, 'extra_X' => null, 'valorRegistro' => null, 'usuarioResponsable' => null, 'fecha_Actualizacion' => '2021-08-13 02:44:41 PM', 'isPublicPrivate' => 'False'],
             ['id' => '3', 'codigo' => 'M', 'nombre' => 'Mujer', 'descripcion' => null, 'habilitado' => 'SI', 'aplicacion' => null, 'isStandardGEL' => 'False', 'isStandardMSPS' => 'False', 'extra_I' => '2', 'extra_II' => '02', 'extra_III' => 'F', 'extra_IV' => null, 'extra_V' => null, 'extra_VI' => null, 'extra_VII' => null, 'extra_VIII' => null, 'extra_IX' => null, 'extra_X' => null, 'valorRegistro' => null, 'usuarioResponsable' => null, 'fecha_Actualizacion' => '2021-08-13 03:14:12 PM', 'isPublicPrivate' => 'False'],
         ];
-        
-        
+
+
         // Inicializar la barra de progreso
         $this->command->info('Starting Seed Data ...');
-        $bar = $this->command->getOutput()->createProgressBar(count($dataArray));
+        $bar = $this->command->getOutput()->createProgressBar(count($arrayData));
 
-        foreach ($dataArray as $value) {
+        foreach ($arrayData as $value) {
             $data = new Sexo();
 
             $data->codigo = $value['codigo'];
@@ -50,10 +50,10 @@ class SexoSeeder extends Seeder
             $data->isPublicPrivate = $value['isPublicPrivate'];
 
             $data->save();
-
+            $bar->advance();
         }
-        
+
         $bar->finish(); // Finalizar la barra
-        
+
     }
 }

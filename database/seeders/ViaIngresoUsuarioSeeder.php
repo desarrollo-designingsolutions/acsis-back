@@ -13,7 +13,7 @@ class ViaIngresoUsuarioSeeder extends Seeder
     public function run(): void
     {
 
-        $dataArray = [
+        $arrayData = [
             ['id' => '1', 'codigo' => '01', 'nombre' => 'Demanda espontánea', 'descripcion' => null, 'habilitado' => 'SI', 'aplicacion' => null, 'isStandardGEL' => 'False', 'isStandardMSPS' => 'False', 'extra_I' => 'NA', 'extra_II' => 'SI', 'extra_III' => 'NA', 'extra_IV' => 'NO', 'extra_V' => 'NA', 'extra_VI' => null, 'extra_VII' => null, 'extra_VIII' => null, 'extra_IX' => null, 'extra_X' => null, 'valorRegistro' => null, 'usuarioResponsable' => null, 'fecha_actualizacion' => '2022-06-16 04:17:45 PM', 'isPublicPrivate' => null],
             ['id' => '2', 'codigo' => '02', 'nombre' => 'Derivado de consulta externa', 'descripcion' => null, 'habilitado' => 'SI', 'aplicacion' => null, 'isStandardGEL' => 'False', 'isStandardMSPS' => 'False', 'extra_I' => 'NA', 'extra_II' => 'SI', 'extra_III' => 'NA', 'extra_IV' => 'SI', 'extra_V' => 'NA', 'extra_VI' => null, 'extra_VII' => null, 'extra_VIII' => null, 'extra_IX' => null, 'extra_X' => null, 'valorRegistro' => null, 'usuarioResponsable' => null, 'fecha_actualizacion' => '2022-06-16 04:17:45 PM', 'isPublicPrivate' => null],
             ['id' => '3', 'codigo' => '03', 'nombre' => 'Derivado de urgencias', 'descripcion' => null, 'habilitado' => 'SI', 'aplicacion' => null, 'isStandardGEL' => 'False', 'isStandardMSPS' => 'False', 'extra_I' => 'NA', 'extra_II' => 'SI', 'extra_III' => 'NA', 'extra_IV' => 'SI', 'extra_V' => 'NA', 'extra_VI' => null, 'extra_VII' => null, 'extra_VIII' => null, 'extra_IX' => null, 'extra_X' => null, 'valorRegistro' => null, 'usuarioResponsable' => null, 'fecha_actualizacion' => '2022-06-16 04:17:45 PM', 'isPublicPrivate' => null],
@@ -30,7 +30,11 @@ class ViaIngresoUsuarioSeeder extends Seeder
             ['id' => '14', 'codigo' => '14', 'nombre' => 'Contrarreferido de otra institución', 'descripcion' => null, 'habilitado' => 'SI', 'aplicacion' => null, 'isStandardGEL' => 'False', 'isStandardMSPS' => 'False', 'extra_I' => 'NA', 'extra_II' => 'SI', 'extra_III' => 'NA', 'extra_IV' => 'SI', 'extra_V' => 'NA', 'extra_VI' => null, 'extra_VII' => null, 'extra_VIII' => null, 'extra_IX' => null, 'extra_X' => null, 'valorRegistro' => null, 'usuarioResponsable' => null, 'fecha_actualizacion' => '2022-06-16 04:17:45 PM', 'isPublicPrivate' => null],
         ];
 
-        foreach ($dataArray as $key => $value) {
+        // Inicializar la barra de progreso
+        $this->command->info('Starting Seed Data ...');
+        $bar = $this->command->getOutput()->createProgressBar(count($arrayData));
+
+        foreach ($arrayData as $key => $value) {
             $data = new ViaIngresoUsuario();
             $data->codigo = $value['codigo'];
             $data->nombre = $value['nombre'];
@@ -55,6 +59,8 @@ class ViaIngresoUsuarioSeeder extends Seeder
             $data->isPublicPrivate = $value['isPublicPrivate'];
 
             $data->save();
+            $bar->advance();
         }
+        $bar->finish(); // Finalizar la barra
     }
 }

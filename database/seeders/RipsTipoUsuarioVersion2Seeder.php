@@ -13,7 +13,7 @@ class RipsTipoUsuarioVersion2Seeder extends Seeder
     public function run(): void
     {
 
-        $dataArray = [
+        $arrayData = [
             ['id' => '1', 'codigo' => '01', 'nombre' => 'Contributivo cotizante', 'descripcion' => null, 'habilitado' => 'SI', 'aplicacion' => null, 'isStandardGEL' => 'False', 'isStandardMSPS' => 'False', 'extra_I' => null, 'extra_II' => null, 'extra_III' => null, 'extra_IV' => null, 'extra_V' => null, 'extra_VI' => null, 'extra_VII' => null, 'extra_VIII' => null, 'extra_IX' => null, 'extra_X' => null, 'valorRegistro' => null, 'usuarioResponsable' => null, 'fecha_actualizacion' => '2022-06-16 04:04:43 PM', 'isPublicPrivate' => null],
             ['id' => '2', 'codigo' => '02', 'nombre' => 'Contributivo beneficiario', 'descripcion' => null, 'habilitado' => 'SI', 'aplicacion' => null, 'isStandardGEL' => 'False', 'isStandardMSPS' => 'False', 'extra_I' => null, 'extra_II' => null, 'extra_III' => null, 'extra_IV' => null, 'extra_V' => null, 'extra_VI' => null, 'extra_VII' => null, 'extra_VIII' => null, 'extra_IX' => null, 'extra_X' => null, 'valorRegistro' => null, 'usuarioResponsable' => null, 'fecha_actualizacion' => '2022-06-16 04:04:43 PM', 'isPublicPrivate' => null],
             ['id' => '3', 'codigo' => '03', 'nombre' => 'Contributivo adicional', 'descripcion' => null, 'habilitado' => 'SI', 'aplicacion' => null, 'isStandardGEL' => 'False', 'isStandardMSPS' => 'False', 'extra_I' => null, 'extra_II' => null, 'extra_III' => null, 'extra_IV' => null, 'extra_V' => null, 'extra_VI' => null, 'extra_VII' => null, 'extra_VIII' => null, 'extra_IX' => null, 'extra_X' => null, 'valorRegistro' => null, 'usuarioResponsable' => null, 'fecha_actualizacion' => '2022-06-16 04:04:43 PM', 'isPublicPrivate' => null],
@@ -27,12 +27,12 @@ class RipsTipoUsuarioVersion2Seeder extends Seeder
             ['id' => '11', 'codigo' => '11', 'nombre' => 'Tomador / Amparado Planes  voluntarios de salud', 'descripcion' => null, 'habilitado' => 'SI', 'aplicacion' => null, 'isStandardGEL' => 'False', 'isStandardMSPS' => 'False', 'extra_I' => null, 'extra_II' => null, 'extra_III' => null, 'extra_IV' => null, 'extra_V' => null, 'extra_VI' => null, 'extra_VII' => null, 'extra_VIII' => null, 'extra_IX' => null, 'extra_X' => null, 'valorRegistro' => null, 'usuarioResponsable' => null, 'fecha_actualizacion' => '2022-06-16 04:04:43 PM', 'isPublicPrivate' => null],
             ['id' => '12', 'codigo' => '12', 'nombre' => 'Particular', 'descripcion' => null, 'habilitado' => 'SI', 'aplicacion' => null, 'isStandardGEL' => 'False', 'isStandardMSPS' => 'False', 'extra_I' => null, 'extra_II' => null, 'extra_III' => null, 'extra_IV' => null, 'extra_V' => null, 'extra_VI' => null, 'extra_VII' => null, 'extra_VIII' => null, 'extra_IX' => null, 'extra_X' => null, 'valorRegistro' => null, 'usuarioResponsable' => null, 'fecha_actualizacion' => '2022-06-16 04:04:43 PM', 'isPublicPrivate' => null],
         ];
-        
+
         // Inicializar la barra de progreso
         $this->command->info('Starting Seed Data ...');
-        $bar = $this->command->getOutput()->createProgressBar(count($dataArray));
-        
-        foreach ($dataArray as $value) {
+        $bar = $this->command->getOutput()->createProgressBar(count($arrayData));
+
+        foreach ($arrayData as $value) {
             $data = new RipsTipoUsuarioVersion2();
             $data->codigo = $value['codigo'];
             $data->nombre = $value['nombre'];
@@ -56,9 +56,9 @@ class RipsTipoUsuarioVersion2Seeder extends Seeder
             $data->fecha_actualizacion = $value['fecha_actualizacion'];
             $data->isPublicPrivate = $value['isPublicPrivate'];
             $data->save();
-
+            $bar->advance();
         }
-        
+
         $bar->finish(); // Finalizar la barra
     }
 }

@@ -13,7 +13,7 @@ class ModalidadAtencionSeeder extends Seeder
     public function run(): void
     {
 
-        $dataArray = [
+        $arrayData = [
             ['id' => '1', 'codigo' => '01', 'nombre' => 'Intramural', 'descripcion' => null, 'habilitado' => 'SI', 'aplicacion' => null, 'isStandardGEL' => 'False', 'isStandardMSPS' => 'False', 'extra_I' => null, 'extra_II' => null, 'extra_III' => null, 'extra_IV' => null, 'extra_V' => null, 'extra_VI' => null, 'extra_VII' => null, 'extra_VIII' => null, 'extra_IX' => null, 'extra_X' => null, 'valorRegistro' => null, 'usuarioResponsable' => null, 'fecha_actualizacion' => '2022-06-16 04:04:43 PM', 'isPublicPrivate' => null],
             ['id' => '2', 'codigo' => '02', 'nombre' => 'Extramural unidad móvil', 'descripcion' => null, 'habilitado' => 'SI', 'aplicacion' => null, 'isStandardGEL' => 'False', 'isStandardMSPS' => 'False', 'extra_I' => null, 'extra_II' => null, 'extra_III' => null, 'extra_IV' => null, 'extra_V' => null, 'extra_VI' => null, 'extra_VII' => null, 'extra_VIII' => null, 'extra_IX' => null, 'extra_X' => null, 'valorRegistro' => null, 'usuarioResponsable' => null, 'fecha_actualizacion' => '2022-06-16 04:04:43 PM', 'isPublicPrivate' => null],
             ['id' => '3', 'codigo' => '03', 'nombre' => 'Extramural domiciliaria', 'descripcion' => null, 'habilitado' => 'SI', 'aplicacion' => null, 'isStandardGEL' => 'False', 'isStandardMSPS' => 'False', 'extra_I' => null, 'extra_II' => null, 'extra_III' => null, 'extra_IV' => null, 'extra_V' => null, 'extra_VI' => null, 'extra_VII' => null, 'extra_VIII' => null, 'extra_IX' => null, 'extra_X' => null, 'valorRegistro' => null, 'usuarioResponsable' => null, 'fecha_actualizacion' => '2022-06-16 04:04:43 PM', 'isPublicPrivate' => null],
@@ -24,7 +24,11 @@ class ModalidadAtencionSeeder extends Seeder
             ['id' => '8', 'codigo' => '09', 'nombre' => 'Telemedicina telemonitoreo', 'descripcion' => null, 'habilitado' => 'SI', 'aplicacion' => null, 'isStandardGEL' => 'False', 'isStandardMSPS' => 'False', 'extra_I' => null, 'extra_II' => null, 'extra_III' => null, 'extra_IV' => null, 'extra_V' => null, 'extra_VI' => null, 'extra_VII' => null, 'extra_VIII' => null, 'extra_IX' => null, 'extra_X' => null, 'valorRegistro' => null, 'usuarioResponsable' => null, 'fecha_actualizacion' => '2022-06-16 04:04:43 PM', 'isPublicPrivate' => null],
         ];
 
-        foreach ($dataArray as $key => $value) {
+        // Inicializar la barra de progreso
+        $this->command->info('Starting Seed Data ...');
+        $bar = $this->command->getOutput()->createProgressBar(count($arrayData));
+
+        foreach ($arrayData as $key => $value) {
             $data = new ModalidadAtencion();
             $data->codigo = $value['codigo'];
             $data->nombre = $value['nombre'];
@@ -49,6 +53,10 @@ class ModalidadAtencionSeeder extends Seeder
             $data->isPublicPrivate = $value['isPublicPrivate'];
 
             $data->save();
+            $bar->advance();
         }
+
+        $bar->finish(); // Finalizar la barra
+
     }
 }

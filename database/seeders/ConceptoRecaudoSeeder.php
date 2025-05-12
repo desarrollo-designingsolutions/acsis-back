@@ -28,7 +28,12 @@ class ConceptoRecaudoSeeder extends Seeder
             //$this->error('Error al obtener la hoja');
         }
 
+
         if ($sheet) {
+            // Inicializar la barra de progreso
+            $this->command->info('Starting Seed Data ...');
+            $bar = $this->command->getOutput()->createProgressBar(count($sheet));
+
             unset($sheet[0]);
             foreach ($sheet as $dataSheet) {
                 ConceptoRecaudo::updateOrCreate(
@@ -38,7 +43,9 @@ class ConceptoRecaudoSeeder extends Seeder
                         'descripcion' => $dataSheet[3],
                     ]
                 );
+                $bar->advance();
             }
+            $bar->finish(); // Finalizar la barra
         }
     }
 }

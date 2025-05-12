@@ -13,16 +13,16 @@ class ZonaVersion2Seeder extends Seeder
     public function run(): void
     {
 
-        $dataArray = [
+        $arrayData = [
             ['id' => '1', 'codigo' => '01', 'nombre' => 'Rural', 'descripcion' => null, 'habilitado' => 'SI', 'aplicacion' => null, 'isStandardGEL' => 'False', 'isStandardMSPS' => 'False', 'extra_I' => null, 'extra_II' => null, 'extra_III' => null, 'extra_IV' => null, 'extra_V' => null, 'extra_VI' => null, 'extra_VII' => null, 'extra_VIII' => null, 'extra_IX' => null, 'extra_X' => null, 'valorRegistro' => null, 'usuarioResponsable' => null, 'fecha_Actualizacion' => '2022-06-16 04:04:43 PM', 'isPublicPrivate' => null, 'created_at' => null, 'updated_at' => null],
             ['id' => '2', 'codigo' => '02', 'nombre' => 'Urbano', 'descripcion' => null, 'habilitado' => 'SI', 'aplicacion' => null, 'isStandardGEL' => 'False', 'isStandardMSPS' => 'False', 'extra_I' => null, 'extra_II' => null, 'extra_III' => null, 'extra_IV' => null, 'extra_V' => null, 'extra_VI' => null, 'extra_VII' => null, 'extra_VIII' => null, 'extra_IX' => null, 'extra_X' => null, 'valorRegistro' => null, 'usuarioResponsable' => null, 'fecha_Actualizacion' => '2022-06-16 04:04:43 PM', 'isPublicPrivate' => null, 'created_at' => null, 'updated_at' => null],
         ];
-        
+
         // Inicializar la barra de progreso
         $this->command->info('Starting Seed Data ...');
-        $bar = $this->command->getOutput()->createProgressBar(count($dataArray));
+        $bar = $this->command->getOutput()->createProgressBar(count($arrayData));
 
-        foreach ($dataArray as $key => $value) {
+        foreach ($arrayData as $key => $value) {
             $data = new ZonaVersion2();
             $data->codigo = $value['codigo'];
             $data->nombre = $value['nombre'];
@@ -46,8 +46,9 @@ class ZonaVersion2Seeder extends Seeder
             $data->fecha_Actualizacion = $value['fecha_Actualizacion'];
             $data->isPublicPrivate = $value['isPublicPrivate'];
             $data->save();
+            $bar->advance();
         }
-        
+
         $bar->finish(); // Finalizar la barra
     }
 }

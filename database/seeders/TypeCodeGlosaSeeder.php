@@ -14,6 +14,24 @@ class TypeCodeGlosaSeeder extends Seeder
      */
     public function run()
     {
-        TypeCodeGlosa::create(['id' => 1, 'type_code' => '3047', 'name' => 'RESOLUCION 3047']);
+        $arrayData = [
+            ['id' => 1, 'type_code' => '3047', 'name' => 'RESOLUCION 3047']
+        ];
+
+        // Inicializar la barra de progreso
+        $this->command->info('Starting Seed Data ...');
+        $bar = $this->command->getOutput()->createProgressBar(count($arrayData));
+
+        foreach ($arrayData as $key => $value) {
+            $data = new TypeCodeGlosa;
+            $data->id = $value['id'];
+            $data->type_code = $value['type_code'];
+            $data->name = $value['name'];
+            $data->save();
+            $bar->advance();
+        }
+
+        $bar->finish(); // Finalizar la barra
+
     }
 }

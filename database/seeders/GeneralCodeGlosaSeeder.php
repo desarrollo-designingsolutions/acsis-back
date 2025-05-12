@@ -14,7 +14,7 @@ class GeneralCodeGlosaSeeder extends Seeder
      */
     public function run()
     {
-        GeneralCodeGlosa::insert([
+        $arrayData = [
             ['id' => 1, 'type_code_glosa_id' => 1, 'general_code' => '1', 'description' => 'facturación', 'created_at' => now(), 'updated_at' => now()],
             ['id' => 2, 'type_code_glosa_id' => 1, 'general_code' => '2', 'description' => 'tarifas', 'created_at' => now(), 'updated_at' => now()],
             ['id' => 3, 'type_code_glosa_id' => 1, 'general_code' => '3', 'description' => 'soportes', 'created_at' => now(), 'updated_at' => now()],
@@ -23,6 +23,23 @@ class GeneralCodeGlosaSeeder extends Seeder
             ['id' => 6, 'type_code_glosa_id' => 1, 'general_code' => '6', 'description' => 'pertinencia', 'created_at' => now(), 'updated_at' => now()],
             ['id' => 8, 'type_code_glosa_id' => 1, 'general_code' => '8', 'description' => 'devoluciones', 'created_at' => now(), 'updated_at' => now()],
             ['id' => 9, 'type_code_glosa_id' => 1, 'general_code' => '9', 'description' => 'respuestas a glosas o devoluciones', 'created_at' => now(), 'updated_at' => now()],
-        ]);
+        ];
+
+        // Inicializar la barra de progreso
+        $this->command->info('Starting Seed Data ...');
+        $bar = $this->command->getOutput()->createProgressBar(count($arrayData));
+
+        foreach ($arrayData as $key => $value) {
+            $data = new GeneralCodeGlosa;
+            $data->id = $value['id'];
+            $data->type_code_glosa_id = $value['type_code_glosa_id'];
+            $data->general_code = $value['general_code'];
+            $data->description = $value['description'];
+            $data->save();
+            $bar->advance();
+        }
+
+        $bar->finish(); // Finalizar la barra
+
     }
 }

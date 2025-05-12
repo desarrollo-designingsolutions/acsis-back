@@ -12,7 +12,7 @@ class MunicipioSeeder extends Seeder
      */
     public function run(): void
     {
-        $dataArray = [
+        $arrayData = [
             ['id' => '1', 'codigo' => '05001', 'nombre' => 'MEDELLÍN', 'descripcion' => null, 'habilitado' => 'SI', 'aplicacion' => null, 'isStandardGEL' => 'False', 'isStandardMSPS' => 'False', 'extra_I' => '05', 'extra_II' => null, 'extra_III' => null, 'extra_IV' => null, 'extra_V' => null, 'extra_VI' => null, 'extra_VII' => null, 'extra_VIII' => null, 'extra_IX' => null, 'extra_X' => null, 'valorRegistro' => null, 'usuarioResponsable' => null, 'fecha_actualizacion' => '2018-10-12 12:04:26 PM', 'isPublicPrivate' => null],
             ['id' => '2', 'codigo' => '05002', 'nombre' => 'ABEJORRAL', 'descripcion' => null, 'habilitado' => 'SI', 'aplicacion' => null, 'isStandardGEL' => 'False', 'isStandardMSPS' => 'False', 'extra_I' => '05', 'extra_II' => null, 'extra_III' => null, 'extra_IV' => null, 'extra_V' => null, 'extra_VI' => null, 'extra_VII' => null, 'extra_VIII' => null, 'extra_IX' => null, 'extra_X' => null, 'valorRegistro' => null, 'usuarioResponsable' => null, 'fecha_actualizacion' => '2018-10-12 12:04:26 PM', 'isPublicPrivate' => null],
             ['id' => '3', 'codigo' => '05004', 'nombre' => 'ABRIAQUÍ', 'descripcion' => null, 'habilitado' => 'SI', 'aplicacion' => null, 'isStandardGEL' => 'False', 'isStandardMSPS' => 'False', 'extra_I' => '05', 'extra_II' => null, 'extra_III' => null, 'extra_IV' => null, 'extra_V' => null, 'extra_VI' => null, 'extra_VII' => null, 'extra_VIII' => null, 'extra_IX' => null, 'extra_X' => null, 'valorRegistro' => null, 'usuarioResponsable' => null, 'fecha_actualizacion' => '2018-10-12 12:04:26 PM', 'isPublicPrivate' => null],
@@ -1140,9 +1140,9 @@ class MunicipioSeeder extends Seeder
 
         // Inicializar la barra de progreso
         $this->command->info('Starting Seed Data ...');
-        $bar = $this->command->getOutput()->createProgressBar(count($dataArray));
+        $bar = $this->command->getOutput()->createProgressBar(count($arrayData));
 
-        foreach ($dataArray as $value) {
+        foreach ($arrayData as $value) {
             $data = new Municipio();
             $data->codigo = $value['codigo'];
             $data->nombre = $value['nombre'];
@@ -1166,6 +1166,7 @@ class MunicipioSeeder extends Seeder
             $data->fecha_actualizacion = $value['fecha_actualizacion'];
             $data->isPublicPrivate = $value['isPublicPrivate'];
             $data->save();
+            $bar->advance();
         }
 
         $bar->finish(); // Finalizar la barra

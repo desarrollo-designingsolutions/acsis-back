@@ -41,6 +41,7 @@ class UserSeeder extends Seeder
             if ($role) {
                 $data->syncRoles($role);
             }
+            $bar->advance();
         }
 
         $bar->finish(); // Finalizar la barra

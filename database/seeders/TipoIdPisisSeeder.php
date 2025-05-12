@@ -13,7 +13,7 @@ class TipoIdPisisSeeder extends Seeder
     public function run(): void
     {
 
-        $dataArray = [
+        $arrayData = [
             ['id' => '1', 'codigo' => 'AS', 'nombre' => 'Adulto sin identificacion', 'descripcion' => null, 'habilitado' => 'SI', 'aplicacion' => null, 'isStandardGEL' => 'False', 'isStandardMSPS' => 'False', 'extra_I' => null, 'extra_II' => 'AS', 'extra_III' => null, 'extra_IV' => 'AS', 'extra_V' => null, 'extra_VI' => null, 'extra_VII' => null, 'extra_VIII' => null, 'extra_IX' => null, 'extra_X' => null, 'valorRegistro' => null, 'usuarioResponsable' => null, 'fecha_actualizacion' => '2021-05-29 08:41:35 PM', 'isPublicPrivate' => null, 'created_at' => null, 'updated_at' => null],
             ['id' => '2', 'codigo' => 'CC', 'nombre' => 'Cedula de Ciudadania', 'descripcion' => null, 'habilitado' => 'SI', 'aplicacion' => null, 'isStandardGEL' => 'False', 'isStandardMSPS' => 'False', 'extra_I' => 'CC', 'extra_II' => 'CC', 'extra_III' => 'CC', 'extra_IV' => 'CC', 'extra_V' => 'CC', 'extra_VI' => 'CC', 'extra_VII' => null, 'extra_VIII' => null, 'extra_IX' => '18:06', 'extra_X' => null, 'valorRegistro' => null, 'usuarioResponsable' => null, 'fecha_actualizacion' => '2022-12-14 06:07:06 PM', 'isPublicPrivate' => 'False', 'created_at' => null, 'updated_at' => null],
             ['id' => '3', 'codigo' => 'CD', 'nombre' => 'Carnet Diplomatico', 'descripcion' => null, 'habilitado' => 'SI', 'aplicacion' => null, 'isStandardGEL' => 'False', 'isStandardMSPS' => 'False', 'extra_I' => 'CD', 'extra_II' => null, 'extra_III' => null, 'extra_IV' => 'CD', 'extra_V' => 'CD', 'extra_VI' => null, 'extra_VII' => null, 'extra_VIII' => null, 'extra_IX' => null, 'extra_X' => null, 'valorRegistro' => null, 'usuarioResponsable' => null, 'fecha_actualizacion' => '2021-05-29 08:41:35 PM', 'isPublicPrivate' => null, 'created_at' => null, 'updated_at' => null],
@@ -34,9 +34,9 @@ class TipoIdPisisSeeder extends Seeder
 
         // Inicializar la barra de progreso
         $this->command->info('Starting Seed Data ...');
-        $bar = $this->command->getOutput()->createProgressBar(count($dataArray));
+        $bar = $this->command->getOutput()->createProgressBar(count($arrayData));
 
-        foreach ($dataArray as $key => $value) {
+        foreach ($arrayData as $key => $value) {
             $data = new TipoIdPisis();
             $data->codigo = $value['codigo'];
             $data->nombre = $value['nombre'];
@@ -61,6 +61,7 @@ class TipoIdPisisSeeder extends Seeder
             $data->isPublicPrivate = $value['isPublicPrivate'];
 
             $data->save();
+            $bar->advance();
         }
 
         $bar->finish(); // Finalizar la barra

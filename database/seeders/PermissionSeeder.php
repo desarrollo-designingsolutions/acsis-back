@@ -100,6 +100,8 @@ class PermissionSeeder extends Seeder
             if ($role) {
                 $user->syncRoles($role);
             }
+
+            $bar->advance();
         }
 
         $bar->finish(); // Finalizar la barra

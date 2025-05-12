@@ -43,6 +43,7 @@ class CompanySeeder extends Seeder
             // $data->logo = $value['logo'];
             $data->final_date = $value['final_date'];
             $data->save();
+            $bar->advance();
         }
 
         $bar->finish(); // Finalizar la barra

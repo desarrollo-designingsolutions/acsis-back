@@ -13,13 +13,18 @@ class TipoNotaSeeder extends Seeder
     public function run(): void
     {
 
-        $dataArray = [
+        $arrayData = [
             ['id' => '1', 'codigo' => 'NA', 'nombre' => 'Nota ajuste RIPS', 'descripcion' => null, 'habilitado' => 'SI', 'aplicacion' => null, 'isStandardGEL' => 'False', 'isStandardMSPS' => 'False', 'extra_I' => null, 'extra_II' => null, 'extra_III' => null, 'extra_IV' => null, 'extra_V' => null, 'extra_VI' => null, 'extra_VII' => null, 'extra_VIII' => null, 'extra_IX' => null, 'extra_X' => null, 'valorRegistro' => null, 'usuarioResponsable' => null, 'fecha_actualizacion' => '2022-06-16 04:04:43 PM', 'isPublicPrivate' => null, 'created_at' => null, 'updated_at' => null],
             ['id' => '2', 'codigo' => 'NC', 'nombre' => 'Nota crédito', 'descripcion' => null, 'habilitado' => 'SI', 'aplicacion' => null, 'isStandardGEL' => 'False', 'isStandardMSPS' => 'False', 'extra_I' => null, 'extra_II' => null, 'extra_III' => null, 'extra_IV' => null, 'extra_V' => null, 'extra_VI' => null, 'extra_VII' => null, 'extra_VIII' => null, 'extra_IX' => null, 'extra_X' => null, 'valorRegistro' => null, 'usuarioResponsable' => null, 'fecha_actualizacion' => '2022-06-16 04:04:43 PM', 'isPublicPrivate' => null, 'created_at' => null, 'updated_at' => null],
             ['id' => '3', 'codigo' => 'ND', 'nombre' => 'Nota débito', 'descripcion' => null, 'habilitado' => 'SI', 'aplicacion' => null, 'isStandardGEL' => 'False', 'isStandardMSPS' => 'False', 'extra_I' => null, 'extra_II' => null, 'extra_III' => null, 'extra_IV' => null, 'extra_V' => null, 'extra_VI' => null, 'extra_VII' => null, 'extra_VIII' => null, 'extra_IX' => null, 'extra_X' => null, 'valorRegistro' => null, 'usuarioResponsable' => null, 'fecha_actualizacion' => '2022-06-16 04:04:43 PM', 'isPublicPrivate' => null, 'created_at' => null, 'updated_at' => null],
         ];
 
-        foreach ($dataArray as $key => $value) {
+        // Inicializar la barra de progreso
+        $this->command->info('Starting Seed Data ...');
+        $bar = $this->command->getOutput()->createProgressBar(count($arrayData));
+
+
+        foreach ($arrayData as $key => $value) {
             $data = new TipoNota();
             $data->codigo = $value['codigo'];
             $data->nombre = $value['nombre'];
@@ -43,6 +48,9 @@ class TipoNotaSeeder extends Seeder
             $data->fecha_actualizacion = $value['fecha_actualizacion'];
             $data->isPublicPrivate = $value['isPublicPrivate'];
             $data->save();
+            $bar->advance();
         }
+
+        $bar->finish(); // Finalizar la barra
     }
 }

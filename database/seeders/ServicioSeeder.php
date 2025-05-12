@@ -13,7 +13,7 @@ class ServicioSeeder extends Seeder
     public function run(): void
     {
 
-        $dataArray = [
+        $arrayData = [
             ['id' => '1', 'codigo' => '105', 'nombre' => 'CUIDADO INTERMEDIO NEONATAL', 'descripcion' => 'INTERNACION', 'habilitado' => 'SI', 'aplicacion' => null, 'isStandardGEL' => 'False', 'isStandardMSPS' => 'False', 'extra_I' => 'NO', 'extra_II' => 'NO', 'extra_III' => 'NO', 'extra_IV' => null, 'extra_V' => 'SI', 'extra_VI' => 'SI', 'extra_VII' => 'NO', 'extra_VIII' => 'NO', 'extra_IX' => 'SI', 'extra_X' => 'SI', 'valorRegistro' => null, 'usuarioResponsable' => null, 'fecha_actualizacion' => '2022-09-02 11:06:33 AM', 'isPublicPrivate' => null],
             ['id' => '2', 'codigo' => '106', 'nombre' => 'CUIDADO INTERMEDIO PEDIATRICO', 'descripcion' => 'INTERNACION', 'habilitado' => 'SI', 'aplicacion' => null, 'isStandardGEL' => 'False', 'isStandardMSPS' => 'False', 'extra_I' => 'NO', 'extra_II' => 'NO', 'extra_III' => 'NO', 'extra_IV' => 'NO', 'extra_V' => 'SI', 'extra_VI' => 'SI', 'extra_VII' => 'NO', 'extra_VIII' => 'NO', 'extra_IX' => 'SI', 'extra_X' => 'SI', 'valorRegistro' => null, 'usuarioResponsable' => null, 'fecha_actualizacion' => '2022-09-02 11:06:33 AM', 'isPublicPrivate' => null],
             ['id' => '3', 'codigo' => '107', 'nombre' => 'CUIDADO INTERMEDIO ADULTOS', 'descripcion' => 'INTERNACION', 'habilitado' => 'SI', 'aplicacion' => null, 'isStandardGEL' => 'False', 'isStandardMSPS' => 'False', 'extra_I' => 'NO', 'extra_II' => 'NO', 'extra_III' => 'NO', 'extra_IV' => 'NO', 'extra_V' => 'SI', 'extra_VI' => 'SI', 'extra_VII' => 'NO', 'extra_VIII' => 'NO', 'extra_IX' => 'SI', 'extra_X' => 'SI', 'valorRegistro' => null, 'usuarioResponsable' => null, 'fecha_actualizacion' => '2022-09-02 11:06:33 AM', 'isPublicPrivate' => null],
@@ -173,7 +173,13 @@ class ServicioSeeder extends Seeder
             ['id' => '157', 'codigo' => '749', 'nombre' => 'TOMA DE MUESTRAS DE CUELLO UTERINO Y GINECOLOGICAS', 'descripcion' => 'APOYO DIAGNOSTICO Y COMPLEMENTACION TERAPEUTICA', 'habilitado' => 'SI', 'aplicacion' => null, 'isStandardGEL' => 'False', 'isStandardMSPS' => 'False', 'extra_I' => 'SI', 'extra_II' => 'SI', 'extra_III' => 'NO', 'extra_IV' => 'SI', 'extra_V' => 'NO', 'extra_VI' => 'NO', 'extra_VII' => 'NO', 'extra_VIII' => 'NO', 'extra_IX' => 'NO', 'extra_X' => 'NO', 'valorRegistro' => null, 'usuarioResponsable' => null, 'fecha_actualizacion' => '2022-09-02 11:06:33 AM', 'isPublicPrivate' => null],
         ];
 
-        foreach ($dataArray as $key => $value) {
+
+        // Inicializar la barra de progreso
+        $this->command->info('Starting Seed Data ...');
+        $bar = $this->command->getOutput()->createProgressBar(count($arrayData));
+
+
+        foreach ($arrayData as $key => $value) {
             $data = new Servicio();
             $data->codigo = $value['codigo'];
             $data->nombre = $value['nombre'];
@@ -198,6 +204,8 @@ class ServicioSeeder extends Seeder
             $data->isPublicPrivate = $value['isPublicPrivate'];
 
             $data->save();
+            $bar->advance();
         }
+        $bar->finish(); // Finalizar la barra
     }
 }

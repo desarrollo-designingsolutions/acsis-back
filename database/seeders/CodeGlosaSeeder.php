@@ -14,7 +14,7 @@ class CodeGlosaSeeder extends Seeder
      */
     public function run()
     {
-        CodeGlosa::insert([
+        $arrayData = [
             ['id' => '101', 'general_code_glosa_id' => 1, 'code' => '101', 'description' => 'Estancia', 'created_at' => now(), 'updated_at' => now()],
             ['id' => '102', 'general_code_glosa_id' => 1, 'code' => '102', 'description' => 'Consultas, interconsultas y visitas médicas', 'created_at' => now(), 'updated_at' => now()],
             ['id' => '103', 'general_code_glosa_id' => 1, 'code' => '103', 'description' => 'Honorarios médicos en procedimientos', 'created_at' => now(), 'updated_at' => now()],
@@ -117,6 +117,22 @@ class CodeGlosaSeeder extends Seeder
             ['id' => '997', 'general_code_glosa_id' => 9, 'code' => '997', 'description' => 'No subsanada (Glosa o devolución totalmente aceptada)', 'created_at' => now(), 'updated_at' => now()],
             ['id' => '998', 'general_code_glosa_id' => 9, 'code' => '998', 'description' => 'Subsanada parcial (Glosa o devolución parcialmente aceptada)', 'created_at' => now(), 'updated_at' => now()],
             ['id' => '999', 'general_code_glosa_id' => 9, 'code' => '999', 'description' => 'Subsanada (Glosa o Devolución No Aceptada)', 'created_at' => now(), 'updated_at' => now()],
-        ]);
+        ];
+
+        // Inicializar la barra de progreso
+        $this->command->info('Starting Seed Data ...');
+        $bar = $this->command->getOutput()->createProgressBar(count($arrayData));
+
+        foreach ($arrayData as $key => $value) {
+            $data = new CodeGlosa;
+            $data->id = $value['id'];
+            $data->general_code_glosa_id = $value['general_code_glosa_id'];
+            $data->code = $value['code'];
+            $data->description = $value['description'];
+            $data->save();
+            $bar->advance();
+        }
+
+        $bar->finish(); // Finalizar la barra
     }
 }
