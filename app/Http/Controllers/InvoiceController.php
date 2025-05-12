@@ -171,7 +171,7 @@ class InvoiceController extends Controller
             //Recuperamos informacion extra dependiendo del tipo de factura
             if ($invoice->type->value == "INVOICE_TYPE_002") {
                 $soat = $this->invoiceSoatRepository->find($form->typeable_id);
-                return $infoDataExtra = new InvoiceSoatFormResource($soat);
+                $infoDataExtra = new InvoiceSoatFormResource($soat);
             }
 
             $serviceVendors = $this->queryController->selectInfiniteServiceVendor(request());
