@@ -33,7 +33,6 @@ class InvoiceRepository extends BaseRepository
                 'is_active',
                 AllowedFilter::callback('inputGeneral', function ($query, $value) {
                     $query->where(function ($subQuery) use ($value) {
-                        $subQuery->orWhere('invoices.id', 'like', "%$value%");
                         $subQuery->orWhere('invoice_number', 'like', "%$value%");
 
                         $subQuery->orWhere(function ($subQuery2) use ($value) {
