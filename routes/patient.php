@@ -3,8 +3,6 @@
 use App\Http\Controllers\PatientController;
 use Illuminate\Support\Facades\Route;
 
-// Rutas protegidas
-Route::middleware(['check.permission:menu.patient'])->group(function () {
 
     /*
     |--------------------------------------------------------------------------
@@ -25,4 +23,3 @@ Route::middleware(['check.permission:menu.patient'])->group(function () {
     Route::delete('/patient/delete/{id}', [PatientController::class, 'delete']);
 
     Route::get('/patient/excelExport', [PatientController::class, 'excelExport']);
-});

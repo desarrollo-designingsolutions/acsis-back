@@ -17,18 +17,14 @@ class OtherServiceStoreRequest extends FormRequest
     public function rules(): array
     {
         $rules = [
-            'invoice_id' => 'required',
-            'numAutorizacion' => 'required',
-            'idMIPRES' => 'required',
+            'invoice_id' => 'required', 
             'fechaSuministroTecnologia' => 'required',
-            'tipoOS_id' => 'required',
             'codTecnologiaSalud' => 'required',
             'nomTecnologiaSalud' => 'required',
             'cantidadOS' => 'required',
             'vrUnitOS' => 'required',
             'valorPagoModerador' => 'required',
             'vrServicio' => 'required',
-            'conceptoRecaudo_id' => 'required',
         ];
 
         return $rules;
@@ -37,18 +33,14 @@ class OtherServiceStoreRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'invoice_id.required' => 'El campo es obligatorio',
-            'numAutorizacion.required' => 'El campo es obligatorio',
-            'idMIPRES.required' => 'El campo es obligatorio',
+            'invoice_id.required' => 'El campo es obligatorio', 
             'fechaSuministroTecnologia.required' => 'El campo es obligatorio',
-            'tipoOS_id.required' => 'El campo es obligatorio',
             'codTecnologiaSalud.required' => 'El campo es obligatorio',
             'nomTecnologiaSalud.required' => 'El campo es obligatorio',
             'cantidadOS.required' => 'El campo es obligatorio',
             'vrUnitOS.required' => 'El campo es obligatorio',
             'valorPagoModerador.required' => 'El campo es obligatorio',
             'vrServicio.required' => 'El campo es obligatorio',
-            'conceptoRecaudo_id.required' => 'El campo es obligatorio',
         ];
     }
 
