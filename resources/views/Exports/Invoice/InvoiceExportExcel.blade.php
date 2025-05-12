@@ -3,21 +3,29 @@
         <thead>
             <tr>
                 <th rowspan="2"
-                style="background-color: #d1cdcc; text-align: center; padding: 8px; border: 1px solid black">Entidad</th>
+                    style="background-color: #d1cdcc; text-align: center; padding: 8px; border: 1px solid black">Entidad
+                </th>
                 <th rowspan="2"
-                style="background-color: #d1cdcc; text-align: center; padding: 8px; border: 1px solid black">Factura No.</th>
+                    style="background-color: #d1cdcc; text-align: center; padding: 8px; border: 1px solid black">Factura
+                    No.</th>
                 <th rowspan="2"
-                style="background-color: #d1cdcc; text-align: center; padding: 8px; border: 1px solid black">Tipo Factura</th>
+                    style="background-color: #d1cdcc; text-align: center; padding: 8px; border: 1px solid black">Tipo
+                    Factura</th>
                 <th rowspan="2"
-                style="background-color: #d1cdcc; text-align: center; padding: 8px; border: 1px solid black">Valor Pagado</th>
+                    style="background-color: #d1cdcc; text-align: center; padding: 8px; border: 1px solid black">Valor
+                    Pagado</th>
                 <th rowspan="2"
-                style="background-color: #d1cdcc; text-align: center; padding: 8px; border: 1px solid black">Valor Glosa</th>
+                    style="background-color: #d1cdcc; text-align: center; padding: 8px; border: 1px solid black">Valor
+                    Glosa</th>
                 <th rowspan="2"
-                style="background-color: #d1cdcc; text-align: center; padding: 8px; border: 1px solid black">Fecha Radicación</th>
+                    style="background-color: #d1cdcc; text-align: center; padding: 8px; border: 1px solid black">Fecha
+                    Radicación</th>
                 <th rowspan="2"
-                style="background-color: #d1cdcc; text-align: center; padding: 8px; border: 1px solid black">Paciente</th>
+                    style="background-color: #d1cdcc; text-align: center; padding: 8px; border: 1px solid black">
+                    Paciente</th>
                 <th rowspan="2"
-                style="background-color: #d1cdcc; text-align: center; padding: 8px; border: 1px solid black">Estado</th>
+                    style="background-color: #d1cdcc; text-align: center; padding: 8px; border: 1px solid black">Estado
+                </th>
             </tr>
             <tr></tr>
         </thead>
@@ -31,7 +39,7 @@
                     <td style="text-align: center; padding: 8px;">{{ $row['value_glosa'] }}</td>
                     <td style="text-align: center; padding: 8px;">{{ $row['radication_date'] }}</td>
                     <td style="text-align: center; padding: 8px;">{{ $row['patient_name'] }}</td>
-                    <td style="text-align: center; padding: 8px;">{{ $row['is_active'] }}</td>
+                    <td style="text-align: center; padding: 8px;">{{ $row['status'] }}</td>
                 </tr>
             @endforeach
         </tbody>
