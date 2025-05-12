@@ -49,6 +49,7 @@ class InvoiceRepository extends BaseRepository
                             $subQuery2->where('entities.corporate_name', 'like', "%$value%");
                         });
 
+                        QueryFilters::filterByDMYtoYMD($subQuery, $value, 'radication_date');
                         QueryFilters::filterByText($subQuery, $value, 'type', [
                             TypeInvoiceEnum::INVOICE_TYPE_001->description() => TypeInvoiceEnum::INVOICE_TYPE_001,
                             TypeInvoiceEnum::INVOICE_TYPE_002->description() => TypeInvoiceEnum::INVOICE_TYPE_002,
