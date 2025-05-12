@@ -174,8 +174,6 @@ class InvoiceController extends Controller
                 return $infoDataExtra = new InvoiceSoatFormResource($soat);
             }
 
-            return 2222;
-
             $serviceVendors = $this->queryController->selectInfiniteServiceVendor(request());
             $entities = $this->queryController->selectInfiniteEntities(request());
             $tipoNotas = $this->queryController->selectInfinitetipoNota(request());
