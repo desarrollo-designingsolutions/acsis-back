@@ -14,17 +14,17 @@ return new class extends Migration
         Schema::create('other_services', function (Blueprint $table) {
             $table->uuid("id")->primary();
 
-            $table->string("numAutorizacion");
-            $table->string("idMIPRES");
-            $table->string("fechaSuministroTecnologia");
-            $table->foreignUuid("tipoOS_id")->constrained("tipo_otros_servicios");
-            $table->string("codTecnologiaSalud");
-            $table->string("nomTecnologiaSalud");
-            $table->string("cantidadOS");
-            $table->string("vrUnitOS");
-            $table->string("valorPagoModerador");
-            $table->string("vrServicio");
-            $table->foreignUuid("conceptoRecaudo_id")->constrained("concepto_recaudos");
+            $table->string("numAutorizacion")->nullable();
+            $table->string("idMIPRES")->nullable();
+            $table->string("fechaSuministroTecnologia")->nullable();
+            $table->foreignUuid("tipoOS_id")->nullable()->constrained("tipo_otros_servicios");
+            $table->string("codTecnologiaSalud")->nullable();
+            $table->string("nomTecnologiaSalud")->nullable();
+            $table->string("cantidadOS")->nullable();
+            $table->string("vrUnitOS")->nullable();
+            $table->string("valorPagoModerador")->nullable();
+            $table->string("vrServicio")->nullable();
+            $table->foreignUuid("conceptoRecaudo_id")->nullable()->constrained("concepto_recaudos");
 
             $table->timestamps();
             $table->softDeletes();
