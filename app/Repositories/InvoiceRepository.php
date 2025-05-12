@@ -6,6 +6,7 @@ use App\Enums\Invoice\StatusInvoiceEnum;
 use App\Enums\Invoice\TypeInvoiceEnum;
 use App\Helpers\Constants;
 use App\Models\Invoice;
+use App\QueryBuilder\Filters\DataSelectFilter;
 use App\QueryBuilder\Filters\DateRangeFilter;
 use App\QueryBuilder\Filters\QueryFilters;
 use App\QueryBuilder\Sort\IsActiveSort;
@@ -30,7 +31,7 @@ class InvoiceRepository extends BaseRepository
             ->with(['patient', 'entity'])
             ->select(['invoices.id', 'invoices.entity_id', 'invoices.type', 'invoices.patient_id', 'invoices.invoice_number', 'invoices.radication_number', 'invoices.value_glosa', 'invoices.value_paid', 'invoices.invoice_date', 'invoices.radication_date', 'invoices.is_active', "invoices.status"])
             ->allowedFilters([
-                'is_active',
+
                 AllowedFilter::callback('inputGeneral', function ($query, $value) {
                     $query->where(function ($subQuery) use ($value) {
                         $subQuery->orWhere('invoice_number', 'like', "%$value%");
@@ -61,9 +62,11 @@ class InvoiceRepository extends BaseRepository
                             StatusInvoiceEnum::INVOICE_STATUS_004->description() => StatusInvoiceEnum::INVOICE_STATUS_004,
                             StatusInvoiceEnum::INVOICE_STATUS_005->description() => StatusInvoiceEnum::INVOICE_STATUS_005,
                             StatusInvoiceEnum::INVOICE_STATUS_006->description() => StatusInvoiceEnum::INVOICE_STATUS_006,
+                            StatusInvoiceEnum::INVOICE_STATUS_007->description() => StatusInvoiceEnum::INVOICE_STATUS_007,
                         ]);
                     });
                 }),
+                AllowedFilter::custom('status', new DataSelectFilter),
                 AllowedFilter::custom('invoices.radication_date', new DateRangeFilter),
             ])
             ->allowedSorts([
