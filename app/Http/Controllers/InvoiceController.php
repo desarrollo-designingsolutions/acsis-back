@@ -178,7 +178,7 @@ class InvoiceController extends Controller
             $entities = $this->queryController->selectInfiniteEntities(request());
             $tipoNotas = $this->queryController->selectInfinitetipoNota(request());
             $patients = $this->queryController->selectInfinitePatients(request());
-            $statusInvoiceEnum = $this->queryController->selectStatusInvoiceEnum();
+            $statusInvoiceEnum = $this->queryController->selectStatusInvoiceEnum(request());
 
             return [
                 'code' => 200,
