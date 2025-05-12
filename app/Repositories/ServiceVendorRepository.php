@@ -22,58 +22,57 @@ class ServiceVendorRepository extends BaseRepository
     {
         $cacheKey = $this->cacheService->generateKey("{$this->model->getTable()}_paginate", $request, 'string');
 
-        // return $this->cacheService->remember($cacheKey, function () {
-        $query = QueryBuilder::for($this->model->query())
-            ->with(['type_vendor:id,name'])
-            ->select(['service_vendors.id', 'service_vendors.name', 'nit', 'address', 'phone', 'email', 'service_vendors.is_active', "type_vendor_id"])
-            ->allowedFilters([
-                'is_active',
-                'nit',
-                AllowedFilter::callback('inputGeneral', function ($query, $value) {
-                    $query->where(function ($subQuery) use ($value) {
-                        $subQuery->orWhere('service_vendors.name', 'like', "%$value%");
-                        $subQuery->orWhere('nit', 'like', "%$value%");
-                        $subQuery->orWhere('email', 'like', "%$value%");
-                        $subQuery->orWhere('phone', 'like', "%$value%");
+        return $this->cacheService->remember($cacheKey, function () {
+            $query = QueryBuilder::for($this->model->query())
+                ->with(['type_vendor:id,name'])
+                ->select(['service_vendors.id', 'service_vendors.name', 'nit', 'address', 'phone', 'email', 'service_vendors.is_active', "type_vendor_id"])
+                ->allowedFilters([
+                    'is_active',
+                    'nit',
+                    AllowedFilter::callback('inputGeneral', function ($query, $value) {
+                        $query->where(function ($subQuery) use ($value) {
+                            $subQuery->orWhere('service_vendors.name', 'like', "%$value%");
+                            $subQuery->orWhere('nit', 'like', "%$value%");
+                            $subQuery->orWhere('email', 'like', "%$value%");
+                            $subQuery->orWhere('phone', 'like', "%$value%");
 
-                        $subQuery->orWhereHas('type_vendor', function ($subQuery2) use ($value) {
-                            $subQuery2->where('name', 'like', "%$value%");
+                            $subQuery->orWhereHas('type_vendor', function ($subQuery2) use ($value) {
+                                $subQuery2->where('name', 'like', "%$value%");
+                            });
+
+                            QueryFilters::filterByText($subQuery, $value, 'is_active', [
+                                'activo' => 1,
+                                'inactivo' => 0,
+                            ]);
                         });
+                    }),
+                ])
+                ->allowedSorts([
+                    'name',
+                    'nit',
+                    'email',
+                    'phone',
+                    AllowedSort::custom('type_vendor_name', new RelatedTableSort('service_vendors', 'type_vendors', 'name', 'type_vendor_id')),
+                    AllowedSort::custom('is_active', new IsActiveSort),
+                ])->where(function ($query) use ($request) {
 
-                        QueryFilters::filterByText($subQuery, $value, 'is_active', [
-                            'activo' => 1,
-                            'inactivo' => 0,
-                        ]);
-                    });
-                }),
-            ])
-            ->allowedSorts([
-                'name',
-                'nit',
-                'email',
-                'phone',
-                AllowedSort::custom('type_vendor_name', new RelatedTableSort('service_vendors', 'type_vendors', 'name', 'type_vendor_id')),
-                AllowedSort::custom('is_active', new IsActiveSort),
-            ])->where(function ($query) use ($request) {
+                    if (isset($request['searchQueryInfinite']) && ! empty($request['searchQueryInfinite'])) {
+                        $query->orWhere('name', 'like', '%' . $request['searchQueryInfinite'] . '%');
+                    }
 
-                if (isset($request['searchQueryInfinite']) && ! empty($request['searchQueryInfinite'])) {
-                    $query->orWhere('name', 'like', '%' . $request['searchQueryInfinite'] . '%');
-                }
+                    if (! empty($request['company_id'])) {
+                        $query->where('company_id', $request['company_id']);
+                    }
+                });
 
-                if (! empty($request['company_id'])) {
-                    $query->where('company_id', $request['company_id']);
-                }
+            if (empty($request['typeData'])) {
+                $query = $query->paginate(request()->perPage ?? Constants::ITEMS_PER_PAGE);
+            } else {
+                $query = $query->get();
+            }
 
-            });
-
-        if (empty($request['typeData'])) {
-            $query = $query->paginate(request()->perPage ?? Constants::ITEMS_PER_PAGE);
-        } else {
-            $query = $query->get();
-        }
-
-        return $query;
-        // }, Constants::REDIS_TTL);
+            return $query;
+        }, Constants::REDIS_TTL);
     }
 
     public function store(array $request, $id = null)

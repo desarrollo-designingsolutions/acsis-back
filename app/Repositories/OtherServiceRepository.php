@@ -18,23 +18,23 @@ class OtherServiceRepository extends BaseRepository
     {
         $cacheKey = $this->cacheService->generateKey("{$this->model->getTable()}_paginate", $request, 'string');
 
-        // return $this->cacheService->remember($cacheKey, function () use ($request) {
-        $query = QueryBuilder::for($this->model->query())
-            ->allowedFilters([
-                AllowedFilter::callback('inputGeneral', function ($query, $value) use ($request) {
-                    $query->where(function ($subQuery) use ($value) {});
-                }),
-            ])
-            ->allowedSorts([])
-            ->where(function ($query) use ($request) {
-                if (isset($request['service_id']) && ! empty($request['service_id'])) {
-                    $query->where('service_id', $request['service_id']);
-                }
-            })
-            ->paginate(request()->perPage ?? Constants::ITEMS_PER_PAGE);
+        return $this->cacheService->remember($cacheKey, function () use ($request) {
+            $query = QueryBuilder::for($this->model->query())
+                ->allowedFilters([
+                    AllowedFilter::callback('inputGeneral', function ($query, $value) use ($request) {
+                        $query->where(function ($subQuery) use ($value) {});
+                    }),
+                ])
+                ->allowedSorts([])
+                ->where(function ($query) use ($request) {
+                    if (isset($request['service_id']) && ! empty($request['service_id'])) {
+                        $query->where('service_id', $request['service_id']);
+                    }
+                })
+                ->paginate(request()->perPage ?? Constants::ITEMS_PER_PAGE);
 
-        return $query;
-        // }, Constants::REDIS_TTL);
+            return $query;
+        }, Constants::REDIS_TTL);
     }
 
     public function store(array $request)

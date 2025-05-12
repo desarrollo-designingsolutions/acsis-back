@@ -321,10 +321,12 @@ class QueryController extends Controller
         ];
     }
 
-    public function selectStatusInvoiceEnum()
+    public function selectStatusInvoiceEnum(Request $request)
     {
+        // Obtener todos los casos del enum
         $status = StatusInvoiceEnum::cases();
 
+        // Mapear los casos a un formato con value y title
         $status = collect($status)->map(function ($item) {
             return [
                 'value' => $item,
@@ -332,9 +334,17 @@ class QueryController extends Controller
             ];
         });
 
+        // Filtrar por descripción si se envía un parámetro de búsqueda
+        if ($request->has('searchQueryInfinite') && !empty($request->input('searchQueryInfinite'))) {
+            $searchTerm = strtolower($request->input('searchQueryInfinite'));
+            $status = $status->filter(function ($item) use ($searchTerm) {
+                return str_contains(strtolower($item['title']), $searchTerm);
+            });
+        }
+
         return [
             'code' => 200,
-            'statusInvoiceEnum_arrayInfo' => $status->values(),
+            'statusInvoiceEnum_arrayInfo' => $status->values()->toArray(), // Convertir a array y resetear índices
             'statusInvoiceEnum_countLinks' => 1,
         ];
     }

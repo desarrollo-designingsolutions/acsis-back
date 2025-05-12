@@ -19,38 +19,38 @@ class InvoicePaymentRepository extends BaseRepository
     {
         $cacheKey = $this->cacheService->generateKey("{$this->model->getTable()}_paginate", $request, 'string');
 
-        // return $this->cacheService->remember($cacheKey, function () use ($request) {
+        return $this->cacheService->remember($cacheKey, function () use ($request) {
 
-        $query = QueryBuilder::for($this->model->query())
-            ->allowedFilters([
-                AllowedFilter::callback('inputGeneral', function ($query, $value) {
-                    $query->where(function ($query) use ($value) {
-                        $query->orWhere('observations', 'like', "%$value%");
+            $query = QueryBuilder::for($this->model->query())
+                ->allowedFilters([
+                    AllowedFilter::callback('inputGeneral', function ($query, $value) {
+                        $query->where(function ($query) use ($value) {
+                            $query->orWhere('observations', 'like', "%$value%");
 
-                        QueryFilters::filterByDMYtoYMD($query, $value, 'date_payment');
+                            QueryFilters::filterByDMYtoYMD($query, $value, 'date_payment');
 
 
-                        $query->orWhere(function ($subQuery) use ($value) {
-                            $normalizedValue = preg_replace('/[\$\s\.,]/', '', $value);
-                            $subQuery->where('value_paid', 'like', "%$normalizedValue%");
+                            $query->orWhere(function ($subQuery) use ($value) {
+                                $normalizedValue = preg_replace('/[\$\s\.,]/', '', $value);
+                                $subQuery->where('value_paid', 'like', "%$normalizedValue%");
+                            });
                         });
-                    });
-                }),
-            ])
-            ->allowedSorts([
-                'value_paid',
-                'date_payment',
-                'observations',
-            ])
-            ->where(function ($query) use ($request) {
-                if (isset($request['invoice_id']) && ! empty($request['invoice_id'])) {
-                    $query->where('invoice_id', $request['invoice_id']);
-                }
-            })
-            ->paginate(request()->perPage ?? Constants::ITEMS_PER_PAGE);
+                    }),
+                ])
+                ->allowedSorts([
+                    'value_paid',
+                    'date_payment',
+                    'observations',
+                ])
+                ->where(function ($query) use ($request) {
+                    if (isset($request['invoice_id']) && ! empty($request['invoice_id'])) {
+                        $query->where('invoice_id', $request['invoice_id']);
+                    }
+                })
+                ->paginate(request()->perPage ?? Constants::ITEMS_PER_PAGE);
 
-        return $query;
-        // }, Constants::REDIS_TTL);
+            return $query;
+        }, Constants::REDIS_TTL);
     }
 
     public function store(array $request, $id = null)
