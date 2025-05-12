@@ -4,6 +4,7 @@ namespace App\Http\Resources\Invoice;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Carbon;
 
 class InvoiceListResource extends JsonResource
 {
@@ -22,7 +23,7 @@ class InvoiceListResource extends JsonResource
             'type_description' =>  $this->type?->description(),
             'value_paid' => formatNumber($this->value_paid),
             'value_glosa' => formatNumber($this->value_glosa),
-            'radication_date' => $this->radication_date,
+            'radication_date' => Carbon::parse($this->radication_date)->format("d-m-Y"),
             'patient_name' => $this->patient?->full_name,
             'status' => $this->status,
             'status_description' => $this->status?->description(),
