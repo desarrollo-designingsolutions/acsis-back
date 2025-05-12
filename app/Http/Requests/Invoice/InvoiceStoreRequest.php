@@ -7,7 +7,7 @@ use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class InvoiceType002StoreRequest extends FormRequest
+class InvoiceStoreRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -25,12 +25,20 @@ class InvoiceType002StoreRequest extends FormRequest
             'invoice_date' => 'required',
             'type' => 'required',
             'radication_date' => 'required',
-            'soat' => 'required',
-            'soat.policy_number' => 'required',
-            'soat.accident_date' => 'required|date',
-            'soat.start_date' => 'required|date',
-            'soat.end_date' => 'required|date',
+            'status' => 'required',
         ];
+
+
+        if ($this->type == 'INVOICE_TYPE_002') {
+            $rules2 = [
+                'soat' => 'required',
+                'soat.policy_number' => 'required',
+                'soat.accident_date' => 'required|date',
+                'soat.start_date' => 'required|date',
+                'soat.end_date' => 'required|date',
+            ];
+            $rules = array_merge($rules, $rules2);
+        }
 
         return $rules;
     }
@@ -46,6 +54,8 @@ class InvoiceType002StoreRequest extends FormRequest
             'invoice_date.required' => 'El campo es obligatorio',
             'type.required' => 'El campo es obligatorio',
             'radication_date.required' => 'El campo es obligatorio',
+            'status.required' => 'El campo es obligatorio',
+
             'soat.required' => 'El campo es obligatorio',
             'soat.policy_number.required' => 'El campo es obligatorio',
             'soat.accident_date.required' => 'El campo es obligatorio',

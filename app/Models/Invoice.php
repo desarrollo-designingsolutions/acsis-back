@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Enums\Invoice\StatusInvoiceEnum;
+use App\Enums\Invoice\TypeInvoiceEnum;
 use App\Events\InvoiceRowUpdatedNow;
 use App\Traits\Cacheable;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
@@ -18,6 +20,8 @@ class Invoice extends Model
 
     protected $casts = [
         'is_active' => 'boolean',
+        'type' => TypeInvoiceEnum::class,
+        'status' => StatusInvoiceEnum::class,
     ];
 
     public function company()

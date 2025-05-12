@@ -15,7 +15,7 @@ class TypeVendorSeeder extends Seeder
     {
         $arrayData = [
             [
-                'name' => 'Proveedor',
+                'name' => 'Prestador',
             ],
             [
                 'name' => 'Contratista',

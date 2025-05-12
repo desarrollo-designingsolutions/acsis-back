@@ -2,7 +2,6 @@
 
 namespace App\Http\Resources\Invoice;
 
-use App\Enums\Invoice\TypeInvoiceEnum;
 use App\Http\Resources\Entity\EntitySelectResource;
 use App\Http\Resources\Patient\PatientSelectResource;
 use App\Http\Resources\ServiceVendor\ServiceVendorSelectResource;
@@ -10,7 +9,7 @@ use App\Http\Resources\TipoNota\TipoNotaSelectResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class InvoiceType001FormResource extends JsonResource
+class InvoiceFormResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -19,8 +18,6 @@ class InvoiceType001FormResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-
-
         return [
             'id' => $this->id,
             'service_vendor_id' => new ServiceVendorSelectResource($this->serviceVendor),
@@ -33,8 +30,12 @@ class InvoiceType001FormResource extends JsonResource
             'value_glosa'      => $this->value_glosa,
             'value_paid' => $this->value_paid,
             'total' => $this->total,
+            'remaining_balance' => $this->remaining_balance,
             'invoice_date' => $this->invoice_date,
             'radication_date' => $this->radication_date,
+            'typeable_id' => $this->typeable_id,
+            'type' => $this->type,
+            'status' => $this->status,
         ];
     }
 }

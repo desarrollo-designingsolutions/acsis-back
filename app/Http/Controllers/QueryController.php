@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\Invoice\StatusInvoiceEnum;
 use App\Http\Resources\CodeGlosa\CodeGlosaSelectInfiniteResource;
 use App\Http\Resources\ConceptoRecaudo\ConceptoRecaudoSelectResource;
 use App\Http\Resources\Country\CountrySelectResource;
@@ -317,6 +318,24 @@ class QueryController extends Controller
             'code' => 200,
             'conceptoRecaudo_arrayInfo' => $data,
             'conceptoRecaudo_countLinks' => $conceptoRecaudo->lastPage(),
+        ];
+    }
+
+    public function selectStatusInvoiceEnum()
+    {
+        $status = StatusInvoiceEnum::cases();
+
+        $status = collect($status)->map(function ($item) {
+            return [
+                'value' => $item,
+                'title' => $item->description(),
+            ];
+        });
+
+        return [
+            'code' => 200,
+            'statusInvoiceEnum_arrayInfo' => $status->values(),
+            'statusInvoiceEnum_countLinks' => 1,
         ];
     }
 }

@@ -15,16 +15,13 @@ class TypeEntitySeeder extends Seeder
     {
         $arrayData = [
             [
-                'name' => 'Proveedor',
+                'name' => 'Eps',
             ],
             [
-                'name' => 'Contratista',
+                'name' => 'Aseguradora',
             ],
             [
-                'name' => 'Crítico',
-            ],
-            [
-                'name' => 'Comunitario',
+                'name' => 'Arl',
             ],
         ];
 
