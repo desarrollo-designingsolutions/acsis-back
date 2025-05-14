@@ -11,6 +11,7 @@ use App\QueryBuilder\Filters\DateRangeFilter;
 use App\QueryBuilder\Filters\QueryFilters;
 use App\QueryBuilder\Sort\IsActiveSort;
 use App\QueryBuilder\Sort\RelatedTableSort;
+use Illuminate\Support\Carbon;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\AllowedSort;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -157,5 +158,173 @@ class InvoiceRepository extends BaseRepository
             })->first();
 
         return $data !== null; // Retorna true si la licencia cumple con ambas condiciones
+    }
+
+    public function countData($request = [])
+    {
+        $query = $this->model->where(function ($query) use ($request) {
+            if (!empty($request['company_id'])) {
+                $query->where('company_id', $request['company_id']);
+            }
+            if (!empty($request['start_date']) && !empty($request['end_date'])) {
+                $query->whereBetween('invoice_date', [$request['start_date'], $request['end_date']]);
+            }
+        });
+
+        // Datos del período actual
+        $totalSum = $query->sum('total');
+        $invoiceCount = $query->count();
+
+        return [
+            'icon' => 'tabler-currency-dollar',
+            'color' => 'success',
+            'title' => 'Valor total facturación',
+            'value' => formatNumber($totalSum),
+            'secondary_data' => $invoiceCount . ' facturas',
+            'isHover' => false,
+            'type' => 1,
+            'to' => []
+        ];
+    }
+
+    public function countApprovedVsGlosa($request = [])
+    {
+        $query = $this->model->where(function ($query) use ($request) {
+            if (!empty($request['company_id'])) {
+                $query->where('company_id', $request['company_id']);
+            }
+            if (!empty($request['start_date']) && !empty($request['end_date'])) {
+                $query->whereBetween('invoice_date', [$request['start_date'], $request['end_date']]);
+            }
+        });
+
+        // Sumatorias de valores aprobados y glosados
+        $approvedSum = $query->sum('value_paid');
+        $glosaSum = $query->sum('value_glosa');
+        $totalSum = $query->sum('total');
+
+        // Calcular porcentajes
+        $approvedPercentage = $totalSum > 0 ? ($approvedSum / $totalSum) * 100 : 0;
+        $glosaPercentage = $totalSum > 0 ? ($glosaSum / $totalSum) * 100 : 0;
+
+
+        $glosaSum = formatNumber($glosaSum);
+        $approvedSum = formatNumber($approvedSum);
+
+        return [
+            'title' => 'Facturación Aprobada vs Glosada',
+            'value' => round($approvedPercentage, 2) . '% / ' .  round($glosaPercentage, 2) . '%',
+            'secondary_data' =>  $approvedSum . 'aprobados / ' . $glosaSum . ' glosados',
+            'icon' => 'tabler-percentage',
+            'color' => 'success',
+            'isHover' => false,
+            'type' => 2,
+            'to' => []
+        ];
+    }
+
+    public function countInReviewVsPending($request = [])
+    {
+        $query = $this->model->where(function ($query) use ($request) {
+            if (!empty($request['company_id'])) {
+                $query->where('company_id', $request['company_id']);
+            }
+            if (!empty($request['start_date']) && !empty($request['end_date'])) {
+                $query->whereBetween('invoice_date', [$request['start_date'], $request['end_date']]);
+            }
+        });
+
+        // Facturas en estado "Radicado" (en revisión)
+        $inReviewQuery = (clone $query)->where('status', \App\Enums\Invoice\StatusInvoiceEnum::INVOICE_STATUS_002->value);
+        $inReviewCount = $inReviewQuery->count();
+        $inReviewSum = $inReviewQuery->sum('total');
+
+        // Facturas en estado "Pendiente"
+        $pendingQuery = (clone $query)->where('status', \App\Enums\Invoice\StatusInvoiceEnum::INVOICE_STATUS_008->value);
+        $pendingCount = $pendingQuery->count();
+        $pendingSum = $pendingQuery->sum('total');
+
+
+        $value = $inReviewCount . ' / ' . $pendingCount;
+        $secondary_data = formatNumber($inReviewSum) . '  en revisión / ' . formatNumber($pendingSum) . 'pendientes';
+
+        return [
+            'title' => 'Facturas en Revisión / Pendientes',
+            'value' => $value,
+            'secondary_data' => $secondary_data,
+            'icon' => 'tabler-file-search',
+            'color' => 'warning',
+            'isHover' => false,
+            'to' => []
+        ];
+    }
+
+    public function countPendingPayments($request = [])
+    {
+        $query = $this->model->where(function ($query) use ($request) {
+            if (!empty($request['company_id'])) {
+                $query->where('company_id', $request['company_id']);
+            }
+            if (!empty($request['start_date']) && !empty($request['end_date'])) {
+                $query->whereBetween('invoice_date', [$request['start_date'], $request['end_date']]);
+            }
+        });
+
+        // Facturas con saldo pendiente mayor a 0
+        $pendingQuery = (clone $query)->where('remaining_balance', '>', 0);
+
+        // Sumatoria del valor pendiente
+        $pendingTotal = $pendingQuery->sum('remaining_balance');
+
+        // Cantidad de facturas con saldo pendiente
+        $pendingCount = $pendingQuery->count();
+
+        // Formatear los datos como espera el frontend
+        $value = formatNumber($pendingTotal);
+        $secondary_data = "$pendingCount facturas pendientes de pago";
+        return [
+            'title' => 'Montos Pendientes de Pago',
+            'value' => $value,
+            'secondary_data' => $secondary_data,
+            'icon' => 'tabler-currency-dollar',
+            'color' => 'error',
+            'isHover' => false,
+            'to' => []
+        ];
+    }
+
+    public function countAverageResponseTime($request = [])
+    {
+
+        // Formatear los datos como espera el frontend
+        $value = '15.3 días';
+        $secondary_data = 'Tiempo de respuesta de aseguradoras';
+
+        return [
+            'title' => 'Tiempo Promedio de Respuesta',
+            'value' => $value,
+            'secondary_data' => $secondary_data,
+            'icon' => 'tabler-clock',
+            'color' => 'success',
+            'isHover' => false,
+            'to' => []
+        ];
+    }
+
+    public function countRecoveredGlosas($request = [])
+    {
+        // Formatear los datos como espera el frontend
+        $value = '68.5%';
+        $secondary_data = '$184,679,381 recuperados de $269,604,936 glosados';
+
+        return [
+            'title' => '% Glosas Recuperadas',
+            'value' => $value,
+            'secondary_data' => $secondary_data,
+            'icon' => 'tabler-percentage',
+            'color' => 'success',
+            'isHover' => false,
+            'to' => []
+        ];
     }
 }
