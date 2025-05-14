@@ -191,14 +191,14 @@ class OtherServiceController extends Controller
                 'consecutivo' => $consecutivo,
             ];
 
-            // // Update JSON with edited service
-            // updateInvoiceServicesJson(
-            //     $post['invoice_id'],
-            //     TypeServiceEnum::SERVICE_TYPE_007,
-            //     $serviceData,
-            //     'edit',
-            //     $consecutivo
-            // );
+            // Update JSON with edited service
+            updateInvoiceServicesJson(
+                $post['invoice_id'],
+                TypeServiceEnum::SERVICE_TYPE_007,
+                $serviceData,
+                'edit',
+                $consecutivo
+            );
 
             return [
                 'code' => 200,
