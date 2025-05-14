@@ -23,13 +23,12 @@ class UserPaginateExport implements FromView, ShouldAutoSize, WithEvents
 
     public function view(): View
     {
-        logMessage($this->data);
         $data = collect($this->data)->map(function ($value) {
             return [
                 'full_name' => $value->full_name,
                 'email' => $value->email,
                 'role_description' => $value->role?->description,
-                'is_active' => $value->is_active? 'Activo' : 'Inactivo',
+                'is_active' => $value->is_active ? 'Activo' : 'Inactivo',
             ];
         });
 

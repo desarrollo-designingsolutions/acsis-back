@@ -36,8 +36,6 @@ class FileStoreRequest extends FormRequest
             $rules['file'] = 'required|file|max:3048|extensions:jpg,jpeg,png,doc,docx,xls,xlsx,pdf,ppt,pptx'; // Ejemplo: permitir JPEG, PNG, PDF, DOC, DOCX; tamaño máximo 30MB
         }
 
-        logMessage(sys_get_temp_dir());
-
         return $rules;
     }
 

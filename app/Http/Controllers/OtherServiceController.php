@@ -3,13 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Enums\Service\TypeServiceEnum;
+use App\Helpers\Constants;
 use App\Http\Requests\OtherService\OtherServiceStoreRequest;
 use App\Http\Resources\OtherService\OtherServiceFormResource;
+use App\Models\Service;
 use App\Repositories\InvoiceRepository;
 use App\Repositories\OtherServiceRepository;
 use App\Repositories\ServiceRepository;
 use App\Traits\HttpResponseTrait;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class OtherServiceController extends Controller
 {
@@ -43,30 +46,74 @@ class OtherServiceController extends Controller
     {
         return $this->runTransaction(function () use ($request) {
 
-            $postOtherService = $request->except(["service_id", "company_id", "invoice_id"]);
+            $post = $request->all();
 
-            $otherService = $this->otherServiceRepository->store($postOtherService);
+            // Get the next consecutivo
+            $consecutivo = getNextConsecutivo($post['invoice_id'], TypeServiceEnum::SERVICE_TYPE_007);
 
-            $postService = [
-                "company_id" => $request->input("company_id"),
-                "invoice_id" => $request->input("invoice_id"),
-                "type" => TypeServiceEnum::SERVICE_TYPE_007,
-                "serviceable_type" => TypeServiceEnum::SERVICE_TYPE_007->model(),
-                "serviceable_id" => $otherService->id,
-                "codigo_servicio" => $request->input("codTecnologiaSalud"),
-                "nombre_servicio" => $request->input("nomTecnologiaSalud"),
-                "quantity" => $request->input("cantidadOS"),
-                "unit_value" => $request->input("vrUnitOS"),
-                "total_value" => $request->input("vrServicio"),
+            // Create OtherService
+            $otherService = $this->otherServiceRepository->store([
+                'idMIPRES' => $post['idMIPRES'],
+                'numAutorizacion' => $post['numAutorizacion'],
+                'fechaSuministroTecnologia' => $post['fechaSuministroTecnologia'],
+                'tipoOS_id' => $post['tipoOS_id'],
+                'codTecnologiaSalud' => $post['codTecnologiaSalud'],
+                'nomTecnologiaSalud' => $post['nomTecnologiaSalud'],
+                'cantidadOS' => $post['cantidadOS'],
+                'vrUnitOS' => $post['vrUnitOS'],
+                'valorPagoModerador' => $post['valorPagoModerador'],
+                'vrServicio' => $post['vrServicio'],
+                'conceptoRecaudo_id' => $post['conceptoRecaudo_id'],
+            ]);
+
+            // Create Service
+            $service = $this->serviceRepository->store([
+                'company_id' => $post['company_id'],
+                'invoice_id' => $post['invoice_id'],
+                'consecutivo' => $consecutivo,
+                'type' => TypeServiceEnum::SERVICE_TYPE_007,
+                'serviceable_type' => TypeServiceEnum::SERVICE_TYPE_007->model(),
+                'serviceable_id' => $otherService->id,
+                'codigo_servicio' => $post['codTecnologiaSalud'],
+                'nombre_servicio' => $post['nomTecnologiaSalud'],
+                'quantity' => $post['cantidadOS'],
+                'unit_value' => $post['vrUnitOS'],
+                'total_value' => $post['vrServicio'],
+            ]);
+
+            // Prepare service data for JSON
+            $serviceData = [
+                'codPrestador' => '',
+                'numAutorizacion' => $post['numAutorizacion'],
+                'idMIPRES' => $post['idMIPRES'],
+                'fechaSuministroTecnologia' => $post['fechaSuministroTecnologia'],
+                'tipoOS' => $otherService->tipoOtrosServicio?->codigo,
+                'codTecnologiaSalud' => $post['codTecnologiaSalud'],
+                'nomTecnologiaSalud' => $post['nomTecnologiaSalud'],
+                'cantidadOS' => $post['cantidadOS'],
+                'tipoDocumentoldentificacion' => "",
+                'numDocumentoldentificacion' => "",
+                'vrUnitOS' => $post['vrUnitOS'],
+                'vrServicio' => $post['vrServicio'],
+                'conceptoRecaudo' => $otherService->conceptoRecaudo?->codigo,
+                'valorPagoModerador' => $post['valorPagoModerador'],
+                'numFEVPagoModerador' => '',
+                'consecutivo' => $consecutivo,
             ];
 
-            $service = $this->serviceRepository->store($postService);
+            // Update JSON with new service
+            updateInvoiceServicesJson(
+                $post['invoice_id'],
+                TypeServiceEnum::SERVICE_TYPE_007,
+                $serviceData,
+                'add'
+            );
 
             return [
                 'code' => 200,
                 'message' => 'Servicio agregado correctamente',
             ];
-        });
+        }, debug: false);
     }
 
     public function edit($service_id)
@@ -95,27 +142,68 @@ class OtherServiceController extends Controller
     {
         return $this->runTransaction(function () use ($request, $id) {
 
-            $postOtherService = $request->except(["service_id", "company_id", "invoice_id"]);
+            $post = $request->all();
 
-            $otherService = $this->otherServiceRepository->store($postOtherService);
+            // Update OtherService
+            $otherService = $this->otherServiceRepository->store([
+                'numAutorizacion' => $post['numAutorizacion'],
+                'idMIPRES' => $post['idMIPRES'],
+                'fechaSuministroTecnologia' => $post['fechaSuministroTecnologia'],
+                'tipoOS_id' => $post['tipoOS_id'],
+                'codTecnologiaSalud' => $post['codTecnologiaSalud'],
+                'nomTecnologiaSalud' => $post['nomTecnologiaSalud'],
+                'cantidadOS' => $post['cantidadOS'],
+                'vrUnitOS' => $post['vrUnitOS'],
+                'valorPagoModerador' => $post['valorPagoModerador'],
+                'vrServicio' => $post['vrServicio'],
+                'conceptoRecaudo_id' => $post['conceptoRecaudo_id'],
+            ], $id);
 
-            $postService = [
-                "id" => $request->input("service_id"),
-                "company_id" => $request->input("company_id"),
-                "serviceable_id" => $otherService->id,
-                "codigo_servicio" => $request->input("codTecnologiaSalud"),
-                "nombre_servicio" => $request->input("nomTecnologiaSalud"),
-                "quantity" => $request->input("cantidadOS"),
-                "unit_value" => $request->input("vrUnitOS"),
-                "total_value" => $request->input("vrServicio"),
+            // Update Service
+            $service = $this->serviceRepository->store([
+                'codigo_servicio' => $post['codTecnologiaSalud'],
+                'nombre_servicio' => $post['nomTecnologiaSalud'],
+                'quantity' => $post['cantidadOS'],
+                'unit_value' => $post['vrUnitOS'],
+                'total_value' => $post['vrServicio'],
+            ], $post['service_id']);
+
+            // Store the current consecutivo
+            $consecutivo = $service->consecutivo;
+
+            // Prepare service data for JSON
+            $serviceData = [
+                'codPrestador' => '',
+                'numAutorizacion' => $post['numAutorizacion'],
+                'idMIPRES' => $post['idMIPRES'],
+                'fechaSuministroTecnologia' => $post['fechaSuministroTecnologia'],
+                'tipoOS' => $otherService->tipoOtrosServicio?->codigo,
+                'codTecnologiaSalud' => $post['codTecnologiaSalud'],
+                'nomTecnologiaSalud' => $post['nomTecnologiaSalud'],
+                'cantidadOS' => $post['cantidadOS'],
+                'tipoDocumentoldentificacion' => "",
+                'numDocumentoldentificacion' => "",
+                'vrUnitOS' => $post['vrUnitOS'],
+                'vrServicio' => $post['vrServicio'],
+                'conceptoRecaudo' => $otherService->conceptoRecaudo?->codigo,
+                'valorPagoModerador' => $post['valorPagoModerador'],
+                'numFEVPagoModerador' => '',
+                'consecutivo' => $consecutivo,
             ];
 
-            $service = $this->serviceRepository->store($postService);
+            // // Update JSON with edited service
+            // updateInvoiceServicesJson(
+            //     $post['invoice_id'],
+            //     TypeServiceEnum::SERVICE_TYPE_007,
+            //     $serviceData,
+            //     'edit',
+            //     $consecutivo
+            // );
 
             return [
                 'code' => 200,
                 'message' => 'Servicio modificado correctamente',
             ];
-        });
+        }, debug: false);
     }
 }

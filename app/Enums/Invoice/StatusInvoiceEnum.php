@@ -29,4 +29,7 @@ enum StatusInvoiceEnum: string
 
     #[Description('Devolucion')]
     case INVOICE_STATUS_007 = 'INVOICE_STATUS_007';
+
+    #[Description('Pendiente')]
+    case INVOICE_STATUS_008 = 'INVOICE_STATUS_008';
 }

@@ -25,24 +25,20 @@ class Glosa extends Model
 
         // Cuando se crea una glosa
         static::created(function ($glosa) {
-            logMessage("created GLOSA");
             changeServiceData($glosa->service_id);
         });
 
         // Cuando se actualiza una glosa
         static::updated(function ($glosa) {
-            logMessage("updated GLOSA");
             changeServiceData($glosa->service_id);
         });
 
         // Cuando se elimina una glosa
         static::deleted(function ($glosa) {
-            logMessage("deleted GLOSA");
             changeServiceData($glosa->service_id);
         });
 
         static::saved(function ($glosa) {
-            logMessage("saved GLOSA");
             changeServiceData($glosa->service_id);
         });
     }

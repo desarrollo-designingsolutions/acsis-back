@@ -46,9 +46,23 @@ class ServiceController extends Controller
                 //     ]));
                 // }
 
-                $service->delete();
                 $service->serviceable()->delete();
                 $service->glosas()->delete();
+                $service->delete();
+
+                $serviceType = TypeServiceEnum::from($service->type);
+                // Update JSON to remove service and reindex consecutivos
+                updateInvoiceServicesJson(
+                    $service->invoice_id,
+                    $serviceType,
+                    [],
+                    'delete',
+                    $service->consecutivo
+                );
+
+                // Reindex consecutivos in the database
+                reindexConsecutivos($service->invoice_id, $serviceType);
+
                 $msg = 'Registro eliminado correctamente';
             } else {
                 $msg = 'El registro no existe';
@@ -58,7 +72,7 @@ class ServiceController extends Controller
                 'code' => 200,
                 'message' => $msg,
             ];
-        }, 200);
+        }, 200, debug: false);
     }
 
 

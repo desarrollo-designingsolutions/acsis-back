@@ -2,7 +2,7 @@
 
 namespace App\Enums\Service;
 
-use App\Attributes\BackgroundColor;
+use App\Attributes\ElementJson;
 use App\Attributes\Description;
 use App\Traits\AttributableEnum;
 use App\Attributes\Model;
@@ -31,5 +31,6 @@ enum TypeServiceEnum: string
 
     #[Description('Otros servicios')]
     #[Model('App\\Models\\OtherService')]
+    #[ElementJson('otrosServicios')]
     case SERVICE_TYPE_007 = 'SERVICE_TYPE_007';
 }

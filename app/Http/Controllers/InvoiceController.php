@@ -210,8 +210,8 @@ class InvoiceController extends Controller
             // Build JSON structure
             $jsonData = $this->buildInvoiceJson($invoice->id);
 
-            // Store JSON file
-            $this->storeJsonFile($invoice, $jsonData);
+            // // Store JSON file
+            // $this->storeJsonFile($invoice, $jsonData);
 
             return [
                 'code' => 200,
@@ -647,12 +647,148 @@ class InvoiceController extends Controller
         });
     }
 
+    /**
+     * Build the JSON structure for the invoice
+     * @param int $invoice_id
+     * @return array
+     */
+    private function buildInvoiceJson($invoice_id): array
+    {
+        // Load invoice with related data
+        $invoice = $this->invoiceRepository->find($invoice_id, [
+            'tipoNota',
+            'serviceVendor',
+            'patient',
+            'patient.sexo',
+            'patient.rips_tipo_usuario_version2',
+            'patient.pais_residency',
+            'patient.municipio_residency',
+            'patient.zona_version2',
+            'patient.tipo_id_pisi',
+            'patient.pais_origin',
+        ]);
+
+        // Extract related data for cleaner code
+        $patient = $invoice->patient;
+        $sexo = $patient->sexo;
+        $tipoUsuario = $patient->rips_tipo_usuario_version2;
+        $pais_residency = $patient->pais_residency;
+        $pais_origin = $patient->pais_origin;
+        $municipio = $patient->municipio_residency;
+        $zonaVersion2 = $patient->zona_version2;
+        $tipoIdPisis = $patient->tipo_id_pisi;
+        $tipoNota = $invoice->tipoNota;
+        $serviceVendor = $invoice->serviceVendor;
+
+        // Build base invoice data
+        $baseData = [
+            'numDocumentoIdObligado' => $serviceVendor->nit,
+            'numFactura' => $invoice->invoice_number,
+            'TipoNota' => $tipoNota->codigo ?? '',
+            'numNota' => $invoice->note_number,
+        ];
+
+        // Convert null values to empty strings
+        $baseData = convertNullToEmptyString($baseData);
+
+        // Build user data
+        $users = [
+            [
+                'codSexo' => $sexo->codigo,
+                'consecutivo' => 1,
+                'incapacidad' => $patient->incapacity,
+                'tipoUsuario' => $tipoUsuario->codigo,
+                'codPaisOrigen' => $pais_origin->codigo,
+                'fechaNacimiento' => $patient->birth_date,
+                'codPaisResidencia' => $pais_residency->codigo,
+                'codMunicipioResidencia' => $municipio->codigo,
+                'numDocumentoIdentificacion' => $patient->document,
+                'tipoDocumentoIdentificacion' => $tipoIdPisis->codigo,
+                'codZonaTerritorialResidencia' => $zonaVersion2->codigo,
+            ]
+        ];
+
+        // Combine base data and users into final JSON structure
+        $newData = $baseData;
+        $newData['usuarios'] = $users;
+
+        // Define file path
+        $nameFile = $invoice->invoice_number . '.json';
+        $path = "companies/company_{$invoice->company_id}/invoices/invoice_{$invoice->id}/{$nameFile}";
+        $disk = Constants::DISK_FILES;
+
+        // Check if invoice has an existing path_json that differs from the new path
+        if ($invoice->path_json && $invoice->path_json !== $path) {
+            // Delete old file if it exists
+            if (Storage::disk($disk)->exists($invoice->path_json)) {
+                Storage::disk($disk)->delete($invoice->path_json);
+            }
+        }
+
+        // Check if file exists
+        if (Storage::disk($disk)->exists($path)) {
+            // Read existing JSON
+            $existingData = json_decode(Storage::disk($disk)->get($path), true);
+
+            // Compare and update only changed fields
+            $mergedData = $this->mergeChangedFields($existingData, $newData);
+        } else {
+            // Use new data if file doesn't exist
+            $mergedData = $newData;
+        }
+
+        // Store JSON contents
+        Storage::disk($disk)->put($path, json_encode($mergedData, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+
+        // Update path_json in the invoice
+        $this->invoiceRepository->store(['path_json' => $path], $invoice->id);
+
+        return $mergedData;
+    }
+
+    /**
+     * Merge existing data with new data, updating only changed fields
+     * @param array $existingData
+     * @param array $newData
+     * @return array
+     */
+    private function mergeChangedFields(array $existingData, array $newData): array
+    {
+        $mergedData = $existingData;
+
+        // Update base fields if they differ
+        foreach ($newData as $key => $value) {
+            if ($key !== 'usuarios' && (!isset($existingData[$key]) || $existingData[$key] !== $value)) {
+                $mergedData[$key] = $value;
+            }
+        }
+
+        // Handle usuarios array
+        if (isset($newData['usuarios'])) {
+            $mergedData['usuarios'] = $mergedData['usuarios'] ?? [];
+            foreach ($newData['usuarios'] as $index => $newUser) {
+                if (isset($mergedData['usuarios'][$index])) {
+                    // Update existing user fields if they differ
+                    foreach ($newUser as $key => $value) {
+                        if (!isset($mergedData['usuarios'][$index][$key]) || $mergedData['usuarios'][$index][$key] !== $value) {
+                            $mergedData['usuarios'][$index][$key] = $value;
+                        }
+                    }
+                } else {
+                    // Add new user if it doesn't exist
+                    $mergedData['usuarios'][$index] = $newUser;
+                }
+            }
+        }
+
+        return $mergedData;
+    }
 
 
     /**
      * Build the JSON structure for the invoice
      */
-    private function buildInvoiceJson($invoice_id): array
+    private function buildInvoiceJson222($invoice_id): array
     {
         $invoice = $this->invoiceRepository->find($invoice_id, [
             "tipoNota",
@@ -683,7 +819,7 @@ class InvoiceController extends Controller
             'numDocumentoIdObligado' => $serviceVendor->nit,
             'numFactura' => $invoice->invoice_number,
             'TipoNota' => $tipoNota->codigo ?? "",
-            'numNota' => $invoice->note_number
+            'numNota' => $invoice->note_number,
         ];
 
         // Convert null values to empty strings
@@ -703,15 +839,6 @@ class InvoiceController extends Controller
                 'numDocumentoIdentificacion' => $patient->document,
                 'tipoDocumentoIdentificacion' => $tipoIdPisis->codigo,
                 'codZonaTerritorialResidencia' => $zonaVersion2->codigo,
-                'servicios' => [
-                    'consultas' => [],
-                    'procedimientos' => [],
-                    'medicamentos' => [],
-                    'urgencias' => [],
-                    'otrosServicios' => [],
-                    'hospitalizacion' => [],
-                    'recienNacidos' => []
-                ]
             ]
         ];
 
@@ -751,5 +878,28 @@ class InvoiceController extends Controller
 
         // Update path_json in the invoice
         $this->invoiceRepository->store(['path_json' => $path], $invoice->id);
+    }
+
+    public function downloadJson($id)
+    {
+        // Buscar la factura
+        $invoice = $this->invoiceRepository->find($id, select: ["id", "invoice_number", "path_json"]);
+        $path = $invoice->path_json;
+        $disk = Constants::DISK_FILES;
+
+        // Verificar que el archivo existe
+        if (!Storage::disk($disk)->exists($path)) {
+            abort(404, 'Archivo no encontrado');
+        }
+
+        // Obtener el contenido del archivo
+        $fileContent = Storage::disk($disk)->get($path);
+        $fileName = $invoice->invoice_number . '.json'; // Nombre del archivo para la descarga
+
+        // Devolver el archivo como respuesta descargable
+        return response($fileContent, 200, [
+            'Content-Type' => 'application/json',
+            'Content-Disposition' => 'attachment; filename="' . $fileName . '"',
+        ]);
     }
 }

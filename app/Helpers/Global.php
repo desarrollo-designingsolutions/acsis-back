@@ -1,12 +1,12 @@
 <?php
 
-use App\Events\ChangeInvoiceAuditData;
+use App\Enums\Service\TypeServiceEnum;
+use App\Helpers\Constants;
 use App\Models\Invoice;
 use App\Models\Service;
-use App\Services\CacheService;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Redis;
+use Illuminate\Support\Facades\Storage;
 
 function logMessage($message)
 {
@@ -151,4 +151,143 @@ function changeServiceData($service_id)
     ]);
 
     Invoice::updateTotalFromServices($service->invoice_id);
+}
+
+
+function updateInvoiceServicesJson(string $invoice_id, TypeServiceEnum $serviceType, array $serviceData = [], string $action = 'add', ?int $consecutivo = null)
+{
+    // Load invoice to get path_json and invoice_number
+    $invoice = Invoice::select(['id', 'path_json', 'invoice_number', 'company_id'])->find($invoice_id);
+
+    // Define file path
+    $nameFile = $invoice->invoice_number . '.json';
+    $path = "companies/company_{$invoice->company_id}/invoices/invoice_{$invoice->id}/{$nameFile}";
+    $disk = Constants::DISK_FILES;
+
+    // Initialize JSON data
+    $jsonData = [];
+
+    // Check if JSON file exists
+    if (Storage::disk($disk)->exists($path)) {
+        // Read existing JSON
+        $jsonData = json_decode(Storage::disk($disk)->get($path), true);
+    } else {
+        // Initialize with minimal structure if JSON doesn't exist
+        $jsonData = [
+            'numDocumentoIdObligado' => '',
+            'numFactura' => $invoice->invoice_number,
+            'TipoNota' => '',
+            'numNota' => '',
+            'usuarios' => [
+                [
+                    'consecutivo' => 1,
+                    'servicios' => [],
+                ],
+            ],
+        ];
+    }
+
+    // Ensure servicios exists
+    $jsonData['usuarios'][0]['servicios'] = $jsonData['usuarios'][0]['servicios'] ?? [];
+    $jsonData['usuarios'][0]['servicios'][$serviceType->elementJson()] = $jsonData['usuarios'][0]['servicios'][$serviceType->elementJson()] ?? [];
+
+    // Handle action
+    switch ($action) {
+        case 'add':
+            // Add new service
+            $jsonData['usuarios'][0]['servicios'][$serviceType->elementJson()][] = $serviceData;
+            break;
+
+        case 'edit':
+            // Find and update service
+            if ($consecutivo === null) {
+                throw new \Exception('Service consecutivo is required for edit action');
+            }
+            foreach ($jsonData['usuarios'][0]['servicios'][$serviceType->elementJson()] as &$service) {
+                if ($service['consecutivo'] === $consecutivo) {
+                    $service = array_merge($service, $serviceData);
+                    break;
+                }
+            }
+            break;
+
+        case 'delete':
+            // Find and remove service
+            if ($consecutivo === null) {
+                throw new \Exception('Service consecutivo is required for delete action');
+            }
+            $jsonData['usuarios'][0]['servicios'][$serviceType->elementJson()] = array_filter(
+                $jsonData['usuarios'][0]['servicios'][$serviceType->elementJson()],
+                fn($service) => $service['consecutivo'] !== $consecutivo
+            );
+            // Reindex consecutivos in JSON
+            $newServices = [];
+            $newConsecutivo = 1;
+            foreach ($jsonData['usuarios'][0]['servicios'][$serviceType->elementJson()] as $service) {
+                $service['consecutivo'] = $newConsecutivo++;
+                $newServices[] = $service;
+            }
+            $jsonData['usuarios'][0]['servicios'][$serviceType->elementJson()] = $newServices;
+            break;
+
+        default:
+            throw new \Exception('Invalid action specified');
+    }
+
+    // Store updated JSON
+    Storage::disk($disk)->put($path, json_encode($jsonData, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+
+    // Update path_json in the invoice if it changed
+    if ($invoice->path_json !== $path) {
+        Invoice::update($invoice->id, ['path_json' => $path]);
+    }
+
+    return $jsonData;
+}
+
+
+function getNextConsecutivo(string $invoice_id, TypeServiceEnum $typeService)
+{
+    // Check JSON first
+    $invoice = Invoice::select(['id', 'path_json', 'invoice_number', 'company_id'])->find($invoice_id);
+    $path = "companies/company_{$invoice->company_id}/invoices/invoice_{$invoice->id}/{$invoice->invoice_number}.json";
+    $disk = Constants::DISK_FILES;
+
+    $maxConsecutivo = 0;
+    if (Storage::disk($disk)->exists($path)) {
+        $jsonData = json_decode(Storage::disk($disk)->get($path), true);
+        if (!empty($jsonData['usuarios'][0]['servicios'][$typeService->elementJson()])) {
+            $maxConsecutivo = max(array_column($jsonData['usuarios'][0]['servicios'][$typeService->elementJson()], 'consecutivo'));
+        }
+    }
+
+    // Check database
+    $dbMaxConsecutivo = Service::where('invoice_id', $invoice_id)
+        ->where('type', $typeService->elementJson())
+        ->max('consecutivo') ?? 0;
+
+    return max($maxConsecutivo, $dbMaxConsecutivo) + 1;
+}
+
+
+function reindexConsecutivos(string $invoice_id, TypeServiceEnum $typeService)
+{
+    // Get services for the invoice and service type, ordered by consecutivo
+    $services = Service::where('invoice_id', $invoice_id)
+        ->where('type', $typeService->value)
+        ->orderBy('consecutivo')
+        ->get();
+
+    if ($services->isEmpty()) {
+        return; // No services to reindex
+    }
+
+    // Reindex consecutivos starting from 1
+    $newConsecutivo = 1;
+    foreach ($services as $service) {
+        if ($service->consecutivo !== $newConsecutivo) {
+            $service->update(['consecutivo' => $newConsecutivo]);
+        }
+        $newConsecutivo++;
+    }
 }
