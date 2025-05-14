@@ -40,7 +40,7 @@ class GlosaMasiveStoreRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'servicesIds.required' => " El campo glosas es obligatorio",
+            'servicesIds.required' => ' El campo glosas es obligatorio',
             'servicesIds.array' => 'El campo glosas debe ser un arreglo',
             'servicesIds.min' => 'Debe enviar al menos una glosa',
 
@@ -71,12 +71,12 @@ class GlosaMasiveStoreRequest extends FormRequest
                 ];
             }, json_decode($this->glosas, 1));
 
-            $merge["glosas"] =  $glosas;
+            $merge['glosas'] = $glosas;
         }
         if ($this->has('servicesIds') && is_string($this->servicesIds)) {
             $servicesIds = json_decode($this->servicesIds, 1);
 
-            $merge["servicesIds"] = $servicesIds;
+            $merge['servicesIds'] = $servicesIds;
         }
 
         $this->merge($merge);

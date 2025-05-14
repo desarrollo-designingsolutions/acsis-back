@@ -7,7 +7,6 @@ use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-
 class GlosaStoreRequest extends FormRequest
 {
     /**
@@ -36,8 +35,6 @@ class GlosaStoreRequest extends FormRequest
             'file' => 'required',
             'date' => 'required',
         ];
-
-
 
         return $rules;
     }

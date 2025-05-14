@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class CodeGlosa extends Model
 {
-    use HasUuids, HasFactory, Cacheable;
+    use Cacheable, HasFactory, HasUuids;
 
     protected $customCachePrefixes = [
         'string:{table}_list*',

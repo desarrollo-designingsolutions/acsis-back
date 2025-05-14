@@ -36,6 +36,6 @@ class FileUploadProgress implements ShouldBroadcastNow
 
     public function broadcastOn()
     {
-        return new Channel('upload-progress.' . $this->uploadId);
+        return new Channel('upload-progress.'.$this->uploadId);
     }
 }

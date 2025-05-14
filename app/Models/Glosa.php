@@ -11,10 +11,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Glosa extends Model
 {
-    use HasFactory, HasUuids, Searchable, Cacheable, SoftDeletes;
+    use Cacheable, HasFactory, HasUuids, Searchable, SoftDeletes;
 
     protected $guarded = [];
-
 
     /**
      * Boot del modelo para registrar eventos.

@@ -20,18 +20,18 @@ class FileRepository extends BaseRepository
             ->with($with)
             ->where(function ($query) use ($request) {
                 if (! empty($request['name'])) {
-                    $query->where('id', 'like', '%' . $request['name'] . '%');
+                    $query->where('id', 'like', '%'.$request['name'].'%');
                 }
                 if (! empty($request['fileable_id'])) {
                     $query->where('fileable_id', $request['fileable_id']);
                 }
                 if (! empty($request['fileable_type'])) {
-                    $query->where('fileable_type', 'App\\Models\\' . $request['fileable_type']);
+                    $query->where('fileable_type', 'App\\Models\\'.$request['fileable_type']);
                 }
             })
             ->where(function ($query) use ($request) {
                 if (! empty($request['searchQuery'])) {
-                    $query->where('name', 'like', '%' . $request['searchQuery'] . '%');
+                    $query->where('name', 'like', '%'.$request['searchQuery'].'%');
                 }
             });
         if (empty($request['typeData'])) {
@@ -51,8 +51,8 @@ class FileRepository extends BaseRepository
 
             $query = QueryBuilder::for($this->model->query())
                 ->allowedFilters([
-                    AllowedFilter::callback('inputGeneral', function ($query, $value) use ($request) {
-                        $query->where(function ($query) use ($value, $request) {
+                    AllowedFilter::callback('inputGeneral', function ($query, $value) {
+                        $query->where(function ($query) use ($value) {
                             $query->orWhere('filename', 'like', "%$value%");
                         });
                     }),
@@ -69,7 +69,7 @@ class FileRepository extends BaseRepository
                         $query->where('fileable_id', $request['fileable_id']);
                     }
                     if (! empty($request['fileable_type'])) {
-                        $query->where('fileable_type', 'App\\Models\\' . $request['fileable_type']);
+                        $query->where('fileable_type', 'App\\Models\\'.$request['fileable_type']);
                     }
                 })
                 ->paginate(request()->perPage ?? Constants::ITEMS_PER_PAGE);

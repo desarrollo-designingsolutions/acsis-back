@@ -36,10 +36,10 @@ class ServiceStoreRequest extends FormRequest
 
     protected function prepareForValidation(): void
     {
-        $merge  = [];
+        $merge = [];
 
         if ($this->has('cups_rip_id')) {
-            $merge["cups_rip_id"] = is_array($this->cups_rip_id) ? $this->cups_rip_id['value'] : $this->cups_rip_id;
+            $merge['cups_rip_id'] = is_array($this->cups_rip_id) ? $this->cups_rip_id['value'] : $this->cups_rip_id;
         }
 
         $this->merge($merge);

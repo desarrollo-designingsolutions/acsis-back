@@ -21,5 +21,4 @@ class Constants
     public const REDIS_TTL = '315360000'; // 10 años en segundos
 
     public const DISK_FILES = 'public'; // sistema de archivos
-
 }

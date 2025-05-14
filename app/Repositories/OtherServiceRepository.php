@@ -21,8 +21,8 @@ class OtherServiceRepository extends BaseRepository
         return $this->cacheService->remember($cacheKey, function () use ($request) {
             $query = QueryBuilder::for($this->model->query())
                 ->allowedFilters([
-                    AllowedFilter::callback('inputGeneral', function ($query, $value) use ($request) {
-                        $query->where(function ($subQuery) use ($value) {});
+                    AllowedFilter::callback('inputGeneral', function ($query, $value) {
+                        $query->where(function ($subQuery) {});
                     }),
                 ])
                 ->allowedSorts([])

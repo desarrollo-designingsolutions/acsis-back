@@ -4,9 +4,7 @@ namespace App\Repositories;
 
 use App\Helpers\Constants;
 use App\Models\Service;
-use App\QueryBuilder\Sort\RelatedTableSort;
 use Spatie\QueryBuilder\AllowedFilter;
-use Spatie\QueryBuilder\AllowedSort;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class ServiceRepository extends BaseRepository
@@ -23,7 +21,7 @@ class ServiceRepository extends BaseRepository
         return $this->cacheService->remember($cacheKey, function () use ($request) {
             $query = QueryBuilder::for($this->model->query())
                 ->allowedFilters([
-                    AllowedFilter::callback('inputGeneral', function ($query, $value) use ($request) {
+                    AllowedFilter::callback('inputGeneral', function ($query, $value) {
                         $query->where(function ($subQuery) use ($value) {
                             $subQuery->orWhere('quantity', 'like', "%$value%");
                             $subQuery->orWhere('codigo_servicio', 'like', "%$value%");
@@ -38,11 +36,11 @@ class ServiceRepository extends BaseRepository
                     }),
                 ])
                 ->allowedSorts([
-                    "quantity",
-                    "unit_value",
-                    "total_value",
-                    "codigo_servicio",
-                    "nombre_servicio",
+                    'quantity',
+                    'unit_value',
+                    'total_value',
+                    'codigo_servicio',
+                    'nombre_servicio',
                 ])
                 ->where(function ($query) use ($request) {
                     if (isset($request['invoice_id']) && ! empty($request['invoice_id'])) {

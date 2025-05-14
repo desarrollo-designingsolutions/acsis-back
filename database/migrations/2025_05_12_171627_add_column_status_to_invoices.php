@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('invoices', function (Blueprint $table) {
-            $table->string("status")->nullable();
+            $table->string('status')->nullable();
         });
     }
 
@@ -22,7 +22,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('invoices', function (Blueprint $table) {
-            $table->dropColumn("status");
+            $table->dropColumn('status');
         });
     }
 };

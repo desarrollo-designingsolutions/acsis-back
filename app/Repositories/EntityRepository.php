@@ -22,10 +22,10 @@ class EntityRepository extends BaseRepository
     {
         $cacheKey = $this->cacheService->generateKey("{$this->model->getTable()}_paginate", $request, 'string');
 
-        return $this->cacheService->remember($cacheKey, function () use($request) {
+        return $this->cacheService->remember($cacheKey, function () use ($request) {
             $query = QueryBuilder::for($this->model->query())
-            ->with(['typeEntity:id,name'])
-            ->select(['entities.id', 'entities.corporate_name', 'nit', 'address', 'phone', 'email', 'entities.is_active', "type_entity_id"])
+                ->with(['typeEntity:id,name'])
+                ->select(['entities.id', 'entities.corporate_name', 'nit', 'address', 'phone', 'email', 'entities.is_active', 'type_entity_id'])
                 ->allowedFilters([
                     'is_active',
                     AllowedFilter::callback('inputGeneral', function ($query, $value) {
@@ -54,20 +54,20 @@ class EntityRepository extends BaseRepository
                 ])->where(function ($query) use ($request) {
 
                     if (isset($request['searchQueryInfinite']) && ! empty($request['searchQueryInfinite'])) {
-                        $query->orWhere('corporate_name', 'like', '%' . $request['searchQueryInfinite'] . '%');
+                        $query->orWhere('corporate_name', 'like', '%'.$request['searchQueryInfinite'].'%');
                     }
-    
+
                     if (! empty($request['company_id'])) {
                         $query->where('company_id', $request['company_id']);
                     }
-    
+
                 });
 
-                if (empty($request['typeData'])) {
-                    $query = $query->paginate(request()->perPage ?? Constants::ITEMS_PER_PAGE);
-                } else {
-                    $query = $query->get();
-                }
+            if (empty($request['typeData'])) {
+                $query = $query->paginate(request()->perPage ?? Constants::ITEMS_PER_PAGE);
+            } else {
+                $query = $query->get();
+            }
 
             return $query;
         }, Constants::REDIS_TTL);

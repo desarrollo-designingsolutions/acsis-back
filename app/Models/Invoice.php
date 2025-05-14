@@ -63,14 +63,13 @@ class Invoice extends Model
      * Actualiza el total, value_paid y remaining_balance de la factura basado en
      * los servicios y pagos asociados, y dispara un evento para notificar al frontend.
      *
-     * @param int $invoiceId
-     * @return bool
+     * @param  int  $invoiceId
      */
     public static function updateTotalFromServices($invoiceId): bool
     {
         $invoice = self::find($invoiceId);
 
-        if (!$invoice) {
+        if (! $invoice) {
             return false;
         }
 

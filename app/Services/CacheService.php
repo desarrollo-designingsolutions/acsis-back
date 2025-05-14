@@ -14,7 +14,7 @@ class CacheService
      */
     public function generateKey(string $prefix, array $params = [], string $type = 'string'): string
     {
-        $suffix = ! empty($params) ? '_' . md5(serialize($params)) : '';
+        $suffix = ! empty($params) ? '_'.md5(serialize($params)) : '';
 
         $project = env('KEY_REDIS_PROJECT');
 

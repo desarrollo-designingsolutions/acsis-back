@@ -2,9 +2,8 @@
 
 namespace App\Enums\Invoice;
 
-use App\Attributes\BackgroundColor;
-use App\Attributes\Model;
 use App\Attributes\Description;
+use App\Attributes\Model;
 use App\Traits\AttributableEnum;
 
 enum TypeInvoiceEnum: string

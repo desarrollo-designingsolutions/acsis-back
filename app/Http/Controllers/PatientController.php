@@ -7,8 +7,8 @@ use App\Http\Requests\Patient\PatientStoreRequest;
 use App\Http\Resources\Patient\PatientFormResource;
 use App\Http\Resources\Patient\PatientListResource;
 use App\Repositories\PatientRepository;
-use App\Traits\HttpResponseTrait;
 use App\Repositories\TypeEntityRepository;
+use App\Traits\HttpResponseTrait;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 

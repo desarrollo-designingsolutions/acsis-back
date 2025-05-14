@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('type_vendors', function (Blueprint $table) {
-            $table->uuid("id")->primary();
+            $table->uuid('id')->primary();
             $table->foreignUuid('company_id')->nullable()->constrained('companies');
             $table->string('name');
             $table->boolean('is_active')->default(true);

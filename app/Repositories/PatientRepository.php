@@ -38,8 +38,8 @@ class PatientRepository extends BaseRepository
                 ])->where(function ($query) use ($request) {
 
                     if (isset($request['searchQueryInfinite']) && ! empty($request['searchQueryInfinite'])) {
-                        $query->orWhere('document', 'like', '%' . $request['searchQueryInfinite'] . '%');
-                        $query->orWhereRaw("CONCAT(first_name, ' ', second_name, ' ', first_surname, ' ', second_surname) LIKE ?", '%' . $request['searchQueryInfinite'] . '%');
+                        $query->orWhere('document', 'like', '%'.$request['searchQueryInfinite'].'%');
+                        $query->orWhereRaw("CONCAT(first_name, ' ', second_name, ' ', first_surname, ' ', second_surname) LIKE ?", '%'.$request['searchQueryInfinite'].'%');
                     }
 
                     if (! empty($request['company_id'])) {
@@ -93,11 +93,11 @@ class PatientRepository extends BaseRepository
         $query->where(function ($query) use ($request) {
             if (! empty($request['string'])) {
                 $value = strval($request['string']);
-                $query->orWhere('document', 'like', '%' . $value . '%');
-                $query->orWhere('first_name', 'like', '%' . $value . '%');
-                $query->orWhere('second_name', 'like', '%' . $value . '%');
-                $query->orWhere('first_surname', 'like', '%' . $value . '%');
-                $query->orWhere('second_surname', 'like', '%' . $value . '%');
+                $query->orWhere('document', 'like', '%'.$value.'%');
+                $query->orWhere('first_name', 'like', '%'.$value.'%');
+                $query->orWhere('second_name', 'like', '%'.$value.'%');
+                $query->orWhere('first_surname', 'like', '%'.$value.'%');
+                $query->orWhere('second_surname', 'like', '%'.$value.'%');
             }
         });
         // Aplica el límite si está definido
@@ -108,7 +108,7 @@ class PatientRepository extends BaseRepository
         $data = $query->get()->map(function ($value) use ($with, $select, $fieldValue, $fieldTitle) {
             $data = [
                 'value' => $value->$fieldValue,
-                'title' => $value->document . ' - ' . $value->$fieldTitle,
+                'title' => $value->document.' - '.$value->$fieldTitle,
                 'id' => $value->id,
                 'type_document' => new TypeDocumentSelectResource($value->typeDocument),
                 'document' => $value->document,

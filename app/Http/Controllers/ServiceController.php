@@ -33,7 +33,6 @@ class ServiceController extends Controller
         });
     }
 
-
     public function delete($id)
     {
         return $this->runTransaction(function () use ($id) {
@@ -75,10 +74,9 @@ class ServiceController extends Controller
         }, 200, debug: false);
     }
 
-
     public function loadBtnCreate(Request $request)
     {
-        return $this->execute(function () use ($request) {
+        return $this->execute(function () {
 
             $typeServiceEnumValues = array_map(function ($case) {
                 return [

@@ -17,7 +17,6 @@ class ServiceVendor extends Model
         'is_active' => 'boolean',
     ];
 
-
     public function company(): BelongsTo
     {
         return $this->belongsTo(Company::class);

@@ -12,19 +12,19 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('other_services', function (Blueprint $table) {
-            $table->uuid("id")->primary();
+            $table->uuid('id')->primary();
 
-            $table->string("numAutorizacion")->nullable();
-            $table->string("idMIPRES")->nullable();
-            $table->string("fechaSuministroTecnologia")->nullable();
-            $table->foreignUuid("tipoOS_id")->nullable()->constrained("tipo_otros_servicios");
-            $table->string("codTecnologiaSalud")->nullable();
-            $table->string("nomTecnologiaSalud")->nullable();
-            $table->string("cantidadOS")->nullable();
-            $table->string("vrUnitOS")->nullable();
-            $table->string("valorPagoModerador")->nullable();
-            $table->string("vrServicio")->nullable();
-            $table->foreignUuid("conceptoRecaudo_id")->nullable()->constrained("concepto_recaudos");
+            $table->string('numAutorizacion')->nullable();
+            $table->string('idMIPRES')->nullable();
+            $table->string('fechaSuministroTecnologia')->nullable();
+            $table->foreignUuid('tipoOS_id')->nullable()->constrained('tipo_otros_servicios');
+            $table->string('codTecnologiaSalud')->nullable();
+            $table->string('nomTecnologiaSalud')->nullable();
+            $table->string('cantidadOS')->nullable();
+            $table->string('vrUnitOS')->nullable();
+            $table->string('valorPagoModerador')->nullable();
+            $table->string('vrServicio')->nullable();
+            $table->foreignUuid('conceptoRecaudo_id')->nullable()->constrained('concepto_recaudos');
 
             $table->timestamps();
             $table->softDeletes();

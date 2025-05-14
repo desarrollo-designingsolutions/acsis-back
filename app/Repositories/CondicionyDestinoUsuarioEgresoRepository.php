@@ -16,16 +16,15 @@ class CondicionyDestinoUsuarioEgresoRepository extends BaseRepository
     {
         $cacheKey = $this->cacheService->generateKey("{$this->model->getTable()}_list", $request, 'string');
 
-        return $this->cacheService->remember($cacheKey, function () use ($request, $with, $select, $idsAllowed, $idsNotAllowed) {
+        return $this->cacheService->remember($cacheKey, function () use ($request, $with) {
 
             $data = $this->model->with($with)->where(function ($query) {})
                 ->where(function ($query) use ($request) {
                     if (isset($request['searchQueryInfinite']) && ! empty($request['searchQueryInfinite'])) {
-                        $query->where('codigo', 'like', '%' . $request['searchQueryInfinite'] . '%');
-                        $query->orWhere('nombre', 'like', '%' . $request['searchQueryInfinite'] . '%');
+                        $query->where('codigo', 'like', '%'.$request['searchQueryInfinite'].'%');
+                        $query->orWhere('nombre', 'like', '%'.$request['searchQueryInfinite'].'%');
                     }
                 });
-
 
             if (empty($request['typeData'])) {
                 $data = $data->paginate($request['perPage'] ?? 10);
@@ -66,8 +65,8 @@ class CondicionyDestinoUsuarioEgresoRepository extends BaseRepository
             }
             if (! empty($request['string'])) {
                 $value = strval($request['string']);
-                $query->where('codigo', 'like', '%' . $value . '%');
-                $query->orWhere('nombre', 'like', '%' . $value . '%');
+                $query->where('codigo', 'like', '%'.$value.'%');
+                $query->orWhere('nombre', 'like', '%'.$value.'%');
             }
         });
 
@@ -76,10 +75,10 @@ class CondicionyDestinoUsuarioEgresoRepository extends BaseRepository
             $query->limit($limit);
         }
 
-        $data = $query->get()->map(function ($value) use ($with, $select, $fieldValue, $fieldTitle) {
+        $data = $query->get()->map(function ($value) use ($with, $select, $fieldValue) {
             $data = [
                 'value' => $value->$fieldValue,
-                'title' => $value->codigo . ' - ' . $value->nombre,
+                'title' => $value->codigo.' - '.$value->nombre,
             ];
 
             if (count($select) > 0) {
@@ -99,7 +98,7 @@ class CondicionyDestinoUsuarioEgresoRepository extends BaseRepository
         return $data;
     }
 
-    public function  searchOne($request = [], $with = [], $select = ["*"], $format = null)
+    public function searchOne($request = [], $with = [], $select = ['*'], $format = null)
     {
         $params = [
             'request' => $request,
@@ -129,7 +128,7 @@ class CondicionyDestinoUsuarioEgresoRepository extends BaseRepository
 
             // Construcción de la consulta
             $query = $query->with($with)->where(function ($query) use ($request) {
-                if (!empty($request['codigo'])) {
+                if (! empty($request['codigo'])) {
                     $query->where('codigo', $request['codigo']);
                 }
             });
@@ -143,7 +142,7 @@ class CondicionyDestinoUsuarioEgresoRepository extends BaseRepository
                     case 'selectInfinite':
                         return [
                             'value' => $data->id,
-                            'title' => $data->codigo . ' - ' . $data->nombre,
+                            'title' => $data->codigo.' - '.$data->nombre,
                             'code' => $data->codigo,
                         ];
                     default:

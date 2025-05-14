@@ -10,7 +10,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Entity extends Model
 {
-
     use Cacheable, HasFactory, HasUuids, SoftDeletes;
 
     protected $casts = [
@@ -21,7 +20,7 @@ class Entity extends Model
     {
         return $this->belongsTo(Company::class);
     }
-    
+
     public function typeEntity()
     {
         return $this->belongsTo(TypeEntity::class, 'type_entity_id');

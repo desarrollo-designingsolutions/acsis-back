@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Enums\Service\TypeServiceEnum;
-use App\Helpers\Constants;
 use App\Http\Requests\OtherService\OtherServiceStoreRequest;
 use App\Http\Resources\OtherService\OtherServiceFormResource;
 use App\Models\Service;
@@ -12,7 +11,6 @@ use App\Repositories\OtherServiceRepository;
 use App\Repositories\ServiceRepository;
 use App\Traits\HttpResponseTrait;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 
 class OtherServiceController extends Controller
 {
@@ -27,7 +25,7 @@ class OtherServiceController extends Controller
 
     public function create(Request $request)
     {
-        return $this->execute(function () use ($request) {
+        return $this->execute(function () {
 
             $tipoOtrosServicios = $this->queryController->selectInfiniteTipoOtrosServicios(request());
             $conceptoRecaudo = $this->queryController->selectInfiniteConceptoRecaudo(request());
@@ -91,8 +89,8 @@ class OtherServiceController extends Controller
                 'codTecnologiaSalud' => $post['codTecnologiaSalud'],
                 'nomTecnologiaSalud' => $post['nomTecnologiaSalud'],
                 'cantidadOS' => $post['cantidadOS'],
-                'tipoDocumentoldentificacion' => "",
-                'numDocumentoldentificacion' => "",
+                'tipoDocumentoldentificacion' => '',
+                'numDocumentoldentificacion' => '',
                 'vrUnitOS' => $post['vrUnitOS'],
                 'vrServicio' => $post['vrServicio'],
                 'conceptoRecaudo' => $otherService->conceptoRecaudo?->codigo,
@@ -128,6 +126,7 @@ class OtherServiceController extends Controller
             $tipoOtrosServicios = $this->queryController->selectInfiniteTipoOtrosServicios(request());
             $conceptoRecaudo = $this->queryController->selectInfiniteConceptoRecaudo(request());
             $cupsRips = $this->queryController->selectInfiniteCupsRips(request());
+
             return [
                 'code' => 200,
                 'form' => $form,
@@ -181,8 +180,8 @@ class OtherServiceController extends Controller
                 'codTecnologiaSalud' => $post['codTecnologiaSalud'],
                 'nomTecnologiaSalud' => $post['nomTecnologiaSalud'],
                 'cantidadOS' => $post['cantidadOS'],
-                'tipoDocumentoldentificacion' => "",
-                'numDocumentoldentificacion' => "",
+                'tipoDocumentoldentificacion' => '',
+                'numDocumentoldentificacion' => '',
                 'vrUnitOS' => $post['vrUnitOS'],
                 'vrServicio' => $post['vrServicio'],
                 'conceptoRecaudo' => $otherService->conceptoRecaudo?->codigo,

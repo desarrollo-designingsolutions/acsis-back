@@ -23,7 +23,7 @@ class GlosaPaginateResource extends JsonResource
             'code_glosa_description' => $this->code_glosa?->description,
             'glosa_value' => formatNumber($this->glosa_value),
             'observation' => $this->observation,
-            'date' =>  Carbon::parse($this->date)->format("d-m-Y"),
+            'date' => Carbon::parse($this->date)->format('d-m-Y'),
         ];
     }
 }

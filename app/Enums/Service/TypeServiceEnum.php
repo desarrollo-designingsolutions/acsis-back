@@ -2,10 +2,10 @@
 
 namespace App\Enums\Service;
 
-use App\Attributes\ElementJson;
 use App\Attributes\Description;
-use App\Traits\AttributableEnum;
+use App\Attributes\ElementJson;
 use App\Attributes\Model;
+use App\Traits\AttributableEnum;
 
 enum TypeServiceEnum: string
 {

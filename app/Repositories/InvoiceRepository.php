@@ -9,9 +9,7 @@ use App\Models\Invoice;
 use App\QueryBuilder\Filters\DataSelectFilter;
 use App\QueryBuilder\Filters\DateRangeFilter;
 use App\QueryBuilder\Filters\QueryFilters;
-use App\QueryBuilder\Sort\IsActiveSort;
 use App\QueryBuilder\Sort\RelatedTableSort;
-use Illuminate\Support\Carbon;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\AllowedSort;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -30,7 +28,7 @@ class InvoiceRepository extends BaseRepository
         return $this->cacheService->remember($cacheKey, function () use ($request) {
             $query = QueryBuilder::for($this->model->query())
                 ->with(['patient', 'entity'])
-                ->select(['invoices.id', 'invoices.entity_id', 'invoices.type', 'invoices.patient_id', 'invoices.invoice_number', 'invoices.radication_number', 'invoices.value_glosa', 'invoices.value_paid', 'invoices.invoice_date', 'invoices.radication_date', 'invoices.is_active', "invoices.status"])
+                ->select(['invoices.id', 'invoices.entity_id', 'invoices.type', 'invoices.patient_id', 'invoices.invoice_number', 'invoices.radication_number', 'invoices.value_glosa', 'invoices.value_paid', 'invoices.invoice_date', 'invoices.radication_date', 'invoices.is_active', 'invoices.status'])
                 ->allowedFilters([
 
                     AllowedFilter::callback('inputGeneral', function ($query, $value) {
@@ -94,6 +92,7 @@ class InvoiceRepository extends BaseRepository
             return $query;
         }, Constants::REDIS_TTL);
     }
+
     public function store(array $request, $id = null)
     {
         $request = $this->clearNull($request);
@@ -163,10 +162,10 @@ class InvoiceRepository extends BaseRepository
     public function countData($request = [])
     {
         $query = $this->model->where(function ($query) use ($request) {
-            if (!empty($request['company_id'])) {
+            if (! empty($request['company_id'])) {
                 $query->where('company_id', $request['company_id']);
             }
-            if (!empty($request['start_date']) && !empty($request['end_date'])) {
+            if (! empty($request['start_date']) && ! empty($request['end_date'])) {
                 $query->whereBetween('invoice_date', [$request['start_date'], $request['end_date']]);
             }
         });
@@ -175,25 +174,28 @@ class InvoiceRepository extends BaseRepository
         $totalSum = $query->sum('total');
         $invoiceCount = $query->count();
 
+        $title = 'Valor total facturación';
+        $value = formatNumber($totalSum);
+
         return [
             'icon' => 'tabler-currency-dollar',
             'color' => 'success',
-            'title' => 'Valor total facturación',
-            'value' => formatNumber($totalSum),
-            'secondary_data' => $invoiceCount . ' facturas',
+            'title' => $title,
+            'value' => $value,
+            'secondary_data' => $invoiceCount.' facturas',
             'isHover' => false,
             'type' => 1,
-            'to' => []
+            'to' => [],
         ];
     }
 
     public function countApprovedVsGlosa($request = [])
     {
         $query = $this->model->where(function ($query) use ($request) {
-            if (!empty($request['company_id'])) {
+            if (! empty($request['company_id'])) {
                 $query->where('company_id', $request['company_id']);
             }
-            if (!empty($request['start_date']) && !empty($request['end_date'])) {
+            if (! empty($request['start_date']) && ! empty($request['end_date'])) {
                 $query->whereBetween('invoice_date', [$request['start_date'], $request['end_date']]);
             }
         });
@@ -207,29 +209,28 @@ class InvoiceRepository extends BaseRepository
         $approvedPercentage = $totalSum > 0 ? ($approvedSum / $totalSum) * 100 : 0;
         $glosaPercentage = $totalSum > 0 ? ($glosaSum / $totalSum) * 100 : 0;
 
-
-        $glosaSum = formatNumber($glosaSum);
-        $approvedSum = formatNumber($approvedSum);
+        $value = round($approvedPercentage, 2).'% / '.round($glosaPercentage, 2).'%';
+        $secondary_data = $approvedSum.'aprobados / '.$glosaSum.' glosados';
 
         return [
             'title' => 'Facturación Aprobada vs Glosada',
-            'value' => round($approvedPercentage, 2) . '% / ' .  round($glosaPercentage, 2) . '%',
-            'secondary_data' =>  $approvedSum . 'aprobados / ' . $glosaSum . ' glosados',
+            'value' => $value,
+            'secondary_data' => $secondary_data,
             'icon' => 'tabler-percentage',
             'color' => 'success',
             'isHover' => false,
             'type' => 2,
-            'to' => []
+            'to' => [],
         ];
     }
 
     public function countInReviewVsPending($request = [])
     {
         $query = $this->model->where(function ($query) use ($request) {
-            if (!empty($request['company_id'])) {
+            if (! empty($request['company_id'])) {
                 $query->where('company_id', $request['company_id']);
             }
-            if (!empty($request['start_date']) && !empty($request['end_date'])) {
+            if (! empty($request['start_date']) && ! empty($request['end_date'])) {
                 $query->whereBetween('invoice_date', [$request['start_date'], $request['end_date']]);
             }
         });
@@ -244,9 +245,8 @@ class InvoiceRepository extends BaseRepository
         $pendingCount = $pendingQuery->count();
         $pendingSum = $pendingQuery->sum('total');
 
-
-        $value = $inReviewCount . ' / ' . $pendingCount;
-        $secondary_data = formatNumber($inReviewSum) . '  en revisión / ' . formatNumber($pendingSum) . 'pendientes';
+        $value = $inReviewCount.' / '.$pendingCount;
+        $secondary_data = formatNumber($inReviewSum).'  en revisión / '.formatNumber($pendingSum).'pendientes';
 
         return [
             'title' => 'Facturas en Revisión / Pendientes',
@@ -255,17 +255,17 @@ class InvoiceRepository extends BaseRepository
             'icon' => 'tabler-file-search',
             'color' => 'warning',
             'isHover' => false,
-            'to' => []
+            'to' => [],
         ];
     }
 
     public function countPendingPayments($request = [])
     {
         $query = $this->model->where(function ($query) use ($request) {
-            if (!empty($request['company_id'])) {
+            if (! empty($request['company_id'])) {
                 $query->where('company_id', $request['company_id']);
             }
-            if (!empty($request['start_date']) && !empty($request['end_date'])) {
+            if (! empty($request['start_date']) && ! empty($request['end_date'])) {
                 $query->whereBetween('invoice_date', [$request['start_date'], $request['end_date']]);
             }
         });
@@ -282,6 +282,7 @@ class InvoiceRepository extends BaseRepository
         // Formatear los datos como espera el frontend
         $value = formatNumber($pendingTotal);
         $secondary_data = "$pendingCount facturas pendientes de pago";
+
         return [
             'title' => 'Montos Pendientes de Pago',
             'value' => $value,
@@ -289,7 +290,7 @@ class InvoiceRepository extends BaseRepository
             'icon' => 'tabler-currency-dollar',
             'color' => 'error',
             'isHover' => false,
-            'to' => []
+            'to' => [],
         ];
     }
 
@@ -307,7 +308,7 @@ class InvoiceRepository extends BaseRepository
             'icon' => 'tabler-clock',
             'color' => 'success',
             'isHover' => false,
-            'to' => []
+            'to' => [],
         ];
     }
 
@@ -324,7 +325,7 @@ class InvoiceRepository extends BaseRepository
             'icon' => 'tabler-percentage',
             'color' => 'success',
             'isHover' => false,
-            'to' => []
+            'to' => [],
         ];
     }
 }

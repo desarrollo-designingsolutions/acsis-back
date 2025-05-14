@@ -56,7 +56,7 @@ class UserRepository extends BaseRepository
                     AllowedSort::custom('full_name', new UserFullNameSort),
                 ])
                 ->where(function ($query) use ($request) {
-                    if (!empty($request['company_id'])) {
+                    if (! empty($request['company_id'])) {
                         $query->where('users.company_id', $request['company_id']);
                     }
                 });
@@ -112,7 +112,7 @@ class UserRepository extends BaseRepository
                     AllowedSort::custom('full_name', new UserFullNameSort),
                 ])
                 ->where(function ($query) use ($request) {
-                    if (!empty($request['company_id'])) {
+                    if (! empty($request['company_id'])) {
                         $query->where('users.company_id', $request['company_id']);
                     }
                 })

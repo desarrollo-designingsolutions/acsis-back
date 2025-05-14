@@ -10,9 +10,7 @@ use App\Repositories\ServiceVendorRepository;
 use App\Repositories\TypeVendorRepository;
 use App\Traits\HttpResponseTrait;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
-
 
 class ServiceVendorController extends Controller
 {
@@ -136,7 +134,7 @@ class ServiceVendorController extends Controller
 
             return [
                 'code' => 200,
-                'message' => 'Proveedor ' . $msg . ' con éxito',
+                'message' => 'Proveedor '.$msg.' con éxito',
             ];
         });
     }

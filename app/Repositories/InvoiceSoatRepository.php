@@ -2,14 +2,7 @@
 
 namespace App\Repositories;
 
-use App\Helpers\Constants;
 use App\Models\InvoiceSoat;
-use App\QueryBuilder\Filters\QueryFilters;
-use App\QueryBuilder\Sort\IsActiveSort;
-use App\QueryBuilder\Sort\RelatedTableSort;
-use Spatie\QueryBuilder\AllowedFilter;
-use Spatie\QueryBuilder\AllowedSort;
-use Spatie\QueryBuilder\QueryBuilder;
 
 class InvoiceSoatRepository extends BaseRepository
 {

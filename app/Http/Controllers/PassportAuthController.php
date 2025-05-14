@@ -170,7 +170,7 @@ class PassportAuthController extends Controller
                     if (
                         isset($item['id']) &&
                         in_array($item['id'], $ids) &&
-                        !in_array($heading, $inserted)
+                        ! in_array($heading, $inserted)
                     ) {
                         $resultMenu[] = ['heading' => $heading, 'to' => ['name' => '']];
                         $inserted[] = $heading;
@@ -216,7 +216,7 @@ class PassportAuthController extends Controller
             // Generar el enlace de restablecimiento
             $token = Password::getRepository()->create($user);
 
-            $action_url = env('SYSTEM_URL_FRONT') . 'ResetPassword/' . $token . '?email=' . urlencode($request->input('email'));
+            $action_url = env('SYSTEM_URL_FRONT').'ResetPassword/'.$token.'?email='.urlencode($request->input('email'));
 
             // Enviar el correo usando el job de Brevo
             BrevoProcessSendEmail::dispatch(

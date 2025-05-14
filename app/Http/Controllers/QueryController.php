@@ -169,13 +169,14 @@ class QueryController extends Controller
 
     public function autoCompleteDataPatients(Request $request)
     {
-        $data = $this->patientRepository->selectList($request->all(), fieldTitle: "full_name", limit: 10);
+        $data = $this->patientRepository->selectList($request->all(), fieldTitle: 'full_name', limit: 10);
 
         return [
             'code' => 200,
             'data' => $data,
         ];
     }
+
     public function selectInfiniteCodeGlosa(Request $request)
     {
         $request['is_active'] = 1;
@@ -335,7 +336,7 @@ class QueryController extends Controller
         });
 
         // Filtrar por descripción si se envía un parámetro de búsqueda
-        if ($request->has('searchQueryInfinite') && !empty($request->input('searchQueryInfinite'))) {
+        if ($request->has('searchQueryInfinite') && ! empty($request->input('searchQueryInfinite'))) {
             $searchTerm = strtolower($request->input('searchQueryInfinite'));
             $status = $status->filter(function ($item) use ($searchTerm) {
                 return str_contains(strtolower($item['title']), $searchTerm);

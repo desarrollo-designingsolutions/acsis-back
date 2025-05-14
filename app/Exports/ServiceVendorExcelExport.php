@@ -30,7 +30,7 @@ class ServiceVendorExcelExport implements FromView, ShouldAutoSize, WithEvents
                 'address' => $value->address,
                 'type_vendor_name' => $value->type_vendor?->name,
                 'email' => $value->email,
-                'is_active' => $value->is_active? 'Activo' : 'Inactivo',
+                'is_active' => $value->is_active ? 'Activo' : 'Inactivo',
             ];
         });
 
@@ -47,7 +47,7 @@ class ServiceVendorExcelExport implements FromView, ShouldAutoSize, WithEvents
                 // Obtener el rango de celdas con datos
                 $highestColumn = $sheet->getHighestColumn();
                 $highestRow = $sheet->getHighestRow();
-                $range = 'A1:' . $highestColumn . $highestRow;
+                $range = 'A1:'.$highestColumn.$highestRow;
 
                 // Establecer el filtro automático en el rango de celdas
                 $sheet->setAutoFilter($range);

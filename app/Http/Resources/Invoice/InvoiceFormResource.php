@@ -27,7 +27,7 @@ class InvoiceFormResource extends JsonResource
             'note_number' => $this->note_number,
             'invoice_number' => $this->invoice_number,
             'radication_number' => $this->radication_number,
-            'value_glosa'      => $this->value_glosa,
+            'value_glosa' => $this->value_glosa,
             'value_paid' => $this->value_paid,
             'total' => $this->total,
             'remaining_balance' => $this->remaining_balance,

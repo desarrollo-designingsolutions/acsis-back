@@ -17,7 +17,7 @@ class OtherServiceStoreRequest extends FormRequest
     public function rules(): array
     {
         $rules = [
-            'invoice_id' => 'required', 
+            'invoice_id' => 'required',
             'fechaSuministroTecnologia' => 'required',
             'codTecnologiaSalud' => 'required',
             'nomTecnologiaSalud' => 'required',
@@ -33,7 +33,7 @@ class OtherServiceStoreRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'invoice_id.required' => 'El campo es obligatorio', 
+            'invoice_id.required' => 'El campo es obligatorio',
             'fechaSuministroTecnologia.required' => 'El campo es obligatorio',
             'codTecnologiaSalud.required' => 'El campo es obligatorio',
             'nomTecnologiaSalud.required' => 'El campo es obligatorio',
@@ -46,16 +46,16 @@ class OtherServiceStoreRequest extends FormRequest
 
     protected function prepareForValidation(): void
     {
-        $merge  = [];
+        $merge = [];
 
         if ($this->has('tipoOS_id')) {
-            $merge["tipoOS_id"] = getValueSelectInfinite($this->tipoOS_id);
+            $merge['tipoOS_id'] = getValueSelectInfinite($this->tipoOS_id);
         }
         if ($this->has('conceptoRecaudo_id')) {
-            $merge["conceptoRecaudo_id"] = getValueSelectInfinite($this->conceptoRecaudo_id);
+            $merge['conceptoRecaudo_id'] = getValueSelectInfinite($this->conceptoRecaudo_id);
         }
         if ($this->has('codTecnologiaSalud')) {
-            $merge["codTecnologiaSalud"] = getValueSelectInfinite($this->codTecnologiaSalud, "codigo");
+            $merge['codTecnologiaSalud'] = getValueSelectInfinite($this->codTecnologiaSalud, 'codigo');
         }
 
         $this->merge($merge);

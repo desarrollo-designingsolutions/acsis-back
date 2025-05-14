@@ -10,12 +10,12 @@ class ExcelService
 {
     /**
      * Get all sheets.
+     *
      * @deprecated
-     * @param string $path
-     * @return array
+     *
      * @throws Exception
      */
-    function getSheetsFromExcel(string $path): array
+    public function getSheetsFromExcel(string $path): array
     {
         /**  Identify the type of $inputFileName  **/
         $inputFileType = IOFactory::identify($path);
@@ -33,11 +33,9 @@ class ExcelService
     /**
      * Get all sheets.
      *
-     * @param string $path
-     * @return Spreadsheet
      * @throws Exception
      */
-    function getSpreadsheetFromExcel(string $path): Spreadsheet
+    public function getSpreadsheetFromExcel(string $path): Spreadsheet
     {
         /**  Identify the type of $inputFileName  **/
         $inputFileType = IOFactory::identify($path);
@@ -52,16 +50,12 @@ class ExcelService
 
     /**
      * Get all sheets.
-     *
-     * @param int $index
-     * @param array $sheets
-     * @return  array
      */
-    function getDataFromSheetExcel(int $index, array $sheets): array
+    public function getDataFromSheetExcel(int $index, array $sheets): array
     {
         $dataSheet = ($sheets[$index]->toArray());
-        unset($dataSheet[0]);//remove titles
+        unset($dataSheet[0]); // remove titles
+
         return $dataSheet;
     }
-
 }

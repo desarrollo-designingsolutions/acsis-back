@@ -57,12 +57,12 @@ class InvoicePaymentController extends Controller
 
         return $this->runTransaction(function () use ($request) {
 
-            $post = $request->except(["file"]);
+            $post = $request->except(['file']);
             $invoicePayment = $this->invoicePaymentRepository->store($post);
 
             if ($request->file('file')) {
                 $file = $request->file('file');
-                $ruta = 'companies/company_' . $invoicePayment->company_id . '/InvoicePayments/InvoicePayment_' . $invoicePayment->id . $request->input('file');
+                $ruta = 'companies/company_'.$invoicePayment->company_id.'/InvoicePayments/InvoicePayment_'.$invoicePayment->id.$request->input('file');
 
                 $file = $file->store($ruta, Constants::DISK_FILES);
                 $invoicePayment->file = $file;
@@ -99,18 +99,17 @@ class InvoicePaymentController extends Controller
 
             $invoicePayment_old = $this->invoicePaymentRepository->find($id, select: ['id', 'value_paid']);
 
-            $post = $request->except(["file"]);
+            $post = $request->except(['file']);
             $invoicePayment = $this->invoicePaymentRepository->store($post);
 
             if ($request->file('file')) {
                 $file = $request->file('file');
-                $ruta = 'companies/company_' . $invoicePayment->company_id . '/InvoicePayments/InvoicePayment_' . $invoicePayment->id . $request->input('file');
+                $ruta = 'companies/company_'.$invoicePayment->company_id.'/InvoicePayments/InvoicePayment_'.$invoicePayment->id.$request->input('file');
 
                 $file = $file->store($ruta, Constants::DISK_FILES);
                 $invoicePayment->file = $file;
                 $invoicePayment->save();
             }
-
 
             return [
                 'code' => 200,

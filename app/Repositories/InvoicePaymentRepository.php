@@ -29,7 +29,6 @@ class InvoicePaymentRepository extends BaseRepository
 
                             QueryFilters::filterByDMYtoYMD($query, $value, 'date_payment');
 
-
                             $query->orWhere(function ($subQuery) use ($value) {
                                 $normalizedValue = preg_replace('/[\$\s\.,]/', '', $value);
                                 $subQuery->where('value_paid', 'like', "%$normalizedValue%");

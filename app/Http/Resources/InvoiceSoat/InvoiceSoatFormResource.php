@@ -15,7 +15,6 @@ class InvoiceSoatFormResource extends JsonResource
     public function toArray(Request $request): array
     {
 
-
         return [
             'id' => $this->id,
             'policy_number' => $this->policy_number,

@@ -28,7 +28,6 @@ class InvoiceStoreRequest extends FormRequest
             'status' => 'required',
         ];
 
-
         if ($this->type == 'INVOICE_TYPE_002') {
             $rules2 = [
                 'soat' => 'required',

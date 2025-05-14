@@ -4,11 +4,7 @@ namespace App\Repositories;
 
 use App\Helpers\Constants;
 use App\Models\TypeDocument;
-use App\QueryBuilder\Filters\QueryFilters;
-use App\QueryBuilder\Sort\IsActiveSort;
-use App\QueryBuilder\Sort\RelatedTableSort;
 use Spatie\QueryBuilder\AllowedFilter;
-use Spatie\QueryBuilder\AllowedSort;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class TypeDocumentRepository extends BaseRepository
@@ -22,22 +18,22 @@ class TypeDocumentRepository extends BaseRepository
     {
         $cacheKey = $this->cacheService->generateKey("{$this->model->getTable()}_paginate", $request, 'string');
 
-        return $this->cacheService->remember($cacheKey, function () use($request) {
-        $query = QueryBuilder::for($this->model->query())
-            ->select(['id', 'name'])
-            ->allowedFilters([
-                AllowedFilter::callback('inputGeneral', function ($query, $value) {
-                    $query->where(function ($subQuery) use ($value) {
-                        $subQuery->orWhere('name', 'like', "%$value%");
-                    });
-                }),
-            ])
-            ->allowedSorts([
-                'name',
+        return $this->cacheService->remember($cacheKey, function () use ($request) {
+            $query = QueryBuilder::for($this->model->query())
+                ->select(['id', 'name'])
+                ->allowedFilters([
+                    AllowedFilter::callback('inputGeneral', function ($query, $value) {
+                        $query->where(function ($subQuery) use ($value) {
+                            $subQuery->orWhere('name', 'like', "%$value%");
+                        });
+                    }),
+                ])
+                ->allowedSorts([
+                    'name',
             ])->where(function ($query) use ($request) {
 
                 if (isset($request['searchQueryInfinite']) && ! empty($request['searchQueryInfinite'])) {
-                    $query->orWhere('name', 'like', '%' . $request['searchQueryInfinite'] . '%');
+                    $query->orWhere('name', 'like', '%'.$request['searchQueryInfinite'].'%');
                 }
 
                 if (! empty($request['company_id'])) {
@@ -46,13 +42,13 @@ class TypeDocumentRepository extends BaseRepository
 
             });
 
-        if (empty($request['typeData'])) {
-            $query = $query->paginate(request()->perPage ?? Constants::ITEMS_PER_PAGE);
-        } else {
-            $query = $query->get();
-        }
+            if (empty($request['typeData'])) {
+                $query = $query->paginate(request()->perPage ?? Constants::ITEMS_PER_PAGE);
+            } else {
+                $query = $query->get();
+            }
 
-        return $query;
+            return $query;
         }, Constants::REDIS_TTL);
     }
 
@@ -85,7 +81,7 @@ class TypeDocumentRepository extends BaseRepository
                 $query->whereIn('id', $request['idsAllowed']);
             }
             if (! empty($request['string'])) {
-                $query->where( 'name', 'like', '%' . $request['string'] . '%');
+                $query->where('name', 'like', '%'.$request['string'].'%');
             }
         });
 

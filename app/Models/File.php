@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class File extends Model
 {
-    use HasFactory, HasUuids, SoftDeletes, Cacheable;
+    use Cacheable, HasFactory, HasUuids, SoftDeletes;
 
     public function fileable()
     {
@@ -19,6 +19,6 @@ class File extends Model
 
     public function user()
     {
-        return $this->hasOne(User::class, "id", "user_id");
+        return $this->hasOne(User::class, 'id', 'user_id');
     }
 }

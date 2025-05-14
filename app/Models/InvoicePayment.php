@@ -39,7 +39,6 @@ class InvoicePayment extends Model
         });
     }
 
-
     public function invoice(): BelongsTo
     {
         return $this->belongsTo(Invoice::class, 'invoice_id');

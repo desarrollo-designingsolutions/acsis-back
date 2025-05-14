@@ -11,6 +11,4 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class TipoNota extends Model
 {
     use Cacheable, HasFactory, HasUuids, SoftDeletes;
-
-
 }

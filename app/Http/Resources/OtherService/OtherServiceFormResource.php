@@ -19,23 +19,23 @@ class OtherServiceFormResource extends JsonResource
     public function toArray(Request $request): array
     {
 
-        $cupsRips = CupsRips::where("codigo", $this->codTecnologiaSalud)->first();
+        $cupsRips = CupsRips::where('codigo', $this->codTecnologiaSalud)->first();
         $codTecnologiaSalud = new CupsRipsSelectInfiniteResource($cupsRips);
 
         return [
             'id' => $this->id,
             'invoice_id' => $this->service->invoice_id,
-            "numAutorizacion" => $this->numAutorizacion,
-            "idMIPRES" => $this->idMIPRES,
-            "fechaSuministroTecnologia" => $this->fechaSuministroTecnologia,
-            "tipoOS_id" => new TipoOtrosServiciosSelectResource($this->tipoOtrosServicio),
-            "codTecnologiaSalud" => $codTecnologiaSalud,
-            "nomTecnologiaSalud" =>  $this->nomTecnologiaSalud,
-            "cantidadOS" => $this->cantidadOS,
-            "vrUnitOS" => $this->vrUnitOS,
-            "valorPagoModerador" => $this->valorPagoModerador,
-            "vrServicio" => $this->vrServicio,
-            "conceptoRecaudo_id" => new ConceptoRecaudoSelectResource($this->conceptoRecaudo),
+            'numAutorizacion' => $this->numAutorizacion,
+            'idMIPRES' => $this->idMIPRES,
+            'fechaSuministroTecnologia' => $this->fechaSuministroTecnologia,
+            'tipoOS_id' => new TipoOtrosServiciosSelectResource($this->tipoOtrosServicio),
+            'codTecnologiaSalud' => $codTecnologiaSalud,
+            'nomTecnologiaSalud' => $this->nomTecnologiaSalud,
+            'cantidadOS' => $this->cantidadOS,
+            'vrUnitOS' => $this->vrUnitOS,
+            'valorPagoModerador' => $this->valorPagoModerador,
+            'vrServicio' => $this->vrServicio,
+            'conceptoRecaudo_id' => new ConceptoRecaudoSelectResource($this->conceptoRecaudo),
         ];
     }
 }

@@ -66,7 +66,7 @@ function generatePastelColor($opacity = 1.0)
 function truncate_text($text, $maxLength = 15)
 {
     if (strlen($text) > $maxLength) {
-        return substr($text, 0, $maxLength) . '...';
+        return substr($text, 0, $maxLength).'...';
     }
 
     return $text;
@@ -77,7 +77,7 @@ function formatNumber($number, $currency_symbol = '$ ', $decimal = 2)
     // Asegúrate de que el número es un número flotante
     $formattedNumber = number_format((float) $number, $decimal, ',', '.');
 
-    return $currency_symbol . $formattedNumber;
+    return $currency_symbol.$formattedNumber;
 }
 
 function formattedElement($element)
@@ -116,10 +116,9 @@ function convertNullToEmptyString(array $data): array
     }, $data);
 }
 
-
 function changeServiceData($service_id)
 {
-    $service = Service::with(["invoice"])->find($service_id);
+    $service = Service::with(['invoice'])->find($service_id);
 
     // Calcular el valor total de las glosas para el servicio
     $value_glosa = $service->glosas->sum('glosa_value');
@@ -153,14 +152,13 @@ function changeServiceData($service_id)
     Invoice::updateTotalFromServices($service->invoice_id);
 }
 
-
 function updateInvoiceServicesJson(string $invoice_id, TypeServiceEnum $serviceType, array $serviceData = [], string $action = 'add', ?int $consecutivo = null)
 {
     // Load invoice to get path_json and invoice_number
     $invoice = Invoice::select(['id', 'path_json', 'invoice_number', 'company_id'])->find($invoice_id);
 
     // Define file path
-    $nameFile = $invoice->invoice_number . '.json';
+    $nameFile = $invoice->invoice_number.'.json';
     $path = "companies/company_{$invoice->company_id}/invoices/invoice_{$invoice->id}/{$nameFile}";
     $disk = Constants::DISK_FILES;
 
@@ -218,7 +216,7 @@ function updateInvoiceServicesJson(string $invoice_id, TypeServiceEnum $serviceT
             }
             $jsonData['usuarios'][0]['servicios'][$serviceType->elementJson()] = array_filter(
                 $jsonData['usuarios'][0]['servicios'][$serviceType->elementJson()],
-                fn($service) => $service['consecutivo'] !== $consecutivo
+                fn ($service) => $service['consecutivo'] !== $consecutivo
             );
             // Reindex consecutivos in JSON
             $newServices = [];
@@ -245,7 +243,6 @@ function updateInvoiceServicesJson(string $invoice_id, TypeServiceEnum $serviceT
     return $jsonData;
 }
 
-
 function getNextConsecutivo(string $invoice_id, TypeServiceEnum $typeService)
 {
     // Check JSON first
@@ -256,7 +253,7 @@ function getNextConsecutivo(string $invoice_id, TypeServiceEnum $typeService)
     $maxConsecutivo = 0;
     if (Storage::disk($disk)->exists($path)) {
         $jsonData = json_decode(Storage::disk($disk)->get($path), true);
-        if (!empty($jsonData['usuarios'][0]['servicios'][$typeService->elementJson()])) {
+        if (! empty($jsonData['usuarios'][0]['servicios'][$typeService->elementJson()])) {
             $maxConsecutivo = max(array_column($jsonData['usuarios'][0]['servicios'][$typeService->elementJson()], 'consecutivo'));
         }
     }
@@ -268,7 +265,6 @@ function getNextConsecutivo(string $invoice_id, TypeServiceEnum $typeService)
 
     return max($maxConsecutivo, $dbMaxConsecutivo) + 1;
 }
-
 
 function reindexConsecutivos(string $invoice_id, TypeServiceEnum $typeService)
 {

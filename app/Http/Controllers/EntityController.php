@@ -8,15 +8,14 @@ use App\Http\Resources\Entity\EntityFormResource;
 use App\Http\Resources\Entity\EntityListResource;
 use App\Http\Resources\TypeEntity\TypeEntitySelectResource;
 use App\Repositories\EntityRepository;
-use App\Traits\HttpResponseTrait;
 use App\Repositories\TypeEntityRepository;
+use App\Traits\HttpResponseTrait;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 
 class EntityController extends Controller
 {
     use HttpResponseTrait;
-
 
     public function __construct(
         protected EntityRepository $entityRepository,
@@ -127,7 +126,7 @@ class EntityController extends Controller
 
             return [
                 'code' => 200,
-                'message' => 'Entidad ' . $msg . ' con éxito',
+                'message' => 'Entidad '.$msg.' con éxito',
             ];
         });
     }

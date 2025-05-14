@@ -36,6 +36,7 @@ class DatabaseSeeder extends Seeder
             GeneralCodeGlosaSeeder::class,
             CodeGlosaSeeder::class,
             CupsRipsSeeder::class,
+            CupsRipsSeeder2::class,
 
             TipoNotaSeeder::class,
             TipoIdPisisSeeder::class,
@@ -51,6 +52,7 @@ class DatabaseSeeder extends Seeder
             RipsFinalidadConsultaVersion2Seeder::class,
             RipsCausaExternaVersion2Seeder::class,
             Cie10Seeder::class,
+            Cie10Seeder2::class,
             RipsTipoDiagnosticoPrincipalVersion2Seeder::class,
             ConceptoRecaudoSeeder::class,
             ViaIngresoUsuarioSeeder::class,

@@ -69,7 +69,7 @@ class DashboardController extends Controller
             '09' => 'Sep',
             '10' => 'Oct',
             '11' => 'Nov',
-            '12' => 'Dic'
+            '12' => 'Dic',
         ];
 
         // Inicializar los meses con 0 para asegurar que todos los meses aparezcan
@@ -115,13 +115,13 @@ class DashboardController extends Controller
                 'description' => $case->description(),
                 'color' => $case->backgroundColor(),
             ];
+
             return $carry;
         }, []);
 
-
         foreach ($distribution as $item) {
             $value = collect($item);
-            $statusValue = $value["status"];
+            $statusValue = $value['status'];
             if (isset($statusMap[$statusValue])) {
                 $labels[] = $statusMap[$statusValue]['description'];
                 $counts[] = (int) $item->count;

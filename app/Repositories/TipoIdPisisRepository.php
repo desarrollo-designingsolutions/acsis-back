@@ -33,8 +33,8 @@ class TipoIdPisisRepository extends BaseRepository
                 ->allowedSorts([])
                 ->where(function ($query) use ($request) {
                     if (isset($request['searchQueryInfinite']) && ! empty($request['searchQueryInfinite'])) {
-                        $query->orWhere('codigo', 'like', '%' . $request['searchQueryInfinite'] . '%');
-                        $query->orWhere('nombre', 'like', '%' . $request['searchQueryInfinite'] . '%');
+                        $query->orWhere('codigo', 'like', '%'.$request['searchQueryInfinite'].'%');
+                        $query->orWhere('nombre', 'like', '%'.$request['searchQueryInfinite'].'%');
                     }
                 });
 
@@ -84,11 +84,11 @@ class TipoIdPisisRepository extends BaseRepository
         $query->where(function ($query) use ($request) {
             if (! empty($request['string'])) {
                 $value = strval($request['string']);
-                $query->orWhere('document', 'like', '%' . $value . '%');
-                $query->orWhere('first_name', 'like', '%' . $value . '%');
-                $query->orWhere('second_name', 'like', '%' . $value . '%');
-                $query->orWhere('first_surname', 'like', '%' . $value . '%');
-                $query->orWhere('second_surname', 'like', '%' . $value . '%');
+                $query->orWhere('document', 'like', '%'.$value.'%');
+                $query->orWhere('first_name', 'like', '%'.$value.'%');
+                $query->orWhere('second_name', 'like', '%'.$value.'%');
+                $query->orWhere('first_surname', 'like', '%'.$value.'%');
+                $query->orWhere('second_surname', 'like', '%'.$value.'%');
             }
         });
         // Aplica el límite si está definido
@@ -99,7 +99,7 @@ class TipoIdPisisRepository extends BaseRepository
         $data = $query->get()->map(function ($value) use ($with, $select, $fieldValue, $fieldTitle) {
             $data = [
                 'value' => $value->$fieldValue,
-                'title' => $value->document . ' - ' . $value->$fieldTitle,
+                'title' => $value->document.' - '.$value->$fieldTitle,
                 'id' => $value->id,
                 'type_document' => new TypeDocumentSelectResource($value->typeDocument),
                 'document' => $value->document,
@@ -126,7 +126,7 @@ class TipoIdPisisRepository extends BaseRepository
         return $data;
     }
 
-    public function  searchOne($request = [], $with = [], $select = ["*"], $format = null)
+    public function searchOne($request = [], $with = [], $select = ['*'], $format = null)
     {
         $params = [
             'request' => $request,
@@ -156,7 +156,7 @@ class TipoIdPisisRepository extends BaseRepository
 
             // Construcción de la consulta
             $query = $query->with($with)->where(function ($query) use ($request) {
-                if (!empty($request['codigo'])) {
+                if (! empty($request['codigo'])) {
                     $query->where('codigo', $request['codigo']);
                 }
             });
@@ -170,7 +170,7 @@ class TipoIdPisisRepository extends BaseRepository
                     case 'selectInfinite':
                         return [
                             'value' => $data->id,
-                            'title' => $data->codigo . ' - ' . $data->nombre,
+                            'title' => $data->codigo.' - '.$data->nombre,
                             'code' => $data->codigo,
                         ];
                     default:

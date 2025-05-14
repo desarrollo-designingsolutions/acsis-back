@@ -33,7 +33,6 @@ class GlosaRepository extends BaseRepository
 
                             QueryFilters::filterByDMYtoYMD($query, $value, 'date');
 
-
                             $query->orWhere(function ($subQuery) use ($value) {
                                 $normalizedValue = preg_replace('/[\$\s\.,]/', '', $value);
                                 $subQuery->where('glosa_value', 'like', "%$normalizedValue%");
@@ -81,10 +80,9 @@ class GlosaRepository extends BaseRepository
             })
             ->where(function ($query) use ($request) {
                 if (isset($request['searchQueryInfinite']) && ! empty($request['searchQueryInfinite'])) {
-                    $query->orWhere('name', 'like', '%' . $request['searchQueryInfinite'] . '%');
+                    $query->orWhere('name', 'like', '%'.$request['searchQueryInfinite'].'%');
                 }
             });
-
 
         if (empty($request['typeData'])) {
             $data = $data->paginate($request['perPage'] ?? 10);

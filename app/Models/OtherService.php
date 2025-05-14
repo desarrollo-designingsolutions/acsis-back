@@ -21,10 +21,11 @@ class OtherService extends Model
 
     public function tipoOtrosServicio()
     {
-        return $this->belongsTo(TipoOtrosServicios::class, "tipoOS_id");
+        return $this->belongsTo(TipoOtrosServicios::class, 'tipoOS_id');
     }
+
     public function conceptoRecaudo()
     {
-        return $this->belongsTo(ConceptoRecaudo::class, "conceptoRecaudo_id");
+        return $this->belongsTo(ConceptoRecaudo::class, 'conceptoRecaudo_id');
     }
 }

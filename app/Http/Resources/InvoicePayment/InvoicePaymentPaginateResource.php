@@ -19,7 +19,7 @@ class InvoicePaymentPaginateResource extends JsonResource
         return [
             'id' => $this->id,
             'value_paid' => formatNumber($this->value_paid),
-            'date_payment' =>  Carbon::parse($this->date_payment)->format("d-m-Y"),
+            'date_payment' => Carbon::parse($this->date_payment)->format('d-m-Y'),
             'observations' => $this->observations,
         ];
     }

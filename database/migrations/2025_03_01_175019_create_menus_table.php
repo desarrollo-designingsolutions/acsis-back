@@ -16,7 +16,7 @@ return new class extends Migration
             $table->double('order'); // Orden del menu
             $table->string('title'); // Texto en el boton
             $table->string('to')->nullable(); // to del boton y name del route
-            $table->string('icon')->nullable();; // icono
+            $table->string('icon')->nullable(); // icono
             $table->string('requiredPermission')->nullable(); // Esta ruta requiere permisos de XXXX
             $table->integer('father')->nullable(); // padre
             $table->boolean('heading')->nullable()->default(0); // cabecera

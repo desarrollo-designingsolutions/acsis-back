@@ -298,7 +298,7 @@ class BaseRepository
      */
     public function clearNull($array)
     {
-        return array_map(fn($value) => in_array($value, ['null', 'undefined']) ? null : $value, $array);
+        return array_map(fn ($value) => in_array($value, ['null', 'undefined']) ? null : $value, $array);
     }
 
     // ---- Configuración ----

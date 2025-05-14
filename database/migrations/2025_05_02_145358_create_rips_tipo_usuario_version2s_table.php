@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('rips_tipo_usuario_version2s', function (Blueprint $table) {
-            $table->uuid("id")->primary();
+            $table->uuid('id')->primary();
             $table->string('codigo')->nullable();
             $table->string('nombre')->nullable();
             $table->string('descripcion')->nullable();

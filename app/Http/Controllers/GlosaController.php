@@ -46,9 +46,10 @@ class GlosaController extends Controller
         return $this->execute(function () {
 
             $codeGlosa = $this->queryController->selectInfiniteCodeGlosa(request());
+
             return [
                 'code' => 200,
-                ...$codeGlosa
+                ...$codeGlosa,
             ];
         });
     }
@@ -57,12 +58,12 @@ class GlosaController extends Controller
     {
 
         return $this->runTransaction(function () use ($request) {
-            $post = $request->except(["file"]);
+            $post = $request->except(['file']);
             $glosa = $this->glosaRepository->store($post);
 
             if ($request->file('file')) {
                 $file = $request->file('file');
-                $ruta = 'companies/company_' . $glosa->company_id . '/glosas/glosa_' . $glosa->id . $request->input('file');
+                $ruta = 'companies/company_'.$glosa->company_id.'/glosas/glosa_'.$glosa->id.$request->input('file');
 
                 $file = $file->store($ruta, Constants::DISK_FILES);
                 $glosa->file = $file;
@@ -84,10 +85,11 @@ class GlosaController extends Controller
             $form = new GlosaFormResource($glosa);
 
             $codeGlosa = $this->queryController->selectInfiniteCodeGlosa(request());
+
             return [
                 'code' => 200,
                 'form' => $form,
-                ...$codeGlosa
+                ...$codeGlosa,
             ];
         });
     }
@@ -110,12 +112,12 @@ class GlosaController extends Controller
     {
         return $this->runTransaction(function () use ($request) {
 
-            $post = $request->except(["file"]);
+            $post = $request->except(['file']);
             $glosa = $this->glosaRepository->store($post);
 
             if ($request->file('file')) {
                 $file = $request->file('file');
-                $ruta = 'companies/company_' . $glosa->company_id . '/glosas/glosa_' . $glosa->id . $request->input('file');
+                $ruta = 'companies/company_'.$glosa->company_id.'/glosas/glosa_'.$glosa->id.$request->input('file');
 
                 $file = $file->store($ruta, Constants::DISK_FILES);
                 $glosa->file = $file;
@@ -148,7 +150,6 @@ class GlosaController extends Controller
             ];
         }, 200);
     }
-
 
     public function createMasive()
     {
@@ -184,9 +185,9 @@ class GlosaController extends Controller
 
                     $glosa = $this->glosaRepository->store($data);
 
-                    if ($request->file('file_file' . $key)) {
-                        $file = $request->file('file_file' . $key);
-                        $ruta = 'companies/company_' . $glosa->company_id . '/glosas/glosa_' . $glosa->id . $request->input('file_file' . $key);
+                    if ($request->file('file_file'.$key)) {
+                        $file = $request->file('file_file'.$key);
+                        $ruta = 'companies/company_'.$glosa->company_id.'/glosas/glosa_'.$glosa->id.$request->input('file_file'.$key);
 
                         $file = $file->store($ruta, Constants::DISK_FILES);
                         $glosa->file = $file;
@@ -194,7 +195,6 @@ class GlosaController extends Controller
                     }
                 }
             }
-
 
             return [
                 'code' => 200,

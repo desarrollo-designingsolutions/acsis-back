@@ -16,7 +16,7 @@ class CodeGlosaRepository extends BaseRepository
     {
         $cacheKey = $this->cacheService->generateKey("{$this->model->getTable()}_list", $request, 'string');
 
-        return $this->cacheService->remember($cacheKey, function () use ($request, $with, $select, $idsAllowed, $idsNotAllowed) {
+        return $this->cacheService->remember($cacheKey, function () use ($request, $with) {
 
             $data = $this->model->with($with)->where(function ($query) {})
                 ->where(function ($query) use ($request) {
@@ -27,11 +27,10 @@ class CodeGlosaRepository extends BaseRepository
                 })
                 ->where(function ($query) use ($request) {
                     if (isset($request['searchQueryInfinite']) && ! empty($request['searchQueryInfinite'])) {
-                        $query->where('code', 'like', '%' . $request['searchQueryInfinite'] . '%');
-                        $query->orWhere('description', 'like', '%' . $request['searchQueryInfinite'] . '%');
+                        $query->where('code', 'like', '%'.$request['searchQueryInfinite'].'%');
+                        $query->orWhere('description', 'like', '%'.$request['searchQueryInfinite'].'%');
                     }
                 });
-
 
             if (empty($request['typeData'])) {
                 $data = $data->paginate($request['perPage'] ?? 10);
@@ -71,8 +70,8 @@ class CodeGlosaRepository extends BaseRepository
                 $query->where('company_id', $request['company_id']);
             }
             if (! empty($request['string'])) {
-                $query->where('description', 'like', '%' . $request['string'] . '%');
-                $query->orWhere('code', 'like', '%' . $request['string'] . '%');
+                $query->where('description', 'like', '%'.$request['string'].'%');
+                $query->orWhere('code', 'like', '%'.$request['string'].'%');
             }
         });
 
@@ -81,10 +80,10 @@ class CodeGlosaRepository extends BaseRepository
             $query->limit($limit);
         }
 
-        $data = $query->get()->map(function ($value) use ($with, $select, $fieldValue, $fieldTitle) {
+        $data = $query->get()->map(function ($value) use ($with, $select, $fieldValue) {
             $data = [
                 'value' => $value->$fieldValue,
-                'title' => $value->code . ' - ' . $value->description,
+                'title' => $value->code.' - '.$value->description,
             ];
 
             if (count($select) > 0) {
