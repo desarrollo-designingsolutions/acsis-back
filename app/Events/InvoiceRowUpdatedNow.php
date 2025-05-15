@@ -42,6 +42,7 @@ class InvoiceRowUpdatedNow implements ShouldBroadcastNow
             'status_xml' => $this->invoice->status_xml,
             'status_xml_backgroundColor' => $this->invoice->status_xml->BackgroundColor(),
             'status_xml_description' => $this->invoice->status_xml->description(),
+            'path_xml' => $this->invoice->path_xml,
         ];
     }
 }

@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use App\Enums\Invoice\StatusXmlInvoiceEnum;
 use App\Enums\Invoice\TypeInvoiceEnum;
 use App\Events\InvoiceRowUpdatedNow;
-use App\Exports\InvoiceExcelExport;
+use App\Exports\Invoice\InvoiceExcelErrorsValidationXmlExport;
+use App\Exports\Invoice\InvoiceExcelExport;
 use App\Helpers\Constants;
 use App\Http\Requests\Invoice\InvoiceStoreRequest;
 use App\Http\Resources\Invoice\InvoiceFormResource;
@@ -504,7 +505,7 @@ class InvoiceController extends Controller
                 $company_id = $request->input('company_id');
                 $invoice_id = $request->input('invoice_id');
 
-                $invoice = $this->invoiceRepository->find($invoice_id, with: ["serviceVendor:id,nit"], select: ["id", "path_json", "invoice_number", "path_xml", "status_xml", "service_vendor_id"]);
+                $invoice = $this->invoiceRepository->find($invoice_id, with: ["serviceVendor:id,nit"], select: ["id", "type", "path_json", "invoice_number", "path_xml", "status_xml", "service_vendor_id"]);
                 $jsonContents = openFileJson($invoice->path_json);
                 $file = $request->file('archiveXml');
 
@@ -541,7 +542,6 @@ class InvoiceController extends Controller
                     'code' => 200,
                     'message' => $infoValidation['totalErrorMessages'] == 0 ? 'Archivo subido con éxito' : 'Validaciones finalizadas',
                     'invoice' => $invoice,
-                    'validationXml' => $infoValidation,
                 ];
             }
         });
@@ -557,6 +557,26 @@ class InvoiceController extends Controller
             return [
                 'code' => 200,
                 'errorMessages' => json_decode($invoice->validationXml, 1),
+            ];
+        });
+    }
+
+    public function excelErrorsValidation($id)
+    {
+        return $this->execute(function () use ($id) {
+
+            // Obtener los mensajes de errores de las validaciones
+            $invoice = $this->invoiceRepository->find($id, select: ["id", "validationXml"]);
+            $errorMessages = json_decode($invoice->validationXml, 1);
+
+
+            $excel = Excel::raw(new InvoiceExcelErrorsValidationXmlExport($errorMessages), \Maatwebsite\Excel\Excel::XLSX);
+
+            $excelBase64 = base64_encode($excel);
+
+            return [
+                'code' => 200,
+                'excel' => $excelBase64,
             ];
         });
     }

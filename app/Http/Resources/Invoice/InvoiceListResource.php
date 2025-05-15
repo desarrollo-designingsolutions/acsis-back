@@ -33,6 +33,8 @@ class InvoiceListResource extends JsonResource
             'status_xml_backgroundColor' => $this->status_xml->backgroundColor(),
             'status_xml_description' => $this->status_xml->description(),
 
+            'path_xml' => $this->path_xml,
+
         ];
     }
 }

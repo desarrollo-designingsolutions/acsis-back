@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Enums\Invoice\StatusInvoiceEnum;
+use App\Enums\Invoice\StatusXmlInvoiceEnum;
 use App\Enums\Invoice\TypeInvoiceEnum;
 use App\Helpers\Constants;
 use App\Models\Invoice;
@@ -28,7 +29,7 @@ class InvoiceRepository extends BaseRepository
         return $this->cacheService->remember($cacheKey, function () use ($request) {
             $query = QueryBuilder::for($this->model->query())
                 ->with(['patient', 'entity'])
-                ->select(['invoices.id', 'invoices.entity_id', 'invoices.type', 'invoices.patient_id', 'invoices.invoice_number', 'invoices.radication_number', 'invoices.value_glosa', 'invoices.value_paid', 'invoices.invoice_date', 'invoices.radication_date', 'invoices.is_active', 'invoices.status', 'invoices.status_xml'])
+                ->select(['invoices.id', 'invoices.entity_id', 'invoices.type', 'invoices.patient_id', 'invoices.invoice_number', 'invoices.radication_number', 'invoices.value_glosa', 'invoices.value_paid', 'invoices.invoice_date', 'invoices.radication_date', 'invoices.is_active', 'invoices.status', 'invoices.status_xml', 'invoices.path_xml'])
                 ->allowedFilters([
 
                     AllowedFilter::callback('inputGeneral', function ($query, $value) {
@@ -63,6 +64,11 @@ class InvoiceRepository extends BaseRepository
                                 StatusInvoiceEnum::INVOICE_STATUS_006->description() => StatusInvoiceEnum::INVOICE_STATUS_006,
                                 StatusInvoiceEnum::INVOICE_STATUS_007->description() => StatusInvoiceEnum::INVOICE_STATUS_007,
                             ]);
+                            QueryFilters::filterByText($subQuery, $value, 'status_xml', [
+                                StatusXmlInvoiceEnum::INVOICE_STATUS_XML_001->description() => StatusXmlInvoiceEnum::INVOICE_STATUS_XML_001,
+                                StatusXmlInvoiceEnum::INVOICE_STATUS_XML_002->description() => StatusXmlInvoiceEnum::INVOICE_STATUS_XML_002,
+                                StatusXmlInvoiceEnum::INVOICE_STATUS_XML_003->description() => StatusXmlInvoiceEnum::INVOICE_STATUS_XML_003,
+                            ]);
                         });
                     }),
                     AllowedFilter::custom('status', new DataSelectFilter),
@@ -75,6 +81,7 @@ class InvoiceRepository extends BaseRepository
                     'value_glosa',
                     'value_paid',
                     'status',
+                    'status_xml',
                     AllowedSort::custom('entity_name', new RelatedTableSort('invoices', 'entities', 'corporate_name', 'entity_id')),
                     AllowedSort::custom('patient_name', new RelatedTableSort('invoices', 'patients', 'first_name', 'patient_id')),
                 ])->where(function ($query) use ($request) {
