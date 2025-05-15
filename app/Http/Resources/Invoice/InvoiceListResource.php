@@ -25,8 +25,14 @@ class InvoiceListResource extends JsonResource
             'value_glosa' => formatNumber($this->value_glosa),
             'radication_date' => Carbon::parse($this->radication_date)->format('d-m-Y'),
             'patient_name' => $this->patient?->full_name,
+
             'status' => $this->status,
             'status_description' => $this->status?->description(),
+
+            'status_xml' => $this->status_xml,
+            'status_xml_backgroundColor' => $this->status_xml->backgroundColor(),
+            'status_xml_description' => $this->status_xml->description(),
+
         ];
     }
 }

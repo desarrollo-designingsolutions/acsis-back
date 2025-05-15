@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\Invoice\StatusInvoiceEnum;
+use App\Enums\Invoice\StatusXmlInvoiceEnum;
 use App\Enums\Invoice\TypeInvoiceEnum;
 use App\Events\InvoiceRowUpdatedNow;
 use App\Traits\Cacheable;
@@ -22,6 +23,7 @@ class Invoice extends Model
         'is_active' => 'boolean',
         'type' => TypeInvoiceEnum::class,
         'status' => StatusInvoiceEnum::class,
+        'status_xml' => StatusXmlInvoiceEnum::class,
     ];
 
     public function company()

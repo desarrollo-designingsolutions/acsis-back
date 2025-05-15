@@ -30,7 +30,9 @@ Route::middleware(['check.permission:menu.invoice'])->group(function () {
 
     Route::post('/invoice/validateInvoiceNumber', [InvoiceController::class, 'validateInvoiceNumber']);
 
-    Route::post('/invoice/getInfoJson', [InvoiceController::class, 'getInfoJson']);
-
     Route::get('/invoice/downloadJson/{id}', [InvoiceController::class, 'downloadJson']);
+
+    Route::post('/invoice/uploadXml', [InvoiceController::class, 'uploadXml']);
+
+    Route::get('/invoice/showErrorsValidationXml/{id}', [InvoiceController::class, 'showErrorsValidationXml']);
 });

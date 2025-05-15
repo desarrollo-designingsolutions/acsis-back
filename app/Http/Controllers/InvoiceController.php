@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\Invoice\StatusXmlInvoiceEnum;
 use App\Enums\Invoice\TypeInvoiceEnum;
+use App\Events\InvoiceRowUpdatedNow;
 use App\Exports\InvoiceExcelExport;
 use App\Helpers\Constants;
 use App\Http\Requests\Invoice\InvoiceStoreRequest;
@@ -134,6 +136,7 @@ class InvoiceController extends Controller
 
             $post['typeable_type'] = $infoDataExtra['model'];
             $post['typeable_id'] = $infoDataExtra['id'];
+            $post['status_xml'] = StatusXmlInvoiceEnum::INVOICE_STATUS_XML_001;
 
             $invoice = $this->invoiceRepository->store($post);
 
@@ -311,336 +314,6 @@ class InvoiceController extends Controller
         });
     }
 
-    public function getInfoJson(Request $request)
-    {
-        return $this->execute(function () use ($request) {
-
-            $invoice = $this->invoiceRepository->find($request->input('id'));
-            $path = $invoice->path_json;
-            $disk = Constants::DISK_FILES;
-            $json = Storage::disk($disk)->get($path);
-            $json = json_decode($json, true);
-
-            // Verificar si existe el primer elemento de 'usuarios'
-            $firstUser = isset($json['usuarios']) && is_array($json['usuarios']) && ! empty($json['usuarios'][0])
-                ? $json['usuarios'][0]
-                : [];
-
-            $dataUser = collect([$firstUser])->map(function ($value) {
-                $user = $value; // Copia todos los campos del usuario );
-
-                // MAPEO SERVICIOS DE CONSULTAS
-                $consultas = collect($user['servicios']['consultas'])->map(function ($service) {
-
-                    // CODIGO DE CONSULTA
-                    $service['codConsulta'] = $this->cupsRipsRepository->searchOne([
-                        'codigo' => getValueSelectInfinite($service['codConsulta'], 'code'),
-                    ], format: 'selectInfinite');
-
-                    // MODALIDAD GRUPO SERVICIO TECSAL
-                    $service['modalidadGrupoServicioTecSal'] = $this->modalidadAtencionRepository->searchOne([
-                        'codigo' => getValueSelectInfinite($service['modalidadGrupoServicioTecSal'], 'code'),
-                    ], format: 'selectInfinite');
-
-                    // GRUPO SERVICIO
-                    $service['grupoServicios'] = $this->grupoServicioRepository->searchOne([
-                        'codigo' => getValueSelectInfinite($service['grupoServicios'], 'code'),
-                    ], format: 'selectInfinite');
-
-                    // SERVICIO
-                    $service['codServicio'] = $this->servicioRepository->searchOne([
-                        'codigo' => getValueSelectInfinite($service['codServicio'], 'code'),
-                    ], format: 'selectInfinite');
-
-                    // FINALIDAD TECNOLOGIA DE SALUD
-                    $service['finalidadTecnologiaSalud'] = $this->ripsFinalidadConsultaVersion2Repository->searchOne([
-                        'codigo' => getValueSelectInfinite($service['finalidadTecnologiaSalud'], 'code'),
-                    ], format: 'selectInfinite');
-
-                    // CAUSA MOTIVO DE ATENCION
-                    $service['causaMotivoAtencion'] = $this->ripsCausaExternaVersion2Repository->searchOne([
-                        'codigo' => getValueSelectInfinite($service['causaMotivoAtencion'], 'code'),
-                    ], format: 'selectInfinite');
-
-                    // DIAGNOSTICO PRINCIPAL
-                    $service['codDiagnosticoPrincipal'] = $this->cie10Repository->searchOne([
-                        'codigo' => getValueSelectInfinite($service['codDiagnosticoPrincipal'], 'code'),
-                    ], format: 'selectInfinite');
-
-                    // DIAGNOSTICO RELACIONADO 1
-                    $service['codDiagnosticoRelacionado1'] = $this->cie10Repository->searchOne([
-                        'codigo' => getValueSelectInfinite($service['codDiagnosticoRelacionado1'], 'code'),
-                    ], format: 'selectInfinite');
-
-                    // DIAGNOSTICO RELACIONADO 2
-                    $service['codDiagnosticoRelacionado2'] = $this->cie10Repository->searchOne([
-                        'codigo' => getValueSelectInfinite($service['codDiagnosticoRelacionado2'], 'code'),
-                    ], format: 'selectInfinite');
-
-                    // DIAGNOSTICO RELACIONADO 3
-                    $service['codDiagnosticoRelacionado3'] = $this->cie10Repository->searchOne([
-                        'codigo' => getValueSelectInfinite($service['codDiagnosticoRelacionado3'], 'code'),
-                    ], format: 'selectInfinite');
-
-                    // TIPO DIAGNOSTICO PRINCIPAL
-                    $service['tipoDiagnosticoPrincipal'] = $this->ripsTipoDiagnosticoPrincipalVersion2Repository->searchOne([
-                        'codigo' => getValueSelectInfinite($service['tipoDiagnosticoPrincipal'], 'code'),
-                    ], format: 'selectInfinite');
-
-                    // CONCEPTO RECAUDO
-                    $service['conceptoRecaudo'] = $this->conceptoRecaudoRepository->searchOne([
-                        'codigo' => getValueSelectInfinite($service['conceptoRecaudo'], 'code'),
-                    ], format: 'selectInfinite');
-
-                    return $service;
-                });
-
-                // MAPEO SERVICIOS DE PROCEDIMIENTOS
-                $procedimientos = collect($user['servicios']['procedimientos'])->map(function ($service) {
-
-                    // CODIGO DE PROCEDIMIENTO
-                    $service['codProcedimiento'] = $this->cupsRipsRepository->searchOne([
-                        'codigo' => getValueSelectInfinite($service['codProcedimiento'], 'code'),
-                    ], format: 'selectInfinite');
-
-                    // VIA INGRESO SERVICIO SALUD
-                    $service['viaIngresoServicioSalud'] = $this->viaIngresoUsuarioRepository->searchOne([
-                        'codigo' => getValueSelectInfinite($service['viaIngresoServicioSalud'], 'code'),
-                    ], format: 'selectInfinite');
-
-                    // MODALIDAD GRUPO SERVICIO TECSAL
-                    $service['modalidadGrupoServicioTecSal'] = $this->modalidadAtencionRepository->searchOne([
-                        'codigo' => getValueSelectInfinite($service['modalidadGrupoServicioTecSal'], 'code'),
-                    ], format: 'selectInfinite');
-
-                    // GRUPO SERVICIO
-                    $service['grupoServicios'] = $this->grupoServicioRepository->searchOne([
-                        'codigo' => getValueSelectInfinite($service['grupoServicios'], 'code'),
-                    ], format: 'selectInfinite');
-
-                    // SERVICIO
-                    $service['codServicio'] = $this->servicioRepository->searchOne([
-                        'codigo' => getValueSelectInfinite($service['codServicio'], 'code'),
-                    ], format: 'selectInfinite');
-
-                    // FINALIDAD TECNOLOGIA DE SALUD
-                    $service['finalidadTecnologiaSalud'] = $this->ripsFinalidadConsultaVersion2Repository->searchOne([
-                        'codigo' => getValueSelectInfinite($service['finalidadTecnologiaSalud'], 'code'),
-                    ], format: 'selectInfinite');
-
-                    // DIAGNOSTICO PRINCIPAL
-                    $service['codDiagnosticoPrincipal'] = $this->cie10Repository->searchOne([
-                        'codigo' => getValueSelectInfinite($service['codDiagnosticoPrincipal'], 'code'),
-                    ], format: 'selectInfinite');
-
-                    // DIAGNOSTICO RELACIONADO
-                    $service['codDiagnosticoRelacionado'] = $this->cie10Repository->searchOne([
-                        'codigo' => getValueSelectInfinite($service['codDiagnosticoRelacionado'], 'code'),
-                    ], format: 'selectInfinite');
-
-                    // CODIGO COMPLICACION
-                    $service['codComplicacion'] = $this->cie10Repository->searchOne([
-                        'codigo' => getValueSelectInfinite($service['codComplicacion'], 'code'),
-                    ], format: 'selectInfinite');
-
-                    // CONCEPTO RECAUDO
-                    $service['conceptoRecaudo'] = $this->conceptoRecaudoRepository->searchOne([
-                        'codigo' => getValueSelectInfinite($service['conceptoRecaudo'], 'code'),
-                    ], format: 'selectInfinite');
-
-                    return $service;
-                });
-
-                // MAPEO SERVICIOS DE URGENCIAS
-                $urgencias = collect($user['servicios']['urgencias'])->map(function ($service) {
-
-                    // CAUSA MOTIVO DE ATENCION
-                    $service['causaMotivoAtencion'] = $this->ripsCausaExternaVersion2Repository->searchOne([
-                        'codigo' => getValueSelectInfinite($service['causaMotivoAtencion'], 'code'),
-                    ], format: 'selectInfinite');
-
-                    // DIAGNOSTICO PRINCIPAL
-                    $service['codDiagnosticoPrincipal'] = $this->cie10Repository->searchOne([
-                        'codigo' => getValueSelectInfinite($service['codDiagnosticoPrincipal'], 'code'),
-                    ], format: 'selectInfinite');
-
-                    // DIAGNOSTICO PRINCIPAL E
-                    $service['codDiagnosticoPrincipalE'] = $this->cie10Repository->searchOne([
-                        'codigo' => getValueSelectInfinite($service['codDiagnosticoPrincipalE'], 'code'),
-                    ], format: 'selectInfinite');
-
-                    // DIAGNOSTICO RELACIONADO E1
-                    $service['codDiagnosticoRelacionadoE1'] = $this->cie10Repository->searchOne([
-                        'codigo' => getValueSelectInfinite($service['codDiagnosticoRelacionadoE1'], 'code'),
-                    ], format: 'selectInfinite');
-
-                    // DIAGNOSTICO RELACIONADO E2
-                    $service['codDiagnosticoRelacionadoE2'] = $this->cie10Repository->searchOne([
-                        'codigo' => getValueSelectInfinite($service['codDiagnosticoRelacionadoE2'], 'code'),
-                    ], format: 'selectInfinite');
-
-                    // DIAGNOSTICO RELACIONADO E3
-                    $service['codDiagnosticoRelacionadoE3'] = $this->cie10Repository->searchOne([
-                        'codigo' => getValueSelectInfinite($service['codDiagnosticoRelacionadoE3'], 'code'),
-                    ], format: 'selectInfinite');
-
-                    // DIAGNOSTICO CAUSA DE MUERTE
-                    $service['codDiagnosticoCausaMuerte'] = $this->cie10Repository->searchOne([
-                        'codigo' => getValueSelectInfinite($service['codDiagnosticoCausaMuerte'], 'code'),
-                    ], format: 'selectInfinite');
-
-                    return $service;
-                });
-                // MAPEO SERVICIOS DE HOSPITALIZACION
-                $hospitalizacion = collect($user['servicios']['hospitalizacion'])->map(function ($service) {
-
-                    // VIA INGRESO SERVICIO SALUD
-                    $service['viaIngresoServicioSalud'] = $this->viaIngresoUsuarioRepository->searchOne([
-                        'codigo' => getValueSelectInfinite($service['viaIngresoServicioSalud'], 'code'),
-                    ], format: 'selectInfinite');
-
-                    // CAUSA MOTIVO DE ATENCION
-                    $service['causaMotivoAtencion'] = $this->ripsCausaExternaVersion2Repository->searchOne([
-                        'codigo' => getValueSelectInfinite($service['causaMotivoAtencion'], 'code'),
-                    ], format: 'selectInfinite');
-
-                    // DIAGNOSTICO PRINCIPAL
-                    $service['codDiagnosticoPrincipal'] = $this->cie10Repository->searchOne([
-                        'codigo' => getValueSelectInfinite($service['codDiagnosticoPrincipal'], 'code'),
-                    ], format: 'selectInfinite');
-
-                    // DIAGNOSTICO PRINCIPAL E
-                    $service['codDiagnosticoPrincipalE'] = $this->cie10Repository->searchOne([
-                        'codigo' => getValueSelectInfinite($service['codDiagnosticoPrincipalE'], 'code'),
-                    ], format: 'selectInfinite');
-
-                    // DIAGNOSTICO PRINCIPAL E1
-                    $service['codDiagnosticoRelacionadoE1'] = $this->cie10Repository->searchOne([
-                        'codigo' => getValueSelectInfinite($service['codDiagnosticoRelacionadoE1'], 'code'),
-                    ], format: 'selectInfinite');
-
-                    // DIAGNOSTICO PRINCIPAL E2
-                    $service['codDiagnosticoRelacionadoE2'] = $this->cie10Repository->searchOne([
-                        'codigo' => getValueSelectInfinite($service['codDiagnosticoRelacionadoE2'], 'code'),
-                    ], format: 'selectInfinite');
-
-                    // DIAGNOSTICO PRINCIPAL E3
-                    $service['codDiagnosticoRelacionadoE3'] = $this->cie10Repository->searchOne([
-                        'codigo' => getValueSelectInfinite($service['codDiagnosticoRelacionadoE3'], 'code'),
-                    ], format: 'selectInfinite');
-
-                    // CODIGO COMPLICACION
-                    $service['codComplicacion'] = $this->cie10Repository->searchOne([
-                        'codigo' => getValueSelectInfinite($service['codComplicacion'], 'code'),
-                    ], format: 'selectInfinite');
-
-                    // CONDICION DESTINO USUARIO EGRESO
-                    $service['condicionDestinoUsuarioEgreso'] = $this->condicionyDestinoUsuarioEgresoRepository->searchOne([
-                        'codigo' => getValueSelectInfinite($service['condicionDestinoUsuarioEgreso'], 'code'),
-                    ], format: 'selectInfinite');
-
-                    // DIAGNOSTICO CAUSA DE MUERTE
-                    $service['codDiagnosticoMuerte'] = $this->cie10Repository->searchOne([
-                        'codigo' => getValueSelectInfinite($service['codDiagnosticoMuerte'], 'code'),
-                    ], format: 'selectInfinite');
-
-                    return $service;
-                });
-                // MAPEO SERVICIOS DE RECIEN NACIDOS
-                $recienNacidos = collect($user['servicios']['recienNacidos'])->map(function ($service) {
-
-                    // SEXO
-                    $service['codSexoBiologico'] = $this->sexoRepository->searchOne([
-                        'codigo' => getValueSelectInfinite($service['codSexoBiologico'], 'code'),
-                    ], format: 'selectInfinite');
-
-                    // DIAGNOSTICO PRINCIPAL
-                    $service['codDiagnosticoPrincipal'] = $this->cie10Repository->searchOne([
-                        'codigo' => getValueSelectInfinite($service['codDiagnosticoPrincipal'], 'code'),
-                    ], format: 'selectInfinite');
-
-                    // CONDICION DESTINO USUARIO EGRESO
-                    $service['condicionDestinoUsuarioEgreso'] = $this->condicionyDestinoUsuarioEgresoRepository->searchOne([
-                        'codigo' => getValueSelectInfinite($service['condicionDestinoUsuarioEgreso'], 'code'),
-                    ], format: 'selectInfinite');
-
-                    // DIAGNOSTICO CAUSA DE MUERTE
-                    $service['codDiagnosticoCausaMuerte'] = $this->cie10Repository->searchOne([
-                        'codigo' => getValueSelectInfinite($service['codDiagnosticoCausaMuerte'], 'code'),
-                    ], format: 'selectInfinite');
-
-                    return $service;
-                });
-                // MAPEO SERVICIOS DE MEDICAMENTOS
-                $medicamentos = collect($user['servicios']['medicamentos'])->map(function ($service) {
-
-                    // DIAGNOSTICO PRINCIPAL
-                    $service['codDiagnosticoPrincipal'] = $this->cie10Repository->searchOne([
-                        'codigo' => getValueSelectInfinite($service['codDiagnosticoPrincipal'], 'code'),
-                    ], format: 'selectInfinite');
-
-                    // DIAGNOSTICO RELACIONADO
-                    $service['codDiagnosticoRelacionado'] = $this->cie10Repository->searchOne([
-                        'codigo' => getValueSelectInfinite($service['codDiagnosticoRelacionado'], 'code'),
-                    ], format: 'selectInfinite');
-
-                    // TIPO MEDICAMENTO
-                    $service['tipoMedicamento'] = $this->tipoMedicamentoPosVersion2Repository->searchOne([
-                        'codigo' => getValueSelectInfinite($service['tipoMedicamento'], 'code'),
-                    ], format: 'selectInfinite');
-
-                    // UNIDAD DE MEDIDA
-                    $service['unidadMedida'] = $this->ummRepository->searchOne([
-                        'codigo' => getValueSelectInfinite($service['unidadMedida'], 'code'),
-                    ], format: 'selectInfinite');
-
-                    // CONCEPTO RECAUDO
-                    $service['conceptoRecaudo'] = $this->conceptoRecaudoRepository->searchOne([
-                        'codigo' => getValueSelectInfinite($service['conceptoRecaudo'], 'code'),
-                    ], format: 'selectInfinite');
-
-                    return $service;
-                });
-
-                // MAPEO SERVICIOS DE OTROS SERVICIOS
-                $otrosServicios = collect($user['servicios']['otrosServicios'])->map(function ($service) {
-
-                    // TIPO OTROS SERVICIOS
-                    $service['tipoOS'] = $this->tipoOtrosServiciosRepository->searchOne([
-                        'codigo' => getValueSelectInfinite($service['tipoOS'], 'code'),
-                    ], format: 'selectInfinite');
-
-                    // CONCEPTO RECAUDO
-                    $service['conceptoRecaudo'] = $this->conceptoRecaudoRepository->searchOne([
-                        'codigo' => getValueSelectInfinite($service['conceptoRecaudo'], 'code'),
-                    ], format: 'selectInfinite');
-
-                    return $service;
-                });
-
-                $user['servicios']['consultas'] = $consultas;
-                $user['servicios']['procedimientos'] = $procedimientos;
-                $user['servicios']['urgencias'] = $urgencias;
-                $user['servicios']['hospitalizacion'] = $hospitalizacion;
-                $user['servicios']['recienNacidos'] = $recienNacidos;
-                $user['servicios']['medicamentos'] = $medicamentos;
-                $user['servicios']['otrosServicios'] = $otrosServicios;
-
-                return $user;
-            });
-
-            return [
-                'code' => '200',
-                'dataUser' => $dataUser,
-            ];
-        });
-    }
-
-    /**
-     * Build the JSON structure for the invoice
-     *
-     * @param  int  $invoice_id
-     */
     private function buildInvoiceJson($invoice_id): array
     {
         // Load invoice with related data
@@ -702,7 +375,7 @@ class InvoiceController extends Controller
         $newData['usuarios'] = $users;
 
         // Define file path
-        $nameFile = $invoice->invoice_number.'.json';
+        $nameFile = $invoice->invoice_number . '.json';
         $path = "companies/company_{$invoice->company_id}/invoices/invoice_{$invoice->id}/{$nameFile}";
         $disk = Constants::DISK_FILES;
 
@@ -770,74 +443,9 @@ class InvoiceController extends Controller
         return $mergedData;
     }
 
-    /**
-     * Build the JSON structure for the invoice
-     */
-    private function buildInvoiceJson222($invoice_id): array
-    {
-        $invoice = $this->invoiceRepository->find($invoice_id, [
-            'tipoNota',
-            'serviceVendor',
-            'patient',
-            'patient.sexo',
-            'patient.rips_tipo_usuario_version2',
-            'patient.pais_residency',
-            'patient.municipio_residency',
-            'patient.zona_version2',
-            'patient.tipo_id_pisi',
-            'patient.pais_origin',
-        ]);
-
-        $patient = $invoice->patient;
-        $sexo = $invoice->patient->sexo;
-        $tipoUsuario = $invoice->patient->rips_tipo_usuario_version2;
-        $pais_residency = $invoice->patient->pais_residency;
-        $pais_origin = $invoice->patient->pais_origin;
-        $municipio = $invoice->patient->municipio_residency;
-        $zonaVersion2 = $invoice->patient->zona_version2;
-        $tipoIdPisis = $invoice->patient->tipo_id_pisi;
-        $tipoNota = $invoice->tipoNota;
-        $serviceVendor = $invoice->serviceVendor;
-
-        // Base invoice data
-        $baseData = [
-            'numDocumentoIdObligado' => $serviceVendor->nit,
-            'numFactura' => $invoice->invoice_number,
-            'TipoNota' => $tipoNota->codigo ?? '',
-            'numNota' => $invoice->note_number,
-        ];
-
-        // Convert null values to empty strings
-        $info = convertNullToEmptyString($baseData);
-
-        // Build user data
-        $users = [
-            [
-                'codSexo' => $sexo->codigo,
-                'consecutivo' => 1,
-                'incapacidad' => $patient->incapacity,
-                'tipoUsuario' => $tipoUsuario->codigo,
-                'codPaisOrigen' => $pais_origin->codigo,
-                'fechaNacimiento' => $patient->birth_date,
-                'codPaisResidencia' => $pais_residency->codigo,
-                'codMunicipioResidencia' => $municipio->codigo,
-                'numDocumentoIdentificacion' => $patient->document,
-                'tipoDocumentoIdentificacion' => $tipoIdPisis->codigo,
-                'codZonaTerritorialResidencia' => $zonaVersion2->codigo,
-            ],
-        ];
-
-        $info['usuarios'] = $users;
-
-        return $info;
-    }
-
-    /**
-     * Store or update the JSON file and save path in invoice
-     */
     private function storeJsonFile($invoice, array $jsonData): void
     {
-        $nameFile = $invoice->invoice_number.'.json';
+        $nameFile = $invoice->invoice_number . '.json';
         $path = "companies/company_{$invoice->company_id}/invoices/invoice_{$invoice->id}/{$nameFile}";
         $disk = Constants::DISK_FILES;
 
@@ -879,12 +487,77 @@ class InvoiceController extends Controller
 
         // Obtener el contenido del archivo
         $fileContent = Storage::disk($disk)->get($path);
-        $fileName = $invoice->invoice_number.'.json'; // Nombre del archivo para la descarga
+        $fileName = $invoice->invoice_number . '.json'; // Nombre del archivo para la descarga
 
         // Devolver el archivo como respuesta descargable
         return response($fileContent, 200, [
             'Content-Type' => 'application/json',
-            'Content-Disposition' => 'attachment; filename="'.$fileName.'"',
+            'Content-Disposition' => 'attachment; filename="' . $fileName . '"',
         ]);
+    }
+
+    public function uploadXml(Request $request)
+    {
+        return $this->execute(function () use ($request) {
+            if ($request->hasFile('archiveXml')) {
+                // Inicializar variables
+                $company_id = $request->input('company_id');
+                $invoice_id = $request->input('invoice_id');
+
+                $invoice = $this->invoiceRepository->find($invoice_id, with: ["serviceVendor:id,nit"], select: ["id", "path_json", "invoice_number", "path_xml", "status_xml", "service_vendor_id"]);
+                $jsonContents = openFileJson($invoice->path_json);
+                $file = $request->file('archiveXml');
+
+                $data = [
+                    'numInvoice' => $invoice->invoice_number,
+                    'file_name' => $file->getClientOriginalName(),
+                    'jsonContents' => $jsonContents,
+                ];
+
+                // Validar datos del XML
+                $infoValidation = validateDataFilesXml($request->file('archiveXml')->path(), $data);
+
+                // Determinar el estado y la ruta del archivo XML
+                if ($infoValidation['totalErrorMessages'] == 0) {
+                    $finalName = "{$invoice->serviceVendor->nit}_{$invoice->invoice_number}_FILEXML.xml";
+                    $finalPath = "companies/company_{$company_id}/invoices/{$invoice->type->value}/invoice_{$invoice->id}/{$invoice->invoice_number}/xml";
+
+                    $path = $file->storeAs($finalPath, $finalName, Constants::DISK_FILES);
+                    $invoice->path_xml = $path;
+                    $invoice->status_xml = StatusXmlInvoiceEnum::INVOICE_STATUS_XML_003;
+                    $invoice->validationXml = null;
+                } else {
+                    $invoice->status_xml = StatusXmlInvoiceEnum::INVOICE_STATUS_XML_002;
+                    $invoice->validationXml = json_encode($infoValidation['errorMessages']);
+                }
+
+                // Guardar el estado de la factura
+                $invoice->save();
+
+                InvoiceRowUpdatedNow::dispatch($invoice->id);
+
+                // Devolver la respuesta adecuada
+                return [
+                    'code' => 200,
+                    'message' => $infoValidation['totalErrorMessages'] == 0 ? 'Archivo subido con éxito' : 'Validaciones finalizadas',
+                    'invoice' => $invoice,
+                    'validationXml' => $infoValidation,
+                ];
+            }
+        });
+    }
+
+    public function showErrorsValidationXml($id)
+    {
+        return $this->execute(function () use ($id) {
+
+            // Obtener los mensajes de errores de las validaciones
+            $invoice = $this->invoiceRepository->find($id, select: ["id", "validationXml"]);
+
+            return [
+                'code' => 200,
+                'errorMessages' => json_decode($invoice->validationXml, 1),
+            ];
+        });
     }
 }
