@@ -29,9 +29,9 @@ class InvoiceListResource extends JsonResource
             'status' => $this->status,
             'status_description' => $this->status?->description(),
 
-            // 'status_xml' => $this->status_xml,
-            // 'status_xml_backgroundColor' => $this->status_xml->backgroundColor(),
-            // 'status_xml_description' => $this->status_xml->description(),
+            'status_xml' => $this->status_xml,
+            'status_xml_backgroundColor' => $this->status_xml->backgroundColor(),
+            'status_xml_description' => $this->status_xml->description(),
 
             'path_xml' => $this->path_xml,
 
