@@ -28,22 +28,27 @@ class Urgency extends Model
     {
         return $this->belongsTo(Cie10::class, 'codDiagnosticoPrincipal_id');
     }
+
     public function codDiagnosticoPrincipalE()
     {
         return $this->belongsTo(Cie10::class, 'codDiagnosticoPrincipalE_id');
     }
+
     public function codDiagnosticoRelacionadoE1()
     {
         return $this->belongsTo(Cie10::class, 'codDiagnosticoRelacionadoE1_id');
     }
+
     public function codDiagnosticoRelacionadoE2()
     {
         return $this->belongsTo(Cie10::class, 'codDiagnosticoRelacionadoE2_id');
     }
+
     public function codDiagnosticoRelacionadoE3()
     {
         return $this->belongsTo(Cie10::class, 'codDiagnosticoRelacionadoE3_id');
     }
+
     public function codDiagnosticoCausaMuerte()
     {
         return $this->belongsTo(Cie10::class, 'codDiagnosticoCausaMuerte_id');

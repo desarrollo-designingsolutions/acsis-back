@@ -14,16 +14,16 @@ return new class extends Migration
         Schema::create('urgencies', function (Blueprint $table) {
             $table->uuid('id')->primary();
 
-            $table->string("fechaInicioAtencion")->nullable();
+            $table->string('fechaInicioAtencion')->nullable();
             $table->foreignUuid('causaMotivoAtencion_id')->nullable()->constrained('rips_causa_externa_version2s');
             $table->foreignUuid('codDiagnosticoPrincipal_id')->nullable()->constrained('cie10s');
             $table->foreignUuid('codDiagnosticoPrincipalE_id')->nullable()->constrained('cie10s');
             $table->foreignUuid('codDiagnosticoRelacionadoE1_id')->nullable()->constrained('cie10s');
             $table->foreignUuid('codDiagnosticoRelacionadoE2_id')->nullable()->constrained('cie10s');
             $table->foreignUuid('codDiagnosticoRelacionadoE3_id')->nullable()->constrained('cie10s');
-            $table->string("condicionDestinoUsuarioEgreso")->nullable();
+            $table->string('condicionDestinoUsuarioEgreso')->nullable();
             $table->foreignUuid('codDiagnosticoCausaMuerte_id')->nullable()->constrained('cie10s');
-            $table->string("fechaEgreso")->nullable();
+            $table->string('fechaEgreso')->nullable();
 
             $table->timestamps();
             $table->softDeletes();

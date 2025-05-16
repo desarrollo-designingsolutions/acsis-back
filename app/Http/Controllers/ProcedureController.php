@@ -77,7 +77,6 @@ class ProcedureController extends Controller
                 'conceptoRecaudo_id' => $post['conceptoRecaudo_id'],
             ]);
 
-
             // Create Service
             $service = $this->serviceRepository->store([
                 'company_id' => $post['company_id'],
@@ -95,25 +94,25 @@ class ProcedureController extends Controller
 
             // Prepare service data for JSON
             $serviceData = [
-                'codPrestador' => "",
-                'fechaInicioAtencion' => $post["fechaInicioAtencion"],
-                'idMIPRES' => $post["idMIPRES"],
-                'numAutorizacion' => $post["numAutorizacion"],
+                'codPrestador' => '',
+                'fechaInicioAtencion' => $post['fechaInicioAtencion'],
+                'idMIPRES' => $post['idMIPRES'],
+                'numAutorizacion' => $post['numAutorizacion'],
                 'codProcedimiento' => $procedure->codProcedimiento->codigo,
                 'viaIngresoServicioSalud' => $procedure->viaIngresoServicioSalud->codigo,
                 'modalidadGrupoServicioTecSal' => $procedure->modalidadGrupoServicioTecSal->codigo,
                 'grupoServicios' => $procedure->grupoServicios->codigo,
                 'codServicio' => $procedure->codServicio->codigo,
                 'finalidadTecnologiaSalud' => $procedure->finalidadTecnologiaSalud->codigo,
-                'tipoDocumentoIdentificacion' => "",
-                'numDocumentoIdentificacion' => "",
+                'tipoDocumentoIdentificacion' => '',
+                'numDocumentoIdentificacion' => '',
                 'codDiagnosticoPrincipal' => $procedure->codDiagnosticoPrincipal->codigo,
                 'codDiagnosticoRelacionado' => $procedure->codDiagnosticoRelacionado->codigo,
                 'codComplicacion' => $procedure->codComplicacion->codigo,
-                'valorPagoModerador' => $post["valorPagoModerador"],
-                'numFEVPagoModerador' => "",
+                'valorPagoModerador' => $post['valorPagoModerador'],
+                'numFEVPagoModerador' => '',
                 'consecutivo' => $consecutivo,
-                'vrServicio' => $post["vrServicio"],
+                'vrServicio' => $post['vrServicio'],
                 'conceptoRecaudo' => $procedure->conceptoRecaudo->codigo,
             ];
 
@@ -171,7 +170,6 @@ class ProcedureController extends Controller
 
             $post = $request->all();
 
-
             // Update MedicalConsultation
             $procedure = $this->procedureRepository->store([
                 'fechaInicioAtencion' => $post['fechaInicioAtencion'],
@@ -205,28 +203,27 @@ class ProcedureController extends Controller
 
             // Prepare service data for JSON
             $serviceData = [
-                'codPrestador' => "",
-                'fechaInicioAtencion' => $post["fechaInicioAtencion"],
-                'idMIPRES' => $post["idMIPRES"],
-                'numAutorizacion' => $post["numAutorizacion"],
+                'codPrestador' => '',
+                'fechaInicioAtencion' => $post['fechaInicioAtencion'],
+                'idMIPRES' => $post['idMIPRES'],
+                'numAutorizacion' => $post['numAutorizacion'],
                 'codProcedimiento' => $procedure->codProcedimiento->codigo,
                 'viaIngresoServicioSalud' => $procedure->viaIngresoServicioSalud->codigo,
                 'modalidadGrupoServicioTecSal' => $procedure->modalidadGrupoServicioTecSal->codigo,
                 'grupoServicios' => $procedure->grupoServicios->codigo,
                 'codServicio' => $procedure->codServicio->codigo,
                 'finalidadTecnologiaSalud' => $procedure->finalidadTecnologiaSalud->codigo,
-                'tipoDocumentoIdentificacion' => "",
-                'numDocumentoIdentificacion' => "",
+                'tipoDocumentoIdentificacion' => '',
+                'numDocumentoIdentificacion' => '',
                 'codDiagnosticoPrincipal' => $procedure->codDiagnosticoPrincipal->codigo,
                 'codDiagnosticoRelacionado' => $procedure->codDiagnosticoRelacionado->codigo,
                 'codComplicacion' => $procedure->codComplicacion->codigo,
-                'valorPagoModerador' => $post["valorPagoModerador"],
-                'numFEVPagoModerador' => "",
+                'valorPagoModerador' => $post['valorPagoModerador'],
+                'numFEVPagoModerador' => '',
                 'consecutivo' => $consecutivo,
-                'vrServicio' => $post["vrServicio"],
+                'vrServicio' => $post['vrServicio'],
                 'conceptoRecaudo' => $procedure->conceptoRecaudo->codigo,
             ];
-
 
             // Update JSON with edited service
             updateInvoiceServicesJson(

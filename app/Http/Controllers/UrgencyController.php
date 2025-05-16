@@ -6,8 +6,8 @@ use App\Enums\Service\TypeServiceEnum;
 use App\Http\Requests\Urgency\UrgencyStoreRequest;
 use App\Http\Resources\Urgency\UrgencyFormResource;
 use App\Repositories\InvoiceRepository;
-use App\Repositories\UrgencyRepository;
 use App\Repositories\ServiceRepository;
+use App\Repositories\UrgencyRepository;
 use App\Traits\HttpResponseTrait;
 use Illuminate\Http\Request;
 
