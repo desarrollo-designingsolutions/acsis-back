@@ -33,3 +33,11 @@ Route::post('/selectInfiniteTipoOtrosServicios', [QueryController::class, 'selec
 Route::post('/selectInfiniteConceptoRecaudo', [QueryController::class, 'selectInfiniteConceptoRecaudo']);
 
 Route::post('/selectStatusInvoiceEnum', [QueryController::class, 'selectStatusInvoiceEnum']);
+
+Route::post('/selectInfiniteRipsTipoDiagnosticoPrincipalVersion2', [QueryController::class, 'selectInfiniteRipsTipoDiagnosticoPrincipalVersion2']);
+Route::post('/selectInfiniteRipsCausaExternaVersion2', [QueryController::class, 'selectInfiniteRipsCausaExternaVersion2']);
+Route::post('/selectInfiniteCie10', [QueryController::class, 'selectInfiniteCie10']);
+Route::post('/selectInfiniteRipsFinalidadConsultaVersion2', [QueryController::class, 'selectInfiniteRipsFinalidadConsultaVersion2']);
+Route::post('/selectInfiniteServicio', [QueryController::class, 'selectInfiniteServicio']);
+Route::post('/selectInfiniteGrupoServicio', [QueryController::class, 'selectInfiniteGrupoServicio']);
+Route::post('/selectInfiniteModalidadAtencion', [QueryController::class, 'selectInfiniteModalidadAtencion']);
