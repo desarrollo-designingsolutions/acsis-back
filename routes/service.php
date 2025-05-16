@@ -3,6 +3,7 @@
 use App\Http\Controllers\MedicalConsultationController;
 use App\Http\Controllers\OtherServiceController;
 use App\Http\Controllers\ServiceController;
+use App\Http\Controllers\UrgencyController;
 use Illuminate\Support\Facades\Route;
 
 // Rutas protegidas
@@ -47,4 +48,18 @@ Route::middleware(['check.permission:menu.invoice'])->group(function () {
     Route::get('/service/medicalConsultation/{service_id}/edit', [MedicalConsultationController::class, 'edit']);
 
     Route::post('/service/medicalConsultation/update/{id}', [MedicalConsultationController::class, 'update']);
+
+    /*
+    |--------------------------------------------------------------------------
+    | Urgency
+    |--------------------------------------------------------------------------
+    */
+
+    Route::get('/service/urgency/create', [UrgencyController::class, 'create']);
+
+    Route::post('/service/urgency/store', [UrgencyController::class, 'store']);
+
+    Route::get('/service/urgency/{service_id}/edit', [UrgencyController::class, 'edit']);
+
+    Route::post('/service/urgency/update/{id}', [UrgencyController::class, 'update']);
 });
