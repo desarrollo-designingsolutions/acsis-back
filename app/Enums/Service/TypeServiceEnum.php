@@ -12,6 +12,8 @@ enum TypeServiceEnum: string
     use AttributableEnum;
 
     #[Description('Consultas')]
+    #[Model('App\\Models\\MedicalConsultation')]
+    #[ElementJson('consultas')]
     case SERVICE_TYPE_001 = 'SERVICE_TYPE_001';
 
     #[Description('Procedimientos')]

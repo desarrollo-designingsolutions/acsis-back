@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\Service\TypeServiceEnum;
 use App\Traits\Cacheable;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -13,6 +14,10 @@ class Service extends Model
     use Cacheable, HasFactory, HasUuids, SoftDeletes;
 
     protected $guarded = [];
+
+    protected $casts = [
+        'type' => TypeServiceEnum::class,
+    ];
 
     /**
      * Boot del modelo para registrar eventos.

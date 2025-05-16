@@ -49,7 +49,7 @@ class ServiceController extends Controller
                 $service->glosas()->delete();
                 $service->delete();
 
-                $serviceType = TypeServiceEnum::from($service->type);
+                $serviceType = $service->type;
                 // Update JSON to remove service and reindex consecutivos
                 updateInvoiceServicesJson(
                     $service->invoice_id,

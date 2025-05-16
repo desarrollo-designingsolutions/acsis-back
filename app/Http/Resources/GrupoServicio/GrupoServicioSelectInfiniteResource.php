@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Resources\ConceptoRecaudo;
+namespace App\Http\Resources\GrupoServicio;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ConceptoRecaudoSelectResource extends JsonResource
+class GrupoServicioSelectInfiniteResource extends JsonResource
 {
     /**
      * Transform the resource into an array.

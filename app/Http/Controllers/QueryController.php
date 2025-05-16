@@ -3,33 +3,47 @@
 namespace App\Http\Controllers;
 
 use App\Enums\Invoice\StatusInvoiceEnum;
+use App\Http\Resources\Cie10\Cie10SelectInfiniteResource;
 use App\Http\Resources\CodeGlosa\CodeGlosaSelectInfiniteResource;
 use App\Http\Resources\ConceptoRecaudo\ConceptoRecaudoSelectResource;
 use App\Http\Resources\Country\CountrySelectResource;
 use App\Http\Resources\CupsRips\CupsRipsSelectInfiniteResource;
 use App\Http\Resources\Entity\EntitySelectResource;
+use App\Http\Resources\GrupoServicio\GrupoServicioSelectInfiniteResource;
+use App\Http\Resources\ModalidadAtencion\ModalidadAtencionSelectInfiniteResource;
 use App\Http\Resources\Municipio\MunicipioSelectResource;
 use App\Http\Resources\Pais\PaisSelectResource;
 use App\Http\Resources\Patient\PatientSelectResource;
+use App\Http\Resources\RipsCausaExternaVersion2\RipsCausaExternaVersion2SelectInfiniteResource;
+use App\Http\Resources\RipsFinalidadConsultaVersion2\RipsFinalidadConsultaVersion2SelectInfiniteResource;
+use App\Http\Resources\RipsTipoDiagnosticoPrincipalVersion2\RipsTipoDiagnosticoPrincipalVersion2SelectInfiniteResource;
 use App\Http\Resources\RipsTipoUsuarioVersion2\RipsTipoUsuarioVersion2SelectResource;
 use App\Http\Resources\ServiceVendor\ServiceVendorSelectResource;
+use App\Http\Resources\Servicio\ServicioSelectInfiniteResource;
 use App\Http\Resources\Sexo\SexoSelectResource;
 use App\Http\Resources\TipoIdPisis\TipoIdPisisSelectResource;
 use App\Http\Resources\TipoNota\TipoNotaSelectResource;
 use App\Http\Resources\TipoOtrosServicios\TipoOtrosServiciosSelectResource;
 use App\Http\Resources\TypeDocument\TypeDocumentSelectResource;
 use App\Http\Resources\ZonaVersion2\ZonaVersion2SelectResource;
+use App\Repositories\Cie10Repository;
 use App\Repositories\CityRepository;
 use App\Repositories\CodeGlosaRepository;
 use App\Repositories\ConceptoRecaudoRepository;
 use App\Repositories\CountryRepository;
 use App\Repositories\CupsRipsRepository;
 use App\Repositories\EntityRepository;
+use App\Repositories\GrupoServicioRepository;
+use App\Repositories\ModalidadAtencionRepository;
 use App\Repositories\MunicipioRepository;
 use App\Repositories\PaisRepository;
 use App\Repositories\PatientRepository;
+use App\Repositories\RipsCausaExternaVersion2Repository;
+use App\Repositories\RipsFinalidadConsultaVersion2Repository;
+use App\Repositories\RipsTipoDiagnosticoPrincipalVersion2Repository;
 use App\Repositories\RipsTipoUsuarioVersion2Repository;
 use App\Repositories\ServiceVendorRepository;
+use App\Repositories\ServicioRepository;
 use App\Repositories\SexoRepository;
 use App\Repositories\StateRepository;
 use App\Repositories\TipoIdPisisRepository;
@@ -69,6 +83,13 @@ class QueryController extends Controller
         protected ZonaVersion2Repository $zonaVersion2Repository,
         protected TipoOtrosServiciosRepository $tipoOtrosServiciosRepository,
         protected ConceptoRecaudoRepository $conceptoRecaudoRepository,
+        protected ModalidadAtencionRepository $modalidadAtencionRepository,
+        protected GrupoServicioRepository $grupoServicioRepository,
+        protected ServicioRepository $servicioRepository,
+        protected RipsFinalidadConsultaVersion2Repository $ripsFinalidadConsultaVersion2Repository,
+        protected Cie10Repository $cie10Repository,
+        protected RipsTipoDiagnosticoPrincipalVersion2Repository $ripsTipoDiagnosticoPrincipalVersion2Repository,
+        protected RipsCausaExternaVersion2Repository $ripsCausaExternaVersion2Repository,
     ) {}
 
     public function selectInfiniteCountries(Request $request)
@@ -347,6 +368,90 @@ class QueryController extends Controller
             'code' => 200,
             'statusInvoiceEnum_arrayInfo' => $status->values()->toArray(), // Convertir a array y resetear índices
             'statusInvoiceEnum_countLinks' => 1,
+        ];
+    }
+
+    public function selectInfiniteModalidadAtencion(Request $request)
+    {
+        $modalidadAtencion = $this->modalidadAtencionRepository->list($request->all());
+        $dataModalidadAtencion = ModalidadAtencionSelectInfiniteResource::collection($modalidadAtencion);
+
+        return [
+            'code' => 200,
+            'modalidadAtencion_arrayInfo' => $dataModalidadAtencion,
+            'modalidadAtencion_countLinks' => $modalidadAtencion->lastPage(),
+        ];
+    }
+
+    public function selectInfiniteGrupoServicio(Request $request)
+    {
+        $grupoServicio = $this->grupoServicioRepository->list($request->all());
+        $dataGrupoServicio = GrupoServicioSelectInfiniteResource::collection($grupoServicio);
+
+        return [
+            'code' => 200,
+            'grupoServicio_arrayInfo' => $dataGrupoServicio,
+            'grupoServicio_countLinks' => $grupoServicio->lastPage(),
+        ];
+    }
+
+    public function selectInfiniteServicio(Request $request)
+    {
+        $servicio = $this->servicioRepository->list($request->all());
+        $dataServicio = ServicioSelectInfiniteResource::collection($servicio);
+
+        return [
+            'code' => 200,
+            'servicio_arrayInfo' => $dataServicio,
+            'servicio_countLinks' => $servicio->lastPage(),
+        ];
+    }
+
+    public function selectInfiniteRipsFinalidadConsultaVersion2(Request $request)
+    {
+        $ripsFinalidadConsultaVersion2 = $this->ripsFinalidadConsultaVersion2Repository->list($request->all());
+        $dataRipsFinalidadConsultaVersion2 = RipsFinalidadConsultaVersion2SelectInfiniteResource::collection($ripsFinalidadConsultaVersion2);
+
+        return [
+            'code' => 200,
+            'ripsFinalidadConsultaVersion2_arrayInfo' => $dataRipsFinalidadConsultaVersion2,
+            'ripsFinalidadConsultaVersion2_countLinks' => $ripsFinalidadConsultaVersion2->lastPage(),
+        ];
+    }
+
+    public function selectInfiniteCie10(Request $request)
+    {
+        $cie10 = $this->cie10Repository->list($request->all());
+        $dataCie10 = Cie10SelectInfiniteResource::collection($cie10);
+
+        return [
+            'code' => 200,
+            'cie10_arrayInfo' => $dataCie10,
+            'cie10_countLinks' => $cie10->lastPage(),
+        ];
+    }
+
+    public function selectInfiniteRipsTipoDiagnosticoPrincipalVersion2(Request $request)
+    {
+        $ripsTipoDiagnosticoPrincipalVersion2 = $this->ripsTipoDiagnosticoPrincipalVersion2Repository->list($request->all());
+        $dataRipsTipoDiagnosticoPrincipalVersion2 = RipsTipoDiagnosticoPrincipalVersion2SelectInfiniteResource::collection($ripsTipoDiagnosticoPrincipalVersion2);
+
+        return [
+            'code' => 200,
+            'ripsTipoDiagnosticoPrincipalVersion2_arrayInfo' => $dataRipsTipoDiagnosticoPrincipalVersion2,
+            'ripsTipoDiagnosticoPrincipalVersion2_countLinks' => $ripsTipoDiagnosticoPrincipalVersion2->lastPage(),
+        ];
+    }
+
+    public function selectInfiniteRipsCausaExternaVersion2(Request $request)
+    {
+        $ripsCausaExternaVersion2 = $this->ripsCausaExternaVersion2Repository->list($request->all());
+        $dataRipsCausaExternaVersion2 = RipsCausaExternaVersion2SelectInfiniteResource::collection($ripsCausaExternaVersion2);
+
+        return [
+            'code' => 200,
+            'ripsCausaExternaVersion2_arrayInfo' => $dataRipsCausaExternaVersion2,
+            'ripsCausaExternaVersion2_countLinks' => $ripsCausaExternaVersion2->lastPage(),
         ];
     }
 }
