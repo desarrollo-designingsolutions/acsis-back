@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\MedicalConsultationController;
 use App\Http\Controllers\OtherServiceController;
+use App\Http\Controllers\ProcedureController;
 use App\Http\Controllers\ServiceController;
 use Illuminate\Support\Facades\Route;
 
@@ -47,4 +48,18 @@ Route::middleware(['check.permission:menu.invoice'])->group(function () {
     Route::get('/service/medicalConsultation/{service_id}/edit', [MedicalConsultationController::class, 'edit']);
 
     Route::post('/service/medicalConsultation/update/{id}', [MedicalConsultationController::class, 'update']);
+
+    /*
+    |--------------------------------------------------------------------------
+    | Procedure
+    |--------------------------------------------------------------------------
+    */
+
+    Route::get('/service/procedure/create', [ProcedureController::class, 'create']);
+
+    Route::post('/service/procedure/store', [ProcedureController::class, 'store']);
+
+    Route::get('/service/procedure/{service_id}/edit', [ProcedureController::class, 'edit']);
+
+    Route::post('/service/procedure/update/{id}', [ProcedureController::class, 'update']);
 });

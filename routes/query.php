@@ -33,3 +33,5 @@ Route::post('/selectInfiniteTipoOtrosServicios', [QueryController::class, 'selec
 Route::post('/selectInfiniteConceptoRecaudo', [QueryController::class, 'selectInfiniteConceptoRecaudo']);
 
 Route::post('/selectStatusInvoiceEnum', [QueryController::class, 'selectStatusInvoiceEnum']);
+
+Route::post('/selectInfiniteViaIngresoUsuario', [QueryController::class, 'selectInfiniteViaIngresoUsuario']);

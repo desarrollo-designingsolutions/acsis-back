@@ -25,6 +25,7 @@ use App\Http\Resources\TipoIdPisis\TipoIdPisisSelectResource;
 use App\Http\Resources\TipoNota\TipoNotaSelectResource;
 use App\Http\Resources\TipoOtrosServicios\TipoOtrosServiciosSelectResource;
 use App\Http\Resources\TypeDocument\TypeDocumentSelectResource;
+use App\Http\Resources\ViaIngresoUsuario\ViaIngresoUsuarioSelectInfiniteResource;
 use App\Http\Resources\ZonaVersion2\ZonaVersion2SelectResource;
 use App\Repositories\Cie10Repository;
 use App\Repositories\CityRepository;
@@ -53,6 +54,7 @@ use App\Repositories\TypeDocumentRepository;
 use App\Repositories\TypeEntityRepository;
 use App\Repositories\TypeVendorRepository;
 use App\Repositories\UserRepository;
+use App\Repositories\ViaIngresoUsuarioRepository;
 use App\Repositories\ZonaVersion2Repository;
 use App\Traits\HttpResponseTrait;
 use Illuminate\Http\Request;
@@ -90,6 +92,7 @@ class QueryController extends Controller
         protected Cie10Repository $cie10Repository,
         protected RipsTipoDiagnosticoPrincipalVersion2Repository $ripsTipoDiagnosticoPrincipalVersion2Repository,
         protected RipsCausaExternaVersion2Repository $ripsCausaExternaVersion2Repository,
+        protected ViaIngresoUsuarioRepository $viaIngresoUsuarioRepository,
     ) {}
 
     public function selectInfiniteCountries(Request $request)
@@ -452,6 +455,18 @@ class QueryController extends Controller
             'code' => 200,
             'ripsCausaExternaVersion2_arrayInfo' => $dataRipsCausaExternaVersion2,
             'ripsCausaExternaVersion2_countLinks' => $ripsCausaExternaVersion2->lastPage(),
+        ];
+    }
+
+    public function selectInfiniteViaIngresoUsuario(Request $request)
+    {
+        $viaIngresoUsuario = $this->viaIngresoUsuarioRepository->list($request->all());
+        $dataViaIngresoUsuario = ViaIngresoUsuarioSelectInfiniteResource::collection($viaIngresoUsuario);
+
+        return [
+            'code' => 200,
+            'viaIngresoUsuario_arrayInfo' => $dataViaIngresoUsuario,
+            'viaIngresoUsuario_countLinks' => $viaIngresoUsuario->lastPage(),
         ];
     }
 }
