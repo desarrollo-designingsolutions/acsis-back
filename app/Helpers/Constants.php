@@ -22,7 +22,6 @@ class Constants
 
     public const DISK_FILES = 'public'; // sistema de archivos
 
-
     // LLAVES PARA CONSTRUCCION Y VALIDACION DE FACTURAS
     public const KEY_NUMFACT = 'numFactura';
 }

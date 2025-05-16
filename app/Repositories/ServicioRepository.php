@@ -21,8 +21,8 @@ class ServicioRepository extends BaseRepository
             $data = $this->model->with($with)->where(function ($query) {})
                 ->where(function ($query) use ($request) {
                     if (isset($request['searchQueryInfinite']) && ! empty($request['searchQueryInfinite'])) {
-                        $query->where('codigo', 'like', '%' . $request['searchQueryInfinite'] . '%');
-                        $query->orWhere('nombre', 'like', '%' . $request['searchQueryInfinite'] . '%');
+                        $query->where('codigo', 'like', '%'.$request['searchQueryInfinite'].'%');
+                        $query->orWhere('nombre', 'like', '%'.$request['searchQueryInfinite'].'%');
                     }
                 });
 
@@ -65,8 +65,8 @@ class ServicioRepository extends BaseRepository
             }
             if (! empty($request['string'])) {
                 $value = strval($request['string']);
-                $query->where('codigo', 'like', '%' . $value . '%');
-                $query->orWhere('nombre', 'like', '%' . $value . '%');
+                $query->where('codigo', 'like', '%'.$value.'%');
+                $query->orWhere('nombre', 'like', '%'.$value.'%');
             }
         });
 
@@ -78,7 +78,7 @@ class ServicioRepository extends BaseRepository
         $data = $query->get()->map(function ($value) use ($with, $select, $fieldValue) {
             $data = [
                 'value' => $value->$fieldValue,
-                'title' => $value->codigo . ' - ' . $value->nombre,
+                'title' => $value->codigo.' - '.$value->nombre,
             ];
 
             if (count($select) > 0) {
@@ -142,7 +142,7 @@ class ServicioRepository extends BaseRepository
                     case 'selectInfinite':
                         return [
                             'value' => $data->id,
-                            'title' => $data->codigo . ' - ' . $data->nombre,
+                            'title' => $data->codigo.' - '.$data->nombre,
                             'code' => $data->codigo,
                         ];
                     default:

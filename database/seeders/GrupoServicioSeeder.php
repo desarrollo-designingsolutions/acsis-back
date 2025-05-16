@@ -26,7 +26,7 @@ class GrupoServicioSeeder extends Seeder
         $bar = $this->command->getOutput()->createProgressBar(count($arrayData));
 
         foreach ($arrayData as $key => $value) {
-            $data = new GrupoServicio();
+            $data = new GrupoServicio;
             $data->codigo = $value['codigo'];
             $data->nombre = $value['nombre'];
             $data->descripcion = $value['descripcion'];

@@ -23,11 +23,10 @@ class ConceptoRecaudoSeeder extends Seeder
                 ->getSheetByName('Table')
                 ->toArray();
         } catch (Exception $e) {
-            //$this->error('Error al leer el excel');
+            // $this->error('Error al leer el excel');
         } catch (\PhpOffice\PhpSpreadsheet\Exception $e) {
-            //$this->error('Error al obtener la hoja');
+            // $this->error('Error al obtener la hoja');
         }
-
 
         if ($sheet) {
             // Inicializar la barra de progreso

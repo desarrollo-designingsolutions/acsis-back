@@ -11,8 +11,8 @@ Route::get('/', function () {
 
     // Enviar notificación
     $user->notify(new BellNotification([
-        'title' => "hola",
-        'subtitle' => "chao",
+        'title' => 'hola',
+        'subtitle' => 'chao',
     ]));
 
     return view('welcome');

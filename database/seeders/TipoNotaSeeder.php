@@ -23,9 +23,8 @@ class TipoNotaSeeder extends Seeder
         $this->command->info('Starting Seed Data ...');
         $bar = $this->command->getOutput()->createProgressBar(count($arrayData));
 
-
         foreach ($arrayData as $key => $value) {
-            $data = new TipoNota();
+            $data = new TipoNota;
             $data->codigo = $value['codigo'];
             $data->nombre = $value['nombre'];
             $data->descripcion = $value['descripcion'];

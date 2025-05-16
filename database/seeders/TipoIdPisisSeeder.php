@@ -37,7 +37,7 @@ class TipoIdPisisSeeder extends Seeder
         $bar = $this->command->getOutput()->createProgressBar(count($arrayData));
 
         foreach ($arrayData as $key => $value) {
-            $data = new TipoIdPisis();
+            $data = new TipoIdPisis;
             $data->codigo = $value['codigo'];
             $data->nombre = $value['nombre'];
             $data->descripcion = $value['descripcion'];

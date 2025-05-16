@@ -31,12 +31,13 @@ class DatabaseSeeder extends Seeder
             TypeEntitySeeder::class,
             TypeDocumentSeeder::class,
 
-
             TypeCodeGlosaSeeder::class,
             GeneralCodeGlosaSeeder::class,
             CodeGlosaSeeder::class,
             CupsRipsSeeder::class,
             CupsRipsSeeder2::class,
+            CupsRipsSeeder3::class,
+            CupsRipsSeeder4::class,
 
             TipoNotaSeeder::class,
             TipoIdPisisSeeder::class,
@@ -53,6 +54,8 @@ class DatabaseSeeder extends Seeder
             RipsCausaExternaVersion2Seeder::class,
             Cie10Seeder::class,
             Cie10Seeder2::class,
+            Cie10Seeder3::class,
+            Cie10Seeder4::class,
             RipsTipoDiagnosticoPrincipalVersion2Seeder::class,
             ConceptoRecaudoSeeder::class,
             ViaIngresoUsuarioSeeder::class,

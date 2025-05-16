@@ -49,7 +49,7 @@ class InvoiceExcelExport implements FromView, ShouldAutoSize, WithEvents
                 // Obtener el rango de celdas con datos
                 $highestColumn = $sheet->getHighestColumn();
                 $highestRow = $sheet->getHighestRow();
-                $range = 'A1:' . $highestColumn . $highestRow;
+                $range = 'A1:'.$highestColumn.$highestRow;
 
                 // Establecer el filtro automático en el rango de celdas
                 $sheet->setAutoFilter($range);

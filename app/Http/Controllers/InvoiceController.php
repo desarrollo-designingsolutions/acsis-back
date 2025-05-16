@@ -376,7 +376,7 @@ class InvoiceController extends Controller
         $newData['usuarios'] = $users;
 
         // Define file path
-        $nameFile = $invoice->invoice_number . '.json';
+        $nameFile = $invoice->invoice_number.'.json';
         $path = "companies/company_{$invoice->company_id}/invoices/invoice_{$invoice->id}/{$nameFile}";
         $disk = Constants::DISK_FILES;
 
@@ -446,7 +446,7 @@ class InvoiceController extends Controller
 
     private function storeJsonFile($invoice, array $jsonData): void
     {
-        $nameFile = $invoice->invoice_number . '.json';
+        $nameFile = $invoice->invoice_number.'.json';
         $path = "companies/company_{$invoice->company_id}/invoices/invoice_{$invoice->id}/{$nameFile}";
         $disk = Constants::DISK_FILES;
 
@@ -488,12 +488,12 @@ class InvoiceController extends Controller
 
         // Obtener el contenido del archivo
         $fileContent = Storage::disk($disk)->get($path);
-        $fileName = $invoice->invoice_number . '.json'; // Nombre del archivo para la descarga
+        $fileName = $invoice->invoice_number.'.json'; // Nombre del archivo para la descarga
 
         // Devolver el archivo como respuesta descargable
         return response($fileContent, 200, [
             'Content-Type' => 'application/json',
-            'Content-Disposition' => 'attachment; filename="' . $fileName . '"',
+            'Content-Disposition' => 'attachment; filename="'.$fileName.'"',
         ]);
     }
 
@@ -505,7 +505,7 @@ class InvoiceController extends Controller
                 $company_id = $request->input('company_id');
                 $invoice_id = $request->input('invoice_id');
 
-                $invoice = $this->invoiceRepository->find($invoice_id, with: ["serviceVendor:id,nit"], select: ["id", "type", "path_json", "invoice_number", "path_xml", "status_xml", "service_vendor_id"]);
+                $invoice = $this->invoiceRepository->find($invoice_id, with: ['serviceVendor:id,nit'], select: ['id', 'type', 'path_json', 'invoice_number', 'path_xml', 'status_xml', 'service_vendor_id']);
                 $jsonContents = openFileJson($invoice->path_json);
                 $file = $request->file('archiveXml');
 
@@ -552,7 +552,7 @@ class InvoiceController extends Controller
         return $this->execute(function () use ($id) {
 
             // Obtener los mensajes de errores de las validaciones
-            $invoice = $this->invoiceRepository->find($id, select: ["id", "validationXml"]);
+            $invoice = $this->invoiceRepository->find($id, select: ['id', 'validationXml']);
 
             return [
                 'code' => 200,
@@ -566,9 +566,8 @@ class InvoiceController extends Controller
         return $this->execute(function () use ($id) {
 
             // Obtener los mensajes de errores de las validaciones
-            $invoice = $this->invoiceRepository->find($id, select: ["id", "validationXml"]);
+            $invoice = $this->invoiceRepository->find($id, select: ['id', 'validationXml']);
             $errorMessages = json_decode($invoice->validationXml, 1);
-
 
             $excel = Excel::raw(new InvoiceExcelErrorsValidationXmlExport($errorMessages), \Maatwebsite\Excel\Excel::XLSX);
 

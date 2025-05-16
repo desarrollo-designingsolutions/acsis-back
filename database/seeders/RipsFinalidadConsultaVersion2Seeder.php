@@ -15,7 +15,7 @@ class RipsFinalidadConsultaVersion2Seeder extends Seeder
     public function run(): void
     {
 
-        $excelService = new ExcelService();
+        $excelService = new ExcelService;
         $sheet = null;
 
         try {
@@ -24,9 +24,9 @@ class RipsFinalidadConsultaVersion2Seeder extends Seeder
                 ->getSheetByName('Table')
                 ->toArray();
         } catch (Exception $e) {
-            //$this->error('Error al leer el excel');
+            // $this->error('Error al leer el excel');
         } catch (\PhpOffice\PhpSpreadsheet\Exception $e) {
-            //$this->error('Error al obtener la hoja');
+            // $this->error('Error al obtener la hoja');
         }
 
         if ($sheet) {

@@ -33,7 +33,7 @@ class TypeVendorSeeder extends Seeder
         $bar = $this->command->getOutput()->createProgressBar(count($arrayData));
 
         foreach ($arrayData as $value) {
-            $data = new TypeVendor();
+            $data = new TypeVendor;
             $data->name = $value['name'];
             $data->company_id = Constants::COMPANY_UUID;
             $data->save();

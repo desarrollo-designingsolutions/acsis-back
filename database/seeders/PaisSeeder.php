@@ -270,7 +270,7 @@ class PaisSeeder extends Seeder
         $bar = $this->command->getOutput()->createProgressBar(count($arrayData));
 
         foreach ($arrayData as $value) {
-            $data = new Pais();
+            $data = new Pais;
             $data->codigo = $value['codigo'];
             $data->nombre = $value['nombre'];
             $data->descripcion = $value['descripcion'];

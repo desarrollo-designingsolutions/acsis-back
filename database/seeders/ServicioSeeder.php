@@ -173,14 +173,12 @@ class ServicioSeeder extends Seeder
             ['id' => '157', 'codigo' => '749', 'nombre' => 'TOMA DE MUESTRAS DE CUELLO UTERINO Y GINECOLOGICAS', 'descripcion' => 'APOYO DIAGNOSTICO Y COMPLEMENTACION TERAPEUTICA', 'habilitado' => 'SI', 'aplicacion' => null, 'isStandardGEL' => 'False', 'isStandardMSPS' => 'False', 'extra_I' => 'SI', 'extra_II' => 'SI', 'extra_III' => 'NO', 'extra_IV' => 'SI', 'extra_V' => 'NO', 'extra_VI' => 'NO', 'extra_VII' => 'NO', 'extra_VIII' => 'NO', 'extra_IX' => 'NO', 'extra_X' => 'NO', 'valorRegistro' => null, 'usuarioResponsable' => null, 'fecha_actualizacion' => '2022-09-02 11:06:33 AM', 'isPublicPrivate' => null],
         ];
 
-
         // Inicializar la barra de progreso
         $this->command->info('Starting Seed Data ...');
         $bar = $this->command->getOutput()->createProgressBar(count($arrayData));
 
-
         foreach ($arrayData as $key => $value) {
-            $data = new Servicio();
+            $data = new Servicio;
             $data->codigo = $value['codigo'];
             $data->nombre = $value['nombre'];
             $data->descripcion = $value['descripcion'];

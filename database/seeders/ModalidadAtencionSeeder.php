@@ -29,7 +29,7 @@ class ModalidadAtencionSeeder extends Seeder
         $bar = $this->command->getOutput()->createProgressBar(count($arrayData));
 
         foreach ($arrayData as $key => $value) {
-            $data = new ModalidadAtencion();
+            $data = new ModalidadAtencion;
             $data->codigo = $value['codigo'];
             $data->nombre = $value['nombre'];
             $data->descripcion = $value['descripcion'];

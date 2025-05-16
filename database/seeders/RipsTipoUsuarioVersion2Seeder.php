@@ -33,7 +33,7 @@ class RipsTipoUsuarioVersion2Seeder extends Seeder
         $bar = $this->command->getOutput()->createProgressBar(count($arrayData));
 
         foreach ($arrayData as $value) {
-            $data = new RipsTipoUsuarioVersion2();
+            $data = new RipsTipoUsuarioVersion2;
             $data->codigo = $value['codigo'];
             $data->nombre = $value['nombre'];
             $data->descripcion = $value['descripcion'];

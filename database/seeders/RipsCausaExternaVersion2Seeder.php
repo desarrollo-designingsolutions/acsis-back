@@ -48,9 +48,8 @@ class RipsCausaExternaVersion2Seeder extends Seeder
         $this->command->info('Starting Seed Data ...');
         $bar = $this->command->getOutput()->createProgressBar(count($arrayData));
 
-
         foreach ($arrayData as $value) {
-            $data = new RipsCausaExternaVersion2();
+            $data = new RipsCausaExternaVersion2;
             $data->codigo = $value['codigo'];
             $data->nombre = $value['nombre'];
             $data->descripcion = $value['descripcion'];

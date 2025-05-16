@@ -15,7 +15,7 @@ class TypeCodeGlosaSeeder extends Seeder
     public function run()
     {
         $arrayData = [
-            ['id' => 1, 'type_code' => '3047', 'name' => 'RESOLUCION 3047']
+            ['id' => 1, 'type_code' => '3047', 'name' => 'RESOLUCION 3047'],
         ];
 
         // Inicializar la barra de progreso

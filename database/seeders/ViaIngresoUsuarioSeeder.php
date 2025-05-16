@@ -35,7 +35,7 @@ class ViaIngresoUsuarioSeeder extends Seeder
         $bar = $this->command->getOutput()->createProgressBar(count($arrayData));
 
         foreach ($arrayData as $key => $value) {
-            $data = new ViaIngresoUsuario();
+            $data = new ViaIngresoUsuario;
             $data->codigo = $value['codigo'];
             $data->nombre = $value['nombre'];
             $data->descripcion = $value['descripcion'];

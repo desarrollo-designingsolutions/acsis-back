@@ -53,14 +53,17 @@ class MedicalConsultation extends Model
     {
         return $this->belongsTo(Cie10::class, 'codDiagnosticoPrincipal_id');
     }
+
     public function codDiagnosticoRelacionado1()
     {
         return $this->belongsTo(Cie10::class, 'codDiagnosticoRelacionado1_id');
     }
+
     public function codDiagnosticoRelacionado2()
     {
         return $this->belongsTo(Cie10::class, 'codDiagnosticoRelacionado2_id');
     }
+
     public function codDiagnosticoRelacionado3()
     {
         return $this->belongsTo(Cie10::class, 'codDiagnosticoRelacionado3_id');

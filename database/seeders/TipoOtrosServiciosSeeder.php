@@ -3,8 +3,8 @@
 namespace Database\Seeders;
 
 use App\Models\TipoOtrosServicios;
-use Illuminate\Database\Seeder;
 use App\Services\ExcelService;
+use Illuminate\Database\Seeder;
 use PhpOffice\PhpSpreadsheet\Reader\Exception;
 
 class TipoOtrosServiciosSeeder extends Seeder
@@ -14,7 +14,7 @@ class TipoOtrosServiciosSeeder extends Seeder
      */
     public function run(): void
     {
-        $excelService = new ExcelService();
+        $excelService = new ExcelService;
         $sheet = null;
 
         try {
@@ -23,9 +23,9 @@ class TipoOtrosServiciosSeeder extends Seeder
                 ->getSheetByName('Table')
                 ->toArray();
         } catch (Exception $e) {
-            //$this->error('Error al leer el excel');
+            // $this->error('Error al leer el excel');
         } catch (\PhpOffice\PhpSpreadsheet\Exception $e) {
-            //$this->error('Error al obtener la hoja');
+            // $this->error('Error al obtener la hoja');
         }
 
         if ($sheet) {
