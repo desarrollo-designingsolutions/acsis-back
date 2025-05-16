@@ -41,3 +41,4 @@ Route::post('/selectInfiniteRipsFinalidadConsultaVersion2', [QueryController::cl
 Route::post('/selectInfiniteServicio', [QueryController::class, 'selectInfiniteServicio']);
 Route::post('/selectInfiniteGrupoServicio', [QueryController::class, 'selectInfiniteGrupoServicio']);
 Route::post('/selectInfiniteModalidadAtencion', [QueryController::class, 'selectInfiniteModalidadAtencion']);
+Route::post('/selectInfiniteViaIngresoUsuario', [QueryController::class, 'selectInfiniteViaIngresoUsuario']);
