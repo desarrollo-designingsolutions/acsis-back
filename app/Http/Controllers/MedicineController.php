@@ -80,8 +80,8 @@ class MedicineController extends Controller
                 'type' => TypeServiceEnum::SERVICE_TYPE_006,
                 'serviceable_type' => TypeServiceEnum::SERVICE_TYPE_006->model(),
                 'serviceable_id' => $medicine->id,
-                'codigo_servicio' => null,
-                'nombre_servicio' => null,
+                'codigo_servicio' => $post['codTecnologiaSalud'],
+                'nombre_servicio' => $post['nomTecnologiaSalud'],
                 'quantity' => 1,
                 'unit_value' => $post['vrServicio'],
                 'total_value' => $post['vrServicio'],
@@ -184,8 +184,8 @@ class MedicineController extends Controller
 
             // Update Service
             $service = $this->serviceRepository->store([
-                'codigo_servicio' => null,
-                'nombre_servicio' => null,
+                'codigo_servicio' => $post['codTecnologiaSalud'],
+                'nombre_servicio' => $post['nomTecnologiaSalud'],
                 'quantity' => 1,
                 'unit_value' => $post['vrServicio'],
                 'total_value' => $post['vrServicio'],

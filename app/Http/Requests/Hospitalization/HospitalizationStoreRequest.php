@@ -19,18 +19,14 @@ class HospitalizationStoreRequest extends FormRequest
         $rules = [
             'invoice_id' => 'required',
 
+            'codigo_hospitalizacion_id' => 'required',
             'viaIngresoServicioSalud_id' => 'required',
             'fechaInicioAtencion' => 'required',
             'numAutorizacion' => 'required',
             'causaMotivoAtencion_id' => 'required',
             'codDiagnosticoPrincipal_id' => 'required',
-            'codDiagnosticoPrincipalE_id' => 'required',
-            'codDiagnosticoRelacionadoE1_id' => 'required',
-            'codDiagnosticoRelacionadoE2_id' => 'required',
-            'codDiagnosticoRelacionadoE3_id' => 'required',
             'codComplicacion_id' => 'required',
             'condicionDestinoUsuarioEgreso_id' => 'required',
-            'codDiagnosticoMuerte_id' => 'required',
             'fechaEgreso' => 'required',
         ];
 
@@ -42,18 +38,14 @@ class HospitalizationStoreRequest extends FormRequest
         return [
             'invoice_id.required' => 'El campo es obligatorio',
 
+            'codigo_hospitalizacion_id.required' => 'El campo es obligatorio',
             'viaIngresoServicioSalud_id.required' => 'El campo es obligatorio',
             'fechaInicioAtencion.required' => 'El campo es obligatorio',
             'numAutorizacion.required' => 'El campo es obligatorio',
             'causaMotivoAtencion_id.required' => 'El campo es obligatorio',
             'codDiagnosticoPrincipal_id.required' => 'El campo es obligatorio',
-            'codDiagnosticoPrincipalE_id.required' => 'El campo es obligatorio',
-            'codDiagnosticoRelacionadoE1_id.required' => 'El campo es obligatorio',
-            'codDiagnosticoRelacionadoE2_id.required' => 'El campo es obligatorio',
-            'codDiagnosticoRelacionadoE3_id.required' => 'El campo es obligatorio',
             'codComplicacion_id.required' => 'El campo es obligatorio',
             'condicionDestinoUsuarioEgreso_id.required' => 'El campo es obligatorio',
-            'codDiagnosticoMuerte_id.required' => 'El campo es obligatorio',
             'fechaEgreso.required' => 'El campo es obligatorio',
         ];
     }
@@ -62,6 +54,9 @@ class HospitalizationStoreRequest extends FormRequest
     {
         $merge = [];
 
+        if ($this->has('codigo_hospitalizacion_id')) {
+            $merge['codigo_hospitalizacion_id'] = getValueSelectInfinite($this->codigo_hospitalizacion_id);
+        }
         if ($this->has('viaIngresoServicioSalud_id')) {
             $merge['viaIngresoServicioSalud_id'] = getValueSelectInfinite($this->viaIngresoServicioSalud_id);
         }

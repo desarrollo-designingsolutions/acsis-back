@@ -2,8 +2,10 @@
 
 namespace App\Repositories;
 
+use App\Enums\Service\TypeServiceEnum;
 use App\Helpers\Constants;
 use App\Models\Service;
+use App\QueryBuilder\Filters\QueryFilters;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
@@ -32,6 +34,15 @@ class ServiceRepository extends BaseRepository
                                 $subQuery->orWhere('unit_value', 'like', "%$normalizedValue%");
                                 $subQuery->orWhere('total_value', 'like', "%$normalizedValue%");
                             });
+                            QueryFilters::filterByText($subQuery, $value, 'type', [
+                                TypeServiceEnum::SERVICE_TYPE_001->description() => TypeServiceEnum::SERVICE_TYPE_001,
+                                TypeServiceEnum::SERVICE_TYPE_002->description() => TypeServiceEnum::SERVICE_TYPE_002,
+                                TypeServiceEnum::SERVICE_TYPE_003->description() => TypeServiceEnum::SERVICE_TYPE_003,
+                                TypeServiceEnum::SERVICE_TYPE_004->description() => TypeServiceEnum::SERVICE_TYPE_004,
+                                TypeServiceEnum::SERVICE_TYPE_005->description() => TypeServiceEnum::SERVICE_TYPE_005,
+                                TypeServiceEnum::SERVICE_TYPE_006->description() => TypeServiceEnum::SERVICE_TYPE_006,
+                                TypeServiceEnum::SERVICE_TYPE_007->description() => TypeServiceEnum::SERVICE_TYPE_007,
+                            ]);
                         });
                     }),
                 ])
@@ -41,6 +52,7 @@ class ServiceRepository extends BaseRepository
                     'total_value',
                     'codigo_servicio',
                     'nombre_servicio',
+                    'type',
                 ])
                 ->where(function ($query) use ($request) {
                     if (isset($request['invoice_id']) && ! empty($request['invoice_id'])) {

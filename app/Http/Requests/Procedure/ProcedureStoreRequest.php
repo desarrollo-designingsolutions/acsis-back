@@ -28,11 +28,9 @@ class ProcedureStoreRequest extends FormRequest
             'codServicio_id' => 'required',
             'finalidadTecnologiaSalud_id' => 'required',
             'codDiagnosticoPrincipal_id' => 'required',
-            'codDiagnosticoRelacionado_id' => 'required',
             'codComplicacion_id' => 'required',
             'valorPagoModerador' => 'required',
             'vrServicio' => 'required',
-            'conceptoRecaudo_id' => 'required',
         ];
 
         return $rules;
@@ -52,11 +50,9 @@ class ProcedureStoreRequest extends FormRequest
             'codServicio_id.required' => 'El campo es obligatorio',
             'finalidadTecnologiaSalud_id.required' => 'El campo es obligatorio',
             'codDiagnosticoPrincipal_id.required' => 'El campo es obligatorio',
-            'codDiagnosticoRelacionado_id.required' => 'El campo es obligatorio',
             'codComplicacion_id.required' => 'El campo es obligatorio',
             'valorPagoModerador.required' => 'El campo es obligatorio',
             'vrServicio.required' => 'El campo es obligatorio',
-            'conceptoRecaudo_id.required' => 'El campo es obligatorio',
 
         ];
     }

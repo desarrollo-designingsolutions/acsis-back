@@ -88,8 +88,8 @@ class MedicalConsultationController extends Controller
                 'type' => TypeServiceEnum::SERVICE_TYPE_001,
                 'serviceable_type' => TypeServiceEnum::SERVICE_TYPE_001->model(),
                 'serviceable_id' => $medicalConsultation->id,
-                'codigo_servicio' => null,
-                'nombre_servicio' => null,
+                'codigo_servicio' => $medicalConsultation->codConsulta->codigo,
+                'nombre_servicio' => $medicalConsultation->codConsulta->nombre,
                 'quantity' => 1,
                 'unit_value' => $post['vrServicio'],
                 'total_value' => $post['vrServicio'],
@@ -198,8 +198,8 @@ class MedicalConsultationController extends Controller
 
             // Update Service
             $service = $this->serviceRepository->store([
-                'codigo_servicio' => null,
-                'nombre_servicio' => null,
+                'codigo_servicio' => $medicalConsultation->codConsulta->codigo,
+                'nombre_servicio' => $medicalConsultation->codConsulta->nombre,
                 'quantity' => 1,
                 'unit_value' => $post['vrServicio'],
                 'total_value' => $post['vrServicio'],

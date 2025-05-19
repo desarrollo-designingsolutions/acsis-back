@@ -19,15 +19,11 @@ class UrgencyStoreRequest extends FormRequest
         $rules = [
             'invoice_id' => 'required',
 
+            'codigo_urgencia_id' => 'required',
             'fechaInicioAtencion' => 'required',
             'causaMotivoAtencion_id' => 'required',
             'codDiagnosticoPrincipal_id' => 'required',
-            'codDiagnosticoPrincipalE_id' => 'required',
-            'codDiagnosticoRelacionadoE1_id' => 'required',
-            'codDiagnosticoRelacionadoE2_id' => 'required',
-            'codDiagnosticoRelacionadoE3_id' => 'required',
             'condicionDestinoUsuarioEgreso' => 'required',
-            'codDiagnosticoCausaMuerte_id' => 'required',
             'fechaEgreso' => 'required',
 
         ];
@@ -40,15 +36,11 @@ class UrgencyStoreRequest extends FormRequest
         return [
             'invoice_id.required' => 'El campo es obligatorio',
 
+            'codigo_urgencia_id' => 'El campo es obligatorio',
             'fechaInicioAtencion' => 'El campo es obligatorio',
             'causaMotivoAtencion_id' => 'El campo es obligatorio',
             'codDiagnosticoPrincipal_id' => 'El campo es obligatorio',
-            'codDiagnosticoPrincipalE_id' => 'El campo es obligatorio',
-            'codDiagnosticoRelacionadoE1_id' => 'El campo es obligatorio',
-            'codDiagnosticoRelacionadoE2_id' => 'El campo es obligatorio',
-            'codDiagnosticoRelacionadoE3_id' => 'El campo es obligatorio',
             'condicionDestinoUsuarioEgreso' => 'El campo es obligatorio',
-            'codDiagnosticoCausaMuerte_id' => 'El campo es obligatorio',
             'fechaEgreso' => 'El campo es obligatorio',
         ];
     }
@@ -57,6 +49,9 @@ class UrgencyStoreRequest extends FormRequest
     {
         $merge = [];
 
+        if ($this->has('codigo_urgencia_id')) {
+            $merge['codigo_urgencia_id'] = getValueSelectInfinite($this->codigo_urgencia_id);
+        }
         if ($this->has('causaMotivoAtencion_id')) {
             $merge['causaMotivoAtencion_id'] = getValueSelectInfinite($this->causaMotivoAtencion_id);
         }

@@ -34,7 +34,6 @@ class MedicineStoreRequest extends FormRequest
             'cantidadMedicamento' => 'required',
             'diasTratamiento' => 'required',
             'vrUnitMedicamento' => 'required',
-            'valorPagoModerador' => 'required',
             'vrServicio' => 'required',
             'conceptoRecaudo_id' => 'required',
 
@@ -63,7 +62,6 @@ class MedicineStoreRequest extends FormRequest
             'cantidadMedicamento' => 'El campo es obligatorio',
             'diasTratamiento' => 'El campo es obligatorio',
             'vrUnitMedicamento' => 'El campo es obligatorio',
-            'valorPagoModerador' => 'El campo es obligatorio',
             'vrServicio' => 'El campo es obligatorio',
             'conceptoRecaudo_id' => 'El campo es obligatorio',
         ];

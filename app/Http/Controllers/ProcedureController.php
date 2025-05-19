@@ -85,8 +85,8 @@ class ProcedureController extends Controller
                 'type' => TypeServiceEnum::SERVICE_TYPE_002,
                 'serviceable_type' => TypeServiceEnum::SERVICE_TYPE_002->model(),
                 'serviceable_id' => $procedure->id,
-                'codigo_servicio' => null,
-                'nombre_servicio' => null,
+                'codigo_servicio' => $procedure->codProcedimiento->codigo,
+                'nombre_servicio' => $procedure->codProcedimiento->nombre,
                 'quantity' => 1,
                 'unit_value' => $post['vrServicio'],
                 'total_value' => $post['vrServicio'],
@@ -107,13 +107,13 @@ class ProcedureController extends Controller
                 'tipoDocumentoIdentificacion' => '',
                 'numDocumentoIdentificacion' => '',
                 'codDiagnosticoPrincipal' => $procedure->codDiagnosticoPrincipal->codigo,
-                'codDiagnosticoRelacionado' => $procedure->codDiagnosticoRelacionado->codigo,
+                'codDiagnosticoRelacionado' => $procedure->codDiagnosticoRelacionado?->codigo,
                 'codComplicacion' => $procedure->codComplicacion->codigo,
                 'valorPagoModerador' => $post['valorPagoModerador'],
                 'numFEVPagoModerador' => '',
                 'consecutivo' => $consecutivo,
                 'vrServicio' => $post['vrServicio'],
-                'conceptoRecaudo' => $procedure->conceptoRecaudo->codigo,
+                'conceptoRecaudo' => $procedure->conceptoRecaudo?->codigo,
             ];
 
             // Update JSON with new service
@@ -191,8 +191,8 @@ class ProcedureController extends Controller
 
             // Update Service
             $service = $this->serviceRepository->store([
-                'codigo_servicio' => null,
-                'nombre_servicio' => null,
+                'codigo_servicio' => $procedure->codProcedimiento->codigo,
+                'nombre_servicio' => $procedure->codProcedimiento->nombre,
                 'quantity' => 1,
                 'unit_value' => $post['vrServicio'],
                 'total_value' => $post['vrServicio'],
@@ -216,13 +216,13 @@ class ProcedureController extends Controller
                 'tipoDocumentoIdentificacion' => '',
                 'numDocumentoIdentificacion' => '',
                 'codDiagnosticoPrincipal' => $procedure->codDiagnosticoPrincipal->codigo,
-                'codDiagnosticoRelacionado' => $procedure->codDiagnosticoRelacionado->codigo,
+                'codDiagnosticoRelacionado' => $procedure->codDiagnosticoRelacionado?->codigo,
                 'codComplicacion' => $procedure->codComplicacion->codigo,
                 'valorPagoModerador' => $post['valorPagoModerador'],
                 'numFEVPagoModerador' => '',
                 'consecutivo' => $consecutivo,
                 'vrServicio' => $post['vrServicio'],
-                'conceptoRecaudo' => $procedure->conceptoRecaudo->codigo,
+                'conceptoRecaudo' => $procedure->conceptoRecaudo?->codigo,
             ];
 
             // Update JSON with edited service

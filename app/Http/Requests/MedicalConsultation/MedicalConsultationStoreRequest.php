@@ -27,11 +27,7 @@ class MedicalConsultationStoreRequest extends FormRequest
             'finalidadTecnologiaSalud_id' => 'required',
             'causaMotivoAtencion_id' => 'required',
             'codDiagnosticoPrincipal_id' => 'required',
-            'codDiagnosticoRelacionado1_id' => 'required',
-            'codDiagnosticoRelacionado2_id' => 'required',
-            'codDiagnosticoRelacionado3_id' => 'required',
             'tipoDiagnosticoPrincipal_id' => 'required',
-            'valorPagoModerador' => 'required',
             'vrServicio' => 'required',
             'conceptoRecaudo_id' => 'required',
         ];
@@ -52,11 +48,7 @@ class MedicalConsultationStoreRequest extends FormRequest
             'finalidadTecnologiaSalud_id.required' => 'El campo es obligatorio',
             'causaMotivoAtencion_id.required' => 'El campo es obligatorio',
             'codDiagnosticoPrincipal_id.required' => 'El campo es obligatorio',
-            'codDiagnosticoRelacionado1_id.required' => 'El campo es obligatorio',
-            'codDiagnosticoRelacionado2_id.required' => 'El campo es obligatorio',
-            'codDiagnosticoRelacionado3_id.required' => 'El campo es obligatorio',
             'tipoDiagnosticoPrincipal_id.required' => 'El campo es obligatorio',
-            'valorPagoModerador.required' => 'El campo es obligatorio',
             'vrServicio.required' => 'El campo es obligatorio',
             'conceptoRecaudo_id.required' => 'El campo es obligatorio',
 

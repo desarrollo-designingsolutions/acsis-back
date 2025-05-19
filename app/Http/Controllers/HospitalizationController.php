@@ -30,6 +30,7 @@ class HospitalizationController extends Controller
             $ripsCausaExternaVersion2 = $this->queryController->selectInfiniteRipsCausaExternaVersion2(request());
             $cie10 = $this->queryController->selectInfiniteCie10(request());
             $condicionyDestinoUsuarioEgreso = $this->queryController->selectInfiniteCondicionyDestinoUsuarioEgreso(request());
+            $cupsRips = $this->queryController->selectInfiniteCupsRips(request());
 
             return [
                 'code' => 200,
@@ -37,6 +38,7 @@ class HospitalizationController extends Controller
                 ...$ripsCausaExternaVersion2,
                 ...$cie10,
                 ...$condicionyDestinoUsuarioEgreso,
+                ...$cupsRips,
             ];
         });
     }
@@ -52,6 +54,7 @@ class HospitalizationController extends Controller
 
             // Create Hospitalization
             $hospitalization = $this->hospitalizationRepository->store([
+                'codigo_hospitalizacion_id' => $post['codigo_hospitalizacion_id'],
                 'viaIngresoServicioSalud_id' => $post['viaIngresoServicioSalud_id'],
                 'fechaInicioAtencion' => $post['fechaInicioAtencion'],
                 'numAutorizacion' => $post['numAutorizacion'],
@@ -75,8 +78,8 @@ class HospitalizationController extends Controller
                 'type' => TypeServiceEnum::SERVICE_TYPE_004,
                 'serviceable_type' => TypeServiceEnum::SERVICE_TYPE_004->model(),
                 'serviceable_id' => $hospitalization->id,
-                'codigo_servicio' => null,
-                'nombre_servicio' => null,
+                'codigo_servicio' => $hospitalization->codigo_hospitalizacion->codigo,
+                'nombre_servicio' => $hospitalization->codigo_hospitalizacion->nombre,
                 'quantity' => 1,
                 'unit_value' => 0,
                 'total_value' => 0,
@@ -89,13 +92,13 @@ class HospitalizationController extends Controller
                 'numAutorizacion' => $post['numAutorizacion'],
                 'causaMotivoAtencion' => $hospitalization->causaMotivoAtencion->codigo,
                 'codDiagnosticoPrincipal' => $hospitalization->codDiagnosticoPrincipal->codigo,
-                'codDiagnosticoPrincipalE' => $hospitalization->codDiagnosticoPrincipalE->codigo,
-                'codDiagnosticoRelacionadoE1' => $hospitalization->codDiagnosticoRelacionadoE1->codigo,
-                'codDiagnosticoRelacionadoE2' => $hospitalization->codDiagnosticoRelacionadoE2->codigo,
-                'codDiagnosticoRelacionadoE3' => $hospitalization->codDiagnosticoRelacionadoE3->codigo,
+                'codDiagnosticoPrincipalE' => $hospitalization->codDiagnosticoPrincipalE?->codigo,
+                'codDiagnosticoRelacionadoE1' => $hospitalization->codDiagnosticoRelacionadoE1?->codigo,
+                'codDiagnosticoRelacionadoE2' => $hospitalization->codDiagnosticoRelacionadoE2?->codigo,
+                'codDiagnosticoRelacionadoE3' => $hospitalization->codDiagnosticoRelacionadoE3?->codigo,
                 'codComplicacion_id' => $post['codComplicacion_id'],
                 'condicionDestinoUsuarioEgreso' => $hospitalization->condicionDestinoUsuarioEgreso->codigo,
-                'codDiagnosticoMuerte' => $hospitalization->codDiagnosticoMuerte->codigo,
+                'codDiagnosticoMuerte' => $hospitalization->codDiagnosticoMuerte?->codigo,
                 'fechaEgreso' => $post['fechaEgreso'],
                 'consecutivo' => $consecutivo,
                 'codPrestador' => '',
@@ -132,6 +135,7 @@ class HospitalizationController extends Controller
             $ripsCausaExternaVersion2 = $this->queryController->selectInfiniteRipsCausaExternaVersion2(request());
             $cie10 = $this->queryController->selectInfiniteCie10(request());
             $condicionyDestinoUsuarioEgreso = $this->queryController->selectInfiniteCondicionyDestinoUsuarioEgreso(request());
+            $cupsRips = $this->queryController->selectInfiniteCupsRips(request());
 
             return [
                 'code' => 200,
@@ -140,6 +144,7 @@ class HospitalizationController extends Controller
                 ...$cie10,
                 ...$ripsCausaExternaVersion2,
                 ...$condicionyDestinoUsuarioEgreso,
+                ...$cupsRips,
             ];
         });
     }
@@ -152,6 +157,7 @@ class HospitalizationController extends Controller
 
             // Update Hospitalization
             $hospitalization = $this->hospitalizationRepository->store([
+                'codigo_hospitalizacion_id' => $post['codigo_hospitalizacion_id'],
                 'viaIngresoServicioSalud_id' => $post['viaIngresoServicioSalud_id'],
                 'fechaInicioAtencion' => $post['fechaInicioAtencion'],
                 'numAutorizacion' => $post['numAutorizacion'],
@@ -169,8 +175,8 @@ class HospitalizationController extends Controller
 
             // Update Service
             $service = $this->serviceRepository->store([
-                'codigo_servicio' => null,
-                'nombre_servicio' => null,
+                'codigo_servicio' => $hospitalization->codigo_hospitalizacion->codigo,
+                'nombre_servicio' => $hospitalization->codigo_hospitalizacion->nombre,
                 'quantity' => 1,
                 'unit_value' => 0,
                 'total_value' => 0,
@@ -186,13 +192,13 @@ class HospitalizationController extends Controller
                 'numAutorizacion' => $post['numAutorizacion'],
                 'causaMotivoAtencion' => $hospitalization->causaMotivoAtencion->codigo,
                 'codDiagnosticoPrincipal' => $hospitalization->codDiagnosticoPrincipal->codigo,
-                'codDiagnosticoPrincipalE' => $hospitalization->codDiagnosticoPrincipalE->codigo,
-                'codDiagnosticoRelacionadoE1' => $hospitalization->codDiagnosticoRelacionadoE1->codigo,
-                'codDiagnosticoRelacionadoE2' => $hospitalization->codDiagnosticoRelacionadoE2->codigo,
-                'codDiagnosticoRelacionadoE3' => $hospitalization->codDiagnosticoRelacionadoE3->codigo,
+                'codDiagnosticoPrincipalE' => $hospitalization->codDiagnosticoPrincipalE?->codigo,
+                'codDiagnosticoRelacionadoE1' => $hospitalization->codDiagnosticoRelacionadoE1?->codigo,
+                'codDiagnosticoRelacionadoE2' => $hospitalization->codDiagnosticoRelacionadoE2?->codigo,
+                'codDiagnosticoRelacionadoE3' => $hospitalization->codDiagnosticoRelacionadoE3?->codigo,
                 'codComplicacion_id' => $post['codComplicacion_id'],
                 'condicionDestinoUsuarioEgreso' => $hospitalization->condicionDestinoUsuarioEgreso->codigo,
-                'codDiagnosticoMuerte' => $hospitalization->codDiagnosticoMuerte->codigo,
+                'codDiagnosticoMuerte' => $hospitalization->codDiagnosticoMuerte?->codigo,
                 'fechaEgreso' => $post['fechaEgreso'],
                 'consecutivo' => $consecutivo,
                 'codPrestador' => '',

@@ -28,11 +28,13 @@ class UrgencyController extends Controller
 
             $ripsCausaExternaVersion2 = $this->queryController->selectInfiniteRipsCausaExternaVersion2(request());
             $cie10 = $this->queryController->selectInfiniteCie10(request());
+            $cupsRips = $this->queryController->selectInfiniteCupsRips(request());
 
             return [
                 'code' => 200,
                 ...$cie10,
                 ...$ripsCausaExternaVersion2,
+                ...$cupsRips,
             ];
         });
     }
@@ -48,6 +50,7 @@ class UrgencyController extends Controller
 
             // Create Urgency
             $urgency = $this->urgencyRepository->store([
+                'codigo_urgencia_id' => $post['codigo_urgencia_id'],
                 'fechaInicioAtencion' => $post['fechaInicioAtencion'],
                 'causaMotivoAtencion_id' => $post['causaMotivoAtencion_id'],
                 'codDiagnosticoPrincipal_id' => $post['codDiagnosticoPrincipal_id'],
@@ -68,8 +71,8 @@ class UrgencyController extends Controller
                 'type' => TypeServiceEnum::SERVICE_TYPE_003,
                 'serviceable_type' => TypeServiceEnum::SERVICE_TYPE_003->model(),
                 'serviceable_id' => $urgency->id,
-                'codigo_servicio' => null,
-                'nombre_servicio' => null,
+                'codigo_servicio' => $urgency->codigo_urgencia->codigo,
+                'nombre_servicio' => $urgency->codigo_urgencia->nombre,
                 'quantity' => 1,
                 'unit_value' => 0,
                 'total_value' => 0,
@@ -81,12 +84,12 @@ class UrgencyController extends Controller
                 'fechaInicioAtencion' => $post['fechaInicioAtencion'],
                 'causaMotivoAtencion' => $urgency->causaMotivoAtencion->codigo,
                 'codDiagnosticoPrincipal' => $urgency->codDiagnosticoPrincipal->codigo,
-                'codDiagnosticoPrincipalE' => $urgency->codDiagnosticoPrincipalE->codigo,
-                'codDiagnosticoRelacionadoE1' => $urgency->codDiagnosticoRelacionadoE1->codigo,
-                'codDiagnosticoRelacionadoE2' => $urgency->codDiagnosticoRelacionadoE2->codigo,
-                'codDiagnosticoRelacionadoE3' => $urgency->codDiagnosticoRelacionadoE3->codigo,
+                'codDiagnosticoPrincipalE' => $urgency->codDiagnosticoPrincipalE?->codigo,
+                'codDiagnosticoRelacionadoE1' => $urgency->codDiagnosticoRelacionadoE1?->codigo,
+                'codDiagnosticoRelacionadoE2' => $urgency->codDiagnosticoRelacionadoE2?->codigo,
+                'codDiagnosticoRelacionadoE3' => $urgency->codDiagnosticoRelacionadoE3?->codigo,
                 'condicionDestinoUsuarioEgreso' => $post['condicionDestinoUsuarioEgreso'],
-                'codDiagnosticoCausaMuerte' => $urgency->codDiagnosticoCausaMuerte->codigo,
+                'codDiagnosticoCausaMuerte' => $urgency->codDiagnosticoCausaMuerte?->codigo,
                 'fechaEgreso' => $post['fechaEgreso'],
                 'consecutivo' => $consecutivo,
                 'numFEVPagoModerador' => '',
@@ -120,12 +123,14 @@ class UrgencyController extends Controller
 
             $ripsCausaExternaVersion2 = $this->queryController->selectInfiniteRipsCausaExternaVersion2(request());
             $cie10 = $this->queryController->selectInfiniteCie10(request());
+            $cupsRips = $this->queryController->selectInfiniteCupsRips(request());
 
             return [
                 'code' => 200,
                 'form' => $form,
                 ...$cie10,
                 ...$ripsCausaExternaVersion2,
+                ...$cupsRips,
             ];
         });
     }
@@ -138,6 +143,7 @@ class UrgencyController extends Controller
 
             // Update Urgency
             $urgency = $this->urgencyRepository->store([
+                'codigo_urgencia_id' => $post['codigo_urgencia_id'],
                 'fechaInicioAtencion' => $post['fechaInicioAtencion'],
                 'causaMotivoAtencion_id' => $post['causaMotivoAtencion_id'],
                 'codDiagnosticoPrincipal_id' => $post['codDiagnosticoPrincipal_id'],
@@ -152,8 +158,8 @@ class UrgencyController extends Controller
 
             // Update Service
             $service = $this->serviceRepository->store([
-                'codigo_servicio' => null,
-                'nombre_servicio' => null,
+                'codigo_servicio' => $urgency->codigo_urgencia->codigo,
+                'nombre_servicio' => $urgency->codigo_urgencia->nombre,
                 'quantity' => 1,
                 'unit_value' => 0,
                 'total_value' => 0,
@@ -168,12 +174,12 @@ class UrgencyController extends Controller
                 'fechaInicioAtencion' => $post['fechaInicioAtencion'],
                 'causaMotivoAtencion' => $urgency->causaMotivoAtencion->codigo,
                 'codDiagnosticoPrincipal' => $urgency->codDiagnosticoPrincipal->codigo,
-                'codDiagnosticoPrincipalE' => $urgency->codDiagnosticoPrincipalE->codigo,
-                'codDiagnosticoRelacionadoE1' => $urgency->codDiagnosticoRelacionadoE1->codigo,
-                'codDiagnosticoRelacionadoE2' => $urgency->codDiagnosticoRelacionadoE2->codigo,
-                'codDiagnosticoRelacionadoE3' => $urgency->codDiagnosticoRelacionadoE3->codigo,
+                'codDiagnosticoPrincipalE' => $urgency->codDiagnosticoPrincipalE?->codigo,
+                'codDiagnosticoRelacionadoE1' => $urgency->codDiagnosticoRelacionadoE1?->codigo,
+                'codDiagnosticoRelacionadoE2' => $urgency->codDiagnosticoRelacionadoE2?->codigo,
+                'codDiagnosticoRelacionadoE3' => $urgency->codDiagnosticoRelacionadoE3?->codigo,
                 'condicionDestinoUsuarioEgreso' => $post['condicionDestinoUsuarioEgreso'],
-                'codDiagnosticoCausaMuerte' => $urgency->codDiagnosticoCausaMuerte->codigo,
+                'codDiagnosticoCausaMuerte' => $urgency->codDiagnosticoCausaMuerte?->codigo,
                 'fechaEgreso' => $post['fechaEgreso'],
                 'consecutivo' => $consecutivo,
                 'numFEVPagoModerador' => '',

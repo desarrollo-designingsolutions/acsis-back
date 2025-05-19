@@ -25,6 +25,7 @@ class ServicePaginateResource extends JsonResource
             'unit_value' => formatNumber($this->unit_value),
             'total_value' => formatNumber($this->total_value),
             'type' => $this->type,
+            'type_description' => $this->type->description(),
             'total_value_origin' => $this->total_value,
         ];
     }
