@@ -82,6 +82,7 @@ class ServiceController extends Controller
                 return [
                     'type' => $case->value,
                     'name' => $case->description(),
+                    'icon' => $case->icon(),
                 ];
             }, TypeServiceEnum::cases());
 
