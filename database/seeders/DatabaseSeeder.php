@@ -63,6 +63,8 @@ class DatabaseSeeder extends Seeder
             UmmSeeder::class,
             TipoOtrosServiciosSeeder::class,
 
+            CondicionyDestinoUsuarioEgresoSeeder::class,
+
         ]);
 
         $client = new ClientRepository;
