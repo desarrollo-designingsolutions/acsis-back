@@ -3,11 +3,11 @@
 namespace App\Repositories;
 
 use App\Helpers\Constants;
-use App\Models\ViaIngresoUsuario;
+use App\Models\CondicionyDestinoUsuarioEgreso;
 
 class CondicionyDestinoUsuarioEgresoRepository extends BaseRepository
 {
-    public function __construct(ViaIngresoUsuario $modelo)
+    public function __construct(CondicionyDestinoUsuarioEgreso $modelo)
     {
         parent::__construct($modelo);
     }
@@ -21,8 +21,8 @@ class CondicionyDestinoUsuarioEgresoRepository extends BaseRepository
             $data = $this->model->with($with)->where(function ($query) {})
                 ->where(function ($query) use ($request) {
                     if (isset($request['searchQueryInfinite']) && ! empty($request['searchQueryInfinite'])) {
-                        $query->where('codigo', 'like', '%'.$request['searchQueryInfinite'].'%');
-                        $query->orWhere('nombre', 'like', '%'.$request['searchQueryInfinite'].'%');
+                        $query->where('codigo', 'like', '%' . $request['searchQueryInfinite'] . '%');
+                        $query->orWhere('nombre', 'like', '%' . $request['searchQueryInfinite'] . '%');
                     }
                 });
 
@@ -65,8 +65,8 @@ class CondicionyDestinoUsuarioEgresoRepository extends BaseRepository
             }
             if (! empty($request['string'])) {
                 $value = strval($request['string']);
-                $query->where('codigo', 'like', '%'.$value.'%');
-                $query->orWhere('nombre', 'like', '%'.$value.'%');
+                $query->where('codigo', 'like', '%' . $value . '%');
+                $query->orWhere('nombre', 'like', '%' . $value . '%');
             }
         });
 
@@ -78,7 +78,7 @@ class CondicionyDestinoUsuarioEgresoRepository extends BaseRepository
         $data = $query->get()->map(function ($value) use ($with, $select, $fieldValue) {
             $data = [
                 'value' => $value->$fieldValue,
-                'title' => $value->codigo.' - '.$value->nombre,
+                'title' => $value->codigo . ' - ' . $value->nombre,
             ];
 
             if (count($select) > 0) {
@@ -142,7 +142,7 @@ class CondicionyDestinoUsuarioEgresoRepository extends BaseRepository
                     case 'selectInfinite':
                         return [
                             'value' => $data->id,
-                            'title' => $data->codigo.' - '.$data->nombre,
+                            'title' => $data->codigo . ' - ' . $data->nombre,
                             'code' => $data->codigo,
                         ];
                     default:

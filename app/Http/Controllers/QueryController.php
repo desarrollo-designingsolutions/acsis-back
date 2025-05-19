@@ -6,6 +6,7 @@ use App\Enums\Invoice\StatusInvoiceEnum;
 use App\Http\Resources\Cie10\Cie10SelectInfiniteResource;
 use App\Http\Resources\CodeGlosa\CodeGlosaSelectInfiniteResource;
 use App\Http\Resources\ConceptoRecaudo\ConceptoRecaudoSelectResource;
+use App\Http\Resources\CondicionyDestinoUsuarioEgreso\CondicionyDestinoUsuarioEgresoSelectInfiniteResource;
 use App\Http\Resources\Country\CountrySelectResource;
 use App\Http\Resources\CupsRips\CupsRipsSelectInfiniteResource;
 use App\Http\Resources\Entity\EntitySelectResource;
@@ -33,6 +34,7 @@ use App\Repositories\Cie10Repository;
 use App\Repositories\CityRepository;
 use App\Repositories\CodeGlosaRepository;
 use App\Repositories\ConceptoRecaudoRepository;
+use App\Repositories\CondicionyDestinoUsuarioEgresoRepository;
 use App\Repositories\CountryRepository;
 use App\Repositories\CupsRipsRepository;
 use App\Repositories\EntityRepository;
@@ -97,8 +99,12 @@ class QueryController extends Controller
         protected RipsTipoDiagnosticoPrincipalVersion2Repository $ripsTipoDiagnosticoPrincipalVersion2Repository,
         protected RipsCausaExternaVersion2Repository $ripsCausaExternaVersion2Repository,
         protected ViaIngresoUsuarioRepository $viaIngresoUsuarioRepository,
+<<<<<<< HEAD
         protected TipoMedicamentoPosVersion2Repository $tipoMedicamentoPosVersion2Repository,
         protected UmmRepository $ummRepository,
+=======
+        protected CondicionyDestinoUsuarioEgresoRepository $condicionyDestinoUsuarioEgresoRepository,
+>>>>>>> origin/feature/hospitalization
     ) {}
 
     public function selectInfiniteCountries(Request $request)
@@ -497,6 +503,18 @@ class QueryController extends Controller
             'code' => 200,
             'umm_arrayInfo' => $dataUmm,
             'umm_countLinks' => $umm->lastPage(),
+        ];
+    }
+
+    public function selectInfiniteCondicionyDestinoUsuarioEgreso(Request $request)
+    {
+        $condicionyDestinoUsuarioEgreso = $this->condicionyDestinoUsuarioEgresoRepository->list($request->all());
+        $dataCondicionyDestinoUsuarioEgreso = CondicionyDestinoUsuarioEgresoSelectInfiniteResource::collection($condicionyDestinoUsuarioEgreso);
+
+        return [
+            'code' => 200,
+            'condicionyDestinoUsuarioEgreso_arrayInfo' => $dataCondicionyDestinoUsuarioEgreso,
+            'condicionyDestinoUsuarioEgreso_countLinks' => $condicionyDestinoUsuarioEgreso->lastPage(),
         ];
     }
 }
