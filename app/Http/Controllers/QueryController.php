@@ -22,9 +22,11 @@ use App\Http\Resources\ServiceVendor\ServiceVendorSelectResource;
 use App\Http\Resources\Servicio\ServicioSelectInfiniteResource;
 use App\Http\Resources\Sexo\SexoSelectResource;
 use App\Http\Resources\TipoIdPisis\TipoIdPisisSelectResource;
+use App\Http\Resources\TipoMedicamentoPosVersion2\TipoMedicamentoPosVersion2SelectInfiniteResource;
 use App\Http\Resources\TipoNota\TipoNotaSelectResource;
 use App\Http\Resources\TipoOtrosServicios\TipoOtrosServiciosSelectResource;
 use App\Http\Resources\TypeDocument\TypeDocumentSelectResource;
+use App\Http\Resources\Umm\UmmSelectInfiniteResource;
 use App\Http\Resources\ViaIngresoUsuario\ViaIngresoUsuarioSelectInfiniteResource;
 use App\Http\Resources\ZonaVersion2\ZonaVersion2SelectResource;
 use App\Repositories\Cie10Repository;
@@ -48,11 +50,13 @@ use App\Repositories\ServicioRepository;
 use App\Repositories\SexoRepository;
 use App\Repositories\StateRepository;
 use App\Repositories\TipoIdPisisRepository;
+use App\Repositories\TipoMedicamentoPosVersion2Repository;
 use App\Repositories\TipoNotaRepository;
 use App\Repositories\TipoOtrosServiciosRepository;
 use App\Repositories\TypeDocumentRepository;
 use App\Repositories\TypeEntityRepository;
 use App\Repositories\TypeVendorRepository;
+use App\Repositories\UmmRepository;
 use App\Repositories\UserRepository;
 use App\Repositories\ViaIngresoUsuarioRepository;
 use App\Repositories\ZonaVersion2Repository;
@@ -93,6 +97,8 @@ class QueryController extends Controller
         protected RipsTipoDiagnosticoPrincipalVersion2Repository $ripsTipoDiagnosticoPrincipalVersion2Repository,
         protected RipsCausaExternaVersion2Repository $ripsCausaExternaVersion2Repository,
         protected ViaIngresoUsuarioRepository $viaIngresoUsuarioRepository,
+        protected TipoMedicamentoPosVersion2Repository $tipoMedicamentoPosVersion2Repository,
+        protected UmmRepository $ummRepository,
     ) {}
 
     public function selectInfiniteCountries(Request $request)
@@ -467,6 +473,30 @@ class QueryController extends Controller
             'code' => 200,
             'viaIngresoUsuario_arrayInfo' => $dataViaIngresoUsuario,
             'viaIngresoUsuario_countLinks' => $viaIngresoUsuario->lastPage(),
+        ];
+    }
+
+    public function selectInfiniteTipoMedicamentoPosVersion2(Request $request)
+    {
+        $tipoMedicamentoPosVersion2 = $this->tipoMedicamentoPosVersion2Repository->list($request->all());
+        $dataTipoMedicamentoPosVersion2 = TipoMedicamentoPosVersion2SelectInfiniteResource::collection($tipoMedicamentoPosVersion2);
+
+        return [
+            'code' => 200,
+            'tipoMedicamentoPosVersion2_arrayInfo' => $dataTipoMedicamentoPosVersion2,
+            'tipoMedicamentoPosVersion2_countLinks' => $tipoMedicamentoPosVersion2->lastPage(),
+        ];
+    }
+
+    public function selectInfiniteUmm(Request $request)
+    {
+        $umm = $this->ummRepository->list($request->all());
+        $dataUmm = UmmSelectInfiniteResource::collection($umm);
+
+        return [
+            'code' => 200,
+            'umm_arrayInfo' => $dataUmm,
+            'umm_countLinks' => $umm->lastPage(),
         ];
     }
 }

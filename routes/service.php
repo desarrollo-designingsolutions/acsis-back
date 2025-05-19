@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\MedicalConsultationController;
+use App\Http\Controllers\MedicineController;
 use App\Http\Controllers\OtherServiceController;
 use App\Http\Controllers\ProcedureController;
 use App\Http\Controllers\ServiceController;
@@ -77,4 +78,18 @@ Route::middleware(['check.permission:menu.invoice'])->group(function () {
     Route::get('/service/urgency/{service_id}/edit', [UrgencyController::class, 'edit']);
 
     Route::post('/service/urgency/update/{id}', [UrgencyController::class, 'update']);
+
+    /*
+    |--------------------------------------------------------------------------
+    | Medicine
+    |--------------------------------------------------------------------------
+    */
+
+    Route::get('/service/medicine/create', [MedicineController::class, 'create']);
+
+    Route::post('/service/medicine/store', [MedicineController::class, 'store']);
+
+    Route::get('/service/medicine/{service_id}/edit', [MedicineController::class, 'edit']);
+
+    Route::post('/service/medicine/update/{id}', [MedicineController::class, 'update']);
 });

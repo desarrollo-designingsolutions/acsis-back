@@ -42,3 +42,5 @@ Route::post('/selectInfiniteServicio', [QueryController::class, 'selectInfiniteS
 Route::post('/selectInfiniteGrupoServicio', [QueryController::class, 'selectInfiniteGrupoServicio']);
 Route::post('/selectInfiniteModalidadAtencion', [QueryController::class, 'selectInfiniteModalidadAtencion']);
 Route::post('/selectInfiniteViaIngresoUsuario', [QueryController::class, 'selectInfiniteViaIngresoUsuario']);
+Route::post('/selectInfiniteTipoMedicamentoPosVersion2', [QueryController::class, 'selectInfiniteTipoMedicamentoPosVersion2']);
+Route::post('/selectInfiniteUmm', [QueryController::class, 'selectInfiniteUmm']);
