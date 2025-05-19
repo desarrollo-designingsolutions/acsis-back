@@ -10,8 +10,4 @@ use Illuminate\Database\Eloquent\Model;
 class RipsTipoUsuarioVersion2 extends Model
 {
     use Cacheable, HasFactory, HasUuids;
-
-    protected $customCachePrefixes = [
-        'string:{table}_searchOne*',
-    ];
 }

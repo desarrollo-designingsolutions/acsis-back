@@ -5,9 +5,9 @@ namespace App\Http\Controllers;
 use App\Enums\Service\TypeServiceEnum;
 use App\Http\Requests\Hospitalization\HospitalizationStoreRequest;
 use App\Http\Resources\Hospitalization\HospitalizationFormResource;
+use App\Repositories\HospitalizationRepository;
 use App\Repositories\InvoiceRepository;
 use App\Repositories\ServiceRepository;
-use App\Repositories\HospitalizationRepository;
 use App\Traits\HttpResponseTrait;
 use Illuminate\Http\Request;
 
@@ -98,7 +98,7 @@ class HospitalizationController extends Controller
                 'codDiagnosticoMuerte' => $hospitalization->codDiagnosticoMuerte->codigo,
                 'fechaEgreso' => $post['fechaEgreso'],
                 'consecutivo' => $consecutivo,
-                'codPrestador' => "",
+                'codPrestador' => '',
                 'numDocumentoIdentificacion' => '',
                 'tipoDocumentoIdentificacion' => '',
                 'numFEVPagoModerador' => '',
@@ -195,7 +195,7 @@ class HospitalizationController extends Controller
                 'codDiagnosticoMuerte' => $hospitalization->codDiagnosticoMuerte->codigo,
                 'fechaEgreso' => $post['fechaEgreso'],
                 'consecutivo' => $consecutivo,
-                'codPrestador' => "",
+                'codPrestador' => '',
                 'numDocumentoIdentificacion' => '',
                 'tipoDocumentoIdentificacion' => '',
                 'numFEVPagoModerador' => '',

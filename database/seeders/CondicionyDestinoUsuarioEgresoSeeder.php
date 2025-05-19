@@ -14,7 +14,7 @@ class CondicionyDestinoUsuarioEgresoSeeder extends Seeder
      */
     public function run(): void
     {
-        $excelService = new ExcelService();
+        $excelService = new ExcelService;
         $sheet = null;
 
         try {
@@ -23,9 +23,9 @@ class CondicionyDestinoUsuarioEgresoSeeder extends Seeder
                 ->getSheetByName('Table')
                 ->toArray();
         } catch (Exception $e) {
-            //$this->error('Error al leer el excel');
+            // $this->error('Error al leer el excel');
         } catch (\PhpOffice\PhpSpreadsheet\Exception $e) {
-            //$this->error('Error al obtener la hoja');
+            // $this->error('Error al obtener la hoja');
         }
 
         if ($sheet) {
@@ -34,7 +34,6 @@ class CondicionyDestinoUsuarioEgresoSeeder extends Seeder
             // Inicializar la barra de progreso
             $this->command->info('Starting Seed Data ...');
             $bar = $this->command->getOutput()->createProgressBar(count($sheet));
-
 
             foreach ($sheet as $dataSheet) {
                 CondicionyDestinoUsuarioEgreso::updateOrCreate(

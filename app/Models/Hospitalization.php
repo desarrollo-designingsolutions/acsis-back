@@ -62,6 +62,7 @@ class Hospitalization extends Model
     {
         return $this->belongsTo(ViaIngresoUsuario::class, 'viaIngresoServicioSalud_id');
     }
+
     public function condicionDestinoUsuarioEgreso()
     {
         return $this->belongsTo(CondicionyDestinoUsuarioEgreso::class, 'condicionDestinoUsuarioEgreso_id');

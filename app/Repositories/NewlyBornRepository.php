@@ -3,13 +3,13 @@
 namespace App\Repositories;
 
 use App\Helpers\Constants;
-use App\Models\TypeDocument;
+use App\Models\NewlyBorn;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
-class TypeDocumentRepository extends BaseRepository
+class NewlyBornRepository extends BaseRepository
 {
-    public function __construct(TypeDocument $modelo)
+    public function __construct(NewlyBorn $modelo)
     {
         parent::__construct($modelo);
     }
@@ -20,33 +20,18 @@ class TypeDocumentRepository extends BaseRepository
 
         return $this->cacheService->remember($cacheKey, function () use ($request) {
             $query = QueryBuilder::for($this->model->query())
-                ->select(['id', 'name'])
                 ->allowedFilters([
                     AllowedFilter::callback('inputGeneral', function ($query, $value) {
-                        $query->where(function ($subQuery) use ($value) {
-                            $subQuery->orWhere('name', 'like', "%$value%");
-                        });
+                        $query->where(function ($subQuery) {});
                     }),
                 ])
-                ->allowedSorts([
-                    'name',
-                ])->where(function ($query) use ($request) {
-
-                    if (isset($request['searchQueryInfinite']) && ! empty($request['searchQueryInfinite'])) {
-                        $query->orWhere('name', 'like', '%'.$request['searchQueryInfinite'].'%');
+                ->allowedSorts([])
+                ->where(function ($query) use ($request) {
+                    if (isset($request['service_id']) && ! empty($request['service_id'])) {
+                        $query->where('service_id', $request['service_id']);
                     }
-
-                    if (! empty($request['company_id'])) {
-                        $query->where('company_id', $request['company_id']);
-                    }
-
-                });
-
-            if (empty($request['typeData'])) {
-                $query = $query->paginate(request()->perPage ?? Constants::ITEMS_PER_PAGE);
-            } else {
-                $query = $query->get();
-            }
+                })
+                ->paginate(request()->perPage ?? Constants::ITEMS_PER_PAGE);
 
             return $query;
         }, Constants::REDIS_TTL);
@@ -74,23 +59,16 @@ class TypeDocumentRepository extends BaseRepository
         return $data;
     }
 
-    public function selectList($request = [], $with = [], $select = [], $fieldValue = 'id', $fieldTitle = 'name', $limit = null)
+    public function selectList($request = [], $with = [], $select = [], $fieldValue = 'id', $fieldTitle = 'name')
     {
-        $query = $this->model->with($with)->where(function ($query) use ($request) {
+        $data = $this->model->with($with)->where(function ($query) use ($request) {
             if (! empty($request['idsAllowed'])) {
                 $query->whereIn('id', $request['idsAllowed']);
             }
-            if (! empty($request['string'])) {
-                $query->where('name', 'like', '%'.$request['string'].'%');
+            if (! empty($request['company_id'])) {
+                $query->where('company_id', $request['company_id']);
             }
-        });
-
-        // Aplica el límite si está definido
-        if ($limit !== null) {
-            $query->limit($limit);
-        }
-
-        $data = $query->get()->map(function ($value) use ($with, $select, $fieldValue, $fieldTitle) {
+        })->get()->map(function ($value) use ($with, $select, $fieldValue, $fieldTitle) {
             $data = [
                 'value' => $value->$fieldValue,
                 'title' => $value->$fieldTitle,

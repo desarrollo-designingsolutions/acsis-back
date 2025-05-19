@@ -6,8 +6,8 @@ use App\Enums\Service\TypeServiceEnum;
 use App\Http\Requests\Medicine\MedicineStoreRequest;
 use App\Http\Resources\Medicine\MedicineFormResource;
 use App\Repositories\InvoiceRepository;
-use App\Repositories\ServiceRepository;
 use App\Repositories\MedicineRepository;
+use App\Repositories\ServiceRepository;
 use App\Traits\HttpResponseTrait;
 use Illuminate\Http\Request;
 

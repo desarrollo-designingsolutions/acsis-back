@@ -99,12 +99,9 @@ class QueryController extends Controller
         protected RipsTipoDiagnosticoPrincipalVersion2Repository $ripsTipoDiagnosticoPrincipalVersion2Repository,
         protected RipsCausaExternaVersion2Repository $ripsCausaExternaVersion2Repository,
         protected ViaIngresoUsuarioRepository $viaIngresoUsuarioRepository,
-<<<<<<< HEAD
         protected TipoMedicamentoPosVersion2Repository $tipoMedicamentoPosVersion2Repository,
         protected UmmRepository $ummRepository,
-=======
         protected CondicionyDestinoUsuarioEgresoRepository $condicionyDestinoUsuarioEgresoRepository,
->>>>>>> origin/feature/hospitalization
     ) {}
 
     public function selectInfiniteCountries(Request $request)

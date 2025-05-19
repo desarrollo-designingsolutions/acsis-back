@@ -14,6 +14,7 @@ trait Cacheable
     protected $defaultCachePrefixes = [
         'string:{table}_paginate*',
         'string:{table}_find_{id}*',
+        'string:{table}_searchOne*',
     ];
 
     /**

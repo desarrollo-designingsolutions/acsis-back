@@ -32,6 +32,8 @@ enum TypeServiceEnum: string
     case SERVICE_TYPE_004 = 'SERVICE_TYPE_004';
 
     #[Description('Recien nacidos')]
+    #[Model('App\\Models\\NewlyBorn')]
+    #[ElementJson('recienNacidos')]
     case SERVICE_TYPE_005 = 'SERVICE_TYPE_005';
 
     #[Description('Medicamentos')]
