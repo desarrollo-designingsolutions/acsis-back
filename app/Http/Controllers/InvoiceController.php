@@ -14,6 +14,7 @@ use App\Http\Requests\Invoice\InvoiceStoreRequest;
 use App\Http\Resources\Invoice\InvoiceFormResource;
 use App\Http\Resources\Invoice\InvoiceListResource;
 use App\Http\Resources\InvoiceSoat\InvoiceSoatFormResource;
+use App\Models\Invoice;
 use App\Models\Service;
 use App\Repositories\Cie10Repository;
 use App\Repositories\ConceptoRecaudoRepository;
@@ -45,8 +46,10 @@ use App\Repositories\ZonaVersion2Repository;
 use App\Services\CacheService;
 use App\Traits\HttpResponseTrait;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
+use ZipArchive;
 
 class InvoiceController extends Controller
 {
@@ -633,4 +636,53 @@ class InvoiceController extends Controller
             ];
         });
     }
+
+    public function downloadZip($id)
+{
+    try {
+        $invoice = Invoice::findOrFail($id);
+
+        // Verificar rutas usando el disco correcto (ajusta 'disco' según tu configuración)
+        $disk = Storage::disk(Constants::DISK_FILES); // o el disco donde tengas los archivos
+        
+        if (!$disk->exists($invoice->path_xml) || !$disk->exists($invoice->path_json)) {
+            return response()->json([
+                'error' => 'Archivos no encontrados'
+            ], 404);
+        }
+
+        // Crear directorio temporal si no existe
+        $tempPath = storage_path('app/temp_zips');
+        if (!File::exists($tempPath)) {
+            File::makeDirectory($tempPath, 0755, true);
+        }
+
+        $zipFileName = 'factura_'.$invoice->id.'.zip';
+        $zipPath = $tempPath.'/'.$zipFileName;
+
+        $zip = new ZipArchive;
+        if ($zip->open($zipPath, ZipArchive::CREATE | ZipArchive::OVERWRITE) === TRUE) {
+            // Agregar archivos usando rutas absolutas
+            $zip->addFile($disk->path($invoice->path_xml), 'factura.xml');
+            $zip->addFile($disk->path($invoice->path_json), 'factura.json');
+            
+            $zip->close();
+
+            // Verificar que el ZIP se creó
+            if (!file_exists($zipPath)) {
+                throw new \Exception('Error al generar el archivo ZIP');
+            }
+
+            return response()->download($zipPath, $zipFileName)->deleteFileAfterSend(true);
+        }
+
+        return response()->json(['error' => 'Error al crear el ZIP'], 500);
+
+    } catch (\Exception $e) {
+        \Log::error('Error en downloadZip: '.$e->getMessage());
+        return response()->json([
+            'error' => $e->getMessage()
+        ], 500);
+    }
+}
 }

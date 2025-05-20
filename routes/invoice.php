@@ -39,4 +39,6 @@ Route::middleware(['check.permission:menu.invoice'])->group(function () {
     Route::get('/invoice/excelErrorsValidationXml/{id}', [InvoiceController::class, 'excelErrorsValidation']);
 
     Route::get('/invoice/dataUrgeHosBorn/{id}', [InvoiceController::class, 'dataUrgeHosBorn']);
+
+    Route::get('/invoice/downloadZip/{id}', [InvoiceController::class, 'downloadZip']);
 });
