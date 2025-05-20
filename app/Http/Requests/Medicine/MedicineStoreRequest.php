@@ -1,0 +1,118 @@
+<?php
+
+namespace App\Http\Requests\Medicine;
+
+use App\Helpers\Constants;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
+
+class MedicineStoreRequest extends FormRequest
+{
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     */
+    public function rules(): array
+    {
+        $rules = [
+            'invoice_id' => 'required',
+
+            'numAutorizacion' => 'required',
+            'idMIPRES' => 'required',
+            'fechaDispensAdmon' => 'required',
+            'codDiagnosticoPrincipal_id' => 'required',
+            'codDiagnosticoRelacionado_id' => 'required',
+            'tipoMedicamento_id' => 'required',
+            'codTecnologiaSalud' => 'required',
+            'nomTecnologiaSalud' => 'required',
+            'concentracionMedicamento' => 'required',
+            'unidadMedida_id' => 'required',
+            'formaFarmaceutica' => 'required',
+            'unidadMinDispensa' => 'required',
+            'cantidadMedicamento' => 'required',
+            'diasTratamiento' => 'required',
+            'vrUnitMedicamento' => 'required',
+            'vrServicio' => 'required',
+            'tipoDocumentoIdentificacion_id' => 'required',
+            'numDocumentoIdentificacion' => 'required',
+
+        ];
+
+        if ($this->valorPagoModerador > 0) {
+            $rules['conceptoRecaudo_id'] = 'required';
+            $rules['numFEVPagoModerador'] = 'required';
+        }
+
+        return $rules;
+    }
+
+    public function messages(): array
+    {
+        return [
+            'invoice_id.required' => 'El campo es obligatorio',
+
+            'numAutorizacion' => 'El campo es obligatorio',
+            'idMIPRES' => 'El campo es obligatorio',
+            'fechaDispensAdmon' => 'El campo es obligatorio',
+            'codDiagnosticoPrincipal_id' => 'El campo es obligatorio',
+            'codDiagnosticoRelacionado_id' => 'El campo es obligatorio',
+            'tipoMedicamento_id' => 'El campo es obligatorio',
+            'codTecnologiaSalud' => 'El campo es obligatorio',
+            'nomTecnologiaSalud' => 'El campo es obligatorio',
+            'concentracionMedicamento' => 'El campo es obligatorio',
+            'unidadMedida_id' => 'El campo es obligatorio',
+            'formaFarmaceutica' => 'El campo es obligatorio',
+            'unidadMinDispensa' => 'El campo es obligatorio',
+            'cantidadMedicamento' => 'El campo es obligatorio',
+            'diasTratamiento' => 'El campo es obligatorio',
+            'vrUnitMedicamento' => 'El campo es obligatorio',
+            'vrServicio' => 'El campo es obligatorio',
+            'conceptoRecaudo_id' => 'El campo es obligatorio',
+            'tipoDocumentoIdentificacion_id.required' => 'El campo es obligatorio',
+            'numDocumentoIdentificacion.required' => 'El campo es obligatorio',
+            'numFEVPagoModerador.required' => 'El campo es obligatorio',
+        ];
+    }
+
+    protected function prepareForValidation(): void
+    {
+        $merge = [];
+
+        if ($this->has('codDiagnosticoPrincipal_id')) {
+            $merge['codDiagnosticoPrincipal_id'] = getValueSelectInfinite($this->codDiagnosticoPrincipal_id);
+        }
+
+        if ($this->has('codDiagnosticoRelacionado_id')) {
+            $merge['codDiagnosticoRelacionado_id'] = getValueSelectInfinite($this->codDiagnosticoRelacionado_id);
+        }
+
+        if ($this->has('tipoMedicamento_id')) {
+            $merge['tipoMedicamento_id'] = getValueSelectInfinite($this->tipoMedicamento_id);
+        }
+
+        if ($this->has('unidadMedida_id')) {
+            $merge['unidadMedida_id'] = getValueSelectInfinite($this->unidadMedida_id);
+        }
+
+        if ($this->has('conceptoRecaudo_id')) {
+            $merge['conceptoRecaudo_id'] = getValueSelectInfinite($this->conceptoRecaudo_id);
+        }
+        if ($this->has('tipoDocumentoIdentificacion_id')) {
+            $merge['tipoDocumentoIdentificacion_id'] = getValueSelectInfinite($this->tipoDocumentoIdentificacion_id);
+        }
+
+        $this->merge($merge);
+    }
+
+    public function failedValidation(Validator $validator)
+    {
+
+        throw new HttpResponseException(response()->json([
+            'code' => 422,
+            'message' => Constants::ERROR_MESSAGE_VALIDATION_BACK,
+            'errors' => $validator->errors(),
+        ], 422));
+    }
+}

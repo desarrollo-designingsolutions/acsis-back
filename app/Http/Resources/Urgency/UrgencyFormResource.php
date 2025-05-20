@@ -3,7 +3,9 @@
 namespace App\Http\Resources\Urgency;
 
 use App\Http\Resources\Cie10\Cie10SelectInfiniteResource;
+use App\Http\Resources\CupsRips\CupsRipsSelectInfiniteResource;
 use App\Http\Resources\RipsCausaExternaVersion2\RipsCausaExternaVersion2SelectInfiniteResource;
+use App\Http\Resources\TipoIdPisis\TipoIdPisisSelectResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -30,6 +32,9 @@ class UrgencyFormResource extends JsonResource
             'condicionDestinoUsuarioEgreso' => $this->condicionDestinoUsuarioEgreso,
             'codDiagnosticoCausaMuerte_id' => new Cie10SelectInfiniteResource($this->codDiagnosticoCausaMuerte),
             'fechaEgreso' => $this->fechaEgreso,
+            'tipoDocumentoIdentificacion_id' => new TipoIdPisisSelectResource($this->tipoDocumentoIdentificacion),
+            'numDocumentoIdentificacion' => $this->numDocumentoIdentificacion,
+            'numFEVPagoModerador' => $this->numFEVPagoModerador,
 
         ];
     }

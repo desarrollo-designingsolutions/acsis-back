@@ -26,4 +26,9 @@ class ServiceVendor extends Model
     {
         return $this->belongsTo(TypeVendor::class);
     }
+    
+    public function ips_no_rep()
+    {
+        return $this->belongsTo(IpsNoReps::class, 'ips_no_rep_id');
+    }
 }

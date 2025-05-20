@@ -31,11 +31,14 @@ class OtherServiceController extends Controller
             $conceptoRecaudo = $this->queryController->selectInfiniteConceptoRecaudo(request());
             $cupsRips = $this->queryController->selectInfiniteCupsRips(request());
 
+            $tipoDocumento = $this->queryController->selectInfiniteTipoIdPisis(request());
+
             return [
                 'code' => 200,
                 ...$tipoOtrosServicios,
                 ...$conceptoRecaudo,
                 ...$cupsRips,
+                ...$tipoDocumento,
             ];
         });
     }
@@ -62,6 +65,9 @@ class OtherServiceController extends Controller
                 'valorPagoModerador' => $post['valorPagoModerador'],
                 'vrServicio' => $post['vrServicio'],
                 'conceptoRecaudo_id' => $post['conceptoRecaudo_id'],
+                'tipoDocumentoIdentificacion_id' => $post['tipoDocumentoIdentificacion_id'],
+                'numDocumentoIdentificacion' => $post['numDocumentoIdentificacion'],
+                'numFEVPagoModerador' => $post['numFEVPagoModerador'],
             ]);
 
             // Create Service
@@ -81,7 +87,7 @@ class OtherServiceController extends Controller
 
             // Prepare service data for JSON
             $serviceData = [
-                'codPrestador' => '',
+                'codPrestador' => $service->invoice?->serviceVendor?->ips_no_rep?->codigo,
                 'numAutorizacion' => $post['numAutorizacion'],
                 'idMIPRES' => $post['idMIPRES'],
                 'fechaSuministroTecnologia' => $post['fechaSuministroTecnologia'],
@@ -89,13 +95,13 @@ class OtherServiceController extends Controller
                 'codTecnologiaSalud' => $post['codTecnologiaSalud'],
                 'nomTecnologiaSalud' => $post['nomTecnologiaSalud'],
                 'cantidadOS' => $post['cantidadOS'],
-                'tipoDocumentoldentificacion' => '',
-                'numDocumentoldentificacion' => '',
+                'tipoDocumentoIdentificacion' => $otherService->tipoDocumentoIdentificacion->codigo,
+                'numDocumentoIdentificacion' => $post['numDocumentoIdentificacion'],
                 'vrUnitOS' => $post['vrUnitOS'],
                 'vrServicio' => $post['vrServicio'],
                 'conceptoRecaudo' => $otherService->conceptoRecaudo?->codigo,
                 'valorPagoModerador' => $post['valorPagoModerador'],
-                'numFEVPagoModerador' => '',
+                'numFEVPagoModerador' => $post['numFEVPagoModerador'],
                 'consecutivo' => $consecutivo,
             ];
 
@@ -126,6 +132,7 @@ class OtherServiceController extends Controller
             $tipoOtrosServicios = $this->queryController->selectInfiniteTipoOtrosServicios(request());
             $conceptoRecaudo = $this->queryController->selectInfiniteConceptoRecaudo(request());
             $cupsRips = $this->queryController->selectInfiniteCupsRips(request());
+            $tipoDocumento = $this->queryController->selectInfiniteTipoIdPisis(request());
 
             return [
                 'code' => 200,
@@ -133,6 +140,7 @@ class OtherServiceController extends Controller
                 ...$tipoOtrosServicios,
                 ...$conceptoRecaudo,
                 ...$cupsRips,
+                ...$tipoDocumento,
             ];
         });
     }
@@ -156,6 +164,9 @@ class OtherServiceController extends Controller
                 'valorPagoModerador' => $post['valorPagoModerador'],
                 'vrServicio' => $post['vrServicio'],
                 'conceptoRecaudo_id' => $post['conceptoRecaudo_id'],
+                'tipoDocumentoIdentificacion_id' => $post['tipoDocumentoIdentificacion_id'],
+                'numDocumentoIdentificacion' => $post['numDocumentoIdentificacion'],
+                'numFEVPagoModerador' => $post['numFEVPagoModerador'],
             ], $id);
 
             // Update Service
@@ -172,7 +183,7 @@ class OtherServiceController extends Controller
 
             // Prepare service data for JSON
             $serviceData = [
-                'codPrestador' => '',
+                'codPrestador' => $service->invoice?->serviceVendor?->ips_no_rep?->codigo,
                 'numAutorizacion' => $post['numAutorizacion'],
                 'idMIPRES' => $post['idMIPRES'],
                 'fechaSuministroTecnologia' => $post['fechaSuministroTecnologia'],
@@ -180,13 +191,13 @@ class OtherServiceController extends Controller
                 'codTecnologiaSalud' => $post['codTecnologiaSalud'],
                 'nomTecnologiaSalud' => $post['nomTecnologiaSalud'],
                 'cantidadOS' => $post['cantidadOS'],
-                'tipoDocumentoldentificacion' => '',
-                'numDocumentoldentificacion' => '',
+                'tipoDocumentoIdentificacion' => $otherService->tipoDocumentoIdentificacion->codigo,
+                'numDocumentoIdentificacion' => $post['numDocumentoIdentificacion'],
                 'vrUnitOS' => $post['vrUnitOS'],
                 'vrServicio' => $post['vrServicio'],
                 'conceptoRecaudo' => $otherService->conceptoRecaudo?->codigo,
                 'valorPagoModerador' => $post['valorPagoModerador'],
-                'numFEVPagoModerador' => '',
+                'numFEVPagoModerador' => $post['numFEVPagoModerador'],
                 'consecutivo' => $consecutivo,
             ];
 

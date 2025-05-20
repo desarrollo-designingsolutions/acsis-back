@@ -19,7 +19,7 @@ class TipoIdPisisRepository extends BaseRepository
     {
         $cacheKey = $this->cacheService->generateKey("{$this->model->getTable()}_paginate", $request, 'string');
 
-        return $this->cacheService->remember($cacheKey, function () use ($request) {
+        // return $this->cacheService->remember($cacheKey, function () use ($request) {
             $query = QueryBuilder::for($this->model->query())
                 ->select(['id', 'codigo', 'nombre'])
                 ->allowedFilters([
@@ -36,6 +36,11 @@ class TipoIdPisisRepository extends BaseRepository
                         $query->orWhere('codigo', 'like', '%'.$request['searchQueryInfinite'].'%');
                         $query->orWhere('nombre', 'like', '%'.$request['searchQueryInfinite'].'%');
                     }
+                })
+                ->where(function ($query) use ($request) {
+                    if (isset($request['codigo_in']) && ! empty($request['codigo_in'])) {
+                        $query->whereIn('codigo', $request['codigo_in']);
+                    }
                 });
 
             if (empty($request['typeData'])) {
@@ -45,7 +50,7 @@ class TipoIdPisisRepository extends BaseRepository
             }
 
             return $query;
-        }, Constants::REDIS_TTL);
+        // }, Constants::REDIS_TTL);
     }
 
     public function store(array $request, $id = null)

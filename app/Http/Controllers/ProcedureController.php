@@ -34,6 +34,7 @@ class ProcedureController extends Controller
             $ripsFinalidadConsultaVersion2 = $this->queryController->selectInfiniteRipsFinalidadConsultaVersion2(request());
             $cie10 = $this->queryController->selectInfiniteCie10(request());
             $conceptoRecaudo = $this->queryController->selectInfiniteConceptoRecaudo(request());
+            $tipoDocumento = $this->queryController->selectInfiniteTipoIdPisis(request());
 
             return [
                 'code' => 200,
@@ -45,6 +46,7 @@ class ProcedureController extends Controller
                 ...$ripsFinalidadConsultaVersion2,
                 ...$cie10,
                 ...$conceptoRecaudo,
+                ...$tipoDocumento,
             ];
         });
     }
@@ -75,6 +77,9 @@ class ProcedureController extends Controller
                 'valorPagoModerador' => $post['valorPagoModerador'],
                 'vrServicio' => $post['vrServicio'],
                 'conceptoRecaudo_id' => $post['conceptoRecaudo_id'],
+                'tipoDocumentoIdentificacion_id' => $post['tipoDocumentoIdentificacion_id'],
+                'numDocumentoIdentificacion' => $post['numDocumentoIdentificacion'],
+                'numFEVPagoModerador' => $post['numFEVPagoModerador'],
             ]);
 
             // Create Service
@@ -85,8 +90,8 @@ class ProcedureController extends Controller
                 'type' => TypeServiceEnum::SERVICE_TYPE_002,
                 'serviceable_type' => TypeServiceEnum::SERVICE_TYPE_002->model(),
                 'serviceable_id' => $procedure->id,
-                'codigo_servicio' => null,
-                'nombre_servicio' => null,
+                'codigo_servicio' => $procedure->codProcedimiento->codigo,
+                'nombre_servicio' => $procedure->codProcedimiento->nombre,
                 'quantity' => 1,
                 'unit_value' => $post['vrServicio'],
                 'total_value' => $post['vrServicio'],
@@ -94,7 +99,7 @@ class ProcedureController extends Controller
 
             // Prepare service data for JSON
             $serviceData = [
-                'codPrestador' => '',
+                'codPrestador' => $service->invoice?->serviceVendor?->ips_no_rep?->codigo,
                 'fechaInicioAtencion' => $post['fechaInicioAtencion'],
                 'idMIPRES' => $post['idMIPRES'],
                 'numAutorizacion' => $post['numAutorizacion'],
@@ -104,16 +109,16 @@ class ProcedureController extends Controller
                 'grupoServicios' => $procedure->grupoServicios->codigo,
                 'codServicio' => $procedure->codServicio->codigo,
                 'finalidadTecnologiaSalud' => $procedure->finalidadTecnologiaSalud->codigo,
-                'tipoDocumentoIdentificacion' => '',
-                'numDocumentoIdentificacion' => '',
+                'tipoDocumentoIdentificacion' => $procedure->tipoDocumentoIdentificacion->codigo,
+                'numDocumentoIdentificacion' => $post['numDocumentoIdentificacion'],
                 'codDiagnosticoPrincipal' => $procedure->codDiagnosticoPrincipal->codigo,
-                'codDiagnosticoRelacionado' => $procedure->codDiagnosticoRelacionado->codigo,
+                'codDiagnosticoRelacionado' => $procedure->codDiagnosticoRelacionado?->codigo,
                 'codComplicacion' => $procedure->codComplicacion->codigo,
                 'valorPagoModerador' => $post['valorPagoModerador'],
-                'numFEVPagoModerador' => '',
+                'numFEVPagoModerador' => $post['numFEVPagoModerador'],
                 'consecutivo' => $consecutivo,
                 'vrServicio' => $post['vrServicio'],
-                'conceptoRecaudo' => $procedure->conceptoRecaudo->codigo,
+                'conceptoRecaudo' => $procedure->conceptoRecaudo?->codigo,
             ];
 
             // Update JSON with new service
@@ -148,6 +153,7 @@ class ProcedureController extends Controller
             $ripsFinalidadConsultaVersion2 = $this->queryController->selectInfiniteRipsFinalidadConsultaVersion2(request());
             $cie10 = $this->queryController->selectInfiniteCie10(request());
             $conceptoRecaudo = $this->queryController->selectInfiniteConceptoRecaudo(request());
+            $tipoDocumento = $this->queryController->selectInfiniteTipoIdPisis(request());
 
             return [
                 'code' => 200,
@@ -160,6 +166,7 @@ class ProcedureController extends Controller
                 ...$ripsFinalidadConsultaVersion2,
                 ...$cie10,
                 ...$conceptoRecaudo,
+                ...$tipoDocumento,
             ];
         });
     }
@@ -187,12 +194,15 @@ class ProcedureController extends Controller
                 'valorPagoModerador' => $post['valorPagoModerador'],
                 'vrServicio' => $post['vrServicio'],
                 'conceptoRecaudo_id' => $post['conceptoRecaudo_id'],
+                'tipoDocumentoIdentificacion_id' => $post['tipoDocumentoIdentificacion_id'],
+                'numDocumentoIdentificacion' => $post['numDocumentoIdentificacion'],
+                'numFEVPagoModerador' => $post['numFEVPagoModerador'],
             ], $id);
 
             // Update Service
             $service = $this->serviceRepository->store([
-                'codigo_servicio' => null,
-                'nombre_servicio' => null,
+                'codigo_servicio' => $procedure->codProcedimiento->codigo,
+                'nombre_servicio' => $procedure->codProcedimiento->nombre,
                 'quantity' => 1,
                 'unit_value' => $post['vrServicio'],
                 'total_value' => $post['vrServicio'],
@@ -203,7 +213,7 @@ class ProcedureController extends Controller
 
             // Prepare service data for JSON
             $serviceData = [
-                'codPrestador' => '',
+                'codPrestador' => $service->invoice?->serviceVendor?->ips_no_rep?->codigo,
                 'fechaInicioAtencion' => $post['fechaInicioAtencion'],
                 'idMIPRES' => $post['idMIPRES'],
                 'numAutorizacion' => $post['numAutorizacion'],
@@ -213,16 +223,16 @@ class ProcedureController extends Controller
                 'grupoServicios' => $procedure->grupoServicios->codigo,
                 'codServicio' => $procedure->codServicio->codigo,
                 'finalidadTecnologiaSalud' => $procedure->finalidadTecnologiaSalud->codigo,
-                'tipoDocumentoIdentificacion' => '',
-                'numDocumentoIdentificacion' => '',
+                'tipoDocumentoIdentificacion' => $procedure->tipoDocumentoIdentificacion->codigo,
+                'numDocumentoIdentificacion' => $post['numDocumentoIdentificacion'],
                 'codDiagnosticoPrincipal' => $procedure->codDiagnosticoPrincipal->codigo,
-                'codDiagnosticoRelacionado' => $procedure->codDiagnosticoRelacionado->codigo,
+                'codDiagnosticoRelacionado' => $procedure->codDiagnosticoRelacionado?->codigo,
                 'codComplicacion' => $procedure->codComplicacion->codigo,
                 'valorPagoModerador' => $post['valorPagoModerador'],
-                'numFEVPagoModerador' => '',
+                'numFEVPagoModerador' => $post['numFEVPagoModerador'],
                 'consecutivo' => $consecutivo,
                 'vrServicio' => $post['vrServicio'],
-                'conceptoRecaudo' => $procedure->conceptoRecaudo->codigo,
+                'conceptoRecaudo' => $procedure->conceptoRecaudo?->codigo,
             ];
 
             // Update JSON with edited service

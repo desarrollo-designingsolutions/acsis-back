@@ -64,6 +64,7 @@ class DatabaseSeeder extends Seeder
             TipoOtrosServiciosSeeder::class,
 
             CondicionyDestinoUsuarioEgresoSeeder::class,
+            IpsNoRepsSeeder::class,
 
         ]);
 

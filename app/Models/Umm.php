@@ -10,8 +10,4 @@ use Illuminate\Database\Eloquent\Model;
 class Umm extends Model
 {
     use Cacheable, HasFactory, HasUuids;
-
-    protected $customCachePrefixes = [
-        'string:{table}_searchOne*',
-    ];
 }

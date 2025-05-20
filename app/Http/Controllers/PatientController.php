@@ -43,7 +43,7 @@ class PatientController extends Controller
     {
         return $this->execute(function () {
 
-            $tipoDocumento = $this->queryController->selectInfiniteTipoDocumento(request());
+            $tipoDocumento = $this->queryController->selectInfiniteTipoIdPisis(request());
             $tipoUsuario = $this->queryController->selectInfiniteTipoUsuario(request());
             $sexo = $this->queryController->selectInfiniteSexo(request());
             $pais = $this->queryController->selectInfinitePais(request());
@@ -84,7 +84,7 @@ class PatientController extends Controller
             $patient = $this->patientRepository->find($id);
             $form = new PatientFormResource($patient);
 
-            $tipoDocumento = $this->queryController->selectInfiniteTipoDocumento(request());
+            $tipoDocumento = $this->queryController->selectInfiniteTipoIdPisis(request());
             $tipoUsuario = $this->queryController->selectInfiniteTipoUsuario(request());
             $sexo = $this->queryController->selectInfiniteSexo(request());
             $pais = $this->queryController->selectInfinitePais(request());

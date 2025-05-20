@@ -22,7 +22,7 @@ Route::post('/selectInfiniteCupsRips', [QueryController::class, 'selectInfiniteC
 Route::post('/selectInfinitePatients', [QueryController::class, 'selectInfinitePatients']);
 Route::post('/selectInfinitetipoNota', [QueryController::class, 'selectInfinitetipoNota']);
 
-Route::post('/selectInfiniteTipoDocumento', [QueryController::class, 'selectInfiniteTipoDocumento']);
+Route::post('/selectInfiniteTipoIdPisis', [QueryController::class, 'selectInfiniteTipoIdPisis']);
 Route::post('/selectInfiniteTipoUsuario', [QueryController::class, 'selectInfiniteTipoUsuario']);
 Route::post('/selectInfiniteSexo', [QueryController::class, 'selectInfiniteSexo']);
 Route::post('/selectInfinitePais', [QueryController::class, 'selectInfinitePais']);
@@ -42,4 +42,7 @@ Route::post('/selectInfiniteServicio', [QueryController::class, 'selectInfiniteS
 Route::post('/selectInfiniteGrupoServicio', [QueryController::class, 'selectInfiniteGrupoServicio']);
 Route::post('/selectInfiniteModalidadAtencion', [QueryController::class, 'selectInfiniteModalidadAtencion']);
 Route::post('/selectInfiniteViaIngresoUsuario', [QueryController::class, 'selectInfiniteViaIngresoUsuario']);
+Route::post('/selectInfiniteTipoMedicamentoPosVersion2', [QueryController::class, 'selectInfiniteTipoMedicamentoPosVersion2']);
+Route::post('/selectInfiniteUmm', [QueryController::class, 'selectInfiniteUmm']);
 Route::post('/selectInfiniteCondicionyDestinoUsuarioEgreso', [QueryController::class, 'selectInfiniteCondicionyDestinoUsuarioEgreso']);
+Route::post('/selectInfiniteIpsNoReps', [QueryController::class, 'selectInfiniteIpsNoReps']);

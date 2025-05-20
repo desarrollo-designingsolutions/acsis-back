@@ -24,14 +24,12 @@ class HospitalizationStoreRequest extends FormRequest
             'numAutorizacion' => 'required',
             'causaMotivoAtencion_id' => 'required',
             'codDiagnosticoPrincipal_id' => 'required',
-            'codDiagnosticoPrincipalE_id' => 'required',
-            'codDiagnosticoRelacionadoE1_id' => 'required',
-            'codDiagnosticoRelacionadoE2_id' => 'required',
-            'codDiagnosticoRelacionadoE3_id' => 'required',
             'codComplicacion_id' => 'required',
             'condicionDestinoUsuarioEgreso_id' => 'required',
-            'codDiagnosticoMuerte_id' => 'required',
             'fechaEgreso' => 'required',
+            'tipoDocumentoIdentificacion_id' => 'required',
+            'numDocumentoIdentificacion' => 'required',
+            'numFEVPagoModerador' => 'required',
         ];
 
         return $rules;
@@ -47,14 +45,12 @@ class HospitalizationStoreRequest extends FormRequest
             'numAutorizacion.required' => 'El campo es obligatorio',
             'causaMotivoAtencion_id.required' => 'El campo es obligatorio',
             'codDiagnosticoPrincipal_id.required' => 'El campo es obligatorio',
-            'codDiagnosticoPrincipalE_id.required' => 'El campo es obligatorio',
-            'codDiagnosticoRelacionadoE1_id.required' => 'El campo es obligatorio',
-            'codDiagnosticoRelacionadoE2_id.required' => 'El campo es obligatorio',
-            'codDiagnosticoRelacionadoE3_id.required' => 'El campo es obligatorio',
             'codComplicacion_id.required' => 'El campo es obligatorio',
             'condicionDestinoUsuarioEgreso_id.required' => 'El campo es obligatorio',
-            'codDiagnosticoMuerte_id.required' => 'El campo es obligatorio',
             'fechaEgreso.required' => 'El campo es obligatorio',
+            'tipoDocumentoIdentificacion_id.required' => 'El campo es obligatorio',
+            'numDocumentoIdentificacion.required' => 'El campo es obligatorio',
+            'numFEVPagoModerador.required' => 'El campo es obligatorio',
         ];
     }
 
@@ -91,6 +87,9 @@ class HospitalizationStoreRequest extends FormRequest
         }
         if ($this->has('codDiagnosticoMuerte_id')) {
             $merge['codDiagnosticoMuerte_id'] = getValueSelectInfinite($this->codDiagnosticoMuerte_id);
+        }
+        if ($this->has('tipoDocumentoIdentificacion_id')) {
+            $merge['tipoDocumentoIdentificacion_id'] = getValueSelectInfinite($this->tipoDocumentoIdentificacion_id);
         }
 
         $this->merge($merge);

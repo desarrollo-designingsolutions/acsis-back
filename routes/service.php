@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\HospitalizationController;
 use App\Http\Controllers\MedicalConsultationController;
+use App\Http\Controllers\MedicineController;
+use App\Http\Controllers\NewlyBornController;
 use App\Http\Controllers\OtherServiceController;
 use App\Http\Controllers\ProcedureController;
 use App\Http\Controllers\ServiceController;
@@ -81,6 +83,20 @@ Route::middleware(['check.permission:menu.invoice'])->group(function () {
 
     /*
     |--------------------------------------------------------------------------
+    | Medicine
+    |--------------------------------------------------------------------------
+    */
+
+    Route::get('/service/medicine/create', [MedicineController::class, 'create']);
+
+    Route::post('/service/medicine/store', [MedicineController::class, 'store']);
+
+    Route::get('/service/medicine/{service_id}/edit', [MedicineController::class, 'edit']);
+
+    Route::post('/service/medicine/update/{id}', [MedicineController::class, 'update']);
+
+    /*
+    |--------------------------------------------------------------------------
     | Hospitalization
     |--------------------------------------------------------------------------
     */
@@ -92,4 +108,18 @@ Route::middleware(['check.permission:menu.invoice'])->group(function () {
     Route::get('/service/hospitalization/{service_id}/edit', [HospitalizationController::class, 'edit']);
 
     Route::post('/service/hospitalization/update/{id}', [HospitalizationController::class, 'update']);
+
+    /*
+    |--------------------------------------------------------------------------
+    | NewlyBorn
+    |--------------------------------------------------------------------------
+    */
+
+    Route::get('/service/newlyBorn/create', [NewlyBornController::class, 'create']);
+
+    Route::post('/service/newlyBorn/store', [NewlyBornController::class, 'store']);
+
+    Route::get('/service/newlyBorn/{service_id}/edit', [NewlyBornController::class, 'edit']);
+
+    Route::post('/service/newlyBorn/update/{id}', [NewlyBornController::class, 'update']);
 });

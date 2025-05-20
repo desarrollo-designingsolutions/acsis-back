@@ -28,11 +28,15 @@ class UrgencyController extends Controller
 
             $ripsCausaExternaVersion2 = $this->queryController->selectInfiniteRipsCausaExternaVersion2(request());
             $cie10 = $this->queryController->selectInfiniteCie10(request());
+            $cupsRips = $this->queryController->selectInfiniteCupsRips(request());
+            $tipoDocumento = $this->queryController->selectInfiniteTipoIdPisis(request());
 
             return [
                 'code' => 200,
                 ...$cie10,
                 ...$ripsCausaExternaVersion2,
+                ...$cupsRips,
+                ...$tipoDocumento,
             ];
         });
     }
@@ -58,6 +62,9 @@ class UrgencyController extends Controller
                 'condicionDestinoUsuarioEgreso' => $post['condicionDestinoUsuarioEgreso'],
                 'codDiagnosticoCausaMuerte_id' => $post['codDiagnosticoCausaMuerte_id'],
                 'fechaEgreso' => $post['fechaEgreso'],
+                'tipoDocumentoIdentificacion_id' => $post['tipoDocumentoIdentificacion_id'],
+                'numDocumentoIdentificacion' => $post['numDocumentoIdentificacion'],
+                'numFEVPagoModerador' => $post['numFEVPagoModerador'],
             ]);
 
             // Create Service
@@ -77,21 +84,21 @@ class UrgencyController extends Controller
 
             // Prepare service data for JSON
             $serviceData = [
-                'codPrestador' => '',
+                'codPrestador' => $service->invoice?->serviceVendor?->ips_no_rep?->codigo,
                 'fechaInicioAtencion' => $post['fechaInicioAtencion'],
                 'causaMotivoAtencion' => $urgency->causaMotivoAtencion->codigo,
                 'codDiagnosticoPrincipal' => $urgency->codDiagnosticoPrincipal->codigo,
-                'codDiagnosticoPrincipalE' => $urgency->codDiagnosticoPrincipalE->codigo,
-                'codDiagnosticoRelacionadoE1' => $urgency->codDiagnosticoRelacionadoE1->codigo,
-                'codDiagnosticoRelacionadoE2' => $urgency->codDiagnosticoRelacionadoE2->codigo,
-                'codDiagnosticoRelacionadoE3' => $urgency->codDiagnosticoRelacionadoE3->codigo,
+                'codDiagnosticoPrincipalE' => $urgency->codDiagnosticoPrincipalE?->codigo,
+                'codDiagnosticoRelacionadoE1' => $urgency->codDiagnosticoRelacionadoE1?->codigo,
+                'codDiagnosticoRelacionadoE2' => $urgency->codDiagnosticoRelacionadoE2?->codigo,
+                'codDiagnosticoRelacionadoE3' => $urgency->codDiagnosticoRelacionadoE3?->codigo,
                 'condicionDestinoUsuarioEgreso' => $post['condicionDestinoUsuarioEgreso'],
-                'codDiagnosticoCausaMuerte' => $urgency->codDiagnosticoCausaMuerte->codigo,
+                'codDiagnosticoCausaMuerte' => $urgency->codDiagnosticoCausaMuerte?->codigo,
                 'fechaEgreso' => $post['fechaEgreso'],
                 'consecutivo' => $consecutivo,
-                'numFEVPagoModerador' => '',
-                'numDocumentoIdentificacion' => '',
-                'tipoDocumentoIdentificacion' => '',
+                'numFEVPagoModerador' => $post['numFEVPagoModerador'],
+                'numDocumentoIdentificacion' => $post['numDocumentoIdentificacion'],
+                'tipoDocumentoIdentificacion' => $urgency->tipoDocumentoIdentificacion->codigo,
             ];
 
             // Update JSON with new service
@@ -120,12 +127,16 @@ class UrgencyController extends Controller
 
             $ripsCausaExternaVersion2 = $this->queryController->selectInfiniteRipsCausaExternaVersion2(request());
             $cie10 = $this->queryController->selectInfiniteCie10(request());
+            $cupsRips = $this->queryController->selectInfiniteCupsRips(request());
+            $tipoDocumento = $this->queryController->selectInfiniteTipoIdPisis(request());
 
             return [
                 'code' => 200,
                 'form' => $form,
                 ...$cie10,
                 ...$ripsCausaExternaVersion2,
+                ...$cupsRips,
+                ...$tipoDocumento,
             ];
         });
     }
@@ -148,6 +159,9 @@ class UrgencyController extends Controller
                 'condicionDestinoUsuarioEgreso' => $post['condicionDestinoUsuarioEgreso'],
                 'codDiagnosticoCausaMuerte_id' => $post['codDiagnosticoCausaMuerte_id'],
                 'fechaEgreso' => $post['fechaEgreso'],
+                'tipoDocumentoIdentificacion_id' => $post['tipoDocumentoIdentificacion_id'],
+                'numDocumentoIdentificacion' => $post['numDocumentoIdentificacion'],
+                'numFEVPagoModerador' => $post['numFEVPagoModerador'],
             ], $id);
 
             // Update Service
@@ -164,21 +178,21 @@ class UrgencyController extends Controller
 
             // Prepare service data for JSON
             $serviceData = [
-                'codPrestador' => '',
+                'codPrestador' => $service->invoice?->serviceVendor?->ips_no_rep?->codigo,
                 'fechaInicioAtencion' => $post['fechaInicioAtencion'],
                 'causaMotivoAtencion' => $urgency->causaMotivoAtencion->codigo,
                 'codDiagnosticoPrincipal' => $urgency->codDiagnosticoPrincipal->codigo,
-                'codDiagnosticoPrincipalE' => $urgency->codDiagnosticoPrincipalE->codigo,
-                'codDiagnosticoRelacionadoE1' => $urgency->codDiagnosticoRelacionadoE1->codigo,
-                'codDiagnosticoRelacionadoE2' => $urgency->codDiagnosticoRelacionadoE2->codigo,
-                'codDiagnosticoRelacionadoE3' => $urgency->codDiagnosticoRelacionadoE3->codigo,
+                'codDiagnosticoPrincipalE' => $urgency->codDiagnosticoPrincipalE?->codigo,
+                'codDiagnosticoRelacionadoE1' => $urgency->codDiagnosticoRelacionadoE1?->codigo,
+                'codDiagnosticoRelacionadoE2' => $urgency->codDiagnosticoRelacionadoE2?->codigo,
+                'codDiagnosticoRelacionadoE3' => $urgency->codDiagnosticoRelacionadoE3?->codigo,
                 'condicionDestinoUsuarioEgreso' => $post['condicionDestinoUsuarioEgreso'],
-                'codDiagnosticoCausaMuerte' => $urgency->codDiagnosticoCausaMuerte->codigo,
+                'codDiagnosticoCausaMuerte' => $urgency->codDiagnosticoCausaMuerte?->codigo,
                 'fechaEgreso' => $post['fechaEgreso'],
                 'consecutivo' => $consecutivo,
-                'numFEVPagoModerador' => '',
-                'numDocumentoIdentificacion' => '',
-                'tipoDocumentoIdentificacion' => '',
+                'numFEVPagoModerador' => $post['numFEVPagoModerador'],
+                'numDocumentoIdentificacion' => $post['numDocumentoIdentificacion'],
+                'tipoDocumentoIdentificacion' => $urgency->tipoDocumentoIdentificacion->codigo,
             ];
 
             // Update JSON with edited service

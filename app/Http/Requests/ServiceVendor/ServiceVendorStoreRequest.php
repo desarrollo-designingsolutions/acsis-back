@@ -22,6 +22,7 @@ class ServiceVendorStoreRequest extends FormRequest
             'phone' => 'required',
             'address' => 'required',
             'email' => 'required|email|unique:companies,email,'.$this->id.',id',
+            'ips_no_rep_id' => 'required',
         ];
 
         return $rules;
@@ -36,12 +37,19 @@ class ServiceVendorStoreRequest extends FormRequest
             'address.required' => 'El campo es obligatorio',
             'email.unique' => 'El Email ya existe',
             'email.email' => 'El campo debe contener un correo valido',
+            'ips_no_rep_id.required' => 'El campo es obligatorio',
         ];
     }
 
     protected function prepareForValidation(): void
     {
-        $this->merge([]);
+        $merge = [];
+
+        if ($this->has('ips_no_rep_id')) {
+            $merge['ips_no_rep_id'] = getValueSelectInfinite($this->ips_no_rep_id);
+        }
+
+        $this->merge($merge);
     }
 
     public function failedValidation(Validator $validator)

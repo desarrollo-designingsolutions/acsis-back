@@ -11,6 +11,7 @@ use App\Http\Resources\Country\CountrySelectResource;
 use App\Http\Resources\CupsRips\CupsRipsSelectInfiniteResource;
 use App\Http\Resources\Entity\EntitySelectResource;
 use App\Http\Resources\GrupoServicio\GrupoServicioSelectInfiniteResource;
+use App\Http\Resources\IpsNoReps\IpsNoRepsSelectInfiniteResource;
 use App\Http\Resources\ModalidadAtencion\ModalidadAtencionSelectInfiniteResource;
 use App\Http\Resources\Municipio\MunicipioSelectResource;
 use App\Http\Resources\Pais\PaisSelectResource;
@@ -23,9 +24,11 @@ use App\Http\Resources\ServiceVendor\ServiceVendorSelectResource;
 use App\Http\Resources\Servicio\ServicioSelectInfiniteResource;
 use App\Http\Resources\Sexo\SexoSelectResource;
 use App\Http\Resources\TipoIdPisis\TipoIdPisisSelectResource;
+use App\Http\Resources\TipoMedicamentoPosVersion2\TipoMedicamentoPosVersion2SelectInfiniteResource;
 use App\Http\Resources\TipoNota\TipoNotaSelectResource;
 use App\Http\Resources\TipoOtrosServicios\TipoOtrosServiciosSelectResource;
 use App\Http\Resources\TypeDocument\TypeDocumentSelectResource;
+use App\Http\Resources\Umm\UmmSelectInfiniteResource;
 use App\Http\Resources\ViaIngresoUsuario\ViaIngresoUsuarioSelectInfiniteResource;
 use App\Http\Resources\ZonaVersion2\ZonaVersion2SelectResource;
 use App\Repositories\Cie10Repository;
@@ -37,6 +40,7 @@ use App\Repositories\CountryRepository;
 use App\Repositories\CupsRipsRepository;
 use App\Repositories\EntityRepository;
 use App\Repositories\GrupoServicioRepository;
+use App\Repositories\IpsNoRepsRepository;
 use App\Repositories\ModalidadAtencionRepository;
 use App\Repositories\MunicipioRepository;
 use App\Repositories\PaisRepository;
@@ -50,11 +54,13 @@ use App\Repositories\ServicioRepository;
 use App\Repositories\SexoRepository;
 use App\Repositories\StateRepository;
 use App\Repositories\TipoIdPisisRepository;
+use App\Repositories\TipoMedicamentoPosVersion2Repository;
 use App\Repositories\TipoNotaRepository;
 use App\Repositories\TipoOtrosServiciosRepository;
 use App\Repositories\TypeDocumentRepository;
 use App\Repositories\TypeEntityRepository;
 use App\Repositories\TypeVendorRepository;
+use App\Repositories\UmmRepository;
 use App\Repositories\UserRepository;
 use App\Repositories\ViaIngresoUsuarioRepository;
 use App\Repositories\ZonaVersion2Repository;
@@ -95,7 +101,10 @@ class QueryController extends Controller
         protected RipsTipoDiagnosticoPrincipalVersion2Repository $ripsTipoDiagnosticoPrincipalVersion2Repository,
         protected RipsCausaExternaVersion2Repository $ripsCausaExternaVersion2Repository,
         protected ViaIngresoUsuarioRepository $viaIngresoUsuarioRepository,
+        protected TipoMedicamentoPosVersion2Repository $tipoMedicamentoPosVersion2Repository,
+        protected UmmRepository $ummRepository,
         protected CondicionyDestinoUsuarioEgresoRepository $condicionyDestinoUsuarioEgresoRepository,
+        protected IpsNoRepsRepository $ipsNoRepsRepository,
     ) {}
 
     public function selectInfiniteCountries(Request $request)
@@ -253,15 +262,15 @@ class QueryController extends Controller
         ];
     }
 
-    public function selectInfiniteTipoDocumento(Request $request)
+    public function selectInfiniteTipoIdPisis(Request $request)
     {
         $tipoIdPisis = $this->tipoIdPisisRepository->paginate($request->all());
         $data = TipoIdPisisSelectResource::collection($tipoIdPisis);
 
         return [
             'code' => 200,
-            'tipoIdPisiss_arrayInfo' => $data,
-            'tipoIdPisiss_countLinks' => $tipoIdPisis->lastPage(),
+            'tipoIdPisis_arrayInfo' => $data,
+            'tipoIdPisis_countLinks' => $tipoIdPisis->lastPage(),
         ];
     }
 
@@ -473,6 +482,30 @@ class QueryController extends Controller
         ];
     }
 
+    public function selectInfiniteTipoMedicamentoPosVersion2(Request $request)
+    {
+        $tipoMedicamentoPosVersion2 = $this->tipoMedicamentoPosVersion2Repository->list($request->all());
+        $dataTipoMedicamentoPosVersion2 = TipoMedicamentoPosVersion2SelectInfiniteResource::collection($tipoMedicamentoPosVersion2);
+
+        return [
+            'code' => 200,
+            'tipoMedicamentoPosVersion2_arrayInfo' => $dataTipoMedicamentoPosVersion2,
+            'tipoMedicamentoPosVersion2_countLinks' => $tipoMedicamentoPosVersion2->lastPage(),
+        ];
+    }
+
+    public function selectInfiniteUmm(Request $request)
+    {
+        $umm = $this->ummRepository->list($request->all());
+        $dataUmm = UmmSelectInfiniteResource::collection($umm);
+
+        return [
+            'code' => 200,
+            'umm_arrayInfo' => $dataUmm,
+            'umm_countLinks' => $umm->lastPage(),
+        ];
+    }
+
     public function selectInfiniteCondicionyDestinoUsuarioEgreso(Request $request)
     {
         $condicionyDestinoUsuarioEgreso = $this->condicionyDestinoUsuarioEgresoRepository->list($request->all());
@@ -482,6 +515,18 @@ class QueryController extends Controller
             'code' => 200,
             'condicionyDestinoUsuarioEgreso_arrayInfo' => $dataCondicionyDestinoUsuarioEgreso,
             'condicionyDestinoUsuarioEgreso_countLinks' => $condicionyDestinoUsuarioEgreso->lastPage(),
+        ];
+    }
+
+    public function selectInfiniteIpsNoReps(Request $request)
+    {
+        $ipsNoReps = $this->ipsNoRepsRepository->list($request->all());
+        $dataIpsNoReps = IpsNoRepsSelectInfiniteResource::collection($ipsNoReps);
+
+        return [
+            'code' => 200,
+            'ipsNoReps_arrayInfo' => $dataIpsNoReps,
+            'ipsNoReps_countLinks' => $ipsNoReps->lastPage(),
         ];
     }
 }

@@ -5,9 +5,9 @@ namespace App\Http\Controllers;
 use App\Enums\Service\TypeServiceEnum;
 use App\Http\Requests\Hospitalization\HospitalizationStoreRequest;
 use App\Http\Resources\Hospitalization\HospitalizationFormResource;
+use App\Repositories\HospitalizationRepository;
 use App\Repositories\InvoiceRepository;
 use App\Repositories\ServiceRepository;
-use App\Repositories\HospitalizationRepository;
 use App\Traits\HttpResponseTrait;
 use Illuminate\Http\Request;
 
@@ -30,6 +30,8 @@ class HospitalizationController extends Controller
             $ripsCausaExternaVersion2 = $this->queryController->selectInfiniteRipsCausaExternaVersion2(request());
             $cie10 = $this->queryController->selectInfiniteCie10(request());
             $condicionyDestinoUsuarioEgreso = $this->queryController->selectInfiniteCondicionyDestinoUsuarioEgreso(request());
+            $cupsRips = $this->queryController->selectInfiniteCupsRips(request());
+            $tipoDocumento = $this->queryController->selectInfiniteTipoIdPisis(request());
 
             return [
                 'code' => 200,
@@ -37,6 +39,8 @@ class HospitalizationController extends Controller
                 ...$ripsCausaExternaVersion2,
                 ...$cie10,
                 ...$condicionyDestinoUsuarioEgreso,
+                ...$cupsRips,
+                ...$tipoDocumento,
             ];
         });
     }
@@ -65,6 +69,9 @@ class HospitalizationController extends Controller
                 'condicionDestinoUsuarioEgreso_id' => $post['condicionDestinoUsuarioEgreso_id'],
                 'codDiagnosticoMuerte_id' => $post['codDiagnosticoMuerte_id'],
                 'fechaEgreso' => $post['fechaEgreso'],
+                'tipoDocumentoIdentificacion_id' => $post['tipoDocumentoIdentificacion_id'],
+                'numDocumentoIdentificacion' => $post['numDocumentoIdentificacion'],
+                'numFEVPagoModerador' => $post['numFEVPagoModerador'],
             ]);
 
             // Create Service
@@ -89,19 +96,19 @@ class HospitalizationController extends Controller
                 'numAutorizacion' => $post['numAutorizacion'],
                 'causaMotivoAtencion' => $hospitalization->causaMotivoAtencion->codigo,
                 'codDiagnosticoPrincipal' => $hospitalization->codDiagnosticoPrincipal->codigo,
-                'codDiagnosticoPrincipalE' => $hospitalization->codDiagnosticoPrincipalE->codigo,
-                'codDiagnosticoRelacionadoE1' => $hospitalization->codDiagnosticoRelacionadoE1->codigo,
-                'codDiagnosticoRelacionadoE2' => $hospitalization->codDiagnosticoRelacionadoE2->codigo,
-                'codDiagnosticoRelacionadoE3' => $hospitalization->codDiagnosticoRelacionadoE3->codigo,
+                'codDiagnosticoPrincipalE' => $hospitalization->codDiagnosticoPrincipalE?->codigo,
+                'codDiagnosticoRelacionadoE1' => $hospitalization->codDiagnosticoRelacionadoE1?->codigo,
+                'codDiagnosticoRelacionadoE2' => $hospitalization->codDiagnosticoRelacionadoE2?->codigo,
+                'codDiagnosticoRelacionadoE3' => $hospitalization->codDiagnosticoRelacionadoE3?->codigo,
                 'codComplicacion_id' => $post['codComplicacion_id'],
                 'condicionDestinoUsuarioEgreso' => $hospitalization->condicionDestinoUsuarioEgreso->codigo,
-                'codDiagnosticoMuerte' => $hospitalization->codDiagnosticoMuerte->codigo,
+                'codDiagnosticoMuerte' => $hospitalization->codDiagnosticoMuerte?->codigo,
                 'fechaEgreso' => $post['fechaEgreso'],
                 'consecutivo' => $consecutivo,
-                'codPrestador' => "",
-                'numDocumentoIdentificacion' => '',
-                'tipoDocumentoIdentificacion' => '',
-                'numFEVPagoModerador' => '',
+                'codPrestador' => $service->invoice?->serviceVendor?->ips_no_rep?->codigo,
+                'numDocumentoIdentificacion' => $post['numDocumentoIdentificacion'],
+                'tipoDocumentoIdentificacion' => $hospitalization->tipoDocumentoIdentificacion->codigo,
+                'numFEVPagoModerador' => $post['numFEVPagoModerador'],
             ];
 
             // Update JSON with new service
@@ -132,6 +139,8 @@ class HospitalizationController extends Controller
             $ripsCausaExternaVersion2 = $this->queryController->selectInfiniteRipsCausaExternaVersion2(request());
             $cie10 = $this->queryController->selectInfiniteCie10(request());
             $condicionyDestinoUsuarioEgreso = $this->queryController->selectInfiniteCondicionyDestinoUsuarioEgreso(request());
+            $cupsRips = $this->queryController->selectInfiniteCupsRips(request());
+            $tipoDocumento = $this->queryController->selectInfiniteTipoIdPisis(request());
 
             return [
                 'code' => 200,
@@ -140,6 +149,8 @@ class HospitalizationController extends Controller
                 ...$cie10,
                 ...$ripsCausaExternaVersion2,
                 ...$condicionyDestinoUsuarioEgreso,
+                ...$cupsRips,
+                ...$tipoDocumento,
             ];
         });
     }
@@ -165,6 +176,9 @@ class HospitalizationController extends Controller
                 'condicionDestinoUsuarioEgreso_id' => $post['condicionDestinoUsuarioEgreso_id'],
                 'codDiagnosticoMuerte_id' => $post['codDiagnosticoMuerte_id'],
                 'fechaEgreso' => $post['fechaEgreso'],
+                'tipoDocumentoIdentificacion_id' => $post['tipoDocumentoIdentificacion_id'],
+                'numDocumentoIdentificacion' => $post['numDocumentoIdentificacion'],
+                'numFEVPagoModerador' => $post['numFEVPagoModerador'],
             ], $id);
 
             // Update Service
@@ -186,19 +200,19 @@ class HospitalizationController extends Controller
                 'numAutorizacion' => $post['numAutorizacion'],
                 'causaMotivoAtencion' => $hospitalization->causaMotivoAtencion->codigo,
                 'codDiagnosticoPrincipal' => $hospitalization->codDiagnosticoPrincipal->codigo,
-                'codDiagnosticoPrincipalE' => $hospitalization->codDiagnosticoPrincipalE->codigo,
-                'codDiagnosticoRelacionadoE1' => $hospitalization->codDiagnosticoRelacionadoE1->codigo,
-                'codDiagnosticoRelacionadoE2' => $hospitalization->codDiagnosticoRelacionadoE2->codigo,
-                'codDiagnosticoRelacionadoE3' => $hospitalization->codDiagnosticoRelacionadoE3->codigo,
+                'codDiagnosticoPrincipalE' => $hospitalization->codDiagnosticoPrincipalE?->codigo,
+                'codDiagnosticoRelacionadoE1' => $hospitalization->codDiagnosticoRelacionadoE1?->codigo,
+                'codDiagnosticoRelacionadoE2' => $hospitalization->codDiagnosticoRelacionadoE2?->codigo,
+                'codDiagnosticoRelacionadoE3' => $hospitalization->codDiagnosticoRelacionadoE3?->codigo,
                 'codComplicacion_id' => $post['codComplicacion_id'],
                 'condicionDestinoUsuarioEgreso' => $hospitalization->condicionDestinoUsuarioEgreso->codigo,
-                'codDiagnosticoMuerte' => $hospitalization->codDiagnosticoMuerte->codigo,
+                'codDiagnosticoMuerte' => $hospitalization->codDiagnosticoMuerte?->codigo,
                 'fechaEgreso' => $post['fechaEgreso'],
                 'consecutivo' => $consecutivo,
-                'codPrestador' => "",
-                'numDocumentoIdentificacion' => '',
-                'tipoDocumentoIdentificacion' => '',
-                'numFEVPagoModerador' => '',
+                'codPrestador' => $service->invoice?->serviceVendor?->ips_no_rep?->codigo,
+                'numDocumentoIdentificacion' => $post['numDocumentoIdentificacion'],
+                'tipoDocumentoIdentificacion' => $hospitalization->tipoDocumentoIdentificacion->codigo,
+                'numFEVPagoModerador' => $post['numFEVPagoModerador'],
             ];
 
             // Update JSON with edited service

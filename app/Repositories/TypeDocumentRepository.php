@@ -30,17 +30,17 @@ class TypeDocumentRepository extends BaseRepository
                 ])
                 ->allowedSorts([
                     'name',
-            ])->where(function ($query) use ($request) {
+                ])->where(function ($query) use ($request) {
 
-                if (isset($request['searchQueryInfinite']) && ! empty($request['searchQueryInfinite'])) {
-                    $query->orWhere('name', 'like', '%'.$request['searchQueryInfinite'].'%');
-                }
+                    if (isset($request['searchQueryInfinite']) && ! empty($request['searchQueryInfinite'])) {
+                        $query->orWhere('name', 'like', '%'.$request['searchQueryInfinite'].'%');
+                    }
 
-                if (! empty($request['company_id'])) {
-                    $query->where('company_id', $request['company_id']);
-                }
+                    if (! empty($request['company_id'])) {
+                        $query->where('company_id', $request['company_id']);
+                    }
 
-            });
+                });
 
             if (empty($request['typeData'])) {
                 $query = $query->paginate(request()->perPage ?? Constants::ITEMS_PER_PAGE);
