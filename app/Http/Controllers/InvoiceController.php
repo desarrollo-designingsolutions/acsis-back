@@ -586,44 +586,44 @@ class InvoiceController extends Controller
     public function dataUrgeHosBorn($id)
     {
         return $this->execute(function () use ($id) {
+            // Definir los tipos de servicio que queremos consultar
+            $serviceTypes = [
+                TypeServiceEnum::SERVICE_TYPE_003->value,
+                TypeServiceEnum::SERVICE_TYPE_004->value,
+                TypeServiceEnum::SERVICE_TYPE_005->value,
+            ];
+
+
             // Consulta para obtener los servicios que coincidan con los tipos deseados
             $services = Service::where("invoice_id", $id)
-                ->whereIn('type', [
-                    TypeServiceEnum::SERVICE_TYPE_003->value,
-                    TypeServiceEnum::SERVICE_TYPE_004->value,
-                    TypeServiceEnum::SERVICE_TYPE_005->value,
-                ])
+                ->whereIn('type', $serviceTypes)
                 ->get();
-
-            // Si no hay servicios, devolver un array vacío
-            if ($services->isEmpty()) {
-                return [
-                    'data' => [],
-                    'code' => 200,
-                ];
-            }
-
-
 
             // Agrupar servicios por tipo
             $groupedServices = $services->groupBy('type');
 
-            // Construir el array de resultados
+            // Construir el array de resultados, incluyendo todos los tipos posibles
             $result = [];
-            foreach ($groupedServices as $type => $servicesByType) {
+            foreach ($serviceTypes as $type) {
                 $serviceType = TypeServiceEnum::from($type);
-                $description = $serviceType->description();
-                $color = null; //$serviceType->color();
-                $icon = null; // $serviceType->icon();
+
+                // Verificar si existen servicios para este tipo
+                $servicesByType = $groupedServices->get($type, collect([]));
+                $hasServices = $servicesByType->isNotEmpty();
+                $serviceId = $hasServices ? $servicesByType->first()->id : null; // ID del primer servicio (para Edit/Delete)
 
                 $result[] = [
-                    'icon' => $icon ?? 'fas fa-info-circle',
-                    'color' => $color ?? '#6c757d',
-                    'title' => $description,
+                    'icon' => $serviceType->icon(),
+                    'color' =>  $serviceType->color(),
+                    'title' => $serviceType->description(),
                     'value' => $servicesByType->count(), // Cantidad de servicios de este tipo
-                    'secondary_data' => null,
-                    'change_label' => null, // Ajusta si tienes una lógica específica
+                    'secondary_data' =>  null,
+                    'change_label' => null,
                     'isHover' => false,
+                    'modal' => $serviceType->model(), // Identificador del modal
+                    'type' => $type, // Enviar el tipo de servicio para el frontend
+                    'hasServices' => $hasServices, // Indicar si existen servicios
+                    'serviceId' => $serviceId, // ID para editar/eliminar
                 ];
             }
 
