@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Attributes\Description;
 use App\Enums\Invoice\StatusXmlInvoiceEnum;
 use App\Enums\Invoice\TypeInvoiceEnum;
+use App\Enums\Service\TypeServiceEnum;
 use App\Events\InvoiceRowUpdatedNow;
 use App\Exports\Invoice\InvoiceExcelErrorsValidationXmlExport;
 use App\Exports\Invoice\InvoiceExcelExport;
@@ -12,6 +14,7 @@ use App\Http\Requests\Invoice\InvoiceStoreRequest;
 use App\Http\Resources\Invoice\InvoiceFormResource;
 use App\Http\Resources\Invoice\InvoiceListResource;
 use App\Http\Resources\InvoiceSoat\InvoiceSoatFormResource;
+use App\Models\Service;
 use App\Repositories\Cie10Repository;
 use App\Repositories\ConceptoRecaudoRepository;
 use App\Repositories\CondicionyDestinoUsuarioEgresoRepository;
@@ -376,7 +379,7 @@ class InvoiceController extends Controller
         $newData['usuarios'] = $users;
 
         // Define file path
-        $nameFile = $invoice->invoice_number.'.json';
+        $nameFile = $invoice->invoice_number . '.json';
         $path = "companies/company_{$invoice->company_id}/invoices/invoice_{$invoice->id}/{$nameFile}";
         $disk = Constants::DISK_FILES;
 
@@ -446,7 +449,7 @@ class InvoiceController extends Controller
 
     private function storeJsonFile($invoice, array $jsonData): void
     {
-        $nameFile = $invoice->invoice_number.'.json';
+        $nameFile = $invoice->invoice_number . '.json';
         $path = "companies/company_{$invoice->company_id}/invoices/invoice_{$invoice->id}/{$nameFile}";
         $disk = Constants::DISK_FILES;
 
@@ -488,12 +491,12 @@ class InvoiceController extends Controller
 
         // Obtener el contenido del archivo
         $fileContent = Storage::disk($disk)->get($path);
-        $fileName = $invoice->invoice_number.'.json'; // Nombre del archivo para la descarga
+        $fileName = $invoice->invoice_number . '.json'; // Nombre del archivo para la descarga
 
         // Devolver el archivo como respuesta descargable
         return response($fileContent, 200, [
             'Content-Type' => 'application/json',
-            'Content-Disposition' => 'attachment; filename="'.$fileName.'"',
+            'Content-Disposition' => 'attachment; filename="' . $fileName . '"',
         ]);
     }
 
@@ -576,6 +579,57 @@ class InvoiceController extends Controller
             return [
                 'code' => 200,
                 'excel' => $excelBase64,
+            ];
+        });
+    }
+
+    public function dataUrgeHosBorn($id)
+    {
+        return $this->execute(function () use ($id) {
+            // Consulta para obtener los servicios que coincidan con los tipos deseados
+            $services = Service::where("invoice_id", $id)
+                ->whereIn('type', [
+                    TypeServiceEnum::SERVICE_TYPE_003->value,
+                    TypeServiceEnum::SERVICE_TYPE_004->value,
+                    TypeServiceEnum::SERVICE_TYPE_005->value,
+                ])
+                ->get();
+
+            // Si no hay servicios, devolver un array vacío
+            if ($services->isEmpty()) {
+                return [
+                    'data' => [],
+                    'code' => 200,
+                ];
+            }
+
+
+
+            // Agrupar servicios por tipo
+            $groupedServices = $services->groupBy('type');
+
+            // Construir el array de resultados
+            $result = [];
+            foreach ($groupedServices as $type => $servicesByType) {
+                $serviceType = TypeServiceEnum::from($type);
+                $description = $serviceType->description();
+                $color = null; //$serviceType->color();
+                $icon = null; // $serviceType->icon();
+
+                $result[] = [
+                    'icon' => $icon ?? 'fas fa-info-circle',
+                    'color' => $color ?? '#6c757d',
+                    'title' => $description,
+                    'value' => $servicesByType->count(), // Cantidad de servicios de este tipo
+                    'secondary_data' => null,
+                    'change_label' => null, // Ajusta si tienes una lógica específica
+                    'isHover' => false,
+                ];
+            }
+
+            return [
+                'services' => $result,
+                'code' => 200,
             ];
         });
     }

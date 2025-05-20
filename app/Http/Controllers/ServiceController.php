@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Enums\Service\TypeServiceEnum;
 use App\Http\Resources\Service\ServicePaginateResource;
+use App\Models\Service;
 use App\Repositories\ServiceRepository;
 use App\Traits\HttpResponseTrait;
 use Illuminate\Http\Request;
