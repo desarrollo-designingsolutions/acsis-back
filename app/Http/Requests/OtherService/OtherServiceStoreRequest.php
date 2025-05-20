@@ -25,7 +25,14 @@ class OtherServiceStoreRequest extends FormRequest
             'vrUnitOS' => 'required',
             'valorPagoModerador' => 'required',
             'vrServicio' => 'required',
+            'tipoDocumentoIdentificacion_id' => 'required',
+            'numDocumentoIdentificacion' => 'required',
         ];
+
+        if ($this->valorPagoModerador > 0) {
+            $rules['conceptoRecaudo_id'] = 'required';
+            $rules['numFEVPagoModerador'] = 'required';
+        }
 
         return $rules;
     }
@@ -41,6 +48,9 @@ class OtherServiceStoreRequest extends FormRequest
             'vrUnitOS.required' => 'El campo es obligatorio',
             'valorPagoModerador.required' => 'El campo es obligatorio',
             'vrServicio.required' => 'El campo es obligatorio',
+            'tipoDocumentoIdentificacion_id.required' => 'El campo es obligatorio',
+            'numDocumentoIdentificacion.required' => 'El campo es obligatorio',
+            'numFEVPagoModerador.required' => 'El campo es obligatorio',
         ];
     }
 
@@ -56,6 +66,9 @@ class OtherServiceStoreRequest extends FormRequest
         }
         if ($this->has('codTecnologiaSalud')) {
             $merge['codTecnologiaSalud'] = getValueSelectInfinite($this->codTecnologiaSalud, 'codigo');
+        }
+        if ($this->has('tipoDocumentoIdentificacion_id')) {
+            $merge['tipoDocumentoIdentificacion_id'] = getValueSelectInfinite($this->tipoDocumentoIdentificacion_id);
         }
 
         $this->merge($merge);

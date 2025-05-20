@@ -68,4 +68,9 @@ class Procedure extends Model
     {
         return $this->belongsTo(ConceptoRecaudo::class, 'conceptoRecaudo_id');
     }
+    
+    public function tipoDocumentoIdentificacion()
+    {
+        return $this->belongsTo(TipoIdPisis::class, 'tipoDocumentoIdentificacion_id');
+    }
 }

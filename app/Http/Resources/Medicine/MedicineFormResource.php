@@ -4,6 +4,7 @@ namespace App\Http\Resources\Medicine;
 
 use App\Http\Resources\Cie10\Cie10SelectInfiniteResource;
 use App\Http\Resources\ConceptoRecaudo\ConceptoRecaudoSelectResource;
+use App\Http\Resources\TipoIdPisis\TipoIdPisisSelectResource;
 use App\Http\Resources\TipoMedicamentoPosVersion2\TipoMedicamentoPosVersion2SelectInfiniteResource;
 use App\Http\Resources\Umm\UmmSelectInfiniteResource;
 use Illuminate\Http\Request;
@@ -40,6 +41,9 @@ class MedicineFormResource extends JsonResource
             'valorPagoModerador' => $this->valorPagoModerador,
             'vrServicio' => $this->vrServicio,
             'conceptoRecaudo_id' => new ConceptoRecaudoSelectResource($this->conceptoRecaudo),
+            'tipoDocumentoIdentificacion_id' => new TipoIdPisisSelectResource($this->tipoDocumentoIdentificacion),
+            'numDocumentoIdentificacion' => $this->numDocumentoIdentificacion,
+            'numFEVPagoModerador' => $this->numFEVPagoModerador,
         ];
     }
 }

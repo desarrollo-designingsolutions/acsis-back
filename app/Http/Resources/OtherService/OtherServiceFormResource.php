@@ -4,6 +4,7 @@ namespace App\Http\Resources\OtherService;
 
 use App\Http\Resources\ConceptoRecaudo\ConceptoRecaudoSelectResource;
 use App\Http\Resources\CupsRips\CupsRipsSelectInfiniteResource;
+use App\Http\Resources\TipoIdPisis\TipoIdPisisSelectResource;
 use App\Http\Resources\TipoOtrosServicios\TipoOtrosServiciosSelectResource;
 use App\Models\CupsRips;
 use Illuminate\Http\Request;
@@ -36,6 +37,9 @@ class OtherServiceFormResource extends JsonResource
             'valorPagoModerador' => $this->valorPagoModerador,
             'vrServicio' => $this->vrServicio,
             'conceptoRecaudo_id' => new ConceptoRecaudoSelectResource($this->conceptoRecaudo),
+            'tipoDocumentoIdentificacion_id' => new TipoIdPisisSelectResource($this->tipoDocumentoIdentificacion),
+            'numDocumentoIdentificacion' => $this->numDocumentoIdentificacion,
+            'numFEVPagoModerador' => $this->numFEVPagoModerador,
         ];
     }
 }

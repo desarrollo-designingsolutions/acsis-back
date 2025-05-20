@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('urgencies', function (Blueprint $table) {
-            $table->foreignUuid('codigo_urgencia_id')->nullable()->comment('Este campo no existe en el json, solo es para db')->constrained('cups_rips');
+        Schema::table('service_vendors', function (Blueprint $table) {
+            $table->foreignUuid('ips_no_rep_id')->nullable()->constrained('ips_no_reps');
         });
     }
 
@@ -21,8 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('urgencies', function (Blueprint $table) {
-            $table->dropConstrainedForeignId('codigo_urgencia_id');
+        Schema::table('service_vendors', function (Blueprint $table) {
+            $table->dropConstrainedForeignId('ips_no_rep_id');
         });
     }
 };

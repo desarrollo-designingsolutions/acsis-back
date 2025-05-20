@@ -68,8 +68,8 @@ class Hospitalization extends Model
         return $this->belongsTo(CondicionyDestinoUsuarioEgreso::class, 'condicionDestinoUsuarioEgreso_id');
     }
     
-    public function codigo_hospitalizacion()
+    public function tipoDocumentoIdentificacion()
     {
-        return $this->belongsTo(CupsRips::class, 'codigo_hospitalizacion_id');
+        return $this->belongsTo(TipoIdPisis::class, 'tipoDocumentoIdentificacion_id');
     }
 }

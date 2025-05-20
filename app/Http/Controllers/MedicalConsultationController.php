@@ -35,6 +35,7 @@ class MedicalConsultationController extends Controller
             $ripsTipoDiagnosticoPrincipalVersion2 = $this->queryController->selectInfiniteRipsTipoDiagnosticoPrincipalVersion2(request());
             $conceptoRecaudo = $this->queryController->selectInfiniteConceptoRecaudo(request());
             $ripsCausaExternaVersion2 = $this->queryController->selectInfiniteRipsCausaExternaVersion2(request());
+            $tipoDocumento = $this->queryController->selectInfiniteTipoIdPisis(request());
 
             return [
                 'code' => 200,
@@ -47,6 +48,7 @@ class MedicalConsultationController extends Controller
                 ...$ripsTipoDiagnosticoPrincipalVersion2,
                 ...$conceptoRecaudo,
                 ...$ripsCausaExternaVersion2,
+                ...$tipoDocumento,
             ];
         });
     }
@@ -78,6 +80,9 @@ class MedicalConsultationController extends Controller
                 'valorPagoModerador' => $post['valorPagoModerador'],
                 'vrServicio' => $post['vrServicio'],
                 'conceptoRecaudo_id' => $post['conceptoRecaudo_id'],
+                'tipoDocumentoIdentificacion_id' => $post['tipoDocumentoIdentificacion_id'],
+                'numDocumentoIdentificacion' => $post['numDocumentoIdentificacion'],
+                'numFEVPagoModerador' => $post['numFEVPagoModerador'],
             ]);
 
             // Create Service
@@ -97,7 +102,7 @@ class MedicalConsultationController extends Controller
 
             // Prepare service data for JSON
             $serviceData = [
-                'codPrestador' => '',
+                'codPrestador' => $service->invoice?->serviceVendor?->ips_no_rep?->codigo,
                 'fechaInicioAtencion' => $post['fechaInicioAtencion'],
                 'numAutoriacion' => $post['numAutoriacion'],
                 'codConsulta' => $medicalConsultation->codConsulta->codigo,
@@ -107,17 +112,17 @@ class MedicalConsultationController extends Controller
                 'finalidadTecnologiaSalud' => $medicalConsultation->finalidadTecnologiaSalud->codigo,
                 'causaMotivoAtencion' => $medicalConsultation->causaMotivoAtencion->codigo,
                 'codDiagnosticoPrincipal' => $medicalConsultation->codDiagnosticoPrincipal->codigo,
-                'codDiagnosticoRelacionado1' => $medicalConsultation->codDiagnosticoRelacionado1->codigo,
-                'codDiagnosticoRelacionado2' => $medicalConsultation->codDiagnosticoRelacionado2->codigo,
-                'codDiagnosticoRelacionado3' => $medicalConsultation->codDiagnosticoRelacionado3->codigo,
+                'codDiagnosticoRelacionado1' => $medicalConsultation->codDiagnosticoRelacionado1?->codigo,
+                'codDiagnosticoRelacionado2' => $medicalConsultation->codDiagnosticoRelacionado2?->codigo,
+                'codDiagnosticoRelacionado3' => $medicalConsultation->codDiagnosticoRelacionado3?->codigo,
                 'tipoDiagnosticoPrincipal' => $medicalConsultation->tipoDiagnosticoPrincipal->codigo,
-                'tipoDocumentoIdentificacion' => '',
-                'numDocumentoIdentificacion' => '',
+                'tipoDocumentoIdentificacion' => $medicalConsultation->tipoDocumentoIdentificacion->codigo,
+                'numDocumentoIdentificacion' => $post['numDocumentoIdentificacion'],
                 'valorPagoModerador' => $post['valorPagoModerador'],
-                'numFEVPagoModerador' => '',
+                'numFEVPagoModerador' => $post['numFEVPagoModerador'],
                 'consecutivo' => $consecutivo,
                 'vrServicio' => $post['vrServicio'],
-                'conceptoRecaudo' => $medicalConsultation->conceptoRecaudo->codigo,
+                'conceptoRecaudo' => $medicalConsultation->conceptoRecaudo?->codigo,
             ];
 
             // Update JSON with new service
@@ -153,6 +158,7 @@ class MedicalConsultationController extends Controller
             $ripsTipoDiagnosticoPrincipalVersion2 = $this->queryController->selectInfiniteRipsTipoDiagnosticoPrincipalVersion2(request());
             $conceptoRecaudo = $this->queryController->selectInfiniteConceptoRecaudo(request());
             $ripsCausaExternaVersion2 = $this->queryController->selectInfiniteRipsCausaExternaVersion2(request());
+            $tipoDocumento = $this->queryController->selectInfiniteTipoIdPisis(request());
 
             return [
                 'code' => 200,
@@ -166,6 +172,7 @@ class MedicalConsultationController extends Controller
                 ...$ripsTipoDiagnosticoPrincipalVersion2,
                 ...$conceptoRecaudo,
                 ...$ripsCausaExternaVersion2,
+                ...$tipoDocumento,
             ];
         });
     }
@@ -194,6 +201,9 @@ class MedicalConsultationController extends Controller
                 'valorPagoModerador' => $post['valorPagoModerador'],
                 'vrServicio' => $post['vrServicio'],
                 'conceptoRecaudo_id' => $post['conceptoRecaudo_id'],
+                'tipoDocumentoIdentificacion_id' => $post['tipoDocumentoIdentificacion_id'],
+                'numDocumentoIdentificacion' => $post['numDocumentoIdentificacion'],
+                'numFEVPagoModerador' => $post['numFEVPagoModerador'],
             ], $id);
 
             // Update Service
@@ -210,7 +220,7 @@ class MedicalConsultationController extends Controller
 
             // Prepare service data for JSON
             $serviceData = [
-                'codPrestador' => '',
+                'codPrestador' => $service->invoice?->serviceVendor?->ips_no_rep?->codigo,
                 'fechaInicioAtencion' => $post['fechaInicioAtencion'],
                 'numAutoriacion' => $post['numAutoriacion'],
                 'codConsulta' => $medicalConsultation->codConsulta->codigo,
@@ -220,17 +230,17 @@ class MedicalConsultationController extends Controller
                 'finalidadTecnologiaSalud' => $medicalConsultation->finalidadTecnologiaSalud->codigo,
                 'causaMotivoAtencion' => $medicalConsultation->causaMotivoAtencion->codigo,
                 'codDiagnosticoPrincipal' => $medicalConsultation->codDiagnosticoPrincipal->codigo,
-                'codDiagnosticoRelacionado1' => $medicalConsultation->codDiagnosticoRelacionado1->codigo,
-                'codDiagnosticoRelacionado2' => $medicalConsultation->codDiagnosticoRelacionado2->codigo,
-                'codDiagnosticoRelacionado3' => $medicalConsultation->codDiagnosticoRelacionado3->codigo,
+                'codDiagnosticoRelacionado1' => $medicalConsultation->codDiagnosticoRelacionado1?->codigo,
+                'codDiagnosticoRelacionado2' => $medicalConsultation->codDiagnosticoRelacionado2?->codigo,
+                'codDiagnosticoRelacionado3' => $medicalConsultation->codDiagnosticoRelacionado3?->codigo,
                 'tipoDiagnosticoPrincipal' => $medicalConsultation->tipoDiagnosticoPrincipal->codigo,
-                'tipoDocumentoIdentificacion' => '',
-                'numDocumentoIdentificacion' => '',
+                'tipoDocumentoIdentificacion' => $medicalConsultation->tipoDocumentoIdentificacion->codigo,
+                'numDocumentoIdentificacion' => $post['numDocumentoIdentificacion'],
                 'valorPagoModerador' => $post['valorPagoModerador'],
-                'numFEVPagoModerador' => '',
+                'numFEVPagoModerador' => $post['numFEVPagoModerador'],
                 'consecutivo' => $consecutivo,
                 'vrServicio' => $post['vrServicio'],
-                'conceptoRecaudo' => $medicalConsultation->conceptoRecaudo->codigo,
+                'conceptoRecaudo' => $medicalConsultation->conceptoRecaudo?->codigo,
             ];
 
             // Update JSON with edited service

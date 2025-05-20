@@ -19,7 +19,6 @@ class HospitalizationStoreRequest extends FormRequest
         $rules = [
             'invoice_id' => 'required',
 
-            'codigo_hospitalizacion_id' => 'required',
             'viaIngresoServicioSalud_id' => 'required',
             'fechaInicioAtencion' => 'required',
             'numAutorizacion' => 'required',
@@ -28,6 +27,9 @@ class HospitalizationStoreRequest extends FormRequest
             'codComplicacion_id' => 'required',
             'condicionDestinoUsuarioEgreso_id' => 'required',
             'fechaEgreso' => 'required',
+            'tipoDocumentoIdentificacion_id' => 'required',
+            'numDocumentoIdentificacion' => 'required',
+            'numFEVPagoModerador' => 'required',
         ];
 
         return $rules;
@@ -38,7 +40,6 @@ class HospitalizationStoreRequest extends FormRequest
         return [
             'invoice_id.required' => 'El campo es obligatorio',
 
-            'codigo_hospitalizacion_id.required' => 'El campo es obligatorio',
             'viaIngresoServicioSalud_id.required' => 'El campo es obligatorio',
             'fechaInicioAtencion.required' => 'El campo es obligatorio',
             'numAutorizacion.required' => 'El campo es obligatorio',
@@ -47,6 +48,9 @@ class HospitalizationStoreRequest extends FormRequest
             'codComplicacion_id.required' => 'El campo es obligatorio',
             'condicionDestinoUsuarioEgreso_id.required' => 'El campo es obligatorio',
             'fechaEgreso.required' => 'El campo es obligatorio',
+            'tipoDocumentoIdentificacion_id.required' => 'El campo es obligatorio',
+            'numDocumentoIdentificacion.required' => 'El campo es obligatorio',
+            'numFEVPagoModerador.required' => 'El campo es obligatorio',
         ];
     }
 
@@ -54,9 +58,6 @@ class HospitalizationStoreRequest extends FormRequest
     {
         $merge = [];
 
-        if ($this->has('codigo_hospitalizacion_id')) {
-            $merge['codigo_hospitalizacion_id'] = getValueSelectInfinite($this->codigo_hospitalizacion_id);
-        }
         if ($this->has('viaIngresoServicioSalud_id')) {
             $merge['viaIngresoServicioSalud_id'] = getValueSelectInfinite($this->viaIngresoServicioSalud_id);
         }
@@ -86,6 +87,9 @@ class HospitalizationStoreRequest extends FormRequest
         }
         if ($this->has('codDiagnosticoMuerte_id')) {
             $merge['codDiagnosticoMuerte_id'] = getValueSelectInfinite($this->codDiagnosticoMuerte_id);
+        }
+        if ($this->has('tipoDocumentoIdentificacion_id')) {
+            $merge['tipoDocumentoIdentificacion_id'] = getValueSelectInfinite($this->tipoDocumentoIdentificacion_id);
         }
 
         $this->merge($merge);

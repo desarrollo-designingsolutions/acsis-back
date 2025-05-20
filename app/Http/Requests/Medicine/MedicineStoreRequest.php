@@ -35,9 +35,15 @@ class MedicineStoreRequest extends FormRequest
             'diasTratamiento' => 'required',
             'vrUnitMedicamento' => 'required',
             'vrServicio' => 'required',
-            'conceptoRecaudo_id' => 'required',
+            'tipoDocumentoIdentificacion_id' => 'required',
+            'numDocumentoIdentificacion' => 'required',
 
         ];
+
+        if ($this->valorPagoModerador > 0) {
+            $rules['conceptoRecaudo_id'] = 'required';
+            $rules['numFEVPagoModerador'] = 'required';
+        }
 
         return $rules;
     }
@@ -64,6 +70,9 @@ class MedicineStoreRequest extends FormRequest
             'vrUnitMedicamento' => 'El campo es obligatorio',
             'vrServicio' => 'El campo es obligatorio',
             'conceptoRecaudo_id' => 'El campo es obligatorio',
+            'tipoDocumentoIdentificacion_id.required' => 'El campo es obligatorio',
+            'numDocumentoIdentificacion.required' => 'El campo es obligatorio',
+            'numFEVPagoModerador.required' => 'El campo es obligatorio',
         ];
     }
 
@@ -89,6 +98,9 @@ class MedicineStoreRequest extends FormRequest
 
         if ($this->has('conceptoRecaudo_id')) {
             $merge['conceptoRecaudo_id'] = getValueSelectInfinite($this->conceptoRecaudo_id);
+        }
+        if ($this->has('tipoDocumentoIdentificacion_id')) {
+            $merge['tipoDocumentoIdentificacion_id'] = getValueSelectInfinite($this->tipoDocumentoIdentificacion_id);
         }
 
         $this->merge($merge);

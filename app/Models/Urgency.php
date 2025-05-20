@@ -53,9 +53,9 @@ class Urgency extends Model
     {
         return $this->belongsTo(Cie10::class, 'codDiagnosticoCausaMuerte_id');
     }
-
-    public function codigo_urgencia()
+    
+    public function tipoDocumentoIdentificacion()
     {
-        return $this->belongsTo(CupsRips::class, 'codigo_urgencia_id');
+        return $this->belongsTo(TipoIdPisis::class, 'tipoDocumentoIdentificacion_id');
     }
 }

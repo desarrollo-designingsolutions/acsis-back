@@ -30,6 +30,7 @@ class MedicineController extends Controller
             $tipoMedicamentoPosVersion2 = $this->queryController->selectInfiniteTipoMedicamentoPosVersion2(request());
             $umm = $this->queryController->selectInfiniteUmm(request());
             $conceptoRecaudo = $this->queryController->selectInfiniteConceptoRecaudo(request());
+            $tipoDocumento = $this->queryController->selectInfiniteTipoIdPisis(request());
 
             return [
                 'code' => 200,
@@ -37,6 +38,7 @@ class MedicineController extends Controller
                 ...$tipoMedicamentoPosVersion2,
                 ...$umm,
                 ...$conceptoRecaudo,
+                ...$tipoDocumento,
             ];
         });
     }
@@ -70,6 +72,9 @@ class MedicineController extends Controller
                 'valorPagoModerador' => $post['valorPagoModerador'],
                 'vrServicio' => $post['vrServicio'],
                 'conceptoRecaudo_id' => $post['conceptoRecaudo_id'],
+                'tipoDocumentoIdentificacion_id' => $post['tipoDocumentoIdentificacion_id'],
+                'numDocumentoIdentificacion' => $post['numDocumentoIdentificacion'],
+                'numFEVPagoModerador' => $post['numFEVPagoModerador'],
             ]);
 
             // Create Service
@@ -82,14 +87,14 @@ class MedicineController extends Controller
                 'serviceable_id' => $medicine->id,
                 'codigo_servicio' => $post['codTecnologiaSalud'],
                 'nombre_servicio' => $post['nomTecnologiaSalud'],
-                'quantity' => 1,
+                'quantity' => $post['cantidadMedicamento'],
                 'unit_value' => $post['vrServicio'],
                 'total_value' => $post['vrServicio'],
             ]);
 
             // Prepare service data for JSON
             $serviceData = [
-                'codPrestador' => '',
+                'codPrestador' => $service->invoice?->serviceVendor?->ips_no_rep?->codigo,
                 'numAutorizacion' => $post['numAutorizacion'],
                 'idMIPRES' => $post['idMIPRES'],
                 'fechaDispensAdmon' => $post['fechaDispensAdmon'],
@@ -104,14 +109,14 @@ class MedicineController extends Controller
                 'unidadMinDispensa' => $post['unidadMinDispensa'],
                 'cantidadMedicamento' => $post['cantidadMedicamento'],
                 'diasTratamiento' => $post['diasTratamiento'],
-                'tipoDocumentoIdentificacion' => '',
-                'numDocumentoIdentificacion' => '',
+                'tipoDocumentoIdentificacion' => $medicine->tipoDocumentoIdentificacion->codigo,
+                'numDocumentoIdentificacion' => $post['numDocumentoIdentificacion'],
                 'vrUnitMedicamento' => $post['vrUnitMedicamento'],
                 'valorPagoModerador' => $post['valorPagoModerador'],
-                'numFEVPagoModerador' => '',
+                'numFEVPagoModerador' => $post['numFEVPagoModerador'],
                 'consecutivo' => $consecutivo,
                 'vrServicio' => $post['vrServicio'],
-                'conceptoRecaudo' => $medicine->conceptoRecaudo->codigo,
+                'conceptoRecaudo' => $medicine->conceptoRecaudo?->codigo,
             ];
 
             // Update JSON with new service
@@ -142,6 +147,7 @@ class MedicineController extends Controller
             $tipoMedicamentoPosVersion2 = $this->queryController->selectInfiniteTipoMedicamentoPosVersion2(request());
             $umm = $this->queryController->selectInfiniteUmm(request());
             $conceptoRecaudo = $this->queryController->selectInfiniteConceptoRecaudo(request());
+            $tipoDocumento = $this->queryController->selectInfiniteTipoIdPisis(request());
 
             return [
                 'code' => 200,
@@ -150,6 +156,7 @@ class MedicineController extends Controller
                 ...$tipoMedicamentoPosVersion2,
                 ...$umm,
                 ...$conceptoRecaudo,
+                ...$tipoDocumento,
             ];
         });
     }
@@ -180,13 +187,16 @@ class MedicineController extends Controller
                 'valorPagoModerador' => $post['valorPagoModerador'],
                 'vrServicio' => $post['vrServicio'],
                 'conceptoRecaudo_id' => $post['conceptoRecaudo_id'],
+                'tipoDocumentoIdentificacion_id' => $post['tipoDocumentoIdentificacion_id'],
+                'numDocumentoIdentificacion' => $post['numDocumentoIdentificacion'],
+                'numFEVPagoModerador' => $post['numFEVPagoModerador'],
             ], $id);
 
             // Update Service
             $service = $this->serviceRepository->store([
                 'codigo_servicio' => $post['codTecnologiaSalud'],
                 'nombre_servicio' => $post['nomTecnologiaSalud'],
-                'quantity' => 1,
+                'quantity' => $post['cantidadMedicamento'],
                 'unit_value' => $post['vrServicio'],
                 'total_value' => $post['vrServicio'],
             ], $post['service_id']);
@@ -196,7 +206,7 @@ class MedicineController extends Controller
 
             // Prepare service data for JSON
             $serviceData = [
-                'codPrestador' => '',
+                'codPrestador' => $service->invoice?->serviceVendor?->ips_no_rep?->codigo,
                 'numAutorizacion' => $post['numAutorizacion'],
                 'idMIPRES' => $post['idMIPRES'],
                 'fechaDispensAdmon' => $post['fechaDispensAdmon'],
@@ -211,14 +221,14 @@ class MedicineController extends Controller
                 'unidadMinDispensa' => $post['unidadMinDispensa'],
                 'cantidadMedicamento' => $post['cantidadMedicamento'],
                 'diasTratamiento' => $post['diasTratamiento'],
-                'tipoDocumentoIdentificacion' => '',
-                'numDocumentoIdentificacion' => '',
+                'tipoDocumentoIdentificacion' => $medicine->tipoDocumentoIdentificacion->codigo,
+                'numDocumentoIdentificacion' => $post['numDocumentoIdentificacion'],
                 'vrUnitMedicamento' => $post['vrUnitMedicamento'],
                 'valorPagoModerador' => $post['valorPagoModerador'],
-                'numFEVPagoModerador' => '',
+                'numFEVPagoModerador' => $post['numFEVPagoModerador'],
                 'consecutivo' => $consecutivo,
                 'vrServicio' => $post['vrServicio'],
-                'conceptoRecaudo' => $medicine->conceptoRecaudo->codigo,
+                'conceptoRecaudo' => $medicine->conceptoRecaudo?->codigo,
             ];
 
             // Update JSON with edited service

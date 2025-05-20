@@ -77,14 +77,23 @@ class ServiceController extends Controller
     public function loadBtnCreate(Request $request)
     {
         return $this->execute(function () {
+            // Define the values to exclude
+            $excludedTypes = [
+                TypeServiceEnum::SERVICE_TYPE_003->value,
+                TypeServiceEnum::SERVICE_TYPE_004->value,
+                TypeServiceEnum::SERVICE_TYPE_005->value,
+            ];
 
+            // Filter out the excluded types and map the remaining cases
             $typeServiceEnumValues = array_map(function ($case) {
                 return [
                     'type' => $case->value,
                     'name' => $case->description(),
                     'icon' => $case->icon(),
                 ];
-            }, TypeServiceEnum::cases());
+            }, array_filter(TypeServiceEnum::cases(), function ($case) use ($excludedTypes) {
+                return !in_array($case->value, $excludedTypes);
+            }));
 
             return [
                 'code' => 200,

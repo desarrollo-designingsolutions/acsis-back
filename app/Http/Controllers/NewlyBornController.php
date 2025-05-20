@@ -30,11 +30,15 @@ class NewlyBornController extends Controller
             $condicionyDestinoUsuarioEgreso = $this->queryController->selectInfiniteCondicionyDestinoUsuarioEgreso(request());
             $sexo = $this->queryController->selectInfiniteSexo(request());
 
+            $newRequest = new Request(['codigo_in' => ['CN', 'RC', 'MS']]);
+            $tipoDocumento = $this->queryController->selectInfiniteTipoIdPisis($newRequest);
+
             return [
                 'code' => 200,
                 ...$cie10,
                 ...$condicionyDestinoUsuarioEgreso,
                 ...$sexo,
+                ...$tipoDocumento,
             ];
         });
     }
@@ -60,6 +64,9 @@ class NewlyBornController extends Controller
                 'condicionDestinoUsuarioEgreso_id' => $post['condicionDestinoUsuarioEgreso_id'],
                 'codDiagnosticoCausaMuerte_id' => $post['codDiagnosticoCausaMuerte_id'],
                 'fechaEgreso' => $post['fechaEgreso'],
+                'tipoDocumentoIdentificacion_id' => $post['tipoDocumentoIdentificacion_id'],
+                'numDocumentoIdentificacion' => $post['numDocumentoIdentificacion'],
+                'numFEVPagoModerador' => $post['numFEVPagoModerador'],
             ]);
 
             // Create Service
@@ -79,9 +86,9 @@ class NewlyBornController extends Controller
 
             // Prepare service data for JSON
             $serviceData = [
-                'codPrestador' => '',
-                'tipoDocumentoIdentificacion' => '',
-                'numDocumentoIdentificacion' => '',
+                'codPrestador' => $service->invoice?->serviceVendor?->ips_no_rep?->codigo,
+                'tipoDocumentoIdentificacion' => $newlyBorn->tipoDocumentoIdentificacion->codigo,
+                'numDocumentoIdentificacion' => $post['numDocumentoIdentificacion'],
                 'fechaNacimiento' => $post['fechaNacimiento'],
                 'edadGestacional' => $post['edadGestacional'],
                 'numConsultasCPrenatal' => $post['numConsultasCPrenatal'],
@@ -93,7 +100,7 @@ class NewlyBornController extends Controller
                 'codDiagnosticoCausaMuerte' => $newlyBorn->codDiagnosticoCausaMuerte->codigo,
                 'fechaEgreso' => $post['fechaEgreso'],
                 'consecutivo' => $consecutivo,
-                'numFEVPagoModerador' => '',
+                'numFEVPagoModerador' => $post['numFEVPagoModerador'],
             ];
 
             // Update JSON with new service
@@ -124,12 +131,16 @@ class NewlyBornController extends Controller
             $condicionyDestinoUsuarioEgreso = $this->queryController->selectInfiniteCondicionyDestinoUsuarioEgreso(request());
             $sexo = $this->queryController->selectInfiniteSexo(request());
 
+            $newRequest = new Request(['codigo_in' => ['CN', 'RC', 'MS']]);
+            $tipoDocumento = $this->queryController->selectInfiniteTipoIdPisis($newRequest);
+
             return [
                 'code' => 200,
                 'form' => $form,
                 ...$cie10,
                 ...$condicionyDestinoUsuarioEgreso,
                 ...$sexo,
+                ...$tipoDocumento,
             ];
         });
     }
@@ -152,6 +163,9 @@ class NewlyBornController extends Controller
                 'condicionDestinoUsuarioEgreso_id' => $post['condicionDestinoUsuarioEgreso_id'],
                 'codDiagnosticoCausaMuerte_id' => $post['codDiagnosticoCausaMuerte_id'],
                 'fechaEgreso' => $post['fechaEgreso'],
+                'tipoDocumentoIdentificacion_id' => $post['tipoDocumentoIdentificacion_id'],
+                'numDocumentoIdentificacion' => $post['numDocumentoIdentificacion'],
+                'numFEVPagoModerador' => $post['numFEVPagoModerador'],
             ], $id);
 
             // Update Service
@@ -168,9 +182,9 @@ class NewlyBornController extends Controller
 
             // Prepare service data for JSON
             $serviceData = [
-                'codPrestador' => '',
-                'tipoDocumentoIdentificacion' => '',
-                'numDocumentoIdentificacion' => '',
+                'codPrestador' => $service->invoice?->serviceVendor?->ips_no_rep?->codigo,
+                'tipoDocumentoIdentificacion' => $newlyBorn->tipoDocumentoIdentificacion->codigo,
+                'numDocumentoIdentificacion' => $post['numDocumentoIdentificacion'],
                 'fechaNacimiento' => $post['fechaNacimiento'],
                 'edadGestacional' => $post['edadGestacional'],
                 'numConsultasCPrenatal' => $post['numConsultasCPrenatal'],
@@ -182,7 +196,7 @@ class NewlyBornController extends Controller
                 'codDiagnosticoCausaMuerte' => $newlyBorn->codDiagnosticoCausaMuerte->codigo,
                 'fechaEgreso' => $post['fechaEgreso'],
                 'consecutivo' => $consecutivo,
-                'numFEVPagoModerador' => '',
+                'numFEVPagoModerador' => $post['numFEVPagoModerador'],
             ];
 
             // Update JSON with edited service

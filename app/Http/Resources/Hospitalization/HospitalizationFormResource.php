@@ -6,6 +6,7 @@ use App\Http\Resources\Cie10\Cie10SelectInfiniteResource;
 use App\Http\Resources\CondicionyDestinoUsuarioEgreso\CondicionyDestinoUsuarioEgresoSelectInfiniteResource;
 use App\Http\Resources\CupsRips\CupsRipsSelectInfiniteResource;
 use App\Http\Resources\RipsCausaExternaVersion2\RipsCausaExternaVersion2SelectInfiniteResource;
+use App\Http\Resources\TipoIdPisis\TipoIdPisisSelectResource;
 use App\Http\Resources\ViaIngresoUsuario\ViaIngresoUsuarioSelectInfiniteResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -23,7 +24,6 @@ class HospitalizationFormResource extends JsonResource
             'id' => $this->id,
             'invoice_id' => $this->service->invoice_id,
 
-            'codigo_hospitalizacion_id' => new CupsRipsSelectInfiniteResource($this->codigo_hospitalizacion),
             'viaIngresoServicioSalud_id' => new ViaIngresoUsuarioSelectInfiniteResource($this->viaIngresoServicioSalud),
             'fechaInicioAtencion' => $this->fechaInicioAtencion,
             'numAutorizacion' => $this->numAutorizacion,
@@ -37,6 +37,9 @@ class HospitalizationFormResource extends JsonResource
             'condicionDestinoUsuarioEgreso_id' => new CondicionyDestinoUsuarioEgresoSelectInfiniteResource($this->condicionDestinoUsuarioEgreso),
             'codDiagnosticoMuerte_id' => new Cie10SelectInfiniteResource($this->codDiagnosticoMuerte),
             'fechaEgreso' => $this->fechaEgreso,
+            'tipoDocumentoIdentificacion_id' => new TipoIdPisisSelectResource($this->tipoDocumentoIdentificacion),
+            'numDocumentoIdentificacion' => $this->numDocumentoIdentificacion,
+            'numFEVPagoModerador' => $this->numFEVPagoModerador,
         ];
     }
 }

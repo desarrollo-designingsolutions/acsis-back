@@ -11,6 +11,7 @@ use App\Http\Resources\Country\CountrySelectResource;
 use App\Http\Resources\CupsRips\CupsRipsSelectInfiniteResource;
 use App\Http\Resources\Entity\EntitySelectResource;
 use App\Http\Resources\GrupoServicio\GrupoServicioSelectInfiniteResource;
+use App\Http\Resources\IpsNoReps\IpsNoRepsSelectInfiniteResource;
 use App\Http\Resources\ModalidadAtencion\ModalidadAtencionSelectInfiniteResource;
 use App\Http\Resources\Municipio\MunicipioSelectResource;
 use App\Http\Resources\Pais\PaisSelectResource;
@@ -39,6 +40,7 @@ use App\Repositories\CountryRepository;
 use App\Repositories\CupsRipsRepository;
 use App\Repositories\EntityRepository;
 use App\Repositories\GrupoServicioRepository;
+use App\Repositories\IpsNoRepsRepository;
 use App\Repositories\ModalidadAtencionRepository;
 use App\Repositories\MunicipioRepository;
 use App\Repositories\PaisRepository;
@@ -102,6 +104,7 @@ class QueryController extends Controller
         protected TipoMedicamentoPosVersion2Repository $tipoMedicamentoPosVersion2Repository,
         protected UmmRepository $ummRepository,
         protected CondicionyDestinoUsuarioEgresoRepository $condicionyDestinoUsuarioEgresoRepository,
+        protected IpsNoRepsRepository $ipsNoRepsRepository,
     ) {}
 
     public function selectInfiniteCountries(Request $request)
@@ -259,15 +262,15 @@ class QueryController extends Controller
         ];
     }
 
-    public function selectInfiniteTipoDocumento(Request $request)
+    public function selectInfiniteTipoIdPisis(Request $request)
     {
         $tipoIdPisis = $this->tipoIdPisisRepository->paginate($request->all());
         $data = TipoIdPisisSelectResource::collection($tipoIdPisis);
 
         return [
             'code' => 200,
-            'tipoIdPisiss_arrayInfo' => $data,
-            'tipoIdPisiss_countLinks' => $tipoIdPisis->lastPage(),
+            'tipoIdPisis_arrayInfo' => $data,
+            'tipoIdPisis_countLinks' => $tipoIdPisis->lastPage(),
         ];
     }
 
@@ -512,6 +515,18 @@ class QueryController extends Controller
             'code' => 200,
             'condicionyDestinoUsuarioEgreso_arrayInfo' => $dataCondicionyDestinoUsuarioEgreso,
             'condicionyDestinoUsuarioEgreso_countLinks' => $condicionyDestinoUsuarioEgreso->lastPage(),
+        ];
+    }
+
+    public function selectInfiniteIpsNoReps(Request $request)
+    {
+        $ipsNoReps = $this->ipsNoRepsRepository->list($request->all());
+        $dataIpsNoReps = IpsNoRepsSelectInfiniteResource::collection($ipsNoReps);
+
+        return [
+            'code' => 200,
+            'ipsNoReps_arrayInfo' => $dataIpsNoReps,
+            'ipsNoReps_countLinks' => $ipsNoReps->lastPage(),
         ];
     }
 }

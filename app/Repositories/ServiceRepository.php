@@ -37,9 +37,6 @@ class ServiceRepository extends BaseRepository
                             QueryFilters::filterByText($subQuery, $value, 'type', [
                                 TypeServiceEnum::SERVICE_TYPE_001->description() => TypeServiceEnum::SERVICE_TYPE_001,
                                 TypeServiceEnum::SERVICE_TYPE_002->description() => TypeServiceEnum::SERVICE_TYPE_002,
-                                TypeServiceEnum::SERVICE_TYPE_003->description() => TypeServiceEnum::SERVICE_TYPE_003,
-                                TypeServiceEnum::SERVICE_TYPE_004->description() => TypeServiceEnum::SERVICE_TYPE_004,
-                                TypeServiceEnum::SERVICE_TYPE_005->description() => TypeServiceEnum::SERVICE_TYPE_005,
                                 TypeServiceEnum::SERVICE_TYPE_006->description() => TypeServiceEnum::SERVICE_TYPE_006,
                                 TypeServiceEnum::SERVICE_TYPE_007->description() => TypeServiceEnum::SERVICE_TYPE_007,
                             ]);
@@ -62,6 +59,12 @@ class ServiceRepository extends BaseRepository
                         $query->where('company_id', $request['company_id']);
                     }
                 })
+                // Excluir los tipos de servicio no deseados
+                ->whereNotIn('type', [
+                    TypeServiceEnum::SERVICE_TYPE_003->value,
+                    TypeServiceEnum::SERVICE_TYPE_004->value,
+                    TypeServiceEnum::SERVICE_TYPE_005->value,
+                ])
                 ->paginate(request()->perPage ?? Constants::ITEMS_PER_PAGE);
 
             return $query;

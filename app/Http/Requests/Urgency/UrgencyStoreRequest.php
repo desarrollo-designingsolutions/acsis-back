@@ -19,12 +19,14 @@ class UrgencyStoreRequest extends FormRequest
         $rules = [
             'invoice_id' => 'required',
 
-            'codigo_urgencia_id' => 'required',
             'fechaInicioAtencion' => 'required',
             'causaMotivoAtencion_id' => 'required',
             'codDiagnosticoPrincipal_id' => 'required',
             'condicionDestinoUsuarioEgreso' => 'required',
             'fechaEgreso' => 'required',
+            'tipoDocumentoIdentificacion_id' => 'required',
+            'numDocumentoIdentificacion' => 'required',
+            'numFEVPagoModerador' => 'required',
 
         ];
 
@@ -36,12 +38,14 @@ class UrgencyStoreRequest extends FormRequest
         return [
             'invoice_id.required' => 'El campo es obligatorio',
 
-            'codigo_urgencia_id' => 'El campo es obligatorio',
             'fechaInicioAtencion' => 'El campo es obligatorio',
             'causaMotivoAtencion_id' => 'El campo es obligatorio',
             'codDiagnosticoPrincipal_id' => 'El campo es obligatorio',
             'condicionDestinoUsuarioEgreso' => 'El campo es obligatorio',
             'fechaEgreso' => 'El campo es obligatorio',
+            'tipoDocumentoIdentificacion_id.required' => 'El campo es obligatorio',
+            'numDocumentoIdentificacion.required' => 'El campo es obligatorio',
+            'numFEVPagoModerador.required' => 'El campo es obligatorio',
         ];
     }
 
@@ -49,9 +53,6 @@ class UrgencyStoreRequest extends FormRequest
     {
         $merge = [];
 
-        if ($this->has('codigo_urgencia_id')) {
-            $merge['codigo_urgencia_id'] = getValueSelectInfinite($this->codigo_urgencia_id);
-        }
         if ($this->has('causaMotivoAtencion_id')) {
             $merge['causaMotivoAtencion_id'] = getValueSelectInfinite($this->causaMotivoAtencion_id);
         }
@@ -72,6 +73,9 @@ class UrgencyStoreRequest extends FormRequest
         }
         if ($this->has('codDiagnosticoCausaMuerte_id')) {
             $merge['codDiagnosticoCausaMuerte_id'] = getValueSelectInfinite($this->codDiagnosticoCausaMuerte_id);
+        }
+        if ($this->has('tipoDocumentoIdentificacion_id')) {
+            $merge['tipoDocumentoIdentificacion_id'] = getValueSelectInfinite($this->tipoDocumentoIdentificacion_id);
         }
 
         $this->merge($merge);

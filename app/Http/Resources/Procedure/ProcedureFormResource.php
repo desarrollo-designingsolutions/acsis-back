@@ -10,6 +10,7 @@ use App\Http\Resources\ModalidadAtencion\ModalidadAtencionSelectInfiniteResource
 use App\Http\Resources\RipsCausaExternaVersion2\RipsCausaExternaVersion2SelectInfiniteResource;
 use App\Http\Resources\RipsFinalidadConsultaVersion2\RipsFinalidadConsultaVersion2SelectInfiniteResource;
 use App\Http\Resources\Servicio\ServicioSelectInfiniteResource;
+use App\Http\Resources\TipoIdPisis\TipoIdPisisSelectResource;
 use App\Http\Resources\ViaIngresoUsuario\ViaIngresoUsuarioSelectInfiniteResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -44,6 +45,9 @@ class ProcedureFormResource extends JsonResource
             'vrServicio' => $this->vrServicio,
 
             'conceptoRecaudo_id' => new ConceptoRecaudoSelectResource($this->conceptoRecaudo),
+            'tipoDocumentoIdentificacion_id' => new TipoIdPisisSelectResource($this->tipoDocumentoIdentificacion),
+            'numDocumentoIdentificacion' => $this->numDocumentoIdentificacion,
+            'numFEVPagoModerador' => $this->numFEVPagoModerador,
         ];
     }
 }

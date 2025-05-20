@@ -31,7 +31,15 @@ class ProcedureStoreRequest extends FormRequest
             'codComplicacion_id' => 'required',
             'valorPagoModerador' => 'required',
             'vrServicio' => 'required',
+            'tipoDocumentoIdentificacion_id' => 'required',
+            'numDocumentoIdentificacion' => 'required',
         ];
+        
+        if($this->valorPagoModerador > 0) 
+        {
+            $rules['conceptoRecaudo_id'] = 'required';
+            $rules['numFEVPagoModerador'] = 'required';
+        }
 
         return $rules;
     }
@@ -53,6 +61,10 @@ class ProcedureStoreRequest extends FormRequest
             'codComplicacion_id.required' => 'El campo es obligatorio',
             'valorPagoModerador.required' => 'El campo es obligatorio',
             'vrServicio.required' => 'El campo es obligatorio',
+            'tipoDocumentoIdentificacion_id.required' => 'El campo es obligatorio',
+            'numDocumentoIdentificacion.required' => 'El campo es obligatorio',
+            'conceptoRecaudo_id.required' => 'El campo es obligatorio',
+            'numFEVPagoModerador.required' => 'El campo es obligatorio',
 
         ];
     }
@@ -99,6 +111,10 @@ class ProcedureStoreRequest extends FormRequest
 
         if ($this->has('conceptoRecaudo_id')) {
             $merge['conceptoRecaudo_id'] = getValueSelectInfinite($this->conceptoRecaudo_id);
+        }
+        
+        if ($this->has('tipoDocumentoIdentificacion_id')) {
+            $merge['tipoDocumentoIdentificacion_id'] = getValueSelectInfinite($this->tipoDocumentoIdentificacion_id);
         }
 
         $this->merge($merge);
