@@ -28,7 +28,7 @@ class MedicalConsultationFormResource extends JsonResource
             'id' => $this->id,
             'invoice_id' => $this->service->invoice_id,
             'fechaInicioAtencion' => $this->fechaInicioAtencion,
-            'numAutoriacion' => $this->numAutoriacion,
+            'numAutorizacion' => $this->numAutorizacion,
 
             'codConsulta_id' => new CupsRipsSelectInfiniteResource($this->codConsulta),
             'modalidadGrupoServicioTecSal_id' => new ModalidadAtencionSelectInfiniteResource($this->modalidadGrupoServicioTecSal),
