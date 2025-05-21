@@ -21,7 +21,7 @@ class IpsCodHabilitacionRepository extends BaseRepository
             $data = $this->model->with($with)->where(function ($query) {})
                 ->where(function ($query) use ($request) {
                     if (isset($request['searchQueryInfinite']) && ! empty($request['searchQueryInfinite'])) {
-                        $query->where('nit', 'like', '%'.$request['searchQueryInfinite'].'%');
+                        $query->where('nroIDPrestador', 'like', '%'.$request['searchQueryInfinite'].'%');
                         $query->orWhere('nombre', 'like', '%'.$request['searchQueryInfinite'].'%');
                     }
                 });
