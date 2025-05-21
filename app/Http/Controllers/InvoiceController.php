@@ -10,6 +10,7 @@ use App\Exports\Invoice\InvoiceExcelErrorsValidationXmlExport;
 use App\Exports\Invoice\InvoiceExcelExport;
 use App\Helpers\Constants;
 use App\Http\Requests\Invoice\InvoiceStoreRequest;
+use App\Http\Requests\Invoice\InvoiceUploadJsonRequest;
 use App\Http\Resources\Invoice\InvoiceFormResource;
 use App\Http\Resources\Invoice\InvoiceListResource;
 use App\Http\Resources\InvoiceSoat\InvoiceSoatFormResource;
@@ -684,13 +685,14 @@ class InvoiceController extends Controller
         }
     }
 
-    public function uploadJson(Request $request)
+    public function uploadJson(InvoiceUploadJsonRequest $request)
     {
         return $this->execute(function () use ($request) {
             if ($request->hasFile('archiveJson')) {
+
                 // Inicializar variables
                 $company_id = $request->input('company_id');
-
+                $file = $request->file('archiveJson');
 
 
 
