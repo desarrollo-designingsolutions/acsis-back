@@ -65,8 +65,10 @@ class UserController extends Controller
             $user = $this->userRepository->store($post, withCompany: false);
             $user->syncRoles($request->input('role_id'));
 
-            $service_vendor_ids = collect($request->input('service_vendor_ids'))->pluck('value');
-            $user->serviceVendors()->sync($service_vendor_ids);
+            if($request->input('service_vendor_ids')){
+                $service_vendor_ids = collect($request->input('service_vendor_ids'))->pluck('value');
+                $user->serviceVendors()->sync($service_vendor_ids);
+            }
 
             return [
                 'code' => 200,
@@ -103,8 +105,10 @@ class UserController extends Controller
             $user = $this->userRepository->store($post, $id, withCompany: false);
             $user->syncRoles($request->input('role_id'));
 
-            $service_vendor_ids = collect($request->input('service_vendor_ids'))->pluck('value');
-            $user->serviceVendors()->sync($service_vendor_ids);
+            if($request->input('service_vendor_ids')){
+                $service_vendor_ids = collect($request->input('service_vendor_ids'))->pluck('value');
+                $user->serviceVendors()->sync($service_vendor_ids);
+            }
 
             return [
                 'code' => 200,
