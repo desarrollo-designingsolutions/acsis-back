@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\Constants;
 use App\Http\Requests\Role\RoleStoreRequest;
 use App\Http\Resources\Role\MenuCheckBoxResource;
 use App\Http\Resources\Role\RoleFormResource;
 use App\Http\Resources\Role\RoleListResource;
 use App\Models\Role;
+use App\Models\User;
 use App\Repositories\MenuRepository;
 use App\Repositories\RoleRepository;
 use App\Traits\HttpResponseTrait;
@@ -36,9 +38,9 @@ class RoleController extends Controller
         });
     }
 
-    public function create()
+    public function create(Request $request)
     {
-        return $this->execute(function () {
+        return $this->execute(function () use ($request) {
             $menus = $this->menuRepository->list([
                 'father_null' => true,
                 'withPermissions' => true,
@@ -46,15 +48,26 @@ class RoleController extends Controller
 
             $menus = MenuCheckBoxResource::collection($menus);
 
+
+            unset($menus[1]);
+
+            $user = User::find($request->input('user_id'));
+            if (!$user || $user->role_id !== Constants::ROLE_SUPERADMIN_UUID) {
+                // El usuario no existe o no es superadmin, entonces limitar menús
+                unset($menus[5]);
+                unset($menus[6]);
+                unset($menus[7]);
+            }
+
             return [
                 'menus' => $menus,
             ];
         });
     }
 
-    public function edit($id)
+    public function edit(Request $request, $id)
     {
-        return $this->execute(function () use ($id) {
+        return $this->execute(function () use ($request, $id) {
             $role = $this->roleRepository->find($id);
 
             $menus = $this->menuRepository->list([
@@ -64,6 +77,16 @@ class RoleController extends Controller
             ], ['children']);
 
             $menus = MenuCheckBoxResource::collection($menus);
+
+            unset($menus[1]);
+
+            $user = User::find($request->input('user_id'));
+            if (!$user || $user->role_id !== Constants::ROLE_SUPERADMIN_UUID) {
+                // El usuario no existe o no es superadmin, entonces limitar menús
+                unset($menus[5]);
+                unset($menus[6]);
+                unset($menus[7]);
+            }
 
             return [
                 'code' => 200,
@@ -100,7 +123,7 @@ class RoleController extends Controller
 
             return [
                 'code' => 200,
-                'message' => 'Registro '.$msg.' correctamente',
+                'message' => 'Registro ' . $msg . ' correctamente',
                 'data' => $data,
             ];
         });
