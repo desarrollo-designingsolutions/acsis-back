@@ -86,8 +86,8 @@ class UrgencyController extends Controller
             $serviceData = [
                 'codPrestador' => $service->invoice?->serviceVendor?->ips_no_rep?->codigo,
                 'fechaInicioAtencion' => $post['fechaInicioAtencion'],
-                'causaMotivoAtencion' => $urgency->causaMotivoAtencion->codigo,
-                'codDiagnosticoPrincipal' => $urgency->codDiagnosticoPrincipal->codigo,
+                'causaMotivoAtencion' => $urgency->causaMotivoAtencion?->codigo,
+                'codDiagnosticoPrincipal' => $urgency->codDiagnosticoPrincipal?->codigo,
                 'codDiagnosticoPrincipalE' => $urgency->codDiagnosticoPrincipalE?->codigo,
                 'codDiagnosticoRelacionadoE1' => $urgency->codDiagnosticoRelacionadoE1?->codigo,
                 'codDiagnosticoRelacionadoE2' => $urgency->codDiagnosticoRelacionadoE2?->codigo,
@@ -96,9 +96,6 @@ class UrgencyController extends Controller
                 'codDiagnosticoCausaMuerte' => $urgency->codDiagnosticoCausaMuerte?->codigo,
                 'fechaEgreso' => $post['fechaEgreso'],
                 'consecutivo' => $consecutivo,
-                'numFEVPagoModerador' => $post['numFEVPagoModerador'],
-                'numDocumentoIdentificacion' => $post['numDocumentoIdentificacion'],
-                'tipoDocumentoIdentificacion' => $urgency->tipoDocumentoIdentificacion->codigo,
             ];
 
             // Update JSON with new service
@@ -180,8 +177,8 @@ class UrgencyController extends Controller
             $serviceData = [
                 'codPrestador' => $service->invoice?->serviceVendor?->ips_no_rep?->codigo,
                 'fechaInicioAtencion' => $post['fechaInicioAtencion'],
-                'causaMotivoAtencion' => $urgency->causaMotivoAtencion->codigo,
-                'codDiagnosticoPrincipal' => $urgency->codDiagnosticoPrincipal->codigo,
+                'causaMotivoAtencion' => $urgency->causaMotivoAtencion?->codigo,
+                'codDiagnosticoPrincipal' => $urgency->codDiagnosticoPrincipal?->codigo,
                 'codDiagnosticoPrincipalE' => $urgency->codDiagnosticoPrincipalE?->codigo,
                 'codDiagnosticoRelacionadoE1' => $urgency->codDiagnosticoRelacionadoE1?->codigo,
                 'codDiagnosticoRelacionadoE2' => $urgency->codDiagnosticoRelacionadoE2?->codigo,
@@ -190,9 +187,6 @@ class UrgencyController extends Controller
                 'codDiagnosticoCausaMuerte' => $urgency->codDiagnosticoCausaMuerte?->codigo,
                 'fechaEgreso' => $post['fechaEgreso'],
                 'consecutivo' => $consecutivo,
-                'numFEVPagoModerador' => $post['numFEVPagoModerador'],
-                'numDocumentoIdentificacion' => $post['numDocumentoIdentificacion'],
-                'tipoDocumentoIdentificacion' => $urgency->tipoDocumentoIdentificacion->codigo,
             ];
 
             // Update JSON with edited service

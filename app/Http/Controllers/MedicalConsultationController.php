@@ -65,7 +65,7 @@ class MedicalConsultationController extends Controller
             // Create MedicalConsultation
             $medicalConsultation = $this->medicalConsultationRepository->store([
                 'fechaInicioAtencion' => $post['fechaInicioAtencion'],
-                'numAutoriacion' => $post['numAutoriacion'], // PREGUNTAR
+                'numAutorizacion' => $post['numAutorizacion'], // PREGUNTAR
                 'codConsulta_id' => $post['codConsulta_id'],
                 'modalidadGrupoServicioTecSal_id' => $post['modalidadGrupoServicioTecSal_id'],
                 'grupoServicios_id' => $post['grupoServicios_id'],
@@ -104,25 +104,25 @@ class MedicalConsultationController extends Controller
             $serviceData = [
                 'codPrestador' => $service->invoice?->serviceVendor?->ips_no_rep?->codigo,
                 'fechaInicioAtencion' => $post['fechaInicioAtencion'],
-                'numAutoriacion' => $post['numAutoriacion'],
-                'codConsulta' => $medicalConsultation->codConsulta->codigo,
-                'modalidadGrupoServicioTecSal' => $medicalConsultation->modalidadGrupoServicioTecSal->codigo,
-                'grupoServicios' => $medicalConsultation->grupoServicios->codigo,
-                'codServicio' => $medicalConsultation->codServicio->codigo,
-                'finalidadTecnologiaSalud' => $medicalConsultation->finalidadTecnologiaSalud->codigo,
-                'causaMotivoAtencion' => $medicalConsultation->causaMotivoAtencion->codigo,
-                'codDiagnosticoPrincipal' => $medicalConsultation->codDiagnosticoPrincipal->codigo,
+                'numAutorizacion' => $post['numAutorizacion'],
+                'codConsulta' => $medicalConsultation->codConsulta?->codigo,
+                'modalidadGrupoServicioTecSal' => $medicalConsultation->modalidadGrupoServicioTecSal?->codigo,
+                'grupoServicios' => $medicalConsultation->grupoServicios?->codigo,
+                'codServicio' => $medicalConsultation->codServicio?->codigo,
+                'finalidadTecnologiaSalud' => $medicalConsultation->finalidadTecnologiaSalud?->codigo,
+                'causaMotivoAtencion' => $medicalConsultation->causaMotivoAtencion?->codigo,
+                'codDiagnosticoPrincipal' => $medicalConsultation->codDiagnosticoPrincipal?->codigo,
                 'codDiagnosticoRelacionado1' => $medicalConsultation->codDiagnosticoRelacionado1?->codigo,
                 'codDiagnosticoRelacionado2' => $medicalConsultation->codDiagnosticoRelacionado2?->codigo,
                 'codDiagnosticoRelacionado3' => $medicalConsultation->codDiagnosticoRelacionado3?->codigo,
-                'tipoDiagnosticoPrincipal' => $medicalConsultation->tipoDiagnosticoPrincipal->codigo,
-                'tipoDocumentoIdentificacion' => $medicalConsultation->tipoDocumentoIdentificacion->codigo,
+                'tipoDiagnosticoPrincipal' => $medicalConsultation->tipoDiagnosticoPrincipal?->codigo,
+                'tipoDocumentoIdentificacion' => $medicalConsultation->tipoDocumentoIdentificacion?->codigo,
                 'numDocumentoIdentificacion' => $post['numDocumentoIdentificacion'],
+                'vrServicio' => $post['vrServicio'],
+                'conceptoRecaudo' => $medicalConsultation->conceptoRecaudo?->codigo,
                 'valorPagoModerador' => $post['valorPagoModerador'],
                 'numFEVPagoModerador' => $post['numFEVPagoModerador'],
                 'consecutivo' => $consecutivo,
-                'vrServicio' => $post['vrServicio'],
-                'conceptoRecaudo' => $medicalConsultation->conceptoRecaudo?->codigo,
             ];
 
             // Update JSON with new service
@@ -186,7 +186,7 @@ class MedicalConsultationController extends Controller
             // Update MedicalConsultation
             $medicalConsultation = $this->medicalConsultationRepository->store([
                 'fechaInicioAtencion' => $post['fechaInicioAtencion'],
-                'numAutoriacion' => $post['numAutoriacion'], // PREGUNTAR
+                'numAutorizacion' => $post['numAutorizacion'], // PREGUNTAR
                 'codConsulta_id' => $post['codConsulta_id'],
                 'modalidadGrupoServicioTecSal_id' => $post['modalidadGrupoServicioTecSal_id'],
                 'grupoServicios_id' => $post['grupoServicios_id'],
@@ -222,25 +222,25 @@ class MedicalConsultationController extends Controller
             $serviceData = [
                 'codPrestador' => $service->invoice?->serviceVendor?->ips_no_rep?->codigo,
                 'fechaInicioAtencion' => $post['fechaInicioAtencion'],
-                'numAutoriacion' => $post['numAutoriacion'],
-                'codConsulta' => $medicalConsultation->codConsulta->codigo,
-                'modalidadGrupoServicioTecSal' => $medicalConsultation->modalidadGrupoServicioTecSal->codigo,
-                'grupoServicios' => $medicalConsultation->grupoServicios->codigo,
-                'codServicio' => $medicalConsultation->codServicio->codigo,
-                'finalidadTecnologiaSalud' => $medicalConsultation->finalidadTecnologiaSalud->codigo,
-                'causaMotivoAtencion' => $medicalConsultation->causaMotivoAtencion->codigo,
-                'codDiagnosticoPrincipal' => $medicalConsultation->codDiagnosticoPrincipal->codigo,
+                'numAutorizacion' => $post['numAutorizacion'],
+                'codConsulta' => $medicalConsultation->codConsulta?->codigo,
+                'modalidadGrupoServicioTecSal' => $medicalConsultation->modalidadGrupoServicioTecSal?->codigo,
+                'grupoServicios' => $medicalConsultation->grupoServicios?->codigo,
+                'codServicio' => $medicalConsultation->codServicio?->codigo,
+                'finalidadTecnologiaSalud' => $medicalConsultation->finalidadTecnologiaSalud?->codigo,
+                'causaMotivoAtencion' => $medicalConsultation->causaMotivoAtencion?->codigo,
+                'codDiagnosticoPrincipal' => $medicalConsultation->codDiagnosticoPrincipal?->codigo,
                 'codDiagnosticoRelacionado1' => $medicalConsultation->codDiagnosticoRelacionado1?->codigo,
                 'codDiagnosticoRelacionado2' => $medicalConsultation->codDiagnosticoRelacionado2?->codigo,
                 'codDiagnosticoRelacionado3' => $medicalConsultation->codDiagnosticoRelacionado3?->codigo,
-                'tipoDiagnosticoPrincipal' => $medicalConsultation->tipoDiagnosticoPrincipal->codigo,
-                'tipoDocumentoIdentificacion' => $medicalConsultation->tipoDocumentoIdentificacion->codigo,
+                'tipoDiagnosticoPrincipal' => $medicalConsultation->tipoDiagnosticoPrincipal?->codigo,
+                'tipoDocumentoIdentificacion' => $medicalConsultation->tipoDocumentoIdentificacion?->codigo,
                 'numDocumentoIdentificacion' => $post['numDocumentoIdentificacion'],
+                'vrServicio' => $post['vrServicio'],
+                'conceptoRecaudo' => $medicalConsultation->conceptoRecaudo?->codigo,
                 'valorPagoModerador' => $post['valorPagoModerador'],
                 'numFEVPagoModerador' => $post['numFEVPagoModerador'],
                 'consecutivo' => $consecutivo,
-                'vrServicio' => $post['vrServicio'],
-                'conceptoRecaudo' => $medicalConsultation->conceptoRecaudo?->codigo,
             ];
 
             // Update JSON with edited service

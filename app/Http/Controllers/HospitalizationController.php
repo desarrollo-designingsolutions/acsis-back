@@ -91,24 +91,21 @@ class HospitalizationController extends Controller
 
             // Prepare service data for JSON
             $serviceData = [
-                'viaIngresoServicioSalud' => $hospitalization->viaIngresoServicioSalud->codigo,
+                'codPrestador' => $service->invoice?->serviceVendor?->ips_no_rep?->codigo,
+                'viaIngresoServicioSalud' => $hospitalization->viaIngresoServicioSalud?->codigo,
                 'fechaInicioAtencion' => $post['fechaInicioAtencion'],
                 'numAutorizacion' => $post['numAutorizacion'],
-                'causaMotivoAtencion' => $hospitalization->causaMotivoAtencion->codigo,
-                'codDiagnosticoPrincipal' => $hospitalization->codDiagnosticoPrincipal->codigo,
+                'causaMotivoAtencion' => $hospitalization->causaMotivoAtencion?->codigo,
+                'codDiagnosticoPrincipal' => $hospitalization->codDiagnosticoPrincipal?->codigo,
                 'codDiagnosticoPrincipalE' => $hospitalization->codDiagnosticoPrincipalE?->codigo,
                 'codDiagnosticoRelacionadoE1' => $hospitalization->codDiagnosticoRelacionadoE1?->codigo,
                 'codDiagnosticoRelacionadoE2' => $hospitalization->codDiagnosticoRelacionadoE2?->codigo,
                 'codDiagnosticoRelacionadoE3' => $hospitalization->codDiagnosticoRelacionadoE3?->codigo,
                 'codComplicacion_id' => $post['codComplicacion_id'],
-                'condicionDestinoUsuarioEgreso' => $hospitalization->condicionDestinoUsuarioEgreso->codigo,
+                'condicionDestinoUsuarioEgreso' => $hospitalization->condicionDestinoUsuarioEgreso?->codigo,
                 'codDiagnosticoMuerte' => $hospitalization->codDiagnosticoMuerte?->codigo,
                 'fechaEgreso' => $post['fechaEgreso'],
                 'consecutivo' => $consecutivo,
-                'codPrestador' => $service->invoice?->serviceVendor?->ips_no_rep?->codigo,
-                'numDocumentoIdentificacion' => $post['numDocumentoIdentificacion'],
-                'tipoDocumentoIdentificacion' => $hospitalization->tipoDocumentoIdentificacion->codigo,
-                'numFEVPagoModerador' => $post['numFEVPagoModerador'],
             ];
 
             // Update JSON with new service
@@ -195,24 +192,21 @@ class HospitalizationController extends Controller
 
             // Prepare service data for JSON
             $serviceData = [
-                'viaIngresoServicioSalud' => $hospitalization->viaIngresoServicioSalud->codigo,
+                'codPrestador' => $service->invoice?->serviceVendor?->ips_no_rep?->codigo,
+                'viaIngresoServicioSalud' => $hospitalization->viaIngresoServicioSalud?->codigo,
                 'fechaInicioAtencion' => $post['fechaInicioAtencion'],
                 'numAutorizacion' => $post['numAutorizacion'],
-                'causaMotivoAtencion' => $hospitalization->causaMotivoAtencion->codigo,
-                'codDiagnosticoPrincipal' => $hospitalization->codDiagnosticoPrincipal->codigo,
+                'causaMotivoAtencion' => $hospitalization->causaMotivoAtencion?->codigo,
+                'codDiagnosticoPrincipal' => $hospitalization->codDiagnosticoPrincipal?->codigo,
                 'codDiagnosticoPrincipalE' => $hospitalization->codDiagnosticoPrincipalE?->codigo,
                 'codDiagnosticoRelacionadoE1' => $hospitalization->codDiagnosticoRelacionadoE1?->codigo,
                 'codDiagnosticoRelacionadoE2' => $hospitalization->codDiagnosticoRelacionadoE2?->codigo,
                 'codDiagnosticoRelacionadoE3' => $hospitalization->codDiagnosticoRelacionadoE3?->codigo,
                 'codComplicacion_id' => $post['codComplicacion_id'],
-                'condicionDestinoUsuarioEgreso' => $hospitalization->condicionDestinoUsuarioEgreso->codigo,
+                'condicionDestinoUsuarioEgreso' => $hospitalization->condicionDestinoUsuarioEgreso?->codigo,
                 'codDiagnosticoMuerte' => $hospitalization->codDiagnosticoMuerte?->codigo,
                 'fechaEgreso' => $post['fechaEgreso'],
                 'consecutivo' => $consecutivo,
-                'codPrestador' => $service->invoice?->serviceVendor?->ips_no_rep?->codigo,
-                'numDocumentoIdentificacion' => $post['numDocumentoIdentificacion'],
-                'tipoDocumentoIdentificacion' => $hospitalization->tipoDocumentoIdentificacion->codigo,
-                'numFEVPagoModerador' => $post['numFEVPagoModerador'],
             ];
 
             // Update JSON with edited service

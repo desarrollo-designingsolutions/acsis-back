@@ -87,20 +87,18 @@ class NewlyBornController extends Controller
             // Prepare service data for JSON
             $serviceData = [
                 'codPrestador' => $service->invoice?->serviceVendor?->ips_no_rep?->codigo,
-                'tipoDocumentoIdentificacion' => $newlyBorn->tipoDocumentoIdentificacion->codigo,
+                'tipoDocumentoIdentificacion' => $newlyBorn->tipoDocumentoIdentificacion?->codigo,
                 'numDocumentoIdentificacion' => $post['numDocumentoIdentificacion'],
                 'fechaNacimiento' => $post['fechaNacimiento'],
                 'edadGestacional' => $post['edadGestacional'],
                 'numConsultasCPrenatal' => $post['numConsultasCPrenatal'],
-                'codSexoBiologico' => $newlyBorn->codSexoBiologico->codigo,
+                'codSexoBiologico' => $newlyBorn->codSexoBiologico?->codigo,
                 'peso' => $post['peso'],
-                'codDiagnosticoPrincipal' => $newlyBorn->codDiagnosticoPrincipal->codigo,
-                'condicionDestino' => $post['condicionDestino'],
-                'condicionDestinoUsuarioEgreso' => $newlyBorn->condicionDestinoUsuarioEgreso->codigo,
-                'codDiagnosticoCausaMuerte' => $newlyBorn->codDiagnosticoCausaMuerte->codigo,
+                'codDiagnosticoPrincipal' => $newlyBorn->codDiagnosticoPrincipal?->codigo,
+                'condicionDestinoUsuarioEgreso' => $newlyBorn->condicionDestinoUsuarioEgreso?->codigo,
+                'codDiagnosticoCausaMuerte' => $newlyBorn->codDiagnosticoCausaMuerte?->codigo,
                 'fechaEgreso' => $post['fechaEgreso'],
                 'consecutivo' => $consecutivo,
-                'numFEVPagoModerador' => $post['numFEVPagoModerador'],
             ];
 
             // Update JSON with new service
@@ -183,20 +181,18 @@ class NewlyBornController extends Controller
             // Prepare service data for JSON
             $serviceData = [
                 'codPrestador' => $service->invoice?->serviceVendor?->ips_no_rep?->codigo,
-                'tipoDocumentoIdentificacion' => $newlyBorn->tipoDocumentoIdentificacion->codigo,
+                'tipoDocumentoIdentificacion' => $newlyBorn->tipoDocumentoIdentificacion?->codigo,
                 'numDocumentoIdentificacion' => $post['numDocumentoIdentificacion'],
                 'fechaNacimiento' => $post['fechaNacimiento'],
                 'edadGestacional' => $post['edadGestacional'],
                 'numConsultasCPrenatal' => $post['numConsultasCPrenatal'],
-                'codSexoBiologico' => $newlyBorn->codSexoBiologico->codigo,
+                'codSexoBiologico' => $newlyBorn->codSexoBiologico?->codigo,
                 'peso' => $post['peso'],
-                'codDiagnosticoPrincipal' => $newlyBorn->codDiagnosticoPrincipal->codigo,
-                'condicionDestino' => $post['condicionDestino'],
-                'condicionDestinoUsuarioEgreso' => $newlyBorn->condicionDestinoUsuarioEgreso->codigo,
-                'codDiagnosticoCausaMuerte' => $newlyBorn->codDiagnosticoCausaMuerte->codigo,
+                'codDiagnosticoPrincipal' => $newlyBorn->codDiagnosticoPrincipal?->codigo,
+                'condicionDestinoUsuarioEgreso' => $newlyBorn->condicionDestinoUsuarioEgreso?->codigo,
+                'codDiagnosticoCausaMuerte' => $newlyBorn->codDiagnosticoCausaMuerte?->codigo,
                 'fechaEgreso' => $post['fechaEgreso'],
                 'consecutivo' => $consecutivo,
-                'numFEVPagoModerador' => $post['numFEVPagoModerador'],
             ];
 
             // Update JSON with edited service
