@@ -93,7 +93,7 @@ class ServiceController extends Controller
                     'icon' => $case->icon(),
                 ];
             }, array_filter(TypeServiceEnum::cases(), function ($case) use ($excludedTypes) {
-                return !in_array($case->value, $excludedTypes);
+                return ! in_array($case->value, $excludedTypes);
             }));
 
             return [

@@ -541,7 +541,7 @@ class IpsNoRepsSeeder extends Seeder
         $bar = $this->command->getOutput()->createProgressBar(count($dataArray));
 
         foreach ($dataArray as $value) {
-            $data = new IpsNoReps();
+            $data = new IpsNoReps;
             $data->codigo = $value['codigo'];
             $data->nombre = $value['nombre'];
             $data->descripcion = $value['descripcion'];

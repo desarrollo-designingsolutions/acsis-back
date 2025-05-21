@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Attributes\Description;
 use App\Enums\Invoice\StatusXmlInvoiceEnum;
 use App\Enums\Invoice\TypeInvoiceEnum;
 use App\Enums\Service\TypeServiceEnum;
@@ -596,9 +595,8 @@ class InvoiceController extends Controller
                 TypeServiceEnum::SERVICE_TYPE_005->value,
             ];
 
-
             // Consulta para obtener los servicios que coincidan con los tipos deseados
-            $services = Service::where("invoice_id", $id)
+            $services = Service::where('invoice_id', $id)
                 ->whereIn('type', $serviceTypes)
                 ->get();
 
@@ -617,10 +615,10 @@ class InvoiceController extends Controller
 
                 $result[] = [
                     'icon' => $serviceType->icon(),
-                    'color' =>  $serviceType->color(),
+                    'color' => $serviceType->color(),
                     'title' => $serviceType->description(),
                     'value' => $servicesByType->count(), // Cantidad de servicios de este tipo
-                    'secondary_data' =>  null,
+                    'secondary_data' => null,
                     'change_label' => null,
                     'isHover' => false,
                     'modal' => $serviceType->model(), // Identificador del modal
@@ -638,51 +636,70 @@ class InvoiceController extends Controller
     }
 
     public function downloadZip($id)
-{
-    try {
-        $invoice = Invoice::findOrFail($id);
+    {
+        try {
+            $invoice = Invoice::findOrFail($id);
 
-        // Verificar rutas usando el disco correcto (ajusta 'disco' según tu configuración)
-        $disk = Storage::disk(Constants::DISK_FILES); // o el disco donde tengas los archivos
-        
-        if (!$disk->exists($invoice->path_xml) || !$disk->exists($invoice->path_json)) {
-            return response()->json([
-                'error' => 'Archivos no encontrados'
-            ], 404);
-        }
+            // Verificar rutas usando el disco correcto (ajusta 'disco' según tu configuración)
+            $disk = Storage::disk(Constants::DISK_FILES); // o el disco donde tengas los archivos
 
-        // Crear directorio temporal si no existe
-        $tempPath = storage_path('app/temp_zips');
-        if (!File::exists($tempPath)) {
-            File::makeDirectory($tempPath, 0755, true);
-        }
-
-        $zipFileName = 'factura_'.$invoice->id.'.zip';
-        $zipPath = $tempPath.'/'.$zipFileName;
-
-        $zip = new ZipArchive;
-        if ($zip->open($zipPath, ZipArchive::CREATE | ZipArchive::OVERWRITE) === TRUE) {
-            // Agregar archivos usando rutas absolutas
-            $zip->addFile($disk->path($invoice->path_xml), 'factura.xml');
-            $zip->addFile($disk->path($invoice->path_json), 'factura.json');
-            
-            $zip->close();
-
-            // Verificar que el ZIP se creó
-            if (!file_exists($zipPath)) {
-                throw new \Exception('Error al generar el archivo ZIP');
+            if (! $disk->exists($invoice->path_xml) || ! $disk->exists($invoice->path_json)) {
+                return response()->json([
+                    'error' => 'Archivos no encontrados',
+                ], 404);
             }
 
-            return response()->download($zipPath, $zipFileName)->deleteFileAfterSend(true);
+            // Crear directorio temporal si no existe
+            $tempPath = storage_path('app/temp_zips');
+            if (! File::exists($tempPath)) {
+                File::makeDirectory($tempPath, 0755, true);
+            }
+
+            $zipFileName = 'factura_' . $invoice->id . '.zip';
+            $zipPath = $tempPath . '/' . $zipFileName;
+
+            $zip = new ZipArchive;
+            if ($zip->open($zipPath, ZipArchive::CREATE | ZipArchive::OVERWRITE) === true) {
+                // Agregar archivos usando rutas absolutas
+                $zip->addFile($disk->path($invoice->path_xml), 'factura.xml');
+                $zip->addFile($disk->path($invoice->path_json), 'factura.json');
+
+                $zip->close();
+
+                // Verificar que el ZIP se creó
+                if (! file_exists($zipPath)) {
+                    throw new \Exception('Error al generar el archivo ZIP');
+                }
+
+                return response()->download($zipPath, $zipFileName)->deleteFileAfterSend(true);
+            }
+
+            return response()->json(['error' => 'Error al crear el ZIP'], 500);
+        } catch (\Exception $e) {
+            \Log::error('Error en downloadZip: ' . $e->getMessage());
+
+            return response()->json([
+                'error' => $e->getMessage(),
+            ], 500);
         }
-
-        return response()->json(['error' => 'Error al crear el ZIP'], 500);
-
-    } catch (\Exception $e) {
-        \Log::error('Error en downloadZip: '.$e->getMessage());
-        return response()->json([
-            'error' => $e->getMessage()
-        ], 500);
     }
-}
+
+    public function uploadJson(Request $request)
+    {
+        return $this->execute(function () use ($request) {
+            if ($request->hasFile('archiveJson')) {
+                // Inicializar variables
+                $company_id = $request->input('company_id');
+
+
+
+
+                // Devolver la respuesta adecuada
+                return [
+                    'code' => 200,
+
+                ];
+            }
+        });
+    }
 }

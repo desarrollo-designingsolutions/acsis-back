@@ -34,9 +34,8 @@ class ProcedureStoreRequest extends FormRequest
             'tipoDocumentoIdentificacion_id' => 'required',
             'numDocumentoIdentificacion' => 'required',
         ];
-        
-        if($this->valorPagoModerador > 0) 
-        {
+
+        if ($this->valorPagoModerador > 0) {
             $rules['conceptoRecaudo_id'] = 'required';
             $rules['numFEVPagoModerador'] = 'required';
         }
@@ -112,7 +111,7 @@ class ProcedureStoreRequest extends FormRequest
         if ($this->has('conceptoRecaudo_id')) {
             $merge['conceptoRecaudo_id'] = getValueSelectInfinite($this->conceptoRecaudo_id);
         }
-        
+
         if ($this->has('tipoDocumentoIdentificacion_id')) {
             $merge['tipoDocumentoIdentificacion_id'] = getValueSelectInfinite($this->tipoDocumentoIdentificacion_id);
         }

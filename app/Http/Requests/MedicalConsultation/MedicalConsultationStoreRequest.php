@@ -33,8 +33,7 @@ class MedicalConsultationStoreRequest extends FormRequest
             'numDocumentoIdentificacion' => 'required',
         ];
 
-        if($this->valorPagoModerador > 0) 
-        {
+        if ($this->valorPagoModerador > 0) {
             $rules['conceptoRecaudo_id'] = 'required';
             $rules['numFEVPagoModerador'] = 'required';
         }

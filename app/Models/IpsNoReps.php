@@ -10,5 +10,4 @@ use Illuminate\Database\Eloquent\Model;
 class IpsNoReps extends Model
 {
     use Cacheable, HasFactory, HasUuids;
-
 }

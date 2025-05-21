@@ -2,10 +2,10 @@
 
 namespace App\Enums\Service;
 
+use App\Attributes\Color;
 use App\Attributes\Description;
 use App\Attributes\ElementJson;
 use App\Attributes\Icon;
-use App\Attributes\Color;
 use App\Attributes\Model;
 use App\Traits\AttributableEnum;
 
