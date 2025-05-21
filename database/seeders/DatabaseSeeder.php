@@ -66,6 +66,8 @@ class DatabaseSeeder extends Seeder
             CondicionyDestinoUsuarioEgresoSeeder::class,
             IpsNoRepsSeeder::class,
 
+            IpsCodHabilitacionSeeder::class,
+
         ]);
 
         $client = new ClientRepository;

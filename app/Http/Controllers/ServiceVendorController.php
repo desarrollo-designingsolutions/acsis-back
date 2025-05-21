@@ -45,12 +45,12 @@ class ServiceVendorController extends Controller
 
             $request['is_active'] = true;
             $type_vendors = $this->typeVendorRepository->selectList($request->all());
-            $ipsNoReps = $this->queryController->selectInfiniteIpsNoReps($request);
+            $ipsCodHabilitacion = $this->queryController->selectInfiniteIpsCodHabilitacion($request);
 
             return [
                 'code' => 200,
                 'type_vendors' => $type_vendors,
-                ...$ipsNoReps,
+                ...$ipsCodHabilitacion,
             ];
         });
     }
@@ -76,7 +76,7 @@ class ServiceVendorController extends Controller
 
             $request['is_active'] = true;
             $type_vendors = $this->typeVendorRepository->selectList($request->all());
-            $ipsNoReps = $this->queryController->selectInfiniteIpsNoReps($request);
+            $ipsCodHabilitacion = $this->queryController->selectInfiniteIpsCodHabilitacion($request);
 
             $serviceVendor = $this->serviceVendorRepository->find($id);
             $form = new ServiceVendorFormResource($serviceVendor);
@@ -85,7 +85,7 @@ class ServiceVendorController extends Controller
                 'code' => 200,
                 'form' => $form,
                 'type_vendors' => $type_vendors,
-                ...$ipsNoReps,
+                ...$ipsCodHabilitacion,
             ];
         });
     }
@@ -139,7 +139,7 @@ class ServiceVendorController extends Controller
 
             return [
                 'code' => 200,
-                'message' => 'Proveedor '.$msg.' con éxito',
+                'message' => 'Proveedor ' . $msg . ' con éxito',
             ];
         });
     }

@@ -39,6 +39,10 @@ class InvoiceRowUpdatedNow implements ShouldBroadcastNow
         // Aquí puedes incluir los datos que deseas enviar al frontend
         return [
             'id' => $this->invoice->id,
+            'total' => $this->invoice->total,
+            'value_paid' => $this->invoice->value_paid,
+            'value_glosa' => $this->invoice->value_glosa,
+            'remaining_balance' => $this->invoice->remaining_balance,
             'status_xml' => $this->invoice->status_xml,
             'status_xml_backgroundColor' => $this->invoice->status_xml?->BackgroundColor(),
             'status_xml_description' => $this->invoice->status_xml?->description(),

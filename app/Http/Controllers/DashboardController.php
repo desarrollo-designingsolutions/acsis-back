@@ -20,18 +20,22 @@ class DashboardController extends Controller
     {
         try {
             $invoiceCountData = $this->invoiceRepository->countData($request->all());
-            $approvedVsGlosaData = $this->invoiceRepository->countApprovedVsGlosa($request->all());
+            // $approvedVsGlosaData = $this->invoiceRepository->countApprovedVsGlosa($request->all());
             $inReviewVsPendingData = $this->invoiceRepository->countInReviewVsPending($request->all());
             $pendingPaymentsData = $this->invoiceRepository->countPendingPayments($request->all());
+
+            $request['status'] = StatusInvoiceEnum::INVOICE_STATUS_008->value;
+            $countPendingPaymentDataStatusPending = $this->invoiceRepository->countPendingPayments($request->all());
             $averageResponseTimeData = $this->invoiceRepository->countAverageResponseTime($request->all());
             $recoveredGlosasData = $this->invoiceRepository->countRecoveredGlosas($request->all());
 
             return response()->json([
                 'code' => 200,
                 'invoiceCountData' => $invoiceCountData,
-                'approvedVsGlosaData' => $approvedVsGlosaData,
-                'inReviewVsPendingData' => $inReviewVsPendingData,
+                // 'approvedVsGlosaData' => $approvedVsGlosaData,
+                'countPendingPaymentDataStatusPending' => $countPendingPaymentDataStatusPending,
                 'pendingPaymentsData' => $pendingPaymentsData,
+                'inReviewVsPendingData' => $inReviewVsPendingData,
                 'averageResponseTimeData' => $averageResponseTimeData,
                 'recoveredGlosasData' => $recoveredGlosasData,
             ]);

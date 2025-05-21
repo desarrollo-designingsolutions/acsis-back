@@ -86,7 +86,7 @@ class NewlyBornController extends Controller
 
             // Prepare service data for JSON
             $serviceData = [
-                'codPrestador' => $service->invoice?->serviceVendor?->ips_no_rep?->codigo,
+                'codPrestador' => $service->invoice?->serviceVendor?->ips_cod_habilitacion?->codigo,
                 'tipoDocumentoIdentificacion' => $newlyBorn->tipoDocumentoIdentificacion?->codigo,
                 'numDocumentoIdentificacion' => $post['numDocumentoIdentificacion'],
                 'fechaNacimiento' => $post['fechaNacimiento'],
@@ -180,7 +180,7 @@ class NewlyBornController extends Controller
 
             // Prepare service data for JSON
             $serviceData = [
-                'codPrestador' => $service->invoice?->serviceVendor?->ips_no_rep?->codigo,
+                'codPrestador' => $service->invoice?->serviceVendor?->ips_cod_habilitacion?->codigo,
                 'tipoDocumentoIdentificacion' => $newlyBorn->tipoDocumentoIdentificacion?->codigo,
                 'numDocumentoIdentificacion' => $post['numDocumentoIdentificacion'],
                 'fechaNacimiento' => $post['fechaNacimiento'],

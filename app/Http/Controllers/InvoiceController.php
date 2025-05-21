@@ -364,7 +364,7 @@ class InvoiceController extends Controller
             [
                 'codSexo' => $sexo->codigo,
                 'consecutivo' => 1,
-                'incapacidad' => $patient->incapacity,
+                'incapacidad' => $patient->incapacity == 1 ? 'SI' : 'NO',
                 'tipoUsuario' => $tipoUsuario->codigo,
                 'codPaisOrigen' => $pais_origin->codigo,
                 'fechaNacimiento' => $patient->birth_date,

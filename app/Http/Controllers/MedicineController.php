@@ -94,7 +94,7 @@ class MedicineController extends Controller
 
             // Prepare service data for JSON
             $serviceData = [
-                'codPrestador' => $service->invoice?->serviceVendor?->ips_no_rep?->codigo,
+                'codPrestador' => $service->invoice?->serviceVendor?->ips_cod_habilitacion?->codigo,
                 'numAutorizacion' => $post['numAutorizacion'],
                 'idMIPRES' => $post['idMIPRES'],
                 'fechaDispensAdmon' => $post['fechaDispensAdmon'],
@@ -206,7 +206,7 @@ class MedicineController extends Controller
 
             // Prepare service data for JSON
             $serviceData = [
-                'codPrestador' => $service->invoice?->serviceVendor?->ips_no_rep?->codigo,
+                'codPrestador' => $service->invoice?->serviceVendor?->ips_cod_habilitacion?->codigo,
                 'numAutorizacion' => $post['numAutorizacion'],
                 'idMIPRES' => $post['idMIPRES'],
                 'fechaDispensAdmon' => $post['fechaDispensAdmon'],

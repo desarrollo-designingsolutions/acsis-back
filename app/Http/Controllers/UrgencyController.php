@@ -84,7 +84,7 @@ class UrgencyController extends Controller
 
             // Prepare service data for JSON
             $serviceData = [
-                'codPrestador' => $service->invoice?->serviceVendor?->ips_no_rep?->codigo,
+                'codPrestador' => $service->invoice?->serviceVendor?->ips_cod_habilitacion?->codigo,
                 'fechaInicioAtencion' => $post['fechaInicioAtencion'],
                 'causaMotivoAtencion' => $urgency->causaMotivoAtencion?->codigo,
                 'codDiagnosticoPrincipal' => $urgency->codDiagnosticoPrincipal?->codigo,
@@ -175,7 +175,7 @@ class UrgencyController extends Controller
 
             // Prepare service data for JSON
             $serviceData = [
-                'codPrestador' => $service->invoice?->serviceVendor?->ips_no_rep?->codigo,
+                'codPrestador' => $service->invoice?->serviceVendor?->ips_cod_habilitacion?->codigo,
                 'fechaInicioAtencion' => $post['fechaInicioAtencion'],
                 'causaMotivoAtencion' => $urgency->causaMotivoAtencion?->codigo,
                 'codDiagnosticoPrincipal' => $urgency->codDiagnosticoPrincipal?->codigo,

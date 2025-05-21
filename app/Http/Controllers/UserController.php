@@ -47,11 +47,13 @@ class UserController extends Controller
         return $this->execute(function () {
             $roles = $this->roleRepository->selectList(request());
             $companies = $this->companyRepository->selectList();
+            $serviceVendors = $this->queryController->selectInfiniteServiceVendor(request());
 
             return [
                 'code' => 200,
                 'roles' => $roles,
                 'companies' => $companies,
+                ...$serviceVendors,
             ];
         });
     }
@@ -59,9 +61,12 @@ class UserController extends Controller
     public function store(UserStoreRequest $request)
     {
         return $this->runTransaction(function () use ($request) {
-            $post = $request->except(['confirmedPassword']);
-            $data = $this->userRepository->store($post, withCompany: false);
-            $data->syncRoles($request->input('role_id'));
+            $post = $request->except(['confirmedPassword', 'service_vendor_ids']);
+            $user = $this->userRepository->store($post, withCompany: false);
+            $user->syncRoles($request->input('role_id'));
+
+            $service_vendor_ids = collect($request->input('service_vendor_ids'))->pluck('value');
+            $user->serviceVendors()->sync($service_vendor_ids);
 
             return [
                 'code' => 200,
@@ -75,6 +80,7 @@ class UserController extends Controller
         return $this->execute(function () use ($id) {
             $roles = $this->roleRepository->selectList(request());
             $companies = $this->companyRepository->selectList();
+            $serviceVendors = $this->queryController->selectInfiniteServiceVendor(request());
 
             $userResult = $this->userRepository->find($id); // Ahora devuelve solo los datos
             $form = new UserFormResource($userResult);
@@ -85,6 +91,7 @@ class UserController extends Controller
                 'roles' => $roles,
                 'companies' => $companies,
                 'source' => $userResult['source'], // Descomentar si ajustas para devolver la fuente
+                ...$serviceVendors,
             ];
         });
     }
@@ -92,9 +99,12 @@ class UserController extends Controller
     public function update(UserStoreRequest $request, $id)
     {
         return $this->runTransaction(function () use ($request, $id) {
-            $post = $request->except(['confirmedPassword']);
-            $data = $this->userRepository->store($post, $id, withCompany: false);
-            $data->syncRoles($request->input('role_id'));
+            $post = $request->except(['confirmedPassword', 'service_vendor_ids']);
+            $user = $this->userRepository->store($post, $id, withCompany: false);
+            $user->syncRoles($request->input('role_id'));
+
+            $service_vendor_ids = collect($request->input('service_vendor_ids'))->pluck('value');
+            $user->serviceVendors()->sync($service_vendor_ids);
 
             return [
                 'code' => 200,
@@ -125,7 +135,7 @@ class UserController extends Controller
 
             return [
                 'code' => 200,
-                'message' => 'User '.$msg.' con éxito',
+                'message' => 'User ' . $msg . ' con éxito',
             ];
         });
     }
@@ -156,7 +166,7 @@ class UserController extends Controller
             // Cambiar la photo
             if ($request->file('photo')) {
                 $file = $request->file('photo');
-                $ruta = 'companies/company_'.$user->company_id.'/'.$user->id.$request->input('photo');
+                $ruta = 'companies/company_' . $user->company_id . '/' . $user->id . $request->input('photo');
                 $photo = $file->store($ruta, Constants::DISK_FILES);
                 $user->photo = $photo;
                 $user->save();

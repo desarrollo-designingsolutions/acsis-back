@@ -27,8 +27,13 @@ class ServiceVendor extends Model
         return $this->belongsTo(TypeVendor::class);
     }
 
-    public function ips_no_rep()
+    public function ips_cod_habilitacion()
     {
-        return $this->belongsTo(IpsNoReps::class, 'ips_no_rep_id');
+        return $this->belongsTo(IpsCodHabilitacion::class, 'ips_cod_habilitacion_id');
+    }
+    
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'service_vendor_users', 'service_vendor_id', 'user_id');
     }
 }

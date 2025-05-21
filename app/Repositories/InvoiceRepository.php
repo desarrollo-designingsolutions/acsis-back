@@ -175,6 +175,9 @@ class InvoiceRepository extends BaseRepository
             if (! empty($request['start_date']) && ! empty($request['end_date'])) {
                 $query->whereBetween('invoice_date', [$request['start_date'], $request['end_date']]);
             }
+            if (! empty($request['service_vendor_id'])) {
+                $query->where('service_vendor_id', $request['service_vendor_id']);
+            }
         });
 
         // Datos del período actual
@@ -189,7 +192,7 @@ class InvoiceRepository extends BaseRepository
             'color' => 'success',
             'title' => $title,
             'value' => $value,
-            'secondary_data' => $invoiceCount.' facturas',
+            'secondary_data' => $invoiceCount . ' facturas',
             'isHover' => false,
             'type' => 1,
             'to' => [],
@@ -205,6 +208,9 @@ class InvoiceRepository extends BaseRepository
             if (! empty($request['start_date']) && ! empty($request['end_date'])) {
                 $query->whereBetween('invoice_date', [$request['start_date'], $request['end_date']]);
             }
+            if (! empty($request['service_vendor_id'])) {
+                $query->where('service_vendor_id', $request['service_vendor_id']);
+            }
         });
 
         // Sumatorias de valores aprobados y glosados
@@ -216,8 +222,8 @@ class InvoiceRepository extends BaseRepository
         $approvedPercentage = $totalSum > 0 ? ($approvedSum / $totalSum) * 100 : 0;
         $glosaPercentage = $totalSum > 0 ? ($glosaSum / $totalSum) * 100 : 0;
 
-        $value = round($approvedPercentage, 2).'% / '.round($glosaPercentage, 2).'%';
-        $secondary_data = formatNumber($approvedSum).' aprobados / '.formatNumber($glosaSum).' glosados';
+        $value = round($approvedPercentage, 2) . '% / ' . round($glosaPercentage, 2) . '%';
+        $secondary_data = formatNumber($approvedSum) . ' aprobados / ' . formatNumber($glosaSum) . ' glosados';
 
         return [
             'title' => 'Facturación Aprobada vs Glosada',
@@ -240,6 +246,9 @@ class InvoiceRepository extends BaseRepository
             if (! empty($request['start_date']) && ! empty($request['end_date'])) {
                 $query->whereBetween('invoice_date', [$request['start_date'], $request['end_date']]);
             }
+            if (! empty($request['service_vendor_id'])) {
+                $query->where('service_vendor_id', $request['service_vendor_id']);
+            }
         });
 
         // Facturas en estado "Radicado" (en revisión)
@@ -252,8 +261,8 @@ class InvoiceRepository extends BaseRepository
         $pendingCount = $pendingQuery->count();
         $pendingSum = $pendingQuery->sum('total');
 
-        $value = $inReviewCount.' / '.$pendingCount;
-        $secondary_data = formatNumber($inReviewSum).'  en revisión / '.formatNumber($pendingSum).'pendientes';
+        $value = $inReviewCount . ' / ' . $pendingCount;
+        $secondary_data = formatNumber($inReviewSum) . '  en revisión / ' . formatNumber($pendingSum) . 'pendientes';
 
         return [
             'title' => 'Facturas en Revisión / Pendientes',
@@ -274,6 +283,12 @@ class InvoiceRepository extends BaseRepository
             }
             if (! empty($request['start_date']) && ! empty($request['end_date'])) {
                 $query->whereBetween('invoice_date', [$request['start_date'], $request['end_date']]);
+            }
+            if (! empty($request['status'])) {
+                $query->where('status', $request['status']);
+            }
+            if (! empty($request['service_vendor_id'])) {
+                $query->where('service_vendor_id', $request['service_vendor_id']);
             }
         });
 

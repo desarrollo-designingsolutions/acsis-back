@@ -2,7 +2,7 @@
 
 namespace App\Http\Resources\ServiceVendor;
 
-use App\Http\Resources\IpsNoReps\IpsNoRepsSelectInfiniteResource;
+use App\Http\Resources\IpsCodHabilitacion\IpsCodHabilitacionSelectInfiniteResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -23,7 +23,7 @@ class ServiceVendorFormResource extends JsonResource
             'address' => $this->address,
             'email' => $this->email,
             'type_vendor_id' => $this->type_vendor_id,
-            'ips_no_rep_id' => new IpsNoRepsSelectInfiniteResource($this->ips_no_rep),
+            'ips_cod_habilitacion_id' => new IpsCodHabilitacionSelectInfiniteResource($this->ips_cod_habilitacion),
         ];
     }
 }

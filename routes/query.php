@@ -46,3 +46,5 @@ Route::post('/selectInfiniteTipoMedicamentoPosVersion2', [QueryController::class
 Route::post('/selectInfiniteUmm', [QueryController::class, 'selectInfiniteUmm']);
 Route::post('/selectInfiniteCondicionyDestinoUsuarioEgreso', [QueryController::class, 'selectInfiniteCondicionyDestinoUsuarioEgreso']);
 Route::post('/selectInfiniteIpsNoReps', [QueryController::class, 'selectInfiniteIpsNoReps']);
+
+Route::post('/selectInfiniteIpsCodHabilitacion', [QueryController::class, 'selectInfiniteIpsCodHabilitacion']);

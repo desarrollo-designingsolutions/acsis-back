@@ -11,6 +11,7 @@ use App\Http\Resources\Country\CountrySelectResource;
 use App\Http\Resources\CupsRips\CupsRipsSelectInfiniteResource;
 use App\Http\Resources\Entity\EntitySelectResource;
 use App\Http\Resources\GrupoServicio\GrupoServicioSelectInfiniteResource;
+use App\Http\Resources\IpsCodHabilitacion\IpsCodHabilitacionSelectInfiniteResource;
 use App\Http\Resources\IpsNoReps\IpsNoRepsSelectInfiniteResource;
 use App\Http\Resources\ModalidadAtencion\ModalidadAtencionSelectInfiniteResource;
 use App\Http\Resources\Municipio\MunicipioSelectResource;
@@ -40,6 +41,7 @@ use App\Repositories\CountryRepository;
 use App\Repositories\CupsRipsRepository;
 use App\Repositories\EntityRepository;
 use App\Repositories\GrupoServicioRepository;
+use App\Repositories\IpsCodHabilitacionRepository;
 use App\Repositories\IpsNoRepsRepository;
 use App\Repositories\ModalidadAtencionRepository;
 use App\Repositories\MunicipioRepository;
@@ -105,6 +107,7 @@ class QueryController extends Controller
         protected UmmRepository $ummRepository,
         protected CondicionyDestinoUsuarioEgresoRepository $condicionyDestinoUsuarioEgresoRepository,
         protected IpsNoRepsRepository $ipsNoRepsRepository,
+        protected IpsCodHabilitacionRepository $ipsCodHabilitacionRepository,
     ) {}
 
     public function selectInfiniteCountries(Request $request)
@@ -527,6 +530,18 @@ class QueryController extends Controller
             'code' => 200,
             'ipsNoReps_arrayInfo' => $dataIpsNoReps,
             'ipsNoReps_countLinks' => $ipsNoReps->lastPage(),
+        ];
+    }
+
+    public function selectInfiniteIpsCodHabilitacion(Request $request)
+    {
+        $ipsCodHabilitacion = $this->ipsCodHabilitacionRepository->list($request->all());
+        $dataIpsCodHabilitacion = IpsCodHabilitacionSelectInfiniteResource::collection($ipsCodHabilitacion);
+
+        return [
+            'code' => 200,
+            'ipsCodHabilitacion_arrayInfo' => $dataIpsCodHabilitacion,
+            'ipsCodHabilitacion_countLinks' => $ipsCodHabilitacion->lastPage(),
         ];
     }
 }

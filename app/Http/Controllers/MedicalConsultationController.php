@@ -65,7 +65,7 @@ class MedicalConsultationController extends Controller
             // Create MedicalConsultation
             $medicalConsultation = $this->medicalConsultationRepository->store([
                 'fechaInicioAtencion' => $post['fechaInicioAtencion'],
-                'numAutorizacion' => $post['numAutorizacion'], // PREGUNTAR
+                'numAutorizacion' => $post['numAutorizacion'],
                 'codConsulta_id' => $post['codConsulta_id'],
                 'modalidadGrupoServicioTecSal_id' => $post['modalidadGrupoServicioTecSal_id'],
                 'grupoServicios_id' => $post['grupoServicios_id'],
@@ -102,7 +102,7 @@ class MedicalConsultationController extends Controller
 
             // Prepare service data for JSON
             $serviceData = [
-                'codPrestador' => $service->invoice?->serviceVendor?->ips_no_rep?->codigo,
+                'codPrestador' => $service->invoice?->serviceVendor?->ips_cod_habilitacion?->codigo,
                 'fechaInicioAtencion' => $post['fechaInicioAtencion'],
                 'numAutorizacion' => $post['numAutorizacion'],
                 'codConsulta' => $medicalConsultation->codConsulta?->codigo,
@@ -186,7 +186,7 @@ class MedicalConsultationController extends Controller
             // Update MedicalConsultation
             $medicalConsultation = $this->medicalConsultationRepository->store([
                 'fechaInicioAtencion' => $post['fechaInicioAtencion'],
-                'numAutorizacion' => $post['numAutorizacion'], // PREGUNTAR
+                'numAutorizacion' => $post['numAutorizacion'],
                 'codConsulta_id' => $post['codConsulta_id'],
                 'modalidadGrupoServicioTecSal_id' => $post['modalidadGrupoServicioTecSal_id'],
                 'grupoServicios_id' => $post['grupoServicios_id'],
@@ -220,7 +220,7 @@ class MedicalConsultationController extends Controller
 
             // Prepare service data for JSON
             $serviceData = [
-                'codPrestador' => $service->invoice?->serviceVendor?->ips_no_rep?->codigo,
+                'codPrestador' => $service->invoice?->serviceVendor?->ips_cod_habilitacion?->codigo,
                 'fechaInicioAtencion' => $post['fechaInicioAtencion'],
                 'numAutorizacion' => $post['numAutorizacion'],
                 'codConsulta' => $medicalConsultation->codConsulta?->codigo,

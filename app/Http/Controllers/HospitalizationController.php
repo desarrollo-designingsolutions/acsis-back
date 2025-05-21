@@ -91,7 +91,7 @@ class HospitalizationController extends Controller
 
             // Prepare service data for JSON
             $serviceData = [
-                'codPrestador' => $service->invoice?->serviceVendor?->ips_no_rep?->codigo,
+                'codPrestador' => $service->invoice?->serviceVendor?->ips_cod_habilitacion?->codigo,
                 'viaIngresoServicioSalud' => $hospitalization->viaIngresoServicioSalud?->codigo,
                 'fechaInicioAtencion' => $post['fechaInicioAtencion'],
                 'numAutorizacion' => $post['numAutorizacion'],
@@ -192,7 +192,7 @@ class HospitalizationController extends Controller
 
             // Prepare service data for JSON
             $serviceData = [
-                'codPrestador' => $service->invoice?->serviceVendor?->ips_no_rep?->codigo,
+                'codPrestador' => $service->invoice?->serviceVendor?->ips_cod_habilitacion?->codigo,
                 'viaIngresoServicioSalud' => $hospitalization->viaIngresoServicioSalud?->codigo,
                 'fechaInicioAtencion' => $post['fechaInicioAtencion'],
                 'numAutorizacion' => $post['numAutorizacion'],
