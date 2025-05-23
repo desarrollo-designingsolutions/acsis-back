@@ -89,8 +89,8 @@
           },
           "consecutivo": {
             "type": "integer",
-            "minLength": 1,
-            "maxLength": 7
+            "minimum": 1,
+            "maximum": 9999999
           },
           "codPaisOrigen": {
             "type": "string",
@@ -176,7 +176,7 @@
                       "pattern": "^(|.{4,20})$"
                     },
                     "vrServicio": {
-                      "type": "integer",
+                      "type": "number",
                       "pattern": "^(|.{1,10})$"
                     },
                     "conceptoRecaudo": {
@@ -184,7 +184,7 @@
                       "pattern": "^(|.{2})$"
                     },
                     "valorPagoModerador": {
-                      "type": "integer",
+                      "type": "number",
                       "pattern": "^(|.{1,10})$"
                     },
                     "numFEVPagoModerador": {
@@ -199,7 +199,8 @@
                     },
                     "consecutivo": {
                       "type": "integer",
-                      "pattern": "^(|.{1,7})$"
+                      "minimum": 1,
+                      "maximum": 9999999
                     }
                   },
                   "required": [
@@ -308,7 +309,7 @@
                       "pattern": "^(.{0}|.{4,25})$"
                     },
                     "vrServicio": {
-                      "type": "integer",
+                      "type": "number",
                       "pattern": "^(|.{1,15})$"
                     },
                     "conceptoRecaudo": {
@@ -316,7 +317,7 @@
                       "pattern": "^(|.{2})$"
                     },
                     "valorPagoModerador": {
-                      "type": "integer",
+                      "type": "number",
                       "pattern": "^(|.{1,10})$"
                     },
                     "numFEVPagoModerador": {
@@ -331,7 +332,8 @@
                     },
                     "consecutivo": {
                       "type": "integer",
-                      "pattern": "^(|.{1,7})$"
+                      "minimum": 1,
+                      "maximum": 9999999
                     }
                   },
                   "required": [
@@ -410,7 +412,8 @@
                     },
                     "consecutivo": {
                       "type": "integer",
-                      "pattern": "^(|.{1,7})$"
+                      "minimum": 1,
+                      "maximum": 9999999
                     }
                   },
                   "required": [
@@ -500,7 +503,8 @@
                     },
                     "consecutivo": {
                       "type": "integer",
-                      "pattern": "^(|.{1,7})$"
+                      "minimum": 1,
+                      "maximum": 9999999
                     }
                   },
                   "required": [
@@ -554,7 +558,7 @@
                     },
                     "codSexoBiologico": {
                       "type": "string",
-                      "pattern": "^(|.{2})$"
+                      "pattern": "^(|.{1})$"
                     },
                     "peso": {
                       "type": "integer",
@@ -578,7 +582,8 @@
                     },
                     "consecutivo": {
                       "type": "integer",
-                      "pattern": "^(|.{1,7})$"
+                      "minimum": 1,
+                      "maximum": 9999999
                     }
                   },
                   "required": [
@@ -742,7 +747,8 @@
                     },
                     "consecutivo": {
                       "type": "integer",
-                      "pattern": "^(|.{1,7})$"
+                      "minimum": 1,
+                      "maximum": 9999999
                     }
                   },
                   "required": [
@@ -823,7 +829,9 @@
                       "type": "string"
                     },
                     "consecutivo": {
-                      "type": "integer"
+                      "type": "integer",
+                      "minimum": 1,
+                      "maximum": 9999999
                     }
                   },
                   "required": [
