@@ -1,8 +1,6 @@
 <?php
 
 use App\Http\Controllers\InvoiceController;
-use App\Http\Controllers\InvoiceOppyController;
-use App\Http\Controllers\JsonValidationController;
 use Illuminate\Support\Facades\Route;
 
 // Rutas protegidas
