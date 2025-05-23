@@ -9,7 +9,9 @@ use App\Events\InvoiceRowUpdatedNow;
 use App\Exports\Invoice\InvoiceExcelErrorsValidationXmlExport;
 use App\Exports\Invoice\InvoiceExcelExport;
 use App\Helpers\Constants;
+use App\Helpers\Invoice\JsonStructureValidation;
 use App\Http\Requests\Invoice\InvoiceStoreRequest;
+use App\Http\Requests\Invoice\InvoiceUploadJsonRequest;
 use App\Http\Resources\Invoice\InvoiceFormResource;
 use App\Http\Resources\Invoice\InvoiceListResource;
 use App\Http\Resources\InvoiceSoat\InvoiceSoatFormResource;
@@ -135,7 +137,7 @@ class InvoiceController extends Controller
         return $this->runTransaction(function () use ($request) {
 
             // Extract and prepare data
-            $post = $request->except(['entity', 'patient', 'TipoNota', 'serviceVendor', 'soat', 'value_paid', 'total', 'remaining_balance', 'value_glosa']);
+            $post = $request->except(['entity', 'patient', 'tipoNota', 'serviceVendor', 'soat', 'value_paid', 'total', 'remaining_balance', 'value_glosa']);
             $type = $request->input('type');
 
             $infoDataExtra = $this->saveDataExtraInvoice($type, $request->all());
@@ -199,7 +201,7 @@ class InvoiceController extends Controller
     {
         return $this->runTransaction(function () use ($request) {
 
-            $post = $request->except(['entity', 'patient', 'TipoNota', 'serviceVendor', 'soat', 'value_paid', 'total', 'remaining_balance', 'value_glosa']);
+            $post = $request->except(['entity', 'patient', 'tipoNota', 'serviceVendor', 'soat', 'value_paid', 'total', 'remaining_balance', 'value_glosa']);
             $type = $request->input('type');
 
             $infoDataExtra = $this->saveDataExtraInvoice($type, $request->all());
@@ -212,8 +214,8 @@ class InvoiceController extends Controller
             // Build JSON structure
             $jsonData = $this->buildInvoiceJson($invoice->id);
 
-            // // Store JSON file
-            // $this->storeJsonFile($invoice, $jsonData);
+            // Store JSON file
+            $this->storeJsonFile($invoice, $jsonData);
 
             return [
                 'code' => 200,
@@ -352,7 +354,7 @@ class InvoiceController extends Controller
         $baseData = [
             'numDocumentoIdObligado' => $serviceVendor->nit,
             'numFactura' => $invoice->invoice_number,
-            'TipoNota' => $tipoNota->codigo ?? '',
+            'tipoNota' => $tipoNota->codigo ?? '',
             'numNota' => $invoice->note_number,
         ];
 
@@ -684,22 +686,20 @@ class InvoiceController extends Controller
         }
     }
 
-    public function uploadJson(Request $request)
+    public function uploadJson(InvoiceUploadJsonRequest $request)
     {
         return $this->execute(function () use ($request) {
-            if ($request->hasFile('archiveJson')) {
-                // Inicializar variables
-                $company_id = $request->input('company_id');
 
+            $file = $request->file('archiveJson');
 
+            $response = JsonStructureValidation::initValidation($file->getRealPath());
 
-
-                // Devolver la respuesta adecuada
-                return [
-                    'code' => 200,
-
-                ];
-            }
+            return [
+                'code' => $response["isValid"] ? 200 : 422,
+                'isValid' => $response["isValid"],
+                'message' => $response["message"],
+                'errors' => $response["errors"],
+            ];
         });
     }
 }

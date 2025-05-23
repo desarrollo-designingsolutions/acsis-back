@@ -1,0 +1,745 @@
+{
+  "type": "object",
+  "properties": {
+    "numDocumentoIdObligado": {
+      "type": "string",
+      "minLength": 4,
+      "maxLength": 12
+    },
+    "numFactura": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "tipoNota": {
+      "anyOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 2
+        }
+      ]
+    },
+    "numNota": {
+      "anyOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "string",
+          "minLength": 20,
+          "maxLength": 20
+        }
+      ]
+    },
+    "usuarios": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "tipoDocumentoIdentificacion": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 2
+          },
+          "numDocumentoIdentificacion": {
+            "type": "string",
+            "minLength": 4,
+            "maxLength": 20
+          },
+          "tipoUsuario": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 2
+          },
+          "fechaNacimiento": {
+            "type": "string",
+            "minLength": 10,
+            "maxLength": 10
+          },
+          "codSexo": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1
+          },
+          "codPaisResidencia": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 3
+          },
+          "codMunicipioResidencia": {
+            "anyOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "minLength": 5,
+                "maxLength": 5
+              }
+            ]
+          },
+          "codZonaTerritorialResidencia": {
+            "anyOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "minLength": 2,
+                "maxLength": 2
+              }
+            ]
+          },
+          "incapacidad": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 2,
+            "enum": [
+              "SI",
+              "NO"
+            ]
+          },
+          "consecutivo": {
+            "type": "integer",
+            "minLength": 1,
+            "maxLength": 7
+          },
+          "codPaisOrigen": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 3
+          },
+          "servicios": {
+            "type": "object",
+            "properties": {
+              "consultas": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "codPrestador": {
+                      "type": "string"
+                    },
+                    "fechaInicioAtencion": {
+                      "type": "string"
+                    },
+                    "numAutorizacion": {
+                      "type": "string"
+                    },
+                    "codConsulta": {
+                      "type": "string"
+                    },
+                    "modalidadGrupoServicioTecSal": {
+                      "type": "string"
+                    },
+                    "grupoServicios": {
+                      "type": "string"
+                    },
+                    "codServicio": {
+                      "type": "string"
+                    },
+                    "finalidadTecnologiaSalud": {
+                      "type": "string"
+                    },
+                    "causaMotivoAtencion": {
+                      "type": "string"
+                    },
+                    "codDiagnosticoPrincipal": {
+                      "type": "string"
+                    },
+                    "codDiagnosticoRelacionado1": {
+                      "type": "string"
+                    },
+                    "codDiagnosticoRelacionado2": {
+                      "type": "string"
+                    },
+                    "codDiagnosticoRelacionado3": {
+                      "type": "string"
+                    },
+                    "tipoDiagnosticoPrincipal": {
+                      "type": "string"
+                    },
+                    "tipoDocumentoIdentificacion": {
+                      "type": "string"
+                    },
+                    "numDocumentoIdentificacion": {
+                      "type": "string"
+                    },
+                    "valorPagoModerador": {
+                      "type": "string"
+                    },
+                    "numFEVPagoModerador": {
+                      "type": "string"
+                    },
+                    "consecutivo": {
+                      "type": "integer"
+                    },
+                    "vrServicio": {
+                      "type": "string"
+                    },
+                    "conceptoRecaudo": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "codPrestador",
+                    "fechaInicioAtencion",
+                    "numAutorizacion",
+                    "codConsulta",
+                    "modalidadGrupoServicioTecSal",
+                    "grupoServicios",
+                    "codServicio",
+                    "finalidadTecnologiaSalud",
+                    "causaMotivoAtencion",
+                    "codDiagnosticoPrincipal",
+                    "codDiagnosticoRelacionado1",
+                    "codDiagnosticoRelacionado2",
+                    "codDiagnosticoRelacionado3",
+                    "tipoDiagnosticoPrincipal",
+                    "tipoDocumentoIdentificacion",
+                    "numDocumentoIdentificacion",
+                    "valorPagoModerador",
+                    "numFEVPagoModerador",
+                    "consecutivo",
+                    "vrServicio",
+                    "conceptoRecaudo"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "procedimientos": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "codPrestador": {
+                      "type": "string"
+                    },
+                    "fechaInicioAtencion": {
+                      "type": "string",
+                      "format": "date-time-custom",
+                      "pattern": "^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}$"
+                    },
+                    "idMIPRES": {
+                      "type": "string"
+                    },
+                    "numAutorizacion": {
+                      "type": "string"
+                    },
+                    "codProcedimiento": {
+                      "type": "string"
+                    },
+                    "viaIngresoServicioSalud": {
+                      "type": "string"
+                    },
+                    "modalidadGrupoServicioTecSal": {
+                      "type": "string"
+                    },
+                    "grupoServicios": {
+                      "type": "string"
+                    },
+                    "codServicio": {
+                      "type": "string"
+                    },
+                    "finalidadTecnologiaSalud": {
+                      "type": "string"
+                    },
+                    "tipoDocumentoIdentificacion": {
+                      "type": "string"
+                    },
+                    "numDocumentoIdentificacion": {
+                      "type": "string"
+                    },
+                    "codDiagnosticoPrincipal": {
+                      "type": "string"
+                    },
+                    "codDiagnosticoRelacionado": {
+                      "type": "string"
+                    },
+                    "codComplicacion": {
+                      "type": "string"
+                    },
+                    "valorPagoModerador": {
+                      "type": "string"
+                    },
+                    "numFEVPagoModerador": {
+                      "type": "string"
+                    },
+                    "consecutivo": {
+                      "type": "integer"
+                    },
+                    "vrServicio": {
+                      "type": "string"
+                    },
+                    "conceptoRecaudo": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "codPrestador",
+                    "fechaInicioAtencion",
+                    "idMIPRES",
+                    "numAutorizacion",
+                    "codProcedimiento",
+                    "viaIngresoServicioSalud",
+                    "modalidadGrupoServicioTecSal",
+                    "grupoServicios",
+                    "codServicio",
+                    "finalidadTecnologiaSalud",
+                    "tipoDocumentoIdentificacion",
+                    "numDocumentoIdentificacion",
+                    "codDiagnosticoPrincipal",
+                    "codDiagnosticoRelacionado",
+                    "codComplicacion",
+                    "valorPagoModerador",
+                    "numFEVPagoModerador",
+                    "consecutivo",
+                    "vrServicio",
+                    "conceptoRecaudo"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "urgencias": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "codPrestador": {
+                      "type": "string"
+                    },
+                    "fechaInicioAtencion": {
+                      "type": "string",
+                      "format": "date-time-custom",
+                      "pattern": "^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}$"
+                    },
+                    "causaMotivoAtencion": {
+                      "type": "string"
+                    },
+                    "codDiagnosticoPrincipal": {
+                      "type": "string"
+                    },
+                    "codDiagnosticoPrincipalE": {
+                      "type": "string"
+                    },
+                    "codDiagnosticoRelacionadoE1": {
+                      "type": "string"
+                    },
+                    "codDiagnosticoRelacionadoE2": {
+                      "type": "string"
+                    },
+                    "codDiagnosticoRelacionadoE3": {
+                      "type": "string"
+                    },
+                    "condicionDestinoUsuarioEgreso": {
+                      "type": "string"
+                    },
+                    "codDiagnosticoCausaMuerte": {
+                      "type": "string"
+                    },
+                    "fechaEgreso": {
+                      "type": "string"
+                    },
+                    "consecutivo": {
+                      "type": "integer"
+                    },
+                    "numFEVPagoModerador": {
+                      "type": "string"
+                    },
+                    "numDocumentoIdentificacion": {
+                      "type": "string"
+                    },
+                    "tipoDocumentoIdentificacion": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "codPrestador",
+                    "fechaInicioAtencion",
+                    "causaMotivoAtencion",
+                    "codDiagnosticoPrincipal",
+                    "codDiagnosticoPrincipalE",
+                    "codDiagnosticoRelacionadoE1",
+                    "codDiagnosticoRelacionadoE2",
+                    "codDiagnosticoRelacionadoE3",
+                    "condicionDestinoUsuarioEgreso",
+                    "codDiagnosticoCausaMuerte",
+                    "fechaEgreso",
+                    "consecutivo",
+                    "numFEVPagoModerador",
+                    "numDocumentoIdentificacion",
+                    "tipoDocumentoIdentificacion"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "hospitalizacion": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "viaIngresoServicioSalud": {
+                      "type": "string"
+                    },
+                    "fechaInicioAtencion": {
+                      "type": "string",
+                      "format": "date-time-custom",
+                      "pattern": "^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}$"
+                    },
+                    "numAutorizacion": {
+                      "type": "string"
+                    },
+                    "causaMotivoAtencion": {
+                      "type": "string"
+                    },
+                    "codDiagnosticoPrincipal": {
+                      "type": "string"
+                    },
+                    "codDiagnosticoPrincipalE": {
+                      "type": "string"
+                    },
+                    "codDiagnosticoRelacionadoE1": {
+                      "type": "string"
+                    },
+                    "codDiagnosticoRelacionadoE2": {
+                      "type": "string"
+                    },
+                    "codDiagnosticoRelacionadoE3": {
+                      "type": "string"
+                    },
+                    "codComplicacion_id": {
+                      "type": "string"
+                    },
+                    "condicionDestinoUsuarioEgreso": {
+                      "type": "string"
+                    },
+                    "codDiagnosticoMuerte": {
+                      "type": "string"
+                    },
+                    "fechaEgreso": {
+                      "type": "string"
+                    },
+                    "consecutivo": {
+                      "type": "integer"
+                    },
+                    "codPrestador": {
+                      "type": "string"
+                    },
+                    "numDocumentoIdentificacion": {
+                      "type": "string"
+                    },
+                    "tipoDocumentoIdentificacion": {
+                      "type": "string"
+                    },
+                    "numFEVPagoModerador": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "viaIngresoServicioSalud",
+                    "fechaInicioAtencion",
+                    "numAutorizacion",
+                    "causaMotivoAtencion",
+                    "codDiagnosticoPrincipal",
+                    "codDiagnosticoPrincipalE",
+                    "codDiagnosticoRelacionadoE1",
+                    "codDiagnosticoRelacionadoE2",
+                    "codDiagnosticoRelacionadoE3",
+                    "codComplicacion_id",
+                    "condicionDestinoUsuarioEgreso",
+                    "codDiagnosticoMuerte",
+                    "fechaEgreso",
+                    "consecutivo",
+                    "codPrestador",
+                    "numDocumentoIdentificacion",
+                    "tipoDocumentoIdentificacion",
+                    "numFEVPagoModerador"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "recienNacidos": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "codPrestador": {
+                      "type": "string"
+                    },
+                    "tipoDocumentoIdentificacion": {
+                      "type": "string"
+                    },
+                    "numDocumentoIdentificacion": {
+                      "type": "string"
+                    },
+                    "fechaNacimiento": {
+                      "type": "string"
+                    },
+                    "edadGestacional": {
+                      "type": "string"
+                    },
+                    "numConsultasCPrenatal": {
+                      "type": "string"
+                    },
+                    "codSexoBiologico": {
+                      "type": "string"
+                    },
+                    "peso": {
+                      "type": "string"
+                    },
+                    "codDiagnosticoPrincipal": {
+                      "type": "string"
+                    },
+                    "condicionDestino": {
+                      "type": "string"
+                    },
+                    "condicionDestinoUsuarioEgreso": {
+                      "type": "string"
+                    },
+                    "codDiagnosticoCausaMuerte": {
+                      "type": "string"
+                    },
+                    "fechaEgreso": {
+                      "type": "string"
+                    },
+                    "consecutivo": {
+                      "type": "integer"
+                    },
+                    "numFEVPagoModerador": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "codPrestador",
+                    "tipoDocumentoIdentificacion",
+                    "numDocumentoIdentificacion",
+                    "fechaNacimiento",
+                    "edadGestacional",
+                    "numConsultasCPrenatal",
+                    "codSexoBiologico",
+                    "peso",
+                    "codDiagnosticoPrincipal",
+                    "condicionDestino",
+                    "condicionDestinoUsuarioEgreso",
+                    "codDiagnosticoCausaMuerte",
+                    "fechaEgreso",
+                    "consecutivo",
+                    "numFEVPagoModerador"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "medicamentos": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "codPrestador": {
+                      "type": "string"
+                    },
+                    "numAutorizacion": {
+                      "type": "string"
+                    },
+                    "idMIPRES": {
+                      "type": "string"
+                    },
+                    "fechaDispensAdmon": {
+                      "type": "string"
+                    },
+                    "codDiagnosticoPrincipal": {
+                      "type": "string"
+                    },
+                    "codDiagnosticoRelacionado": {
+                      "type": "string"
+                    },
+                    "tipoMedicamento": {
+                      "type": "string"
+                    },
+                    "codTecnologiaSalud": {
+                      "type": "string"
+                    },
+                    "nomTecnologiaSalud": {
+                      "type": "string"
+                    },
+                    "concentracionMedicamento": {
+                      "type": "string"
+                    },
+                    "unidadMedida": {
+                      "type": "string"
+                    },
+                    "formaFarmaceutica": {
+                      "type": "string"
+                    },
+                    "unidadMinDispensa": {
+                      "type": "string"
+                    },
+                    "cantidadMedicamento": {
+                      "type": "string"
+                    },
+                    "diasTratamiento": {
+                      "type": "string"
+                    },
+                    "tipoDocumentoIdentificacion": {
+                      "type": "string"
+                    },
+                    "numDocumentoIdentificacion": {
+                      "type": "string"
+                    },
+                    "vrUnitMedicamento": {
+                      "type": "string"
+                    },
+                    "valorPagoModerador": {
+                      "type": "string"
+                    },
+                    "numFEVPagoModerador": {
+                      "type": "string"
+                    },
+                    "consecutivo": {
+                      "type": "integer"
+                    },
+                    "vrServicio": {
+                      "type": "string"
+                    },
+                    "conceptoRecaudo": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "codPrestador",
+                    "numAutorizacion",
+                    "idMIPRES",
+                    "fechaDispensAdmon",
+                    "codDiagnosticoPrincipal",
+                    "codDiagnosticoRelacionado",
+                    "tipoMedicamento",
+                    "codTecnologiaSalud",
+                    "nomTecnologiaSalud",
+                    "concentracionMedicamento",
+                    "unidadMedida",
+                    "formaFarmaceutica",
+                    "unidadMinDispensa",
+                    "cantidadMedicamento",
+                    "diasTratamiento",
+                    "tipoDocumentoIdentificacion",
+                    "numDocumentoIdentificacion",
+                    "vrUnitMedicamento",
+                    "valorPagoModerador",
+                    "numFEVPagoModerador",
+                    "consecutivo",
+                    "vrServicio",
+                    "conceptoRecaudo"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "otrosServicios": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "codPrestador": {
+                      "type": "string"
+                    },
+                    "numAutorizacion": {
+                      "type": "string"
+                    },
+                    "idMIPRES": {
+                      "type": "string"
+                    },
+                    "fechaSuministroTecnologia": {
+                      "type": "string"
+                    },
+                    "tipoOS": {
+                      "type": "string"
+                    },
+                    "codTecnologiaSalud": {
+                      "type": "string"
+                    },
+                    "nomTecnologiaSalud": {
+                      "type": "string"
+                    },
+                    "cantidadOS": {
+                      "type": "string"
+                    },
+                    "tipoDocumentoldentificacion": {
+                      "type": "string"
+                    },
+                    "numDocumentoldentificacion": {
+                      "type": "string"
+                    },
+                    "vrUnitOS": {
+                      "type": "string"
+                    },
+                    "vrServicio": {
+                      "type": "string"
+                    },
+                    "conceptoRecaudo": {
+                      "type": "string"
+                    },
+                    "valorPagoModerador": {
+                      "type": "string"
+                    },
+                    "numFEVPagoModerador": {
+                      "type": "string"
+                    },
+                    "consecutivo": {
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "codPrestador",
+                    "numAutorizacion",
+                    "idMIPRES",
+                    "fechaSuministroTecnologia",
+                    "tipoOS",
+                    "codTecnologiaSalud",
+                    "nomTecnologiaSalud",
+                    "cantidadOS",
+                    "tipoDocumentoldentificacion",
+                    "numDocumentoldentificacion",
+                    "vrUnitOS",
+                    "vrServicio",
+                    "conceptoRecaudo",
+                    "valorPagoModerador",
+                    "numFEVPagoModerador",
+                    "consecutivo"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "codSexo",
+          "consecutivo",
+          "incapacidad",
+          "tipoUsuario",
+          "codPaisOrigen",
+          "fechaNacimiento",
+          "codPaisResidencia",
+          "codMunicipioResidencia",
+          "numDocumentoIdentificacion",
+          "tipoDocumentoIdentificacion",
+          "codZonaTerritorialResidencia",
+          "servicios"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "numDocumentoIdObligado",
+    "numFactura",
+    "tipoNota",
+    "numNota",
+    "usuarios"
+  ],
+  "additionalProperties": false
+}
