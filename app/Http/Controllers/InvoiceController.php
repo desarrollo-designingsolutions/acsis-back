@@ -52,6 +52,8 @@ use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 use ZipArchive;
 
+use function Psl\Type\object;
+
 class InvoiceController extends Controller
 {
     use HttpResponseTrait;
@@ -355,7 +357,7 @@ class InvoiceController extends Controller
             'numDocumentoIdObligado' => $serviceVendor->nit,
             'numFactura' => $invoice->invoice_number,
             'tipoNota' => $tipoNota->codigo ?? '',
-            'numNota' => $invoice->note_number,
+            'numNota' => $invoice->note_number ?? null,
         ];
 
         // Convert null values to empty strings
@@ -364,17 +366,17 @@ class InvoiceController extends Controller
         // Build user data
         $users = [
             [
-                'codSexo' => $sexo->codigo,
-                'consecutivo' => 1,
-                'incapacidad' => $patient->incapacity == 1 ? 'SI' : 'NO',
+                'tipoDocumentoIdentificacion' => $tipoIdPisis->codigo,
+                'numDocumentoIdentificacion' => $patient->document,
                 'tipoUsuario' => $tipoUsuario->codigo,
-                'codPaisOrigen' => $pais_origin->codigo,
                 'fechaNacimiento' => $patient->birth_date,
+                'codSexo' => $sexo->codigo,
                 'codPaisResidencia' => $pais_residency->codigo,
                 'codMunicipioResidencia' => $municipio->codigo,
-                'numDocumentoIdentificacion' => $patient->document,
-                'tipoDocumentoIdentificacion' => $tipoIdPisis->codigo,
                 'codZonaTerritorialResidencia' => $zonaVersion2->codigo,
+                'incapacidad' => $patient->incapacity == 1 ? 'SI' : 'NO',
+                'consecutivo' => 1,
+                'codPaisOrigen' => $pais_origin->codigo,
             ],
         ];
 

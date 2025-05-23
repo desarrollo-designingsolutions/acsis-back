@@ -25,7 +25,7 @@ return new class extends Migration
             $table->foreignUuid('codDiagnosticoRelacionadoE3_id')->nullable()->constrained('cie10s');
             $table->foreignUuid('codComplicacion_id')->nullable()->constrained('cie10s');
             $table->foreignUuid('condicionDestinoUsuarioEgreso_id')->nullable()->constrained('condiciony_destino_usuario_egresos');
-            $table->foreignUuid('codDiagnosticoMuerte_id')->nullable()->constrained('cie10s');
+            $table->foreignUuid('codDiagnosticoCausaMuerte_id')->nullable()->constrained('cie10s');
             $table->string('fechaEgreso')->nullable();
 
             $table->timestamps();

@@ -10,6 +10,7 @@ use App\Repositories\InvoiceRepository;
 use App\Repositories\ServiceRepository;
 use App\Traits\HttpResponseTrait;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 
 class HospitalizationController extends Controller
 {
@@ -67,7 +68,7 @@ class HospitalizationController extends Controller
                 'codDiagnosticoRelacionadoE3_id' => $post['codDiagnosticoRelacionadoE3_id'],
                 'codComplicacion_id' => $post['codComplicacion_id'],
                 'condicionDestinoUsuarioEgreso_id' => $post['condicionDestinoUsuarioEgreso_id'],
-                'codDiagnosticoMuerte_id' => $post['codDiagnosticoMuerte_id'],
+                'codDiagnosticoCausaMuerte_id' => $post['codDiagnosticoCausaMuerte_id'],
                 'fechaEgreso' => $post['fechaEgreso'],
                 'tipoDocumentoIdentificacion_id' => $post['tipoDocumentoIdentificacion_id'],
                 'numDocumentoIdentificacion' => $post['numDocumentoIdentificacion'],
@@ -93,18 +94,18 @@ class HospitalizationController extends Controller
             $serviceData = [
                 'codPrestador' => $service->invoice?->serviceVendor?->ips_cod_habilitacion?->codigo,
                 'viaIngresoServicioSalud' => $hospitalization->viaIngresoServicioSalud?->codigo,
-                'fechaInicioAtencion' => $post['fechaInicioAtencion'],
+                'fechaInicioAtencion' => Carbon::parse($post['fechaInicioAtencion'])->format('Y-m-d H:i'),
                 'numAutorizacion' => $post['numAutorizacion'],
                 'causaMotivoAtencion' => $hospitalization->causaMotivoAtencion?->codigo,
                 'codDiagnosticoPrincipal' => $hospitalization->codDiagnosticoPrincipal?->codigo,
                 'codDiagnosticoPrincipalE' => $hospitalization->codDiagnosticoPrincipalE?->codigo,
-                'codDiagnosticoRelacionadoE1' => $hospitalization->codDiagnosticoRelacionadoE1?->codigo,
-                'codDiagnosticoRelacionadoE2' => $hospitalization->codDiagnosticoRelacionadoE2?->codigo,
-                'codDiagnosticoRelacionadoE3' => $hospitalization->codDiagnosticoRelacionadoE3?->codigo,
-                'codComplicacion_id' => $post['codComplicacion_id'],
+                'codDiagnosticoRelacionadoE1' => $hospitalization->codDiagnosticoRelacionadoE1?->codigo ?? '',
+                'codDiagnosticoRelacionadoE2' => $hospitalization->codDiagnosticoRelacionadoE2?->codigo ?? '',
+                'codDiagnosticoRelacionadoE3' => $hospitalization->codDiagnosticoRelacionadoE3?->codigo ?? '',
+                'codComplicacion' => $hospitalization->codComplicacion?->codigo ?? '',
                 'condicionDestinoUsuarioEgreso' => $hospitalization->condicionDestinoUsuarioEgreso?->codigo,
-                'codDiagnosticoMuerte' => $hospitalization->codDiagnosticoMuerte?->codigo,
-                'fechaEgreso' => $post['fechaEgreso'],
+                'codDiagnosticoCausaMuerte' => $hospitalization->codDiagnosticoCausaMuerte?->codigo ?? '',
+                'fechaEgreso' => Carbon::parse($post['fechaEgreso'])->format('Y-m-d H:i'),
                 'consecutivo' => $consecutivo,
             ];
 
@@ -171,7 +172,7 @@ class HospitalizationController extends Controller
                 'codDiagnosticoRelacionadoE3_id' => $post['codDiagnosticoRelacionadoE3_id'],
                 'codComplicacion_id' => $post['codComplicacion_id'],
                 'condicionDestinoUsuarioEgreso_id' => $post['condicionDestinoUsuarioEgreso_id'],
-                'codDiagnosticoMuerte_id' => $post['codDiagnosticoMuerte_id'],
+                'codDiagnosticoCausaMuerte_id' => $post['codDiagnosticoCausaMuerte_id'],
                 'fechaEgreso' => $post['fechaEgreso'],
                 'tipoDocumentoIdentificacion_id' => $post['tipoDocumentoIdentificacion_id'],
                 'numDocumentoIdentificacion' => $post['numDocumentoIdentificacion'],
@@ -194,18 +195,18 @@ class HospitalizationController extends Controller
             $serviceData = [
                 'codPrestador' => $service->invoice?->serviceVendor?->ips_cod_habilitacion?->codigo,
                 'viaIngresoServicioSalud' => $hospitalization->viaIngresoServicioSalud?->codigo,
-                'fechaInicioAtencion' => $post['fechaInicioAtencion'],
+                'fechaInicioAtencion' => Carbon::parse($post['fechaInicioAtencion'])->format('Y-m-d H:i'),
                 'numAutorizacion' => $post['numAutorizacion'],
                 'causaMotivoAtencion' => $hospitalization->causaMotivoAtencion?->codigo,
                 'codDiagnosticoPrincipal' => $hospitalization->codDiagnosticoPrincipal?->codigo,
                 'codDiagnosticoPrincipalE' => $hospitalization->codDiagnosticoPrincipalE?->codigo,
-                'codDiagnosticoRelacionadoE1' => $hospitalization->codDiagnosticoRelacionadoE1?->codigo,
-                'codDiagnosticoRelacionadoE2' => $hospitalization->codDiagnosticoRelacionadoE2?->codigo,
-                'codDiagnosticoRelacionadoE3' => $hospitalization->codDiagnosticoRelacionadoE3?->codigo,
-                'codComplicacion_id' => $post['codComplicacion_id'],
+                'codDiagnosticoRelacionadoE1' => $hospitalization->codDiagnosticoRelacionadoE1?->codigo ?? '',
+                'codDiagnosticoRelacionadoE2' => $hospitalization->codDiagnosticoRelacionadoE2?->codigo ?? '',
+                'codDiagnosticoRelacionadoE3' => $hospitalization->codDiagnosticoRelacionadoE3?->codigo ?? '',
+                'codComplicacion' => $hospitalization->codComplicacion?->codigo ?? '',
                 'condicionDestinoUsuarioEgreso' => $hospitalization->condicionDestinoUsuarioEgreso?->codigo,
-                'codDiagnosticoMuerte' => $hospitalization->codDiagnosticoMuerte?->codigo,
-                'fechaEgreso' => $post['fechaEgreso'],
+                'codDiagnosticoCausaMuerte' => $hospitalization->codDiagnosticoCausaMuerte?->codigo ?? '',
+                'fechaEgreso' => Carbon::parse($post['fechaEgreso'])->format('Y-m-d H:i'),
                 'consecutivo' => $consecutivo,
             ];
 

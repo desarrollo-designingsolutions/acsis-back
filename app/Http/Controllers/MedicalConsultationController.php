@@ -10,6 +10,7 @@ use App\Repositories\MedicalConsultationRepository;
 use App\Repositories\ServiceRepository;
 use App\Traits\HttpResponseTrait;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 
 class MedicalConsultationController extends Controller
 {
@@ -103,7 +104,7 @@ class MedicalConsultationController extends Controller
             // Prepare service data for JSON
             $serviceData = [
                 'codPrestador' => $service->invoice?->serviceVendor?->ips_cod_habilitacion?->codigo,
-                'fechaInicioAtencion' => $post['fechaInicioAtencion'],
+                'fechaInicioAtencion' => Carbon::parse($post['fechaInicioAtencion'])->format('Y-m-d H:i'),
                 'numAutorizacion' => $post['numAutorizacion'],
                 'codConsulta' => $medicalConsultation->codConsulta?->codigo,
                 'modalidadGrupoServicioTecSal' => $medicalConsultation->modalidadGrupoServicioTecSal?->codigo,
@@ -112,15 +113,15 @@ class MedicalConsultationController extends Controller
                 'finalidadTecnologiaSalud' => $medicalConsultation->finalidadTecnologiaSalud?->codigo,
                 'causaMotivoAtencion' => $medicalConsultation->causaMotivoAtencion?->codigo,
                 'codDiagnosticoPrincipal' => $medicalConsultation->codDiagnosticoPrincipal?->codigo,
-                'codDiagnosticoRelacionado1' => $medicalConsultation->codDiagnosticoRelacionado1?->codigo,
-                'codDiagnosticoRelacionado2' => $medicalConsultation->codDiagnosticoRelacionado2?->codigo,
-                'codDiagnosticoRelacionado3' => $medicalConsultation->codDiagnosticoRelacionado3?->codigo,
+                'codDiagnosticoRelacionado1' => $medicalConsultation->codDiagnosticoRelacionado1?->codigo ?? '',
+                'codDiagnosticoRelacionado2' => $medicalConsultation->codDiagnosticoRelacionado2?->codigo ?? '',
+                'codDiagnosticoRelacionado3' => $medicalConsultation->codDiagnosticoRelacionado3?->codigo ?? '',
                 'tipoDiagnosticoPrincipal' => $medicalConsultation->tipoDiagnosticoPrincipal?->codigo,
                 'tipoDocumentoIdentificacion' => $medicalConsultation->tipoDocumentoIdentificacion?->codigo,
                 'numDocumentoIdentificacion' => $post['numDocumentoIdentificacion'],
-                'vrServicio' => $post['vrServicio'],
+                'vrServicio' => floatval($post['vrServicio']),
                 'conceptoRecaudo' => $medicalConsultation->conceptoRecaudo?->codigo,
-                'valorPagoModerador' => $post['valorPagoModerador'],
+                'valorPagoModerador' => floatval($post['valorPagoModerador']),
                 'numFEVPagoModerador' => $post['numFEVPagoModerador'],
                 'consecutivo' => $consecutivo,
             ];
@@ -221,7 +222,7 @@ class MedicalConsultationController extends Controller
             // Prepare service data for JSON
             $serviceData = [
                 'codPrestador' => $service->invoice?->serviceVendor?->ips_cod_habilitacion?->codigo,
-                'fechaInicioAtencion' => $post['fechaInicioAtencion'],
+                'fechaInicioAtencion' => Carbon::parse($post['fechaInicioAtencion'])->format('Y-m-d H:i'),
                 'numAutorizacion' => $post['numAutorizacion'],
                 'codConsulta' => $medicalConsultation->codConsulta?->codigo,
                 'modalidadGrupoServicioTecSal' => $medicalConsultation->modalidadGrupoServicioTecSal?->codigo,
@@ -230,15 +231,15 @@ class MedicalConsultationController extends Controller
                 'finalidadTecnologiaSalud' => $medicalConsultation->finalidadTecnologiaSalud?->codigo,
                 'causaMotivoAtencion' => $medicalConsultation->causaMotivoAtencion?->codigo,
                 'codDiagnosticoPrincipal' => $medicalConsultation->codDiagnosticoPrincipal?->codigo,
-                'codDiagnosticoRelacionado1' => $medicalConsultation->codDiagnosticoRelacionado1?->codigo,
-                'codDiagnosticoRelacionado2' => $medicalConsultation->codDiagnosticoRelacionado2?->codigo,
-                'codDiagnosticoRelacionado3' => $medicalConsultation->codDiagnosticoRelacionado3?->codigo,
+                'codDiagnosticoRelacionado1' => $medicalConsultation->codDiagnosticoRelacionado1?->codigo ?? '',
+                'codDiagnosticoRelacionado2' => $medicalConsultation->codDiagnosticoRelacionado2?->codigo ?? '',
+                'codDiagnosticoRelacionado3' => $medicalConsultation->codDiagnosticoRelacionado3?->codigo ?? '',
                 'tipoDiagnosticoPrincipal' => $medicalConsultation->tipoDiagnosticoPrincipal?->codigo,
                 'tipoDocumentoIdentificacion' => $medicalConsultation->tipoDocumentoIdentificacion?->codigo,
                 'numDocumentoIdentificacion' => $post['numDocumentoIdentificacion'],
-                'vrServicio' => $post['vrServicio'],
+                'vrServicio' => floatval($post['vrServicio']),
                 'conceptoRecaudo' => $medicalConsultation->conceptoRecaudo?->codigo,
-                'valorPagoModerador' => $post['valorPagoModerador'],
+                'valorPagoModerador' => floatval($post['valorPagoModerador']),
                 'numFEVPagoModerador' => $post['numFEVPagoModerador'],
                 'consecutivo' => $consecutivo,
             ];

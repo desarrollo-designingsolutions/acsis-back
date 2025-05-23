@@ -10,6 +10,7 @@ use App\Repositories\NewlyBornRepository;
 use App\Repositories\ServiceRepository;
 use App\Traits\HttpResponseTrait;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 
 class NewlyBornController extends Controller
 {
@@ -88,16 +89,16 @@ class NewlyBornController extends Controller
             $serviceData = [
                 'codPrestador' => $service->invoice?->serviceVendor?->ips_cod_habilitacion?->codigo,
                 'tipoDocumentoIdentificacion' => $newlyBorn->tipoDocumentoIdentificacion?->codigo,
-                'numDocumentoIdentificacion' => $post['numDocumentoIdentificacion'],
-                'fechaNacimiento' => $post['fechaNacimiento'],
-                'edadGestacional' => $post['edadGestacional'],
-                'numConsultasCPrenatal' => $post['numConsultasCPrenatal'],
+                'numDocumentoIdentificacion' => intval($post['numDocumentoIdentificacion']),
+                'fechaNacimiento' => Carbon::parse($post['fechaNacimiento'])->format('Y-m-d H:i'),
+                'edadGestacional' => intval($post['edadGestacional']),
+                'numConsultasCPrenatal' => intval($post['numConsultasCPrenatal']),
                 'codSexoBiologico' => $newlyBorn->codSexoBiologico?->codigo,
-                'peso' => $post['peso'],
+                'peso' => floatval($post['peso']),
                 'codDiagnosticoPrincipal' => $newlyBorn->codDiagnosticoPrincipal?->codigo,
                 'condicionDestinoUsuarioEgreso' => $newlyBorn->condicionDestinoUsuarioEgreso?->codigo,
-                'codDiagnosticoCausaMuerte' => $newlyBorn->codDiagnosticoCausaMuerte?->codigo,
-                'fechaEgreso' => $post['fechaEgreso'],
+                'codDiagnosticoCausaMuerte' => $newlyBorn->codDiagnosticoCausaMuerte?->codigo ?? '',
+                'fechaEgreso' => Carbon::parse($post['fechaEgreso'])->format('Y-m-d H:i'),
                 'consecutivo' => $consecutivo,
             ];
 
@@ -182,16 +183,16 @@ class NewlyBornController extends Controller
             $serviceData = [
                 'codPrestador' => $service->invoice?->serviceVendor?->ips_cod_habilitacion?->codigo,
                 'tipoDocumentoIdentificacion' => $newlyBorn->tipoDocumentoIdentificacion?->codigo,
-                'numDocumentoIdentificacion' => $post['numDocumentoIdentificacion'],
-                'fechaNacimiento' => $post['fechaNacimiento'],
-                'edadGestacional' => $post['edadGestacional'],
-                'numConsultasCPrenatal' => $post['numConsultasCPrenatal'],
+                'numDocumentoIdentificacion' => intval($post['numDocumentoIdentificacion']),
+                'fechaNacimiento' => Carbon::parse($post['fechaNacimiento'])->format('Y-m-d H:i'),
+                'edadGestacional' => intval($post['edadGestacional']),
+                'numConsultasCPrenatal' => intval($post['numConsultasCPrenatal']),
                 'codSexoBiologico' => $newlyBorn->codSexoBiologico?->codigo,
-                'peso' => $post['peso'],
+                'peso' => floatval($post['peso']),
                 'codDiagnosticoPrincipal' => $newlyBorn->codDiagnosticoPrincipal?->codigo,
                 'condicionDestinoUsuarioEgreso' => $newlyBorn->condicionDestinoUsuarioEgreso?->codigo,
-                'codDiagnosticoCausaMuerte' => $newlyBorn->codDiagnosticoCausaMuerte?->codigo,
-                'fechaEgreso' => $post['fechaEgreso'],
+                'codDiagnosticoCausaMuerte' => $newlyBorn->codDiagnosticoCausaMuerte?->codigo ?? '',
+                'fechaEgreso' => Carbon::parse($post['fechaEgreso'])->format('Y-m-d H:i'),
                 'consecutivo' => $consecutivo,
             ];
 

@@ -10,6 +10,7 @@ use App\Repositories\ProcedureRepository;
 use App\Repositories\ServiceRepository;
 use App\Traits\HttpResponseTrait;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 
 class ProcedureController extends Controller
 {
@@ -62,7 +63,7 @@ class ProcedureController extends Controller
 
             // Create MedicalConsultation
             $procedure = $this->procedureRepository->store([
-                'fechaInicioAtencion' => $post['fechaInicioAtencion'],
+                'fechaInicioAtencion' => Carbon::parse($post['fechaInicioAtencion'])->format('Y-m-d H:i'),
                 'idMIPRES' => $post['idMIPRES'],
                 'numAutorizacion' => $post['numAutorizacion'],
                 'codProcedimiento_id' => $post['codProcedimiento_id'],
@@ -100,23 +101,23 @@ class ProcedureController extends Controller
             // Prepare service data for JSON
             $serviceData = [
                 'codPrestador' => $service->invoice?->serviceVendor?->ips_cod_habilitacion?->codigo,
-                'fechaInicioAtencion' => $post['fechaInicioAtencion'],
+                'fechaInicioAtencion' => Carbon::parse($post['fechaInicioAtencion'])->format('Y-m-d H:i'),
                 'idMIPRES' => $post['idMIPRES'],
                 'numAutorizacion' => $post['numAutorizacion'],
                 'codProcedimiento' => $procedure->codProcedimiento?->codigo,
                 'viaIngresoServicioSalud' => $procedure->viaIngresoServicioSalud?->codigo,
                 'modalidadGrupoServicioTecSal' => $procedure->modalidadGrupoServicioTecSal?->codigo,
                 'grupoServicios' => $procedure->grupoServicios?->codigo,
-                'codServicio' => $procedure->codServicio?->codigo,
+                'codServicio' => intval($procedure->codServicio?->codigo),
                 'finalidadTecnologiaSalud' => $procedure->finalidadTecnologiaSalud?->codigo,
                 'tipoDocumentoIdentificacion' => $procedure->tipoDocumentoIdentificacion?->codigo,
                 'numDocumentoIdentificacion' => $post['numDocumentoIdentificacion'],
                 'codDiagnosticoPrincipal' => $procedure->codDiagnosticoPrincipal?->codigo,
-                'codDiagnosticoRelacionado' => $procedure->codDiagnosticoRelacionado?->codigo,
-                'codComplicacion' => $procedure->codComplicacion?->codigo,
-                'vrServicio' => $post['vrServicio'],
+                'codDiagnosticoRelacionado' => $procedure->codDiagnosticoRelacionado?->codigo ?? '',
+                'codComplicacion' => $procedure->codComplicacion?->codigo ?? '',
+                'vrServicio' => floatval($post['vrServicio']),
                 'conceptoRecaudo' => $procedure->conceptoRecaudo?->codigo,
-                'valorPagoModerador' => $post['valorPagoModerador'],
+                'valorPagoModerador' => floatval($post['valorPagoModerador']),
                 'numFEVPagoModerador' => $post['numFEVPagoModerador'],
                 'consecutivo' => $consecutivo,
             ];
@@ -214,23 +215,23 @@ class ProcedureController extends Controller
             // Prepare service data for JSON
             $serviceData = [
                 'codPrestador' => $service->invoice?->serviceVendor?->ips_cod_habilitacion?->codigo,
-                'fechaInicioAtencion' => $post['fechaInicioAtencion'],
+                'fechaInicioAtencion' => Carbon::parse($post['fechaInicioAtencion'])->format('Y-m-d H:i'),
                 'idMIPRES' => $post['idMIPRES'],
                 'numAutorizacion' => $post['numAutorizacion'],
                 'codProcedimiento' => $procedure->codProcedimiento?->codigo,
                 'viaIngresoServicioSalud' => $procedure->viaIngresoServicioSalud?->codigo,
                 'modalidadGrupoServicioTecSal' => $procedure->modalidadGrupoServicioTecSal?->codigo,
                 'grupoServicios' => $procedure->grupoServicios?->codigo,
-                'codServicio' => $procedure->codServicio?->codigo,
+                'codServicio' => intval($procedure->codServicio?->codigo),
                 'finalidadTecnologiaSalud' => $procedure->finalidadTecnologiaSalud?->codigo,
                 'tipoDocumentoIdentificacion' => $procedure->tipoDocumentoIdentificacion?->codigo,
                 'numDocumentoIdentificacion' => $post['numDocumentoIdentificacion'],
                 'codDiagnosticoPrincipal' => $procedure->codDiagnosticoPrincipal?->codigo,
-                'codDiagnosticoRelacionado' => $procedure->codDiagnosticoRelacionado?->codigo,
-                'codComplicacion' => $procedure->codComplicacion?->codigo,
-                'vrServicio' => $post['vrServicio'],
+                'codDiagnosticoRelacionado' => $procedure->codDiagnosticoRelacionado?->codigo ?? '',
+                'codComplicacion' => $procedure->codComplicacion?->codigo ?? '',
+                'vrServicio' => floatval($post['vrServicio']),
                 'conceptoRecaudo' => $procedure->conceptoRecaudo?->codigo,
-                'valorPagoModerador' => $post['valorPagoModerador'],
+                'valorPagoModerador' => floatval($post['valorPagoModerador']),
                 'numFEVPagoModerador' => $post['numFEVPagoModerador'],
                 'consecutivo' => $consecutivo,
             ];

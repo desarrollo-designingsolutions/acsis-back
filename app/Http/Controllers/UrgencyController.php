@@ -10,6 +10,7 @@ use App\Repositories\ServiceRepository;
 use App\Repositories\UrgencyRepository;
 use App\Traits\HttpResponseTrait;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 
 class UrgencyController extends Controller
 {
@@ -85,16 +86,16 @@ class UrgencyController extends Controller
             // Prepare service data for JSON
             $serviceData = [
                 'codPrestador' => $service->invoice?->serviceVendor?->ips_cod_habilitacion?->codigo,
-                'fechaInicioAtencion' => $post['fechaInicioAtencion'],
+                'fechaInicioAtencion' => Carbon::parse($post['fechaInicioAtencion'])->format('Y-m-d H:i'),
                 'causaMotivoAtencion' => $urgency->causaMotivoAtencion?->codigo,
                 'codDiagnosticoPrincipal' => $urgency->codDiagnosticoPrincipal?->codigo,
                 'codDiagnosticoPrincipalE' => $urgency->codDiagnosticoPrincipalE?->codigo,
-                'codDiagnosticoRelacionadoE1' => $urgency->codDiagnosticoRelacionadoE1?->codigo,
-                'codDiagnosticoRelacionadoE2' => $urgency->codDiagnosticoRelacionadoE2?->codigo,
-                'codDiagnosticoRelacionadoE3' => $urgency->codDiagnosticoRelacionadoE3?->codigo,
+                'codDiagnosticoRelacionadoE1' => $urgency->codDiagnosticoRelacionadoE1?->codigo ?? '',
+                'codDiagnosticoRelacionadoE2' => $urgency->codDiagnosticoRelacionadoE2?->codigo ?? '',
+                'codDiagnosticoRelacionadoE3' => $urgency->codDiagnosticoRelacionadoE3?->codigo ?? '',
                 'condicionDestinoUsuarioEgreso' => $post['condicionDestinoUsuarioEgreso'],
-                'codDiagnosticoCausaMuerte' => $urgency->codDiagnosticoCausaMuerte?->codigo,
-                'fechaEgreso' => $post['fechaEgreso'],
+                'codDiagnosticoCausaMuerte' => $urgency->codDiagnosticoCausaMuerte?->codigo ?? '',
+                'fechaEgreso' => Carbon::parse($post['fechaEgreso'])->format('Y-m-d H:i'),
                 'consecutivo' => $consecutivo,
             ];
 
@@ -176,16 +177,16 @@ class UrgencyController extends Controller
             // Prepare service data for JSON
             $serviceData = [
                 'codPrestador' => $service->invoice?->serviceVendor?->ips_cod_habilitacion?->codigo,
-                'fechaInicioAtencion' => $post['fechaInicioAtencion'],
+                'fechaInicioAtencion' => Carbon::parse($post['fechaInicioAtencion'])->format('Y-m-d H:i'),
                 'causaMotivoAtencion' => $urgency->causaMotivoAtencion?->codigo,
                 'codDiagnosticoPrincipal' => $urgency->codDiagnosticoPrincipal?->codigo,
                 'codDiagnosticoPrincipalE' => $urgency->codDiagnosticoPrincipalE?->codigo,
-                'codDiagnosticoRelacionadoE1' => $urgency->codDiagnosticoRelacionadoE1?->codigo,
-                'codDiagnosticoRelacionadoE2' => $urgency->codDiagnosticoRelacionadoE2?->codigo,
-                'codDiagnosticoRelacionadoE3' => $urgency->codDiagnosticoRelacionadoE3?->codigo,
+                'codDiagnosticoRelacionadoE1' => $urgency->codDiagnosticoRelacionadoE1?->codigo ?? '',
+                'codDiagnosticoRelacionadoE2' => $urgency->codDiagnosticoRelacionadoE2?->codigo ?? '',
+                'codDiagnosticoRelacionadoE3' => $urgency->codDiagnosticoRelacionadoE3?->codigo ?? '',
                 'condicionDestinoUsuarioEgreso' => $post['condicionDestinoUsuarioEgreso'],
-                'codDiagnosticoCausaMuerte' => $urgency->codDiagnosticoCausaMuerte?->codigo,
-                'fechaEgreso' => $post['fechaEgreso'],
+                'codDiagnosticoCausaMuerte' => $urgency->codDiagnosticoCausaMuerte?->codigo ?? '',
+                'fechaEgreso' => Carbon::parse($post['fechaEgreso'])->format('Y-m-d H:i'),
                 'consecutivo' => $consecutivo,
             ];
 

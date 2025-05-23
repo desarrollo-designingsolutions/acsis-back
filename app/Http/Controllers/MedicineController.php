@@ -10,6 +10,7 @@ use App\Repositories\MedicineRepository;
 use App\Repositories\ServiceRepository;
 use App\Traits\HttpResponseTrait;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 
 class MedicineController extends Controller
 {
@@ -94,27 +95,27 @@ class MedicineController extends Controller
 
             // Prepare service data for JSON
             $serviceData = [
-                'codPrestador' => $service->invoice?->serviceVendor?->ips_cod_habilitacion?->codigo,
-                'numAutorizacion' => $post['numAutorizacion'],
-                'idMIPRES' => $post['idMIPRES'],
-                'fechaDispensAdmon' => $post['fechaDispensAdmon'],
+                'codPrestador' => $service->invoice?->serviceVendor?->ips_cod_habilitacion?->codigo ?? '',
+                'numAutorizacion' => $post['numAutorizacion'] ?? '',
+                'idMIPRES' => $post['idMIPRES'] ?? '',
+                'fechaDispensAdmon' => Carbon::parse($post['fechaDispensAdmon'])->format('Y-m-d H:i'),
                 'codDiagnosticoPrincipal' => $medicine->codDiagnosticoPrincipal?->codigo,
-                'codDiagnosticoRelacionado' => $medicine->codDiagnosticoRelacionado?->codigo,
+                'codDiagnosticoRelacionado' => $medicine->codDiagnosticoRelacionado?->codigo ?? '',
                 'tipoMedicamento' => $medicine->tipoMedicamento?->codigo,
                 'codTecnologiaSalud' => $post['codTecnologiaSalud'],
-                'nomTecnologiaSalud' => $post['nomTecnologiaSalud'],
-                'concentracionMedicamento' => $post['concentracionMedicamento'],
-                'unidadMedida' => $medicine->unidadMedida?->codigo,
-                'formaFarmaceutica' => $post['formaFarmaceutica'],
-                'unidadMinDispensa' => $post['unidadMinDispensa'],
-                'cantidadMedicamento' => $post['cantidadMedicamento'],
-                'diasTratamiento' => $post['diasTratamiento'],
+                'nomTecnologiaSalud' => $post['nomTecnologiaSalud'] ?? '',
+                'concentracionMedicamento' => floatval($post['concentracionMedicamento']) ?? '',
+                'unidadMedida' => floatval($medicine->unidadMedida?->codigo) ?? '',
+                'formaFarmaceutica' => $post['formaFarmaceutica'] ?? '',
+                'unidadMinDispensa' => floatval($post['unidadMinDispensa']),
+                'cantidadMedicamento' => intval($post['cantidadMedicamento']),
+                'diasTratamiento' => intval($post['diasTratamiento']),
                 'tipoDocumentoIdentificacion' => $medicine->tipoDocumentoIdentificacion?->codigo,
                 'numDocumentoIdentificacion' => $post['numDocumentoIdentificacion'],
-                'vrUnitMedicamento' => $post['vrUnitMedicamento'],
-                'vrServicio' => $post['vrServicio'],
+                'vrUnitMedicamento' => floatval($post['vrUnitMedicamento']),
+                'vrServicio' => floatval($post['vrServicio']),
                 'conceptoRecaudo' => $medicine->conceptoRecaudo?->codigo,
-                'valorPagoModerador' => $post['valorPagoModerador'],
+                'valorPagoModerador' => floatval($post['valorPagoModerador']),
                 'numFEVPagoModerador' => $post['numFEVPagoModerador'],
                 'consecutivo' => $consecutivo,
             ];
@@ -206,27 +207,27 @@ class MedicineController extends Controller
 
             // Prepare service data for JSON
             $serviceData = [
-                'codPrestador' => $service->invoice?->serviceVendor?->ips_cod_habilitacion?->codigo,
-                'numAutorizacion' => $post['numAutorizacion'],
-                'idMIPRES' => $post['idMIPRES'],
-                'fechaDispensAdmon' => $post['fechaDispensAdmon'],
+                'codPrestador' => $service->invoice?->serviceVendor?->ips_cod_habilitacion?->codigo ?? '',
+                'numAutorizacion' => $post['numAutorizacion'] ?? '',
+                'idMIPRES' => $post['idMIPRES'] ?? '',
+                'fechaDispensAdmon' => Carbon::parse($post['fechaDispensAdmon'])->format('Y-m-d H:i'),
                 'codDiagnosticoPrincipal' => $medicine->codDiagnosticoPrincipal?->codigo,
-                'codDiagnosticoRelacionado' => $medicine->codDiagnosticoRelacionado?->codigo,
+                'codDiagnosticoRelacionado' => $medicine->codDiagnosticoRelacionado?->codigo ?? '',
                 'tipoMedicamento' => $medicine->tipoMedicamento?->codigo,
                 'codTecnologiaSalud' => $post['codTecnologiaSalud'],
-                'nomTecnologiaSalud' => $post['nomTecnologiaSalud'],
-                'concentracionMedicamento' => $post['concentracionMedicamento'],
-                'unidadMedida' => $medicine->unidadMedida?->codigo,
-                'formaFarmaceutica' => $post['formaFarmaceutica'],
-                'unidadMinDispensa' => $post['unidadMinDispensa'],
-                'cantidadMedicamento' => $post['cantidadMedicamento'],
-                'diasTratamiento' => $post['diasTratamiento'],
+                'nomTecnologiaSalud' => $post['nomTecnologiaSalud'] ?? '',
+                'concentracionMedicamento' => floatval($post['concentracionMedicamento']) ?? '',
+                'unidadMedida' => floatval($medicine->unidadMedida?->codigo) ?? '',
+                'formaFarmaceutica' => $post['formaFarmaceutica'] ?? '',
+                'unidadMinDispensa' => floatval($post['unidadMinDispensa']),
+                'cantidadMedicamento' => intval($post['cantidadMedicamento']),
+                'diasTratamiento' => intval($post['diasTratamiento']),
                 'tipoDocumentoIdentificacion' => $medicine->tipoDocumentoIdentificacion?->codigo,
                 'numDocumentoIdentificacion' => $post['numDocumentoIdentificacion'],
-                'vrUnitMedicamento' => $post['vrUnitMedicamento'],
-                'vrServicio' => $post['vrServicio'],
+                'vrUnitMedicamento' => floatval($post['vrUnitMedicamento']),
+                'vrServicio' => floatval($post['vrServicio']),
                 'conceptoRecaudo' => $medicine->conceptoRecaudo?->codigo,
-                'valorPagoModerador' => $post['valorPagoModerador'],
+                'valorPagoModerador' => floatval($post['valorPagoModerador']),
                 'numFEVPagoModerador' => $post['numFEVPagoModerador'],
                 'consecutivo' => $consecutivo,
             ];

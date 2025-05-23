@@ -53,9 +53,9 @@ class Hospitalization extends Model
         return $this->belongsTo(Cie10::class, 'codComplicacion_id');
     }
 
-    public function codDiagnosticoMuerte()
+    public function codDiagnosticoCausaMuerte()
     {
-        return $this->belongsTo(Cie10::class, 'codDiagnosticoMuerte_id');
+        return $this->belongsTo(Cie10::class, 'codDiagnosticoCausaMuerte_id');
     }
 
     public function viaIngresoServicioSalud()
