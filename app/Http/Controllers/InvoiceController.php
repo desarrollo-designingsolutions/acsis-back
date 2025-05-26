@@ -17,6 +17,7 @@ use App\Http\Resources\Invoice\InvoiceListResource;
 use App\Http\Resources\InvoiceSoat\InvoiceSoatFormResource;
 use App\Models\Invoice;
 use App\Models\Service;
+use App\Models\ServiceVendor;
 use App\Repositories\Cie10Repository;
 use App\Repositories\ConceptoRecaudoRepository;
 use App\Repositories\CondicionyDestinoUsuarioEgresoRepository;
@@ -45,6 +46,7 @@ use App\Repositories\UmmRepository;
 use App\Repositories\ViaIngresoUsuarioRepository;
 use App\Repositories\ZonaVersion2Repository;
 use App\Services\CacheService;
+use App\Services\JsonValidation\JsonDataValidation;
 use App\Traits\HttpResponseTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
@@ -692,15 +694,48 @@ class InvoiceController extends Controller
     {
         return $this->execute(function () use ($request) {
 
+            $id = $request->input('id', null);
+
+            // Paso 1: Validar la estructura del JSON
             $file = $request->file('archiveJson');
+            // $structureResponse = JsonStructureValidation::initValidation($file->getRealPath());
 
-            $response = JsonStructureValidation::initValidation($file->getRealPath());
+            // if (!$structureResponse['isValid']) {
+            //     return [
+            //         'code' => 422,
+            //         'isValid' => false,
+            //         'message' => $structureResponse['message'],
+            //         'errors' => $structureResponse['errors'],
+            //     ];
+            // }
 
+            // Paso 2: Validar los datos del JSON contra la base de datos
+            $jsonData = json_decode(file_get_contents($file->getRealPath()), true);
+            $dataValidation = new JsonDataValidation();
+            return $dataResponse = $dataValidation->validate($jsonData);
+
+            if (!$dataResponse['isValid']) {
+                return [
+                    'code' => 422,
+                    'isValid' => false,
+                    'message' => $dataResponse['message'],
+                    'errors' => $dataResponse['errors'],
+                ];
+            }
+
+            // Paso 3: pasar la informacion del json al resourse del formulario
+
+            $formData = [
+                'id' => $id,
+                'service_vendor_id' => ""
+            ];
+
+            // Si ambas validaciones pasan, proceder con el procesamiento
             return [
-                'code' => $response["isValid"] ? 200 : 422,
-                'isValid' => $response["isValid"],
-                'message' => $response["message"],
-                'errors' => $response["errors"],
+                'code' => 200,
+                'isValid' => true,
+                'message' => 'JSON validado correctamente (estructura y datos)',
+                'errors' => [],
             ];
         });
     }
