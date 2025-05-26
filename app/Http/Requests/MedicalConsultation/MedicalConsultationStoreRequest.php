@@ -19,7 +19,6 @@ class MedicalConsultationStoreRequest extends FormRequest
         $rules = [
             'invoice_id' => 'required',
             'fechaInicioAtencion' => 'required',
-            'numAutorizacion' => 'required',
             'codConsulta_id' => 'required',
             'modalidadGrupoServicioTecSal_id' => 'required',
             'grupoServicios_id' => 'required',
@@ -46,7 +45,6 @@ class MedicalConsultationStoreRequest extends FormRequest
         return [
             'invoice_id.required' => 'El campo es obligatorio',
             'fechaInicioAtencion.required' => 'El campo es obligatorio',
-            'numAutorizacion.required' => 'El campo es obligatorio',
             'codConsulta_id.required' => 'El campo es obligatorio',
             'modalidadGrupoServicioTecSal_id.required' => 'El campo es obligatorio',
             'grupoServicios_id.required' => 'El campo es obligatorio',

@@ -10,6 +10,7 @@ use App\Repositories\InvoiceRepository;
 use App\Repositories\OtherServiceRepository;
 use App\Repositories\ServiceRepository;
 use App\Traits\HttpResponseTrait;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class OtherServiceController extends Controller
@@ -89,18 +90,18 @@ class OtherServiceController extends Controller
             $serviceData = [
                 'codPrestador' => $service->invoice?->serviceVendor?->ips_cod_habilitacion?->codigo,
                 'numAutorizacion' => $post['numAutorizacion'],
-                'idMIPRES' => $post['idMIPRES'],
-                'fechaSuministroTecnologia' => $post['fechaSuministroTecnologia'],
+                'idMIPRES' => $post['idMIPRES'] ?? '',
+                'fechaSuministroTecnologia' => Carbon::parse($post['fechaSuministroTecnologia'])->format('Y-m-d H:i'),
                 'tipoOS' => $otherService->tipoOtrosServicio?->codigo,
                 'codTecnologiaSalud' => $post['codTecnologiaSalud'],
                 'nomTecnologiaSalud' => $post['nomTecnologiaSalud'],
-                'cantidadOS' => $post['cantidadOS'],
+                'cantidadOS' => intval($post['cantidadOS']),
                 'tipoDocumentoIdentificacion' => $otherService->tipoDocumentoIdentificacion?->codigo,
                 'numDocumentoIdentificacion' => $post['numDocumentoIdentificacion'],
-                'vrUnitOS' => $post['vrUnitOS'],
-                'vrServicio' => $post['vrServicio'],
+                'vrUnitOS' => floatval($post['vrUnitOS']),
+                'vrServicio' => floatval($post['vrServicio']),
                 'conceptoRecaudo' => $otherService->conceptoRecaudo?->codigo,
-                'valorPagoModerador' => $post['valorPagoModerador'],
+                'valorPagoModerador' => floatval($post['valorPagoModerador']),
                 'numFEVPagoModerador' => $post['numFEVPagoModerador'],
                 'consecutivo' => $consecutivo,
             ];
@@ -185,18 +186,18 @@ class OtherServiceController extends Controller
             $serviceData = [
                 'codPrestador' => $service->invoice?->serviceVendor?->ips_cod_habilitacion?->codigo,
                 'numAutorizacion' => $post['numAutorizacion'],
-                'idMIPRES' => $post['idMIPRES'],
-                'fechaSuministroTecnologia' => $post['fechaSuministroTecnologia'],
+                'idMIPRES' => $post['idMIPRES'] ?? '',
+                'fechaSuministroTecnologia' => Carbon::parse($post['fechaSuministroTecnologia'])->format('Y-m-d H:i'),
                 'tipoOS' => $otherService->tipoOtrosServicio?->codigo,
                 'codTecnologiaSalud' => $post['codTecnologiaSalud'],
                 'nomTecnologiaSalud' => $post['nomTecnologiaSalud'],
-                'cantidadOS' => $post['cantidadOS'],
+                'cantidadOS' => intval($post['cantidadOS']),
                 'tipoDocumentoIdentificacion' => $otherService->tipoDocumentoIdentificacion?->codigo,
                 'numDocumentoIdentificacion' => $post['numDocumentoIdentificacion'],
-                'vrUnitOS' => $post['vrUnitOS'],
-                'vrServicio' => $post['vrServicio'],
+                'vrUnitOS' => floatval($post['vrUnitOS']),
+                'vrServicio' => floatval($post['vrServicio']),
                 'conceptoRecaudo' => $otherService->conceptoRecaudo?->codigo,
-                'valorPagoModerador' => $post['valorPagoModerador'],
+                'valorPagoModerador' => floatval($post['valorPagoModerador']),
                 'numFEVPagoModerador' => $post['numFEVPagoModerador'],
                 'consecutivo' => $consecutivo,
             ];

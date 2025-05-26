@@ -28,13 +28,11 @@ class NewlyBornFormResource extends JsonResource
             'codSexoBiologico_id' => new SexoSelectResource($this->codSexoBiologico),
             'peso' => $this->peso,
             'codDiagnosticoPrincipal_id' => new Cie10SelectInfiniteResource($this->codDiagnosticoPrincipal),
-            'condicionDestino' => $this->condicionDestino,
             'condicionDestinoUsuarioEgreso_id' => new CondicionyDestinoUsuarioEgresoSelectInfiniteResource($this->condicionDestinoUsuarioEgreso),
             'codDiagnosticoCausaMuerte_id' => new Cie10SelectInfiniteResource($this->codDiagnosticoCausaMuerte),
             'fechaEgreso' => $this->fechaEgreso,
             'tipoDocumentoIdentificacion_id' => new TipoIdPisisSelectResource($this->tipoDocumentoIdentificacion),
             'numDocumentoIdentificacion' => $this->numDocumentoIdentificacion,
-            'numFEVPagoModerador' => $this->numFEVPagoModerador,
         ];
     }
 }

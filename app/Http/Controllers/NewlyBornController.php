@@ -61,13 +61,11 @@ class NewlyBornController extends Controller
                 'codSexoBiologico_id' => $post['codSexoBiologico_id'],
                 'peso' => $post['peso'],
                 'codDiagnosticoPrincipal_id' => $post['codDiagnosticoPrincipal_id'],
-                'condicionDestino' => $post['condicionDestino'],
                 'condicionDestinoUsuarioEgreso_id' => $post['condicionDestinoUsuarioEgreso_id'],
                 'codDiagnosticoCausaMuerte_id' => $post['codDiagnosticoCausaMuerte_id'],
                 'fechaEgreso' => $post['fechaEgreso'],
                 'tipoDocumentoIdentificacion_id' => $post['tipoDocumentoIdentificacion_id'],
                 'numDocumentoIdentificacion' => $post['numDocumentoIdentificacion'],
-                'numFEVPagoModerador' => $post['numFEVPagoModerador'],
             ]);
 
             // Create Service
@@ -158,13 +156,11 @@ class NewlyBornController extends Controller
                 'codSexoBiologico_id' => $post['codSexoBiologico_id'],
                 'peso' => $post['peso'],
                 'codDiagnosticoPrincipal_id' => $post['codDiagnosticoPrincipal_id'],
-                'condicionDestino' => $post['condicionDestino'],
                 'condicionDestinoUsuarioEgreso_id' => $post['condicionDestinoUsuarioEgreso_id'],
                 'codDiagnosticoCausaMuerte_id' => $post['codDiagnosticoCausaMuerte_id'],
                 'fechaEgreso' => $post['fechaEgreso'],
                 'tipoDocumentoIdentificacion_id' => $post['tipoDocumentoIdentificacion_id'],
                 'numDocumentoIdentificacion' => $post['numDocumentoIdentificacion'],
-                'numFEVPagoModerador' => $post['numFEVPagoModerador'],
             ], $id);
 
             // Update Service

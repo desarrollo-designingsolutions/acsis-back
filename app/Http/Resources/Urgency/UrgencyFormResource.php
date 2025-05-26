@@ -31,10 +31,6 @@ class UrgencyFormResource extends JsonResource
             'condicionDestinoUsuarioEgreso' => $this->condicionDestinoUsuarioEgreso,
             'codDiagnosticoCausaMuerte_id' => new Cie10SelectInfiniteResource($this->codDiagnosticoCausaMuerte),
             'fechaEgreso' => $this->fechaEgreso,
-            'tipoDocumentoIdentificacion_id' => new TipoIdPisisSelectResource($this->tipoDocumentoIdentificacion),
-            'numDocumentoIdentificacion' => $this->numDocumentoIdentificacion,
-            'numFEVPagoModerador' => $this->numFEVPagoModerador,
-
         ];
     }
 }

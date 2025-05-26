@@ -36,9 +36,6 @@ class HospitalizationFormResource extends JsonResource
             'condicionDestinoUsuarioEgreso_id' => new CondicionyDestinoUsuarioEgresoSelectInfiniteResource($this->condicionDestinoUsuarioEgreso),
             'codDiagnosticoMuerte_id' => new Cie10SelectInfiniteResource($this->codDiagnosticoMuerte),
             'fechaEgreso' => $this->fechaEgreso,
-            'tipoDocumentoIdentificacion_id' => new TipoIdPisisSelectResource($this->tipoDocumentoIdentificacion),
-            'numDocumentoIdentificacion' => $this->numDocumentoIdentificacion,
-            'numFEVPagoModerador' => $this->numFEVPagoModerador,
         ];
     }
 }

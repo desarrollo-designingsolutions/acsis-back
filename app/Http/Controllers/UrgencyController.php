@@ -30,14 +30,12 @@ class UrgencyController extends Controller
             $ripsCausaExternaVersion2 = $this->queryController->selectInfiniteRipsCausaExternaVersion2(request());
             $cie10 = $this->queryController->selectInfiniteCie10(request());
             $cupsRips = $this->queryController->selectInfiniteCupsRips(request());
-            $tipoDocumento = $this->queryController->selectInfiniteTipoIdPisis(request());
 
             return [
                 'code' => 200,
                 ...$cie10,
                 ...$ripsCausaExternaVersion2,
                 ...$cupsRips,
-                ...$tipoDocumento,
             ];
         });
     }
@@ -63,9 +61,6 @@ class UrgencyController extends Controller
                 'condicionDestinoUsuarioEgreso' => $post['condicionDestinoUsuarioEgreso'],
                 'codDiagnosticoCausaMuerte_id' => $post['codDiagnosticoCausaMuerte_id'],
                 'fechaEgreso' => $post['fechaEgreso'],
-                'tipoDocumentoIdentificacion_id' => $post['tipoDocumentoIdentificacion_id'],
-                'numDocumentoIdentificacion' => $post['numDocumentoIdentificacion'],
-                'numFEVPagoModerador' => $post['numFEVPagoModerador'],
             ]);
 
             // Create Service
@@ -126,7 +121,6 @@ class UrgencyController extends Controller
             $ripsCausaExternaVersion2 = $this->queryController->selectInfiniteRipsCausaExternaVersion2(request());
             $cie10 = $this->queryController->selectInfiniteCie10(request());
             $cupsRips = $this->queryController->selectInfiniteCupsRips(request());
-            $tipoDocumento = $this->queryController->selectInfiniteTipoIdPisis(request());
 
             return [
                 'code' => 200,
@@ -134,7 +128,6 @@ class UrgencyController extends Controller
                 ...$cie10,
                 ...$ripsCausaExternaVersion2,
                 ...$cupsRips,
-                ...$tipoDocumento,
             ];
         });
     }
@@ -157,9 +150,6 @@ class UrgencyController extends Controller
                 'condicionDestinoUsuarioEgreso' => $post['condicionDestinoUsuarioEgreso'],
                 'codDiagnosticoCausaMuerte_id' => $post['codDiagnosticoCausaMuerte_id'],
                 'fechaEgreso' => $post['fechaEgreso'],
-                'tipoDocumentoIdentificacion_id' => $post['tipoDocumentoIdentificacion_id'],
-                'numDocumentoIdentificacion' => $post['numDocumentoIdentificacion'],
-                'numFEVPagoModerador' => $post['numFEVPagoModerador'],
             ], $id);
 
             // Update Service

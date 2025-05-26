@@ -34,7 +34,10 @@ class MedicalConsultationController extends Controller
             $ripsFinalidadConsultaVersion2 = $this->queryController->selectInfiniteRipsFinalidadConsultaVersion2(request());
             $cie10 = $this->queryController->selectInfiniteCie10(request());
             $ripsTipoDiagnosticoPrincipalVersion2 = $this->queryController->selectInfiniteRipsTipoDiagnosticoPrincipalVersion2(request());
-            $conceptoRecaudo = $this->queryController->selectInfiniteConceptoRecaudo(request());
+            
+            $newRequest = new Request(['codigo_in' => ['02', '03', '05']]);
+            $conceptoRecaudo = $this->queryController->selectInfiniteConceptoRecaudo($newRequest);
+
             $ripsCausaExternaVersion2 = $this->queryController->selectInfiniteRipsCausaExternaVersion2(request());
             $tipoDocumento = $this->queryController->selectInfiniteTipoIdPisis(request());
 
@@ -157,7 +160,10 @@ class MedicalConsultationController extends Controller
             $ripsFinalidadConsultaVersion2 = $this->queryController->selectInfiniteRipsFinalidadConsultaVersion2(request());
             $cie10 = $this->queryController->selectInfiniteCie10(request());
             $ripsTipoDiagnosticoPrincipalVersion2 = $this->queryController->selectInfiniteRipsTipoDiagnosticoPrincipalVersion2(request());
-            $conceptoRecaudo = $this->queryController->selectInfiniteConceptoRecaudo(request());
+
+            $newRequest = new Request(['codigo_in' => ['02', '03', '05']]);
+            $conceptoRecaudo = $this->queryController->selectInfiniteConceptoRecaudo($newRequest);
+
             $ripsCausaExternaVersion2 = $this->queryController->selectInfiniteRipsCausaExternaVersion2(request());
             $tipoDocumento = $this->queryController->selectInfiniteTipoIdPisis(request());
 

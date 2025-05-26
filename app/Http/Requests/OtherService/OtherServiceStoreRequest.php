@@ -18,9 +18,9 @@ class OtherServiceStoreRequest extends FormRequest
     {
         $rules = [
             'invoice_id' => 'required',
+            'numAutorizacion' => 'required',
             'fechaSuministroTecnologia' => 'required',
             'codTecnologiaSalud' => 'required',
-            'nomTecnologiaSalud' => 'required',
             'cantidadOS' => 'required',
             'vrUnitOS' => 'required',
             'valorPagoModerador' => 'required',
@@ -41,9 +41,9 @@ class OtherServiceStoreRequest extends FormRequest
     {
         return [
             'invoice_id.required' => 'El campo es obligatorio',
+            'numAutorizacion.required' => 'El campo es obligatorio',
             'fechaSuministroTecnologia.required' => 'El campo es obligatorio',
             'codTecnologiaSalud.required' => 'El campo es obligatorio',
-            'nomTecnologiaSalud.required' => 'El campo es obligatorio',
             'cantidadOS.required' => 'El campo es obligatorio',
             'vrUnitOS.required' => 'El campo es obligatorio',
             'valorPagoModerador.required' => 'El campo es obligatorio',

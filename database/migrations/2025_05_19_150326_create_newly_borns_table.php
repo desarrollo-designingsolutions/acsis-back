@@ -20,7 +20,6 @@ return new class extends Migration
             $table->foreignUuid('codSexoBiologico_id')->nullable()->constrained('sexos');
             $table->string('peso')->nullable();
             $table->foreignUuid('codDiagnosticoPrincipal_id')->nullable()->constrained('cie10s');
-            $table->string('condicionDestino')->nullable();
             $table->foreignUuid('condicionDestinoUsuarioEgreso_id')->nullable()->constrained('condiciony_destino_usuario_egresos');
             $table->foreignUuid('codDiagnosticoCausaMuerte_id')->nullable()->constrained('cie10s');
             $table->string('fechaEgreso')->nullable();
