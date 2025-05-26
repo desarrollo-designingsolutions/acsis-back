@@ -93,6 +93,7 @@ class InvoiceController extends Controller
         protected UmmRepository $ummRepository,
         protected TipoOtrosServiciosRepository $tipoOtrosServiciosRepository,
         protected EntityRepository $entityRepository,
+        protected JsonDataValidation $jsonDataValidation,
 
     ) {
         $this->key_redis_project = env('KEY_REDIS_PROJECT');
@@ -711,8 +712,7 @@ class InvoiceController extends Controller
 
             // Paso 2: Validar los datos del JSON contra la base de datos
             $jsonData = json_decode(file_get_contents($file->getRealPath()), true);
-            $dataValidation = new JsonDataValidation();
-            return $dataResponse = $dataValidation->validate($jsonData);
+            return $dataResponse = $this->jsonDataValidation->validate($jsonData);
 
             if (!$dataResponse['isValid']) {
                 return [

@@ -2,6 +2,8 @@
 
 namespace App\Services\JsonValidation;
 
+use App\Helpers\Constants;
+use App\Services\CacheService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Arr;
@@ -11,6 +13,11 @@ class JsonDataValidation
 {
     protected $errors = [];
     protected $validatedData = [];
+
+    public function __construct(protected CacheService $cacheService)
+    {
+        // Aquí podrías inicializar cualquier otro servicio necesario
+    }
 
     public function validate(array $jsonData): array
     {
@@ -218,8 +225,42 @@ class JsonDataValidation
 
     protected function existsInDatabase($value, string $table, string $column, array $select = ['id'])
     {
-        $record = DB::table($table)->where($column, $value)->select($select)->first();
-        return $record ? (array) $record : false;
+
+        try {
+            $params = [
+                'value' => $value,
+                'table' => $table,
+                'column' => $column,
+                'select' => $select,
+            ];
+            $cacheKey = $this->cacheService->generateKey("{$table}_existsInDatabase", $params, 'string');
+
+            return $this->cacheService->remember($cacheKey, function () use ($table, $column, $value, $select) {
+
+                $cacheKeyNew = $this->cacheService->generateKey("{$table}_table", [], 'string');
+                $dataTable =  $this->cacheService->remember($cacheKeyNew, function () use ($table, $column, $value, $select) {
+
+                    $records = DB::table($table)->get();
+
+                    return $records;
+                }, Constants::REDIS_TTL);
+
+                if ($dataTable->isEmpty()) {
+                    return false;
+                } else {
+                    $record = $dataTable->firstWhere($column, $value);
+
+                    if ($record) {
+                        return $select ? Arr::only((array) $record, $select) : (array) $record;
+                    } else {
+                        return false;
+                    }
+                }
+            }, Constants::REDIS_TTL);
+        } catch (\Throwable $th) {
+            logMessage($th);
+            //throw $th;
+        }
     }
 
     protected function validateIn($value, array $allowedValues): bool
