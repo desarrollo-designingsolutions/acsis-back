@@ -20,7 +20,6 @@ class InvoiceStoreRequest extends FormRequest
             'service_vendor_id' => 'required',
             'entity_id' => 'required',
             'patient_id' => 'required',
-            'invoice_number' => 'required',
             'radication_number' => 'required',
             'invoice_date' => 'required',
             'type' => 'required',
@@ -28,15 +27,22 @@ class InvoiceStoreRequest extends FormRequest
             'status' => 'required',
         ];
 
-        if ($this->type == 'INVOICE_TYPE_002') {
+        if (!$this->tipo_nota_id && !$this->note_number) {
             $rules2 = [
+                'invoice_number' => 'required',
+            ];
+            $rules = array_merge($rules, $rules2);
+        }
+
+        if ($this->type == 'INVOICE_TYPE_002') {
+            $rules3 = [
                 'soat' => 'required',
                 'soat.policy_number' => 'required',
                 'soat.accident_date' => 'required|date',
                 'soat.start_date' => 'required|date',
                 'soat.end_date' => 'required|date',
             ];
-            $rules = array_merge($rules, $rules2);
+            $rules = array_merge($rules, $rules3);
         }
 
         return $rules;

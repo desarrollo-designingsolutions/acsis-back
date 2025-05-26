@@ -15,7 +15,6 @@ return new class extends Migration
             $table->foreignUuid('tipoDocumentoIdentificacion_id')->nullable()->constrained('tipo_id_pisis');
             $table->string('numDocumentoIdentificacion')->nullable();
             $table->string('codPrestador')->nullable();
-            $table->string('numFEVPagoModerador')->nullable();
         });
     }
 
@@ -28,7 +27,6 @@ return new class extends Migration
             $table->dropConstrainedForeignId('tipoDocumentoIdentificacion_id');
             $table->dropColumn('numDocumentoIdentificacion');
             $table->dropColumn('codPrestador');
-            $table->dropColumn('numFEVPagoModerador');
         });
     }
 };

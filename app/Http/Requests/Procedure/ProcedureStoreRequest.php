@@ -19,8 +19,6 @@ class ProcedureStoreRequest extends FormRequest
         $rules = [
             'invoice_id' => 'required',
             'fechaInicioAtencion' => 'required',
-            'idMIPRES' => 'required',
-            'numAutorizacion' => 'required',
             'codProcedimiento_id' => 'required',
             'viaIngresoServicioSalud_id' => 'required',
             'modalidadGrupoServicioTecSal_id' => 'required',
@@ -28,7 +26,6 @@ class ProcedureStoreRequest extends FormRequest
             'codServicio_id' => 'required',
             'finalidadTecnologiaSalud_id' => 'required',
             'codDiagnosticoPrincipal_id' => 'required',
-            'codComplicacion_id' => 'required',
             'valorPagoModerador' => 'required',
             'vrServicio' => 'required',
             'tipoDocumentoIdentificacion_id' => 'required',
@@ -48,8 +45,6 @@ class ProcedureStoreRequest extends FormRequest
         return [
             'invoice_id.required' => 'El campo es obligatorio',
             'fechaInicioAtencion.required' => 'El campo es obligatorio',
-            'idMIPRES.required' => 'El campo es obligatorio',
-            'numAutorizacion.required' => 'El campo es obligatorio',
             'codProcedimiento_id.required' => 'El campo es obligatorio',
             'viaIngresoServicioSalud_id.required' => 'El campo es obligatorio',
             'modalidadGrupoServicioTecSal_id.required' => 'El campo es obligatorio',
@@ -57,7 +52,6 @@ class ProcedureStoreRequest extends FormRequest
             'codServicio_id.required' => 'El campo es obligatorio',
             'finalidadTecnologiaSalud_id.required' => 'El campo es obligatorio',
             'codDiagnosticoPrincipal_id.required' => 'El campo es obligatorio',
-            'codComplicacion_id.required' => 'El campo es obligatorio',
             'valorPagoModerador.required' => 'El campo es obligatorio',
             'vrServicio.required' => 'El campo es obligatorio',
             'tipoDocumentoIdentificacion_id.required' => 'El campo es obligatorio',

@@ -54,7 +54,7 @@
           },
           "fechaNacimiento": {
             "type": "string",
-            "pattern": "^(|.{10})$"
+            "format": "date-time-custom-user"
           },
           "codSexo": {
             "type": "string",
@@ -784,49 +784,91 @@
                   "type": "object",
                   "properties": {
                     "codPrestador": {
-                      "type": "string"
+                      "anyOf": [
+                        {
+                          "type": "null"
+                        },
+                        {
+                          "type": "string",
+                          "pattern": "^(.{0}|.{12})$"
+                        }
+                      ]
                     },
                     "numAutorizacion": {
-                      "type": "string"
+                      "type": "string",
+                      "pattern": "^(|.{0,30})$"
                     },
                     "idMIPRES": {
-                      "type": "string"
+                      "anyOf": [
+                        {
+                          "type": "null"
+                        },
+                        {
+                          "type": "string",
+                          "pattern": "^(|.{0,15})$"
+                        }
+                      ]
                     },
                     "fechaSuministroTecnologia": {
-                      "type": "string"
+                      "type": "string",
+                      "format": "date-time-custom"
                     },
                     "tipoOS": {
-                      "type": "string"
+                      "type": "string",
+                      "pattern": "^(|.{2})$"
                     },
                     "codTecnologiaSalud": {
-                      "type": "string"
+                      "type": "string",
+                      "pattern": "^(|.{1,20})$"
                     },
                     "nomTecnologiaSalud": {
-                      "type": "string"
+                      "anyOf": [
+                        {
+                          "type": "null"
+                        },
+                        {
+                          "type": "string",
+                          "pattern": "^(|.{0,60})$"
+                        }
+                      ]
                     },
                     "cantidadOS": {
-                      "type": "string"
+                      "type": "integer",
+                      "pattern": "^(|.{5})$"
                     },
-                    "tipoDocumentoldentificacion": {
-                      "type": "string"
+                    "tipoDocumentoIdentificacion": {
+                      "type": "string",
+                      "pattern": "^(.{0}|.{2})$"
                     },
-                    "numDocumentoldentificacion": {
-                      "type": "string"
+                    "numDocumentoIdentificacion": {
+                      "type": "string",
+                      "pattern": "^(.{0}|.{4,20})$"
                     },
                     "vrUnitOS": {
-                      "type": "string"
+                      "type": "integer",
+                      "pattern": "^(|.{1,15})$"
                     },
                     "vrServicio": {
-                      "type": "string"
+                      "type": "integer",
+                      "pattern": "^(|.{1,15})$"
                     },
                     "conceptoRecaudo": {
-                      "type": "string"
+                      "type": "string",
+                      "pattern": "^(|.{2})$"
                     },
                     "valorPagoModerador": {
-                      "type": "string"
+                      "type": "integer",
+                      "pattern": "^(|.{1,10})$"
                     },
                     "numFEVPagoModerador": {
-                      "type": "string"
+                      "anyOf": [
+                        {
+                          "type": "null"
+                        },
+                        {
+                          "type": "string"
+                        }
+                      ]
                     },
                     "consecutivo": {
                       "type": "integer",
@@ -843,8 +885,8 @@
                     "codTecnologiaSalud",
                     "nomTecnologiaSalud",
                     "cantidadOS",
-                    "tipoDocumentoldentificacion",
-                    "numDocumentoldentificacion",
+                    "tipoDocumentoIdentificacion",
+                    "numDocumentoIdentificacion",
                     "vrUnitOS",
                     "vrServicio",
                     "conceptoRecaudo",

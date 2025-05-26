@@ -25,13 +25,11 @@ class NewlyBornStoreRequest extends FormRequest
             'codSexoBiologico_id' => 'required',
             'peso' => 'required',
             'codDiagnosticoPrincipal_id' => 'required',
-            'condicionDestino' => 'required',
             'condicionDestinoUsuarioEgreso_id' => 'required',
             'codDiagnosticoCausaMuerte_id' => 'required',
             'fechaEgreso' => 'required',
             'tipoDocumentoIdentificacion_id' => 'required',
             'numDocumentoIdentificacion' => 'required',
-            'numFEVPagoModerador' => 'required',
 
         ];
 
@@ -49,14 +47,11 @@ class NewlyBornStoreRequest extends FormRequest
             'codSexoBiologico_id.required' => 'El campo es obligatorio',
             'peso.required' => 'El campo es obligatorio',
             'codDiagnosticoPrincipal_id.required' => 'El campo es obligatorio',
-            'condicionDestino.required' => 'El campo es obligatorio',
             'condicionDestinoUsuarioEgreso_id.required' => 'El campo es obligatorio',
             'codDiagnosticoCausaMuerte_id.required' => 'El campo es obligatorio',
             'fechaEgreso.required' => 'El campo es obligatorio',
             'tipoDocumentoIdentificacion_id.required' => 'El campo es obligatorio',
             'numDocumentoIdentificacion.required' => 'El campo es obligatorio',
-            'numFEVPagoModerador.required' => 'El campo es obligatorio',
-
         ];
     }
 

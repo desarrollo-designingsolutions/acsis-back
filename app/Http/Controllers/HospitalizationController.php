@@ -32,7 +32,6 @@ class HospitalizationController extends Controller
             $cie10 = $this->queryController->selectInfiniteCie10(request());
             $condicionyDestinoUsuarioEgreso = $this->queryController->selectInfiniteCondicionyDestinoUsuarioEgreso(request());
             $cupsRips = $this->queryController->selectInfiniteCupsRips(request());
-            $tipoDocumento = $this->queryController->selectInfiniteTipoIdPisis(request());
 
             return [
                 'code' => 200,
@@ -41,7 +40,6 @@ class HospitalizationController extends Controller
                 ...$cie10,
                 ...$condicionyDestinoUsuarioEgreso,
                 ...$cupsRips,
-                ...$tipoDocumento,
             ];
         });
     }
@@ -70,9 +68,6 @@ class HospitalizationController extends Controller
                 'condicionDestinoUsuarioEgreso_id' => $post['condicionDestinoUsuarioEgreso_id'],
                 'codDiagnosticoCausaMuerte_id' => $post['codDiagnosticoCausaMuerte_id'],
                 'fechaEgreso' => $post['fechaEgreso'],
-                'tipoDocumentoIdentificacion_id' => $post['tipoDocumentoIdentificacion_id'],
-                'numDocumentoIdentificacion' => $post['numDocumentoIdentificacion'],
-                'numFEVPagoModerador' => $post['numFEVPagoModerador'],
             ]);
 
             // Create Service
@@ -138,7 +133,6 @@ class HospitalizationController extends Controller
             $cie10 = $this->queryController->selectInfiniteCie10(request());
             $condicionyDestinoUsuarioEgreso = $this->queryController->selectInfiniteCondicionyDestinoUsuarioEgreso(request());
             $cupsRips = $this->queryController->selectInfiniteCupsRips(request());
-            $tipoDocumento = $this->queryController->selectInfiniteTipoIdPisis(request());
 
             return [
                 'code' => 200,
@@ -148,7 +142,6 @@ class HospitalizationController extends Controller
                 ...$ripsCausaExternaVersion2,
                 ...$condicionyDestinoUsuarioEgreso,
                 ...$cupsRips,
-                ...$tipoDocumento,
             ];
         });
     }
@@ -174,9 +167,6 @@ class HospitalizationController extends Controller
                 'condicionDestinoUsuarioEgreso_id' => $post['condicionDestinoUsuarioEgreso_id'],
                 'codDiagnosticoCausaMuerte_id' => $post['codDiagnosticoCausaMuerte_id'],
                 'fechaEgreso' => $post['fechaEgreso'],
-                'tipoDocumentoIdentificacion_id' => $post['tipoDocumentoIdentificacion_id'],
-                'numDocumentoIdentificacion' => $post['numDocumentoIdentificacion'],
-                'numFEVPagoModerador' => $post['numFEVPagoModerador'],
             ], $id);
 
             // Update Service
