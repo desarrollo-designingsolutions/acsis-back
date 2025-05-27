@@ -232,47 +232,13 @@ class JsonDataValidation
             'select' => $select,
         ];
 
-        $cacheKeyNew = $this->cacheService->generateKey("{$table}_table", [], 'string');
+        $cacheKey = $this->cacheService->generateKey("{$table}_existsInDatabase", $params, 'string');
 
-        $dataTable = $this->cacheService->getDataFromRedis($cacheKeyNew, "hash");
-
-        // $allRecords = Redis::hgetall($hashKey);
-
-        logMessage('dataTable');
-        logMessage($dataTable);
-
-        // $dataTable = collect($dataTable);
-
-         $dataTable = collect($dataTable)->mapWithKeys(function ($element, $key) {
-                return [$key => json_decode($element, true)];
-            });
-
-        if ($dataTable->isEmpty()) {
-
-            // Fallback: Ejecutar IDEA 1
-
-            $cacheKey = $this->cacheService->generateKey("{$table}_existsInDatabase", $params, 'string');
-
-            return $this->cacheService->remember($cacheKey, function () use ($table, $column, $value, $select) {
-                $record = DB::table($table)->where($column, $value)->select($select)->first();
-                return $record ? (array) $record : false;
-            }, Constants::REDIS_TTL);
-        } else {
-
-            // Fallback: Ejecutar IDEA 2
-
-           
-
-            $cacheKey = $this->cacheService->generateKey("{$table}_existsInDatabase", $params, 'string');
-
-            return $this->cacheService->remember($cacheKey, function () use ($table, $column, $value, $select, $dataTable) {
-                if ($dataTable->isEmpty()) {
-                    return false;
-                }
-                $record = $dataTable->firstWhere($column, $value);
-                return $record ? ($select ? Arr::only((array) $record, $select) : (array) $record) : false;
-            }, Constants::REDIS_TTL);
-        }
+        return $this->cacheService->remember($cacheKey, function () use ($table, $column, $value, $select) {
+            $record = DB::table($table)->where($column, $value)->select($select)->first();
+            return $record ? (array) $record : false;
+        }, Constants::REDIS_TTL);
+        
     }
 
     protected function validateIn($value, array $allowedValues): bool

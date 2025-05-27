@@ -367,7 +367,8 @@ class CacheMetricsController extends Controller
 
             $tables = DB::select("SHOW TABLES");
 
-            $tableKey = 'Tables_in_acsis'; // Ajusta si tu base de datos no es "acsis"
+            $bd = env("DB_DATABASE"); // Ajusta si tu base de datos no es "acsis"
+            $tableKey = 'Tables_in_'.$bd; // Ajusta si tu base de datos no es "acsis"
             $results = [];
 
             foreach ($tables as $table) {
