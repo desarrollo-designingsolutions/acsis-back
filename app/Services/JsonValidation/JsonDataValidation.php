@@ -25,7 +25,7 @@ class JsonDataValidation
             $this->errors = [];
             $this->validatedData = $jsonData; // Inicializar con el JSON original
             $rules = JsonDataValidationConfig::getValidationRules();
-            Log::info('Reglas de validación cargadas', ['rules' => $rules]);
+            // Log::info('Reglas de validación cargadas', ['rules' => $rules]);
 
             foreach ($rules as $fieldPath => $rule) {
                 $this->validateField($jsonData, $fieldPath, $rule);
@@ -85,7 +85,7 @@ class JsonDataValidation
 
                 foreach ($serviceItems as $itemIndex => $itemValue) {
                     $value = Arr::get($itemValue, $childField);
-                    Log::info("Validando campo {$fieldPath}[{$userIndex}][{$itemIndex}]", ['value' => $value, 'rule' => $rule]);
+                    // Log::info("Validando campo {$fieldPath}[{$userIndex}][{$itemIndex}]", ['value' => $value, 'rule' => $rule]);
 
                     if ($value === null) {
                         $this->errors[] = "Campo {$parentPath}[{$userIndex}].{$middlePath}[{$itemIndex}].{$childField}: No se encontró el campo en el JSON.";
@@ -133,7 +133,7 @@ class JsonDataValidation
 
             foreach ($parentValues as $index => $parentValue) {
                 $value = Arr::get($parentValue, $childField);
-                Log::info("Validando campo {$fieldPath}[{$index}]", ['value' => $value, 'rule' => $rule]);
+                // Log::info("Validando campo {$fieldPath}[{$index}]", ['value' => $value, 'rule' => $rule]);
 
                 if ($value === null) {
                     $this->errors[] = "Campo {$parentPath}[{$index}].{$childField}: No se encontró el campo en el JSON.";
@@ -169,7 +169,7 @@ class JsonDataValidation
         } else {
             // Manejo de campos no anidados
             $value = Arr::get($jsonData, $fieldPath);
-            Log::info("Validando campo {$fieldPath}", ['value' => $value, 'rule' => $rule]);
+            // Log::info("Validando campo {$fieldPath}", ['value' => $value, 'rule' => $rule]);
 
             if ($value === null) {
                 $this->errors[] = "Campo {$fieldPath}: No se encontró el campo en el JSON.";
@@ -234,9 +234,18 @@ class JsonDataValidation
 
         $cacheKeyNew = $this->cacheService->generateKey("{$table}_table", [], 'string');
 
-        $dataTable = $this->cacheService->getDataFromRedis($cacheKeyNew, "string");
+        $dataTable = $this->cacheService->getDataFromRedis($cacheKeyNew, "hash");
 
-        $dataTable = collect($dataTable);
+        // $allRecords = Redis::hgetall($hashKey);
+
+        logMessage('dataTable');
+        logMessage($dataTable);
+
+        // $dataTable = collect($dataTable);
+
+         $dataTable = collect($dataTable)->mapWithKeys(function ($element, $key) {
+                return [$key => json_decode($element, true)];
+            });
 
         if ($dataTable->isEmpty()) {
 
@@ -251,6 +260,8 @@ class JsonDataValidation
         } else {
 
             // Fallback: Ejecutar IDEA 2
+
+           
 
             $cacheKey = $this->cacheService->generateKey("{$table}_existsInDatabase", $params, 'string');
 
