@@ -628,6 +628,10 @@ class JsonDataValidationConfig
                 'type' => 'date',
                 'error_message' => fn($rule, $value) => "El fechaEgreso '{$value}' debe ser una fecha válida.",
             ],
+            'usuarios.*.servicios.hospitalizacion.*.consecutivo' => [
+                'type' => 'numeric',
+                'error_message' => 'El consecutivo debe ser un número válido.',
+            ],
         ];
 
         $rulesRecienNacidos = [
@@ -639,6 +643,73 @@ class JsonDataValidationConfig
                 'error_message' => 'El codPrestador no existe en la tabla ips_cod_habilitacions.',
             ],
 
+            'usuarios.*.servicios.recienNacidos.*.tipoDocumentoIdentificacion' => [
+                'type' => 'exists',
+                'table' => 'tipo_id_pisis',
+                'column' => 'codigo',
+                'select' => ["id", "codigo", "nombre"],
+                'error_message' => 'El tipoDocumentoIdentificacion no existe en la tabla tipo_id_pisis.',
+            ],
+
+            'usuarios.*.servicios.recienNacidos.*.fechaNacimiento' => [
+                'type' => 'date',
+                'error_message' => fn($rule, $value) => "El fechaNacimiento '{$value}' debe ser una fecha válida.",
+            ],
+
+            'usuarios.*.servicios.recienNacidos.*.edadGestacional' => [
+                'type' => 'numeric',
+                'error_message' => 'El edadGestacional debe ser un número válido.',
+            ],
+            'usuarios.*.servicios.recienNacidos.*.numConsultasCPrenatal' => [
+                'type' => 'numeric',
+                'error_message' => 'El numConsultasCPrenatal debe ser un número válido.',
+            ],
+
+            'usuarios.*.servicios.recienNacidos.*.codSexoBiologico' => [
+                'type' => 'exists',
+                'table' => 'sexos',
+                'column' => 'codigo',
+                'select' => ["id", "codigo", "nombre"],
+                'error_message' => 'El codSexoBiologico no existe en la tabla sexos.',
+            ],
+
+            'usuarios.*.servicios.recienNacidos.*.peso' => [
+                'type' => 'numeric',
+                'error_message' => 'El peso debe ser un número válido.',
+            ],
+
+            'usuarios.*.servicios.recienNacidos.*.codDiagnosticoPrincipal' => [
+                'type' => 'exists',
+                'table' => 'cie10s',
+                'column' => 'codigo',
+                'select' => ["id", "codigo", "nombre"],
+                'error_message' => 'El codDiagnosticoPrincipal no existe en la tabla cie10s.',
+            ],
+
+            'usuarios.*.servicios.recienNacidos.*.condicionDestinoUsuarioEgreso' => [
+                'type' => 'exists',
+                'table' => 'condiciony_destino_usuario_egresos',
+                'column' => 'codigo',
+                'select' => ["id", "codigo", "nombre"],
+                'error_message' => 'El condicionDestinoUsuarioEgreso no existe en la tabla condiciony_destino_usuario_egresos.',
+            ],
+
+            'usuarios.*.servicios.recienNacidos.*.codDiagnosticoCausaMuerte' => [
+                'type' => 'exists',
+                'table' => 'cie10s',
+                'column' => 'codigo',
+                'select' => ["id", "codigo", "nombre"],
+                'error_message' => 'El codDiagnosticoCausaMuerte no existe en la tabla cie10s.',
+            ],
+
+            'usuarios.*.servicios.recienNacidos.*.fechaEgreso' => [
+                'type' => 'date',
+                'error_message' => fn($rule, $value) => "El fechaEgreso '{$value}' debe ser una fecha válida.",
+            ],
+            'usuarios.*.servicios.recienNacidos.*.consecutivo' => [
+                'type' => 'numeric',
+                'error_message' => 'El consecutivo debe ser un número válido.',
+            ],
         ];
 
         // Unir todas las reglas
