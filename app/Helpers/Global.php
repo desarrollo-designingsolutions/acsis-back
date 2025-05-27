@@ -7,6 +7,8 @@ use App\Models\Service;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
+use Illuminate\Database\Eloquent\Model;
 
 function logMessage($message)
 {
@@ -299,4 +301,23 @@ function openFileJson($path_json)
     }
 
     return $jsonContents;
+}
+
+function getModelByTableName($tableName)
+{
+    $path = app_path('Models');
+    if (!File::exists($path)) return null;
+
+    foreach (File::allFiles($path) as $file) {
+        $relativePath = $file->getRelativePathname();
+        $class = 'App\\Models\\' . str_replace(['/', '.php'], ['\\', ''], $relativePath);
+
+        if (class_exists($class) && is_subclass_of($class, \Illuminate\Database\Eloquent\Model::class)) {
+            if ((new $class)->getTable() === $tableName) {
+                return $class; // ya es el nombre de clase válido
+            }
+        }
+    }
+
+    return null;
 }

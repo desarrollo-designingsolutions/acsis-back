@@ -2,11 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\Redis\ProcessRedisData;
+use App\Traits\HttpResponseTrait;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redis;
 
 class CacheMetricsController extends Controller
 {
+
+    use HttpResponseTrait;
+
     /**
      * Obtiene métricas de caché desde Redis y las agrupa por intervalos de tiempo.
      *
@@ -16,7 +22,7 @@ class CacheMetricsController extends Controller
     private function getMetricsFromRedis(int $limit = 30): array
     {
         $rawMetrics = Redis::lrange('list:cache_metrics', 0, -1);
-        $metrics = array_map(fn ($item) => json_decode($item, true), $rawMetrics);
+        $metrics = array_map(fn($item) => json_decode($item, true), $rawMetrics);
 
         $grouped = [];
         foreach ($metrics as $metric) {
@@ -171,7 +177,7 @@ class CacheMetricsController extends Controller
         $redisRequests = array_reverse($redisRequests);
         $dbRequests = array_reverse($dbRequests);
 
-        $maxRequests = max(max(array_filter($redisRequests, fn ($v) => $v > 0)), max(array_filter($dbRequests, fn ($v) => $v > 0)));
+        $maxRequests = max(max(array_filter($redisRequests, fn($v) => $v > 0)), max(array_filter($dbRequests, fn($v) => $v > 0)));
         $maxRequests = $maxRequests > 0 ? ceil($maxRequests * 1.1) : 10;
 
         return response()->json([
@@ -351,5 +357,80 @@ class CacheMetricsController extends Controller
         }
 
         return $value;
+    }
+
+    public function getTables(Request $request)
+    {
+        return $this->execute(function () use ($request) {
+            $filter = $request->input('filter.inputGeneral');
+            $sort = $request->input('sort', 'title'); // default sort by 'title'
+
+            $tables = DB::select("SHOW TABLES");
+
+            $tableKey = 'Tables_in_acsis'; // Ajusta si tu base de datos no es "acsis"
+            $results = [];
+
+            foreach ($tables as $table) {
+                $tableName = $table->$tableKey;
+
+                // Filtrar si hay filtro activo y no coincide
+                if ($filter && stripos($tableName, $filter) === false) {
+                    continue;
+                }
+
+                try {
+                    $count = DB::table($tableName)->count();
+                } catch (\Exception $e) {
+                    $count = 'Error: ' . $e->getMessage();
+                }
+
+                $results[] = [
+                    'title' => $tableName,
+                    'count_records' => $count
+                ];
+            }
+
+            // Ordenar por título (alfabéticamente ascendente o descendente)
+            $sortDirection = strtolower($sort) === 'desc' ? SORT_DESC : SORT_ASC;
+            usort($results, function ($a, $b) use ($sortDirection) {
+                return $sortDirection === SORT_ASC
+                    ? strcmp($a['title'], $b['title'])
+                    : strcmp($b['title'], $a['title']);
+            });
+
+            return [
+                'code' => 200,
+                'total' => count($results),
+                'tables' => $results,
+            ];
+        });
+    }
+
+    public function synchronizeTables(Request $request)
+    {
+        return $this->execute(function () use ($request) {
+            $table = $request->input('table_name');
+
+            // Debe devolver algo como: App\Models\Invoice
+            $model = getModelByTableName($table);
+
+            if (!$model) {
+                return [
+                    'code' => 404,
+                    'message' => 'Modelo no encontrado para la tabla: ' . $table
+                ];
+            }
+
+            // Ahora construyes el array como en tu ejemplo
+            $models = [$model];
+
+            // Despachar con array de clases
+            ProcessRedisData::dispatch($models, "synchronize_table.{$table}");
+
+            return [
+                'code' => 200,
+                'message' => 'Sincronización iniciada'
+            ];
+        });
     }
 }
