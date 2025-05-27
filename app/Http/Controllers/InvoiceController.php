@@ -26,10 +26,13 @@ use App\Repositories\EntityRepository;
 use App\Repositories\GrupoServicioRepository;
 use App\Repositories\InvoiceRepository;
 use App\Repositories\InvoiceSoatRepository;
+use App\Repositories\MedicalConsultationRepository;
+use App\Repositories\MedicineRepository;
 use App\Repositories\ModalidadAtencionRepository;
 use App\Repositories\MunicipioRepository;
 use App\Repositories\PaisRepository;
 use App\Repositories\PatientRepository;
+use App\Repositories\ProcedureRepository;
 use App\Repositories\RipsCausaExternaVersion2Repository;
 use App\Repositories\RipsFinalidadConsultaVersion2Repository;
 use App\Repositories\RipsTipoDiagnosticoPrincipalVersion2Repository;
@@ -49,6 +52,7 @@ use App\Services\CacheService;
 use App\Services\JsonValidation\JsonDataValidation;
 use App\Traits\HttpResponseTrait;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
@@ -94,6 +98,10 @@ class InvoiceController extends Controller
         protected TipoOtrosServiciosRepository $tipoOtrosServiciosRepository,
         protected EntityRepository $entityRepository,
         protected JsonDataValidation $jsonDataValidation,
+
+        protected MedicalConsultationRepository $medicalConsultationRepository,
+        protected ProcedureRepository $procedureRepository,
+        protected MedicineRepository $medicineRepository,
 
     ) {
         $this->key_redis_project = env('KEY_REDIS_PROJECT');
@@ -712,14 +720,13 @@ class InvoiceController extends Controller
 
             // Paso 2: Validar los datos del JSON contra la base de datos
             $jsonData = json_decode(file_get_contents($file->getRealPath()), true);
-            return $dataResponse = $this->jsonDataValidation->validate($jsonData);
+            $dataResponse = $this->jsonDataValidation->validate($jsonData);
 
             if (!$dataResponse['isValid']) {
                 return [
                     'code' => 422,
                     'isValid' => false,
-                    'message' => $dataResponse['message'],
-                    'errors' => $dataResponse['errors'],
+                    ...$dataResponse,
                 ];
             }
 
@@ -736,6 +743,127 @@ class InvoiceController extends Controller
                 'isValid' => true,
                 'message' => 'JSON validado correctamente (estructura y datos)',
                 'errors' => [],
+            ];
+        });
+    }
+
+    public function jsonToForm(InvoiceUploadJsonRequest $request)
+    {
+        return $this->execute(function () use ($request) {
+
+            $json = $request->input('json');
+
+            //Factura
+            $type = TypeInvoiceEnum::INVOICE_TYPE_001;
+
+            $infoDataExtra = $this->saveDataExtraInvoice($type, $request->all());
+
+            $post['typeable_type'] = $infoDataExtra['model'];
+            $post['typeable_id'] = $infoDataExtra['id'];
+
+            $post['status_xml'] = StatusXmlInvoiceEnum::INVOICE_STATUS_XML_001;
+
+
+            $post['service_vendor_id'] = $json['numDocumentoIdObligado_data']['id'] ?? null;
+            $post['invoice_number'] = $json['numFactura'];
+            $post['tipo_nota_id'] = $json['tipoNota_data']['id'] ?? null;
+            $post['note_number'] = $json['numNota'];
+            $post['patient_id'] = $json['usuarios'][0]['numDocumentoIdentificacion_data']['id'] ?? null;
+
+            $invoice = $this->invoiceRepository->store($post);
+
+
+            //Consultas
+            $post = [];
+
+            $consultas = $json['usuarios'][0]['servicios']['consultas'];
+
+            if (count($consultas) > 0) {
+                foreach ($consultas as $key => $value) {
+                    $medicalConsultation = $this->medicalConsultationRepository->store([
+                        'fechaInicioAtencion' => $value['fechaInicioAtencion'],
+                        'numAutorizacion' => $value['numAutorizacion'],
+                        'codConsulta_id' => $value['codConsulta_data']['id'] ?? null,
+                        'modalidadGrupoServicioTecSal_id' => $value['modalidadGrupoServicioTecSal_data']['id'] ?? null,
+                        'grupoServicios_id' => $value['grupoServicios_data']['id'] ?? null,
+                        'codServicio_id' => $value['codServicio_data']['id'] ?? null,
+                        'finalidadTecnologiaSalud_id' => $value['finalidadTecnologiaSalud_data']['id'] ?? null,
+                        'causaMotivoAtencion_id' => $value['causaMotivoAtencion_data']['id'] ?? null,
+                        'codDiagnosticoPrincipal_id' => $value['codDiagnosticoPrincipal_data']['id'] ?? null,
+                        'codDiagnosticoRelacionado1_id' => $value['codDiagnosticoRelacionado1_data']['id'] ?? null,
+                        'codDiagnosticoRelacionado2_id' => $value['codDiagnosticoRelacionado2_data']['id'] ?? null,
+                        'codDiagnosticoRelacionado3_id' => $value['codDiagnosticoRelacionado3_data']['id'] ?? null,
+                        'tipoDiagnosticoPrincipal_id' => $value['tipoDiagnosticoPrincipal_data']['id'] ?? null,
+                        'valorPagoModerador' => $value['valorPagoModerador'],
+                        'vrServicio' => $value['vrServicio'],
+                        'conceptoRecaudo_id' => $value['conceptoRecaudo_data']['id'] ?? null,
+                        'tipoDocumentoIdentificacion_id' => $value['tipoDocumentoIdentificacion_data']['id'] ?? null,
+                        'numDocumentoIdentificacion' => $value['numDocumentoIdentificacion'],
+                        'numFEVPagoModerador' => $value['numFEVPagoModerador'],
+                    ]);
+                }
+            }
+
+            $procedimientos = $json['usuarios'][0]['servicios']['procedimientos'];
+
+            if (count($procedimientos) > 0) {
+                foreach ($procedimientos as $key => $value) {
+                    $procedure = $this->procedureRepository->store([
+                        'fechaInicioAtencion' => Carbon::parse($value['fechaInicioAtencion'])->format('Y-m-d H:i'),
+                        'idMIPRES' => $value['idMIPRES'],
+                        'numAutorizacion' => $value['numAutorizacion'],
+                        'codProcedimiento_id' => $value['codProcedimiento_data']['id'] ?? null,
+                        'viaIngresoServicioSalud_id' => $value['viaIngresoServicioSalud_data']['id'] ?? null,
+                        'modalidadGrupoServicioTecSal_id' => $value['modalidadGrupoServicioTecSal_data']['id'] ?? null,
+                        'grupoServicios_id' => $value['grupoServicios_data']['id'] ?? null,
+                        'codServicio_id' => $value['codServicio_data']['id'] ?? null,
+                        'finalidadTecnologiaSalud_id' => $value['finalidadTecnologiaSalud_data']['id'] ?? null,
+                        'codDiagnosticoPrincipal_id' => $value['codDiagnosticoPrincipal_data']['id'] ?? null,
+                        'codDiagnosticoRelacionado_id' => $value['codDiagnosticoRelacionado_data']['id'] ?? null,
+                        'codComplicacion_id' => $value['codComplicacion_data']['id'] ?? null,
+                        'valorPagoModerador' => $value['valorPagoModerador'],
+                        'vrServicio' => $value['vrServicio'],
+                        'conceptoRecaudo_id' => $value['conceptoRecaudo_data']['id'] ?? null,
+                        'tipoDocumentoIdentificacion_id' => $value['tipoDocumentoIdentificacion_data']['id'] ?? null,
+                        'numDocumentoIdentificacion' => $value['numDocumentoIdentificacion'],
+                        'numFEVPagoModerador' => $value['numFEVPagoModerador'],
+                    ]);
+                }
+            }
+
+            $medicamentos = $json['usuarios'][0]['servicios']['medicamentos'];
+
+            if (count($medicamentos) > 0) {
+                foreach ($medicamentos as $key => $value) {
+                    $medicine = $this->medicineRepository->store([
+                        'numAutorizacion' => $value['numAutorizacion'],
+                        'idMIPRES' => $value['idMIPRES'],
+                        'fechaDispensAdmon' => $value['fechaDispensAdmon'],
+                        'codDiagnosticoPrincipal_id' => $value['codDiagnosticoPrincipal_data']['id'] ?? null,
+                        'codDiagnosticoRelacionado_id' => $value['codDiagnosticoRelacionado_data']['id'] ?? null,
+                        'tipoMedicamento_id' => $value['tipoMedicamento_data']['id'] ?? null,
+                        'codTecnologiaSalud' => $value['codTecnologiaSalud'],
+                        'nomTecnologiaSalud' => $value['nomTecnologiaSalud'],
+                        'concentracionMedicamento' => $value['concentracionMedicamento'],
+                        'unidadMedida_id' => $value['unidadMedida_data']['id'] ?? null,
+                        'formaFarmaceutica' => $value['formaFarmaceutica'],
+                        'unidadMinDispensa' => $value['unidadMinDispensa'],
+                        'cantidadMedicamento' => $value['cantidadMedicamento'],
+                        'diasTratamiento' => $value['diasTratamiento'],
+                        'vrUnitMedicamento' => $value['vrUnitMedicamento'],
+                        'valorPagoModerador' => $value['valorPagoModerador'],
+                        'vrServicio' => $value['vrServicio'],
+                        'conceptoRecaudo_id' => $value['conceptoRecaudo_data']['id'] ?? null,
+                        'tipoDocumentoIdentificacion_id' => $value['tipoDocumentoIdentificacion_data']['id'] ?? null,
+                        'numDocumentoIdentificacion' => $value['numDocumentoIdentificacion'],
+                        'numFEVPagoModerador' => $value['numFEVPagoModerador'],
+                    ]);
+                }
+            }
+
+            // Si ambas validaciones pasan, proceder con el procesamiento
+            return [
+                'code' => 200,
             ];
         });
     }

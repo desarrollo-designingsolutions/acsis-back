@@ -34,6 +34,13 @@ class JsonDataValidationConfig
                 'select' => ["id", "codigo", "nombre"],
                 'error_message' => 'El tipoDocumentoIdentificacion no existe en la tabla tipo_id_pisis.',
             ],
+            'usuarios.*.numDocumentoIdentificacion' => [
+                'type' => 'exists',
+                'table' => 'patients',
+                'column' => 'document',
+                'select' => ["id", "document", "first_name", "second_name", "first_surname", "second_surname"],
+                'error_message' => 'El numDocumentoIdentificacion no existe en la tabla patients.',
+            ],
             'usuarios.*.tipoUsuario' => [
                 'type' => 'exists',
                 'table' => 'rips_tipo_usuario_version2s',

@@ -43,4 +43,6 @@ Route::middleware(['check.permission:menu.invoice'])->group(function () {
     Route::get('/invoice/downloadZip/{id}', [InvoiceController::class, 'downloadZip']);
 
     Route::post('/invoice/uploadJson', [InvoiceController::class, 'uploadJson']);
+
+    Route::post('/invoice/jsonToForm', [InvoiceController::class, 'jsonToForm']);
 });

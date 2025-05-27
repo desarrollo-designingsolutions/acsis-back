@@ -61,7 +61,13 @@ class JsonDataValidation
             $middleParts = explode('.', $middlePath); // ['servicios', '<servicio>']
 
             if (count($middleParts) !== 2 || $middleParts[0] !== 'servicios') {
-                $this->errors[] = "Formato de regla inválido para {$fieldPath}: se esperaba usuarios.*.servicios.<servicio>.*.<campo>.";
+
+                $this->errors[] = [
+                    'level' => 'Archivo de validación',
+                    'key' => '',
+                    'data' => '',
+                    'message' => "Formato de regla inválido para {$fieldPath}: se esperaba usuarios.*.servicios.<servicio>.*.<campo>.",
+                ];
                 return;
             }
 
@@ -69,7 +75,14 @@ class JsonDataValidation
             $parentValues = Arr::get($jsonData, $parentPath, []);
 
             if (!is_array($parentValues)) {
-                $this->errors[] = "Campo {$fieldPath}: Se esperaba un array en {$parentPath}.";
+
+                $this->errors[] = [
+                    'level' => $parentPath,
+                    'key' => $fieldPath,
+                    'data' => null,
+                    'message' => "Campo {$fieldPath}: Se esperaba un array en {$parentPath}.",
+                ];
+
                 Arr::set($this->validatedData, $parentPath, null);
                 return;
             }
@@ -78,7 +91,12 @@ class JsonDataValidation
                 $serviceItems = Arr::get($parentValue, "{$middleParts[0]}.{$serviceType}", []);
 
                 if (!is_array($serviceItems)) {
-                    $this->errors[] = "Campo {$parentPath}[{$userIndex}].{$middlePath}: Se esperaba un array en {$serviceType}.";
+                    $this->errors[] = [
+                        'level' => "{$parentPath}[{$userIndex}].{$middlePath}",
+                        'key' => $serviceType,
+                        'data' => null,
+                        'message' => "Campo {$parentPath}[{$userIndex}].{$middlePath}: Se esperaba un array en {$serviceType}.",
+                    ];
                     Arr::set($this->validatedData, "{$parentPath}.{$userIndex}.{$middleParts[0]}.{$serviceType}", null);
                     return;
                 }
@@ -88,7 +106,15 @@ class JsonDataValidation
                     // Log::info("Validando campo {$fieldPath}[{$userIndex}][{$itemIndex}]", ['value' => $value, 'rule' => $rule]);
 
                     if ($value === null) {
-                        $this->errors[] = "Campo {$parentPath}[{$userIndex}].{$middlePath}[{$itemIndex}].{$childField}: No se encontró el campo en el JSON.";
+
+
+                        $this->errors[] = [
+                            'level' => "{$parentPath}[{$userIndex}].{$middlePath}[{$itemIndex}].{$childField}",
+                            'key' => $childField,
+                            'data' => null,
+                            'message' => "Campo {$parentPath}[{$userIndex}].{$middlePath}[{$itemIndex}].{$childField}: No se encontró el campo en el JSON.",
+                        ];
+
                         Arr::set($this->validatedData, "{$parentPath}.{$userIndex}.{$middleParts[0]}.{$serviceType}.{$itemIndex}.{$childField}", null);
                         if ($rule['type'] === 'exists') {
                             Arr::set($this->validatedData, "{$parentPath}.{$userIndex}.{$middleParts[0]}.{$serviceType}.{$itemIndex}.{$childField}_data", null);
@@ -102,7 +128,14 @@ class JsonDataValidation
                             $errorMessage = is_callable($rule['error_message'])
                                 ? $rule['error_message']($rule, $value)
                                 : $rule['error_message'];
-                            $this->errors[] = "Campo {$parentPath}[{$userIndex}].{$middlePath}[{$itemIndex}].{$childField}: {$errorMessage}";
+
+                            $this->errors[] = [
+                                'level' => "{$parentPath}[{$userIndex}].{$middlePath}[{$itemIndex}].{$childField}",
+                                'key' => "{$childField}",
+                                'data' => null,
+                                'message' => "Campo {$parentPath}[{$userIndex}].{$middlePath}[{$itemIndex}].{$childField}: {$errorMessage}",
+                            ];
+
                             Arr::set($this->validatedData, "{$parentPath}.{$userIndex}.{$middleParts[0]}.{$serviceType}.{$itemIndex}.{$childField}_data", null);
                         } else {
                             Arr::set($this->validatedData, "{$parentPath}.{$userIndex}.{$middleParts[0]}.{$serviceType}.{$itemIndex}.{$childField}_data", $result);
@@ -113,7 +146,14 @@ class JsonDataValidation
                             $errorMessage = is_callable($rule['error_message'])
                                 ? $rule['error_message']($rule, $value)
                                 : $rule['error_message'];
-                            $this->errors[] = "Campo {$parentPath}[{$userIndex}].{$middlePath}[{$itemIndex}].{$childField}: {$errorMessage}";
+
+                            $this->errors[] = [
+                                'level' => "{$parentPath}[{$userIndex}].{$middlePath}[{$itemIndex}].{$childField}",
+                                'key' => "{$childField}",
+                                'data' => null,
+                                'message' => "Campo {$parentPath}[{$userIndex}].{$middlePath}[{$itemIndex}].{$childField}: {$errorMessage}",
+                            ];
+
                             Arr::set($this->validatedData, "{$parentPath}.{$userIndex}.{$middleParts[0]}.{$serviceType}.{$itemIndex}.{$childField}", null);
                         }
                     }
@@ -126,7 +166,14 @@ class JsonDataValidation
             $parentValues = Arr::get($jsonData, $parentPath, []);
 
             if (!is_array($parentValues)) {
-                $this->errors[] = "Campo {$fieldPath}: Se esperaba un array en {$parentPath}.";
+
+                $this->errors[] = [
+                    'level' => $parentPath,
+                    'key' => $fieldPath,
+                    'data' => null,
+                    'message' => "Campo {$fieldPath}: Se esperaba un array en {$parentPath}.",
+                ];
+
                 Arr::set($this->validatedData, $parentPath, null);
                 return;
             }
@@ -136,7 +183,15 @@ class JsonDataValidation
                 // Log::info("Validando campo {$fieldPath}[{$index}]", ['value' => $value, 'rule' => $rule]);
 
                 if ($value === null) {
-                    $this->errors[] = "Campo {$parentPath}[{$index}].{$childField}: No se encontró el campo en el JSON.";
+
+
+                    $this->errors[] = [
+                        'level' => "{$parentPath}[{$index}].{$childField}",
+                        'key' => $childField,
+                        'data' => null,
+                        'message' => "Campo {$parentPath}[{$index}].{$childField}: No se encontró el campo en el JSON.",
+                    ];
+
                     Arr::set($this->validatedData, "{$parentPath}.{$index}.{$childField}", null);
                     if ($rule['type'] === 'exists') {
                         Arr::set($this->validatedData, "{$parentPath}.{$index}.{$childField}_data", null);
@@ -150,7 +205,14 @@ class JsonDataValidation
                         $errorMessage = is_callable($rule['error_message'])
                             ? $rule['error_message']($rule, $value)
                             : $rule['error_message'];
-                        $this->errors[] = "Campo {$parentPath}[{$index}].{$childField}: {$errorMessage}";
+
+                        $this->errors[] = [
+                            'level' => "{$parentPath}[{$index}].{$childField}",
+                            'key' => $childField,
+                            'data' => null,
+                            'message' => "Campo {$parentPath}[{$index}].{$childField}: {$errorMessage}",
+                        ];
+
                         Arr::set($this->validatedData, "{$parentPath}.{$index}.{$childField}_data", null);
                     } else {
                         Arr::set($this->validatedData, "{$parentPath}.{$index}.{$childField}_data", $result);
@@ -161,7 +223,14 @@ class JsonDataValidation
                         $errorMessage = is_callable($rule['error_message'])
                             ? $rule['error_message']($rule, $value)
                             : $rule['error_message'];
-                        $this->errors[] = "Campo {$parentPath}[{$index}].{$childField}: {$errorMessage}";
+
+                        $this->errors[] = [
+                            'level' => "{$parentPath}[{$index}].{$childField}",
+                            'key' => $childField,
+                            'data' => null,
+                            'message' => "Campo {$parentPath}[{$index}].{$childField}: {$errorMessage}",
+                        ];
+
                         Arr::set($this->validatedData, "{$parentPath}.{$index}.{$childField}", null);
                     }
                 }
@@ -172,7 +241,14 @@ class JsonDataValidation
             // Log::info("Validando campo {$fieldPath}", ['value' => $value, 'rule' => $rule]);
 
             if ($value === null) {
-                $this->errors[] = "Campo {$fieldPath}: No se encontró el campo en el JSON.";
+
+                $this->errors[] = [
+                    'level' => "{$fieldPath}",
+                    'key' => '',
+                    'data' => null,
+                    'message' => "Campo {$fieldPath}: No se encontró el campo en el JSON.",
+                ];
+
                 Arr::set($this->validatedData, $fieldPath, null);
                 if ($rule['type'] === 'exists') {
                     Arr::set($this->validatedData, "{$fieldPath}_data", null);
@@ -186,7 +262,14 @@ class JsonDataValidation
                     $errorMessage = is_callable($rule['error_message'])
                         ? $rule['error_message']($rule, $value)
                         : $rule['error_message'];
-                    $this->errors[] = "Campo {$fieldPath}: {$errorMessage}";
+
+                    $this->errors[] = [
+                        'level' => "/",
+                        'key' => "{$fieldPath}",
+                        'data' => null,
+                        'message' => "Campo {$fieldPath}: {$errorMessage}",
+                    ];
+
                     Arr::set($this->validatedData, "{$fieldPath}_data", null);
                 } else {
                     Arr::set($this->validatedData, "{$fieldPath}_data", $result);
@@ -197,7 +280,14 @@ class JsonDataValidation
                     $errorMessage = is_callable($rule['error_message'])
                         ? $rule['error_message']($rule, $value)
                         : $rule['error_message'];
-                    $this->errors[] = "Campo {$fieldPath}: {$errorMessage}";
+
+                    $this->errors[] = [
+                        'level' => "/",
+                        'key' => "{$fieldPath}",
+                        'data' => null,
+                        'message' => "Campo {$fieldPath}: {$errorMessage}",
+                    ];
+
                     Arr::set($this->validatedData, $fieldPath, null);
                 }
             }
@@ -238,7 +328,6 @@ class JsonDataValidation
             $record = DB::table($table)->where($column, $value)->select($select)->first();
             return $record ? (array) $record : false;
         }, Constants::REDIS_TTL);
-        
     }
 
     protected function validateIn($value, array $allowedValues): bool
