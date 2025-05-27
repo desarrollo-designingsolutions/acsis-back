@@ -6,7 +6,8 @@ class JsonDataValidationConfig
 {
     public static function getValidationRules(): array
     {
-        return [
+        // reglas de la factura
+        $rulesRoot = [
             'tipoNota' => [
                 'type' => 'exists',
                 'table' => 'tipo_notas',
@@ -21,6 +22,11 @@ class JsonDataValidationConfig
                 'select' => ["id", "nit", "name"],
                 'error_message' => 'El numDocumentoIdObligado no existe en la tabla service_vendors.',
             ],
+        ];
+
+
+        // reglas de los usuarios
+        $rulesUsuarios = [
             'usuarios.*.tipoDocumentoIdentificacion' => [
                 'type' => 'exists',
                 'table' => 'tipo_id_pisis',
@@ -79,6 +85,23 @@ class JsonDataValidationConfig
                 'select' => ["id", "codigo", "nombre"],
                 'error_message' => 'El codPaisOrigen no existe en la tabla pais.',
             ],
+            'usuarios.*.consecutivo' => [
+                'type' => 'numeric',
+                'error_message' => 'El consecutivo debe ser un número válido.',
+            ],
+        ];
+
+
+        // reglas de los servicios
+        $rulesServicios = [
+            'usuarios.*.servicios' => [
+                'type' => 'array',
+                'error_message' => 'El campo servicios debe ser un array.',
+            ],
+        ];
+
+        //reglas de consultas
+        $rulesConsultas = [
             'usuarios.*.servicios.consultas.*.codPrestador' => [
                 'type' => 'exists',
                 'table' => 'ips_cod_habilitacions',
@@ -196,6 +219,454 @@ class JsonDataValidationConfig
                 'type' => 'numeric',
                 'error_message' => 'El valorPagoModerador debe ser un número válido.',
             ],
+            'usuarios.*.servicios.consultas.*.consecutivo' => [
+                'type' => 'numeric',
+                'error_message' => 'El consecutivo debe ser un número válido.',
+            ],
         ];
+
+
+        // reglas de procedimientos
+        $rulesProcedimientos = [
+            'usuarios.*.servicios.procedimientos.*.codPrestador' => [
+                'type' => 'exists',
+                'table' => 'ips_cod_habilitacions',
+                'column' => 'codigo',
+                'select' => ["id", "codigo", "nombre"],
+                'error_message' => 'El codPrestador no existe en la tabla ips_cod_habilitacions.',
+            ],
+            'usuarios.*.servicios.procedimientos.*.fechaInicioAtencion' => [
+                'type' => 'date',
+                'error_message' => fn($rule, $value) => "El fechaInicioAtencion '{$value}' debe ser una fecha válida.",
+            ],
+            'usuarios.*.servicios.procedimientos.*.codProcedimiento' => [
+                'type' => 'exists',
+                'table' => 'cups_rips',
+                'column' => 'codigo',
+                'select' => ["id", "codigo", "nombre"],
+                'error_message' => 'El codProcedimiento no existe en la tabla cups_rips.',
+            ],
+            'usuarios.*.servicios.procedimientos.*.viaIngresoServicioSalud' => [
+                'type' => 'exists',
+                'table' => 'via_ingreso_usuarios',
+                'column' => 'codigo',
+                'select' => ["id", "codigo", "nombre"],
+                'error_message' => 'El viaIngresoServicioSalud no existe en la tabla via_ingreso_usuarios.',
+            ],
+            'usuarios.*.servicios.procedimientos.*.modalidadGrupoServicioTecSal' => [
+                'type' => 'exists',
+                'table' => 'modalidad_atencions',
+                'column' => 'codigo',
+                'select' => ["id", "codigo", "nombre"],
+                'error_message' => 'El modalidadGrupoServicioTecSal no existe en la tabla modalidad_atencions.',
+            ],
+            'usuarios.*.servicios.procedimientos.*.grupoServicios' => [
+                'type' => 'exists',
+                'table' => 'grupo_servicios',
+                'column' => 'codigo',
+                'select' => ["id", "codigo", "nombre"],
+                'error_message' => 'El grupoServicios no existe en la tabla grupo_servicios.',
+            ],
+            'usuarios.*.servicios.procedimientos.*.codServicio' => [
+                'type' => 'exists',
+                'table' => 'servicios',
+                'column' => 'codigo',
+                'select' => ["id", "codigo", "nombre"],
+                'error_message' => 'El codServicio no existe en la tabla servicios.',
+            ],
+            'usuarios.*.servicios.procedimientos.*.finalidadTecnologiaSalud' => [
+                'type' => 'exists',
+                'table' => 'rips_finalidad_consulta_version2s',
+                'column' => 'codigo',
+                'select' => ["id", "codigo", "nombre"],
+                'error_message' => 'El finalidadTecnologiaSalud no existe en la tabla rips_finalidad_consulta_version2s.',
+            ],
+            'usuarios.*.servicios.procedimientos.*.tipoDocumentoIdentificacion' => [
+                'type' => 'exists',
+                'table' => 'tipo_id_pisis',
+                'column' => 'codigo',
+                'select' => ["id", "codigo", "nombre"],
+                'error_message' => 'El tipoDocumentoIdentificacion no existe en la tabla tipo_id_pisis.',
+            ],
+            'usuarios.*.servicios.procedimientos.*.codDiagnosticoPrincipal' => [
+                'type' => 'exists',
+                'table' => 'cie10s',
+                'column' => 'codigo',
+                'select' => ["id", "codigo", "nombre"],
+                'error_message' => 'El codDiagnosticoPrincipal no existe en la tabla cie10s.',
+            ],
+            'usuarios.*.servicios.procedimientos.*.codDiagnosticoRelacionado' => [
+                'type' => 'exists',
+                'table' => 'cie10s',
+                'column' => 'codigo',
+                'select' => ["id", "codigo", "nombre"],
+                'error_message' => 'El codDiagnosticoRelacionado no existe en la tabla cie10s.',
+            ],
+            'usuarios.*.servicios.procedimientos.*.codComplicacion' => [
+                'type' => 'exists',
+                'table' => 'cie10s',
+                'column' => 'codigo',
+                'select' => ["id", "codigo", "nombre"],
+                'error_message' => 'El codComplicacion no existe en la tabla cie10s.',
+            ],
+            'usuarios.*.servicios.procedimientos.*.vrServicio' => [
+                'type' => 'numeric',
+                'error_message' => 'El vrServicio debe ser un número válido.',
+            ],
+            'usuarios.*.servicios.procedimientos.*.conceptoRecaudo' => [
+                'type' => 'exists',
+                'table' => 'concepto_recaudos',
+                'column' => 'codigo',
+                'select' => ["id", "codigo", "nombre"],
+                'error_message' => 'El conceptoRecaudo no existe en la tabla concepto_recaudos.',
+            ],
+            'usuarios.*.servicios.procedimientos.*.valorPagoModerador' => [
+                'type' => 'numeric',
+                'error_message' => 'El valorPagoModerador debe ser un número válido.',
+            ],
+            'usuarios.*.servicios.procedimientos.*.consecutivo' => [
+                'type' => 'numeric',
+                'error_message' => 'El consecutivo debe ser un número válido.',
+            ],
+        ];
+
+        // reglas de medicamentos
+        $rulesMedicamentos = [
+            'usuarios.*.servicios.medicamentos.*.codPrestador' => [
+                'type' => 'exists',
+                'table' => 'ips_cod_habilitacions',
+                'column' => 'codigo',
+                'select' => ["id", "codigo", "nombre"],
+                'error_message' => 'El codPrestador no existe en la tabla ips_cod_habilitacions.',
+            ],
+            'usuarios.*.servicios.medicamentos.*.fechaDispensAdmon' => [
+                'type' => 'date',
+                'error_message' => fn($rule, $value) => "El fechaDispensAdmon '{$value}' debe ser una fecha válida.",
+            ],
+            'usuarios.*.servicios.medicamentos.*.codDiagnosticoPrincipal' => [
+                'type' => 'exists',
+                'table' => 'cie10s',
+                'column' => 'codigo',
+                'select' => ["id", "codigo", "nombre"],
+                'error_message' => 'El codDiagnosticoPrincipal no existe en la tabla cie10s.',
+            ],
+            'usuarios.*.servicios.medicamentos.*.codDiagnosticoRelacionado' => [
+                'type' => 'exists',
+                'table' => 'cie10s',
+                'column' => 'codigo',
+                'select' => ["id", "codigo", "nombre"],
+                'error_message' => 'El codDiagnosticoRelacionado no existe en la tabla cie10s.',
+            ],
+            'usuarios.*.servicios.medicamentos.*.tipoMedicamento' => [
+                'type' => 'exists',
+                'table' => 'tipo_medicamento_pos_version2s',
+                'column' => 'codigo',
+                'select' => ["id", "codigo", "nombre"],
+                'error_message' => 'El tipoMedicamento no existe en la tabla tipo_medicamento_pos_version2s.',
+            ],
+            'usuarios.*.servicios.medicamentos.*.concentracionMedicamento' => [
+                'type' => 'numeric',
+                'error_message' => 'El concentracionMedicamento debe ser un número válido.',
+            ],
+            'usuarios.*.servicios.medicamentos.*.unidadMedida' => [
+                'type' => 'numeric',
+                'error_message' => 'El unidadMedida debe ser un número válido.',
+            ],
+            'usuarios.*.servicios.medicamentos.*.unidadMinDispensa' => [
+                'type' => 'numeric',
+                'error_message' => 'El unidadMinDispensa debe ser un número válido.',
+            ],
+            'usuarios.*.servicios.medicamentos.*.cantidadMedicamento' => [
+                'type' => 'numeric',
+                'error_message' => 'El cantidadMedicamento debe ser un número válido.',
+            ],
+            'usuarios.*.servicios.medicamentos.*.diasTratamiento' => [
+                'type' => 'numeric',
+                'error_message' => 'El diasTratamiento debe ser un número válido.',
+            ],
+            'usuarios.*.servicios.medicamentos.*.tipoDocumentoIdentificacion' => [
+                'type' => 'exists',
+                'table' => 'tipo_id_pisis',
+                'column' => 'codigo',
+                'select' => ["id", "codigo", "nombre"],
+                'error_message' => 'El tipoDocumentoIdentificacion no existe en la tabla tipo_id_pisis.',
+            ],
+            'usuarios.*.servicios.medicamentos.*.vrUnitMedicamento' => [
+                'type' => 'numeric',
+                'error_message' => 'El vrUnitMedicamento debe ser un número válido.',
+            ],
+            'usuarios.*.servicios.medicamentos.*.vrServicio' => [
+                'type' => 'numeric',
+                'error_message' => 'El vrServicio debe ser un número válido.',
+            ],
+            'usuarios.*.servicios.medicamentos.*.conceptoRecaudo' => [
+                'type' => 'exists',
+                'table' => 'concepto_recaudos',
+                'column' => 'codigo',
+                'select' => ["id", "codigo", "nombre"],
+                'error_message' => 'El conceptoRecaudo no existe en la tabla concepto_recaudos.',
+            ],
+            'usuarios.*.servicios.medicamentos.*.valorPagoModerador' => [
+                'type' => 'numeric',
+                'error_message' => 'El valorPagoModerador debe ser un número válido.',
+            ],
+            'usuarios.*.servicios.medicamentos.*.consecutivo' => [
+                'type' => 'numeric',
+                'error_message' => 'El consecutivo debe ser un número válido.',
+            ],
+        ];
+
+        // reglas de otros servicios
+        $rulesOtrosServicios = [
+            'usuarios.*.servicios.otrosServicios.*.codPrestador' => [
+                'type' => 'exists',
+                'table' => 'ips_cod_habilitacions',
+                'column' => 'codigo',
+                'select' => ["id", "codigo", "nombre"],
+                'error_message' => 'El codPrestador no existe en la tabla ips_cod_habilitacions.',
+            ],
+            'usuarios.*.servicios.otrosServicios.*.fechaSuministroTecnologia' => [
+                'type' => 'date',
+                'error_message' => fn($rule, $value) => "El fechaSuministroTecnologia '{$value}' debe ser una fecha válida.",
+            ],
+            'usuarios.*.servicios.otrosServicios.*.tipoOS' => [
+                'type' => 'exists',
+                'table' => 'tipo_otros_servicios',
+                'column' => 'codigo',
+                'select' => ["id", "codigo", "nombre"],
+                'error_message' => 'El tipoOS no existe en la tabla tipo_otros_servicios.',
+            ],
+            'usuarios.*.servicios.otrosServicios.*.codTecnologiaSalud' => [
+                'type' => 'exists',
+                'table' => 'cups_rips',
+                'column' => 'codigo',
+                'select' => ["id", "codigo", "nombre"],
+                'error_message' => 'El codTecnologiaSalud no existe en la tabla cups_rips.',
+            ],
+            'usuarios.*.servicios.otrosServicios.*.cantidadOS' => [
+                'type' => 'numeric',
+                'error_message' => 'El cantidadOS debe ser un número válido.',
+            ],
+            'usuarios.*.servicios.otrosServicios.*.tipoDocumentoIdentificacion' => [
+                'type' => 'exists',
+                'table' => 'tipo_id_pisis',
+                'column' => 'codigo',
+                'select' => ["id", "codigo", "nombre"],
+                'error_message' => 'El tipoDocumentoIdentificacion no existe en la tabla tipo_id_pisis.',
+            ],
+            'usuarios.*.servicios.otrosServicios.*.vrUnitOS' => [
+                'type' => 'numeric',
+                'error_message' => 'El vrUnitOS debe ser un número válido.',
+            ],
+            'usuarios.*.servicios.otrosServicios.*.vrServicio' => [
+                'type' => 'numeric',
+                'error_message' => 'El vrServicio debe ser un número válido.',
+            ],
+            'usuarios.*.servicios.otrosServicios.*.conceptoRecaudo' => [
+                'type' => 'exists',
+                'table' => 'concepto_recaudos',
+                'column' => 'codigo',
+                'select' => ["id", "codigo", "nombre"],
+                'error_message' => 'El conceptoRecaudo no existe en la tabla concepto_recaudos.',
+            ],
+            'usuarios.*.servicios.otrosServicios.*.valorPagoModerador' => [
+                'type' => 'numeric',
+                'error_message' => 'El valorPagoModerador debe ser un número válido.',
+            ],
+            'usuarios.*.servicios.otrosServicios.*.consecutivo' => [
+                'type' => 'numeric',
+                'error_message' => 'El consecutivo debe ser un número válido.',
+            ],
+        ];
+
+        // reglas de urgencias
+        $rulesUrgencias = [
+            'usuarios.*.servicios.urgencias.*.codPrestador' => [
+                'type' => 'exists',
+                'table' => 'ips_cod_habilitacions',
+                'column' => 'codigo',
+                'select' => ["id", "codigo", "nombre"],
+                'error_message' => 'El codPrestador no existe en la tabla ips_cod_habilitacions.',
+            ],
+            'usuarios.*.servicios.urgencias.*.fechaInicioAtencion' => [
+                'type' => 'date',
+                'error_message' => fn($rule, $value) => "El fechaInicioAtencion '{$value}' debe ser una fecha válida.",
+            ],
+            'usuarios.*.servicios.urgencias.*.causaMotivoAtencion' => [
+                'type' => 'exists',
+                'table' => 'rips_causa_externa_version2s',
+                'column' => 'codigo',
+                'select' => ["id", "codigo", "nombre"],
+                'error_message' => 'El causaMotivoAtencion no existe en la tabla rips_causa_externa_version2s.',
+            ],
+            'usuarios.*.servicios.urgencias.*.codDiagnosticoPrincipal' => [
+                'type' => 'exists',
+                'table' => 'cie10s',
+                'column' => 'codigo',
+                'select' => ["id", "codigo", "nombre"],
+                'error_message' => 'El codDiagnosticoPrincipal no existe en la tabla cie10s.',
+            ],
+            'usuarios.*.servicios.urgencias.*.codDiagnosticoPrincipalE' => [
+                'type' => 'exists',
+                'table' => 'cie10s',
+                'column' => 'codigo',
+                'select' => ["id", "codigo", "nombre"],
+                'error_message' => 'El codDiagnosticoPrincipalE no existe en la tabla cie10s.',
+            ],
+            'usuarios.*.servicios.urgencias.*.codDiagnosticoRelacionadoE1' => [
+                'type' => 'exists',
+                'table' => 'cie10s',
+                'column' => 'codigo',
+                'select' => ["id", "codigo", "nombre"],
+                'error_message' => 'El codDiagnosticoRelacionadoE1 no existe en la tabla cie10s.',
+            ],
+            'usuarios.*.servicios.urgencias.*.codDiagnosticoRelacionadoE2' => [
+                'type' => 'exists',
+                'table' => 'cie10s',
+                'column' => 'codigo',
+                'select' => ["id", "codigo", "nombre"],
+                'error_message' => 'El codDiagnosticoRelacionadoE2 no existe en la tabla cie10s.',
+            ],
+            'usuarios.*.servicios.urgencias.*.codDiagnosticoRelacionadoE3' => [
+                'type' => 'exists',
+                'table' => 'cie10s',
+                'column' => 'codigo',
+                'select' => ["id", "codigo", "nombre"],
+                'error_message' => 'El codDiagnosticoRelacionadoE3 no existe en la tabla cie10s.',
+            ],
+            'usuarios.*.servicios.urgencias.*.codDiagnosticoCausaMuerte' => [
+                'type' => 'exists',
+                'table' => 'cie10s',
+                'column' => 'codigo',
+                'select' => ["id", "codigo", "nombre"],
+                'error_message' => 'El codDiagnosticoCausaMuerte no existe en la tabla cie10s.',
+            ],
+            'usuarios.*.servicios.urgencias.*.fechaEgreso' => [
+                'type' => 'date',
+                'error_message' => fn($rule, $value) => "El fechaEgreso '{$value}' debe ser una fecha válida.",
+            ],
+            'usuarios.*.servicios.urgencias.*.consecutivo' => [
+                'type' => 'numeric',
+                'error_message' => 'El consecutivo debe ser un número válido.',
+            ],
+        ];
+
+        $rulesHospitalizacion = [
+            'usuarios.*.servicios.hospitalizacion.*.codPrestador' => [
+                'type' => 'exists',
+                'table' => 'ips_cod_habilitacions',
+                'column' => 'codigo',
+                'select' => ["id", "codigo", "nombre"],
+                'error_message' => 'El codPrestador no existe en la tabla ips_cod_habilitacions.',
+            ],
+            'usuarios.*.servicios.hospitalizacion.*.viaIngresoServicioSalud' => [
+                'type' => 'exists',
+                'table' => 'via_ingreso_usuarios',
+                'column' => 'codigo',
+                'select' => ["id", "codigo", "nombre"],
+                'error_message' => 'El viaIngresoServicioSalud no existe en la tabla via_ingreso_usuarios.',
+            ],
+            'usuarios.*.servicios.hospitalizacion.*.fechaInicioAtencion' => [
+                'type' => 'date',
+                'error_message' => fn($rule, $value) => "El fechaInicioAtencion '{$value}' debe ser una fecha válida.",
+            ],
+            'usuarios.*.servicios.hospitalizacion.*.causaMotivoAtencion' => [
+                'type' => 'exists',
+                'table' => 'rips_causa_externa_version2s',
+                'column' => 'codigo',
+                'select' => ["id", "codigo", "nombre"],
+                'error_message' => 'El causaMotivoAtencion no existe en la tabla rips_causa_externa_version2s.',
+            ],
+
+
+            'usuarios.*.servicios.hospitalizacion.*.codDiagnosticoPrincipal' => [
+                'type' => 'exists',
+                'table' => 'cie10s',
+                'column' => 'codigo',
+                'select' => ["id", "codigo", "nombre"],
+                'error_message' => 'El codDiagnosticoPrincipal no existe en la tabla cie10s.',
+            ],
+
+            'usuarios.*.servicios.hospitalizacion.*.codDiagnosticoPrincipalE' => [
+                'type' => 'exists',
+                'table' => 'cie10s',
+                'column' => 'codigo',
+                'select' => ["id", "codigo", "nombre"],
+                'error_message' => 'El codDiagnosticoPrincipalE no existe en la tabla cie10s.',
+            ],
+            'usuarios.*.servicios.hospitalizacion.*.codDiagnosticoRelacionadoE1' => [
+                'type' => 'exists',
+                'table' => 'cie10s',
+                'column' => 'codigo',
+                'select' => ["id", "codigo", "nombre"],
+                'error_message' => 'El codDiagnosticoRelacionadoE1 no existe en la tabla cie10s.',
+            ],
+            'usuarios.*.servicios.hospitalizacion.*.codDiagnosticoRelacionadoE2' => [
+                'type' => 'exists',
+                'table' => 'cie10s',
+                'column' => 'codigo',
+                'select' => ["id", "codigo", "nombre"],
+                'error_message' => 'El codDiagnosticoRelacionadoE2 no existe en la tabla cie10s.',
+            ],
+            'usuarios.*.servicios.hospitalizacion.*.codDiagnosticoRelacionadoE3' => [
+                'type' => 'exists',
+                'table' => 'cie10s',
+                'column' => 'codigo',
+                'select' => ["id", "codigo", "nombre"],
+                'error_message' => 'El codDiagnosticoRelacionadoE3 no existe en la tabla cie10s.',
+            ],
+
+            'usuarios.*.servicios.hospitalizacion.*.codComplicacion' => [
+                'type' => 'exists',
+                'table' => 'cie10s',
+                'column' => 'codigo',
+                'select' => ["id", "codigo", "nombre"],
+                'error_message' => 'El codComplicacion no existe en la tabla cie10s.',
+            ],
+            'usuarios.*.servicios.hospitalizacion.*.condicionDestinoUsuarioEgreso' => [
+                'type' => 'exists',
+                'table' => 'condiciony_destino_usuario_egresos',
+                'column' => 'codigo',
+                'select' => ["id", "codigo", "nombre"],
+                'error_message' => 'El condicionDestinoUsuarioEgreso no existe en la tabla condiciony_destino_usuario_egresos.',
+            ],
+            'usuarios.*.servicios.hospitalizacion.*.codDiagnosticoCausaMuerte' => [
+                'type' => 'exists',
+                'table' => 'cie10s',
+                'column' => 'codigo',
+                'select' => ["id", "codigo", "nombre"],
+                'error_message' => 'El codDiagnosticoCausaMuerte no existe en la tabla cie10s.',
+            ],
+
+            'usuarios.*.servicios.hospitalizacion.*.fechaEgreso' => [
+                'type' => 'date',
+                'error_message' => fn($rule, $value) => "El fechaEgreso '{$value}' debe ser una fecha válida.",
+            ],
+        ];
+
+        $rulesRecienNacidos = [
+            'usuarios.*.servicios.recienNacidos.*.codPrestador' => [
+                'type' => 'exists',
+                'table' => 'ips_cod_habilitacions',
+                'column' => 'codigo',
+                'select' => ["id", "codigo", "nombre"],
+                'error_message' => 'El codPrestador no existe en la tabla ips_cod_habilitacions.',
+            ],
+
+        ];
+
+        // Unir todas las reglas
+        return array_merge(
+            $rulesRoot,
+            $rulesUsuarios,
+            $rulesServicios,
+            $rulesConsultas,
+            $rulesProcedimientos,
+            $rulesMedicamentos,
+            $rulesOtrosServicios,
+            $rulesUrgencias,
+            $rulesHospitalizacion,
+            $rulesRecienNacidos,
+        );
     }
 }

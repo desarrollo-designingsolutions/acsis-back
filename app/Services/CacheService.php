@@ -55,7 +55,7 @@ class CacheService
         ];
         Redis::rpush('list:cache_metrics', json_encode($metric)); // Cambiado a list:cache_metrics
 
-        Log::debug("Datos obtenidos de {$source}", ['key' => $key, 'time' => $time . 'ms']);
+        // Log::debug("Datos obtenidos de {$source}", ['key' => $key, 'time' => $time . 'ms']);
 
         return $data;
     }
@@ -121,7 +121,7 @@ class CacheService
     /**
      * Recupera datos de Redis según el tipo.
      */
-    private function getDataFromRedis(string $key, string $type)
+    public function getDataFromRedis(string $key, string $type)
     {
         switch ($type) {
             case 'set':

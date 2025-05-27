@@ -225,41 +225,42 @@ class JsonDataValidation
 
     protected function existsInDatabase($value, string $table, string $column, array $select = ['id'])
     {
+        $params = [
+            'value' => $value,
+            'table' => $table,
+            'column' => $column,
+            'select' => $select,
+        ];
 
-        try {
-            $params = [
-                'value' => $value,
-                'table' => $table,
-                'column' => $column,
-                'select' => $select,
-            ];
+        $cacheKeyNew = $this->cacheService->generateKey("{$table}_table", [], 'string');
+
+        $dataTable = $this->cacheService->getDataFromRedis($cacheKeyNew, "string");
+
+        $dataTable = collect($dataTable);
+
+        if ($dataTable->isEmpty()) {
+
+            // Fallback: Ejecutar IDEA 1
+
             $cacheKey = $this->cacheService->generateKey("{$table}_existsInDatabase", $params, 'string');
 
             return $this->cacheService->remember($cacheKey, function () use ($table, $column, $value, $select) {
+                $record = DB::table($table)->where($column, $value)->select($select)->first();
+                return $record ? (array) $record : false;
+            }, Constants::REDIS_TTL);
+        } else {
 
-                $cacheKeyNew = $this->cacheService->generateKey("{$table}_table", [], 'string');
-                $dataTable =  $this->cacheService->remember($cacheKeyNew, function () use ($table, $column, $value, $select) {
+            // Fallback: Ejecutar IDEA 2
 
-                    $records = DB::table($table)->get();
+            $cacheKey = $this->cacheService->generateKey("{$table}_existsInDatabase", $params, 'string');
 
-                    return $records;
-                }, Constants::REDIS_TTL);
-
+            return $this->cacheService->remember($cacheKey, function () use ($table, $column, $value, $select, $dataTable) {
                 if ($dataTable->isEmpty()) {
                     return false;
-                } else {
-                    $record = $dataTable->firstWhere($column, $value);
-
-                    if ($record) {
-                        return $select ? Arr::only((array) $record, $select) : (array) $record;
-                    } else {
-                        return false;
-                    }
                 }
+                $record = $dataTable->firstWhere($column, $value);
+                return $record ? ($select ? Arr::only((array) $record, $select) : (array) $record) : false;
             }, Constants::REDIS_TTL);
-        } catch (\Throwable $th) {
-            logMessage($th);
-            //throw $th;
         }
     }
 
