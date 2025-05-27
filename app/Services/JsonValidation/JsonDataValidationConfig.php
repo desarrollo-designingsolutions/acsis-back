@@ -92,13 +92,6 @@ class JsonDataValidationConfig
         ];
 
 
-        // reglas de los servicios
-        $rulesServicios = [
-            'usuarios.*.servicios' => [
-                'type' => 'array',
-                'error_message' => 'El campo servicios debe ser un array.',
-            ],
-        ];
 
         //reglas de consultas
         $rulesConsultas = [
@@ -652,7 +645,6 @@ class JsonDataValidationConfig
         return array_merge(
             $rulesRoot,
             $rulesUsuarios,
-            $rulesServicios,
             $rulesConsultas,
             $rulesProcedimientos,
             $rulesMedicamentos,
