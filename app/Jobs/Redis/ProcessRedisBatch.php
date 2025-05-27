@@ -35,38 +35,52 @@ class ProcessRedisBatch implements ShouldQueue
 {
     try {
         $table = (new $this->modelClass)->getTable();
-        $company = Company::find($this->companyId);
 
+        $mainCacheKey = $cacheService->generateKey("{$table}_table", [], 'string');
+        
         foreach ($this->elements as $element) {
-            $serviceData = $element->toArray();
-            $request = [
-                'company_id' => $this->companyId,
-                'element_id' => $element->id,
-            ];
+                        $serviceData = $element->toArray();
 
-            $cacheKey = $cacheService->generateKey("{$table}_table", $request, 'string');
+                        Redis::hset($mainCacheKey, $element->id, json_encode($serviceData));
 
-            $cacheService->remember($cacheKey, function () use ($table) {
-                $record = DB::table($table)->get();
-                return $record ? (array) $record : false;
-            }, Constants::REDIS_TTL);
+                        if ($this->channel) {
+                            $processed = Redis::incr("integer:progress_processed:{$this->channel}");
+                            $total = Redis::get("integer:progress_total:{$this->channel}") ?: 1;
+                            $percentage = ($processed / $total) * 100;
+                            ProgressCircular::dispatch($this->channel, $percentage);
+                        }
+                    }
 
-            // $cacheKey = $cacheService->generateKey("{$table}:company_{$this->companyId}:cronjob", $request, 'hash');
-            // Redis::hmset($cacheKey, $serviceData);
+        // foreach ($this->elements as $element) {
+        //     $serviceData = $element->toArray();
+        //     $request = [
+        //         'company_id' => $this->companyId,
+        //         'element_id' => $element->id,
+        //     ];
 
-            // $cacheKey2 = $cacheService->generateKey("{$table}:company_{$this->companyId}:ids_set_cronjob", $request, 'set');
-            // Redis::sadd($cacheKey2, $element->id);
+        //     $cacheKey = $cacheService->generateKey("{$table}_table", $request, 'string');
 
-            // 🔄 Progreso por elemento
-            if ($this->channel) {
-                $processed = Redis::incr("integer:progress_processed:{$this->channel}");
-                $total = Redis::get("integer:progress_total:{$this->channel}") ?: 1;
+        //     $cacheService->remember($cacheKey, function () use ($table) {
+        //         $record = DB::table($table)->get();
+        //         return $record ? (array) $record : false;
+        //     }, Constants::REDIS_TTL);
 
-                $percentage = ($processed / $total) * 100;
+        //     // $cacheKey = $cacheService->generateKey("{$table}:company_{$this->companyId}:cronjob", $request, 'hash');
+        //     // Redis::hmset($cacheKey, $serviceData);
 
-                ProgressCircular::dispatch($this->channel, $percentage);
-            }
-        }
+        //     // $cacheKey2 = $cacheService->generateKey("{$table}:company_{$this->companyId}:ids_set_cronjob", $request, 'set');
+        //     // Redis::sadd($cacheKey2, $element->id);
+
+        //     // 🔄 Progreso por elemento
+        //     if ($this->channel) {
+        //         $processed = Redis::incr("integer:progress_processed:{$this->channel}");
+        //         $total = Redis::get("integer:progress_total:{$this->channel}") ?: 1;
+
+        //         $percentage = ($processed / $total) * 100;
+
+        //         ProgressCircular::dispatch($this->channel, $percentage);
+        //     }
+        // }
     } catch (\Throwable $e) {
         \Log::error("Error in ProcessRedisBatch for {$this->modelClass}, company {$this->companyId}: " . $e->getMessage(), [
             'company_id' => $this->companyId,
