@@ -120,13 +120,6 @@ class JsonDataValidationConfig
                 'select' => ["id", "codigo", "nombre"],
                 'error_message' => 'El codConsulta no existe en la tabla cups_rips.',
             ],
-            'usuarios.*.servicios.consultas.*.codConsulta' => [
-                'type' => 'exists',
-                'table' => 'cups_rips',
-                'column' => 'codigo',
-                'select' => ["id", "codigo", "nombre"],
-                'error_message' => 'El codConsulta no existe en la tabla cups_rips.',
-            ],
             'usuarios.*.servicios.consultas.*.modalidadGrupoServicioTecSal' => [
                 'type' => 'exists',
                 'table' => 'modalidad_atencions',

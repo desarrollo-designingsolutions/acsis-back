@@ -3,6 +3,7 @@
 namespace App\Jobs\Redis;
 
 use App\Events\ProgressCircular;
+use App\Helpers\Constants;
 use App\Models\Company;
 use App\Services\CacheService;
 use Illuminate\Bus\Queueable;
@@ -10,6 +11,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redis;
 
 class ProcessRedisBatch implements ShouldQueue
@@ -42,11 +44,18 @@ class ProcessRedisBatch implements ShouldQueue
                 'element_id' => $element->id,
             ];
 
-            $cacheKey = $cacheService->generateKey("{$table}:company_{$this->companyId}:cronjob", $request, 'hash');
-            Redis::hmset($cacheKey, $serviceData);
+            $cacheKey = $cacheService->generateKey("{$table}_table", $request, 'string');
 
-            $cacheKey2 = $cacheService->generateKey("{$table}:company_{$this->companyId}:ids_set_cronjob", $request, 'set');
-            Redis::sadd($cacheKey2, $element->id);
+            $cacheService->remember($cacheKey, function () use ($table) {
+                $record = DB::table($table)->get();
+                return $record ? (array) $record : false;
+            }, Constants::REDIS_TTL);
+
+            // $cacheKey = $cacheService->generateKey("{$table}:company_{$this->companyId}:cronjob", $request, 'hash');
+            // Redis::hmset($cacheKey, $serviceData);
+
+            // $cacheKey2 = $cacheService->generateKey("{$table}:company_{$this->companyId}:ids_set_cronjob", $request, 'set');
+            // Redis::sadd($cacheKey2, $element->id);
 
             // 🔄 Progreso por elemento
             if ($this->channel) {
