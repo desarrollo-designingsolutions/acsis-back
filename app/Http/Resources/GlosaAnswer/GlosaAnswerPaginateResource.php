@@ -22,7 +22,8 @@ class GlosaAnswerPaginateResource extends JsonResource
             'value_accepted' => formatNumber($this->value_accepted),
             'date_answer' => Carbon::parse($this->date_answer)->format('d-m-Y'),
             'observation' => $this->observation,
-            'status' => $this->status?->description(),
+            'status' => $this->status,
+            'status_description' => $this->status?->description(),
         ];
     }
 }

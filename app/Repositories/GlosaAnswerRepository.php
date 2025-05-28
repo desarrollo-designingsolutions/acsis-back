@@ -26,11 +26,11 @@ class GlosaAnswerRepository extends BaseRepository
         return $this->cacheService->remember($cacheKey, function () use ($request) {
 
             $query = QueryBuilder::for($this->model->query())
-                ->select('answers.*')
+                ->select('glosa_answers.*')
                 ->allowedFilters([
                     AllowedFilter::callback('inputGeneral', function ($query, $value) {
                         $query->where(function ($subQuery) use ($value) {
-                            $subQuery->orWhere('answers.observation', 'like', "%$value%");
+                            $subQuery->orWhere('glosa_answers.observation', 'like', "%$value%");
 
                             QueryFilters::filterByDMYtoYMD($subQuery, $value, 'date_answer');
 

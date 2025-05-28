@@ -360,20 +360,20 @@ class InvoiceController extends Controller
 
         // Extract related data for cleaner code
         $patient = $invoice->patient;
-        $sexo = $patient->sexo;
-        $tipoUsuario = $patient->rips_tipo_usuario_version2;
-        $pais_residency = $patient->pais_residency;
-        $pais_origin = $patient->pais_origin;
-        $municipio = $patient->municipio_residency;
-        $zonaVersion2 = $patient->zona_version2;
-        $tipoIdPisis = $patient->tipo_id_pisi;
-        $tipoNota = $invoice->tipoNota;
-        $serviceVendor = $invoice->serviceVendor;
+        $sexo = $patient->sexo ?? null;
+        $tipoUsuario = $patient->rips_tipo_usuario_version2 ?? null;
+        $pais_residency = $patient->pais_residency ?? null;
+        $pais_origin = $patient->pais_origin ?? null;
+        $municipio = $patient->municipio_residency ?? null;
+        $zonaVersion2 = $patient->zona_version2 ?? null;
+        $tipoIdPisis = $patient->tipo_id_pisi ?? null;
+        $tipoNota = $invoice->tipoNota ?? null;
+        $serviceVendor = $invoice->serviceVendor ?? null;
 
         // Build base invoice data
         $baseData = [
-            'numDocumentoIdObligado' => $serviceVendor->nit,
-            'numFactura' => $invoice->invoice_number,
+            'numDocumentoIdObligado' => $serviceVendor->nit ?? null,
+            'numFactura' => $invoice->invoice_number ?? null,
             'tipoNota' => $tipoNota->codigo ?? '',
             'numNota' => $invoice->note_number ?? null,
         ];
@@ -384,17 +384,17 @@ class InvoiceController extends Controller
         // Build user data
         $users = [
             [
-                'tipoDocumentoIdentificacion' => $tipoIdPisis->codigo,
-                'numDocumentoIdentificacion' => $patient->document,
-                'tipoUsuario' => $tipoUsuario->codigo,
-                'fechaNacimiento' => $patient->birth_date,
-                'codSexo' => $sexo->codigo,
-                'codPaisResidencia' => $pais_residency->codigo,
-                'codMunicipioResidencia' => $municipio->codigo,
-                'codZonaTerritorialResidencia' => $zonaVersion2->codigo,
-                'incapacidad' => $patient->incapacity == 1 ? 'SI' : 'NO',
+                'tipoDocumentoIdentificacion' => $tipoIdPisis->codigo ?? null,
+                'numDocumentoIdentificacion' => $patient->document ?? null,
+                'tipoUsuario' => $tipoUsuario->codigo ?? null,
+                'fechaNacimiento' => $patient->birth_date ?? null,
+                'codSexo' => $sexo->codigo ?? null,
+                'codPaisResidencia' => $pais_residency->codigo ?? null,
+                'codMunicipioResidencia' => $municipio->codigo ?? null,
+                'codZonaTerritorialResidencia' => $zonaVersion2->codigo ?? null,
+                'incapacidad' => $patient ? $patient->incapacity == 1 ? 'SI' : 'NO' : '',
                 'consecutivo' => 1,
-                'codPaisOrigen' => $pais_origin->codigo,
+                'codPaisOrigen' => $pais_origin->codigo ?? null,
             ],
         ];
 
