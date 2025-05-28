@@ -60,6 +60,11 @@ class Invoice extends Model
     {
         return $this->hasMany(Service::class, 'invoice_id');
     }
+    
+    public function typeable()
+    {
+        return $this->morphTo(__FUNCTION__, 'typeable_type', 'typeable_id');
+    }
 
     /**
      * Actualiza el total, value_paid y remaining_balance de la factura basado en

@@ -26,8 +26,6 @@ Route::middleware(['check.permission:menu.invoice'])->group(function () {
 
     Route::get('/invoice/excelExport', [InvoiceController::class, 'excelExport']);
 
-    Route::get('/invoice/loadBtnCreate', [InvoiceController::class, 'loadBtnCreate']);
-
     Route::post('/invoice/validateInvoiceNumber', [InvoiceController::class, 'validateInvoiceNumber']);
 
     Route::get('/invoice/downloadJson/{id}', [InvoiceController::class, 'downloadJson']);

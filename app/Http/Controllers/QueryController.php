@@ -11,6 +11,7 @@ use App\Http\Resources\Country\CountrySelectResource;
 use App\Http\Resources\CupsRips\CupsRipsSelectInfiniteResource;
 use App\Http\Resources\Entity\EntitySelectResource;
 use App\Http\Resources\GrupoServicio\GrupoServicioSelectInfiniteResource;
+use App\Http\Resources\InsuranceStatus\InsuranceStatusSelectResource;
 use App\Http\Resources\IpsCodHabilitacion\IpsCodHabilitacionSelectInfiniteResource;
 use App\Http\Resources\IpsNoReps\IpsNoRepsSelectInfiniteResource;
 use App\Http\Resources\ModalidadAtencion\ModalidadAtencionSelectInfiniteResource;
@@ -41,6 +42,7 @@ use App\Repositories\CountryRepository;
 use App\Repositories\CupsRipsRepository;
 use App\Repositories\EntityRepository;
 use App\Repositories\GrupoServicioRepository;
+use App\Repositories\InsuranceStatusRepository;
 use App\Repositories\IpsCodHabilitacionRepository;
 use App\Repositories\IpsNoRepsRepository;
 use App\Repositories\ModalidadAtencionRepository;
@@ -108,6 +110,7 @@ class QueryController extends Controller
         protected CondicionyDestinoUsuarioEgresoRepository $condicionyDestinoUsuarioEgresoRepository,
         protected IpsNoRepsRepository $ipsNoRepsRepository,
         protected IpsCodHabilitacionRepository $ipsCodHabilitacionRepository,
+        protected InsuranceStatusRepository $insuranceStatusRepository,
     ) {}
 
     public function selectInfiniteCountries(Request $request)
@@ -542,6 +545,19 @@ class QueryController extends Controller
             'code' => 200,
             'ipsCodHabilitacion_arrayInfo' => $dataIpsCodHabilitacion,
             'ipsCodHabilitacion_countLinks' => $ipsCodHabilitacion->lastPage(),
+        ];
+    }
+    
+    public function selectInfiniteInsuranceStatus(Request $request)
+    {
+
+        $insuranceStatus = $this->insuranceStatusRepository->paginate($request->all());
+
+        $dataCountries = InsuranceStatusSelectResource::collection($insuranceStatus);
+
+        return [
+            'insuranceStatus_arrayInfo' => $dataCountries,
+            'insuranceStatus_countLinks' => $insuranceStatus->lastPage(),
         ];
     }
 }

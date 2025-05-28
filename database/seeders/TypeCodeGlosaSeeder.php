@@ -16,6 +16,7 @@ class TypeCodeGlosaSeeder extends Seeder
     {
         $arrayData = [
             ['id' => 1, 'type_code' => '3047', 'name' => 'RESOLUCION 3047'],
+            ['id' => 2, 'type_code' => '2284', 'name' => 'Resolucion 2285 de 2023'],
         ];
 
         // Inicializar la barra de progreso
@@ -23,7 +24,10 @@ class TypeCodeGlosaSeeder extends Seeder
         $bar = $this->command->getOutput()->createProgressBar(count($arrayData));
 
         foreach ($arrayData as $key => $value) {
-            $data = new TypeCodeGlosa;
+            $data = TypeCodeGlosa::find($value['id']);
+            if (! $data) {
+                $data = new TypeCodeGlosa;
+            }
             $data->id = $value['id'];
             $data->type_code = $value['type_code'];
             $data->name = $value['name'];

@@ -9,12 +9,11 @@ use App\Events\InvoiceRowUpdatedNow;
 use App\Exports\Invoice\InvoiceExcelErrorsValidationXmlExport;
 use App\Exports\Invoice\InvoiceExcelExport;
 use App\Helpers\Constants;
-use App\Helpers\Invoice\JsonStructureValidation;
 use App\Http\Requests\Invoice\InvoiceStoreRequest;
 use App\Http\Requests\Invoice\InvoiceUploadJsonRequest;
 use App\Http\Resources\Invoice\InvoiceFormResource;
 use App\Http\Resources\Invoice\InvoiceListResource;
-use App\Http\Resources\InvoiceSoat\InvoiceSoatFormResource;
+use App\Http\Resources\InvoicePolicy\InvoicePolicyFormResource;
 use App\Models\Invoice;
 use App\Models\Service;
 use App\Repositories\Cie10Repository;
@@ -25,7 +24,7 @@ use App\Repositories\EntityRepository;
 use App\Repositories\GrupoServicioRepository;
 use App\Repositories\HospitalizationRepository;
 use App\Repositories\InvoiceRepository;
-use App\Repositories\InvoiceSoatRepository;
+use App\Repositories\InvoicePolicyRepository;
 use App\Repositories\MedicalConsultationRepository;
 use App\Repositories\MedicineRepository;
 use App\Repositories\ModalidadAtencionRepository;
@@ -74,7 +73,7 @@ class InvoiceController extends Controller
         protected TypeEntityRepository $typeEntityRepository,
         protected CacheService $cacheService,
         protected PatientRepository $patientRepository,
-        protected InvoiceSoatRepository $invoiceSoatRepository,
+        protected InvoicePolicyRepository $invoicePolicyRepository,
         protected ServiceVendorRepository $serviceVendorRepository,
         protected TipoNotaRepository $tipoNotaRepository,
         protected TipoIdPisisRepository $tipoIdPisisRepository,
@@ -140,6 +139,19 @@ class InvoiceController extends Controller
             $tipoNotas = $this->queryController->selectInfinitetipoNota(request());
             $patients = $this->queryController->selectInfinitePatients(request());
             $statusInvoiceEnum = $this->queryController->selectStatusInvoiceEnum(request());
+            $insuranceStatus = $this->queryController->selectInfiniteInsuranceStatus(request());
+
+            // Filter out the excluded types and map the remaining cases
+            $typeInvoiceEnumValues = array_map(function ($case) {
+                return [
+                    'type' => $case->value,
+                    'title' => $case->description(),
+                ];
+            }, array_filter(TypeInvoiceEnum::cases(), function ($case) {
+                return $case->value;
+            }));
+
+
 
             return [
                 'code' => 200,
@@ -148,6 +160,8 @@ class InvoiceController extends Controller
                 ...$entities,
                 ...$tipoNotas,
                 ...$patients,
+                ...$insuranceStatus,
+                'typeInvoiceEnumValues' => $typeInvoiceEnumValues,
             ];
         });
     }
@@ -157,7 +171,7 @@ class InvoiceController extends Controller
         return $this->runTransaction(function () use ($request) {
 
             // Extract and prepare data
-            $post = $request->except(['entity', 'patient', 'tipoNota', 'serviceVendor', 'soat', 'value_paid', 'total', 'remaining_balance', 'value_glosa']);
+            $post = $request->except(['entity', 'patient', 'tipoNota', 'serviceVendor', 'policy', 'value_paid', 'total', 'remaining_balance', 'value_glosa']);
             $type = $request->input('type');
 
             $infoDataExtra = $this->saveDataExtraInvoice($type, $request->all());
@@ -194,8 +208,8 @@ class InvoiceController extends Controller
             $infoDataExtra = null;
             // Recuperamos informacion extra dependiendo del tipo de factura
             if ($invoice->type->value == 'INVOICE_TYPE_002') {
-                $soat = $this->invoiceSoatRepository->find($form->typeable_id);
-                $infoDataExtra = new InvoiceSoatFormResource($soat);
+                $policy = $this->invoicePolicyRepository->find($form->typeable_id);
+                $infoDataExtra = new InvoicePolicyFormResource($policy);
             }
 
             $serviceVendors = $this->queryController->selectInfiniteServiceVendor(request());
@@ -203,6 +217,17 @@ class InvoiceController extends Controller
             $tipoNotas = $this->queryController->selectInfinitetipoNota(request());
             $patients = $this->queryController->selectInfinitePatients(request());
             $statusInvoiceEnum = $this->queryController->selectStatusInvoiceEnum(request());
+            $insuranceStatus = $this->queryController->selectInfiniteInsuranceStatus(request());
+
+            // Filter out the excluded types and map the remaining cases
+            $typeInvoiceEnumValues = array_map(function ($case) {
+                return [
+                    'type' => $case->value,
+                    'title' => $case->description(),
+                ];
+            }, array_filter(TypeInvoiceEnum::cases(), function ($case) {
+                return $case->value;
+            }));
 
             return [
                 'code' => 200,
@@ -213,6 +238,8 @@ class InvoiceController extends Controller
                 ...$entities,
                 ...$tipoNotas,
                 ...$patients,
+                ...$insuranceStatus,
+                'typeInvoiceEnumValues' => $typeInvoiceEnumValues,
             ];
         });
     }
@@ -221,13 +248,20 @@ class InvoiceController extends Controller
     {
         return $this->runTransaction(function () use ($request) {
 
-            $post = $request->except(['entity', 'patient', 'tipoNota', 'serviceVendor', 'soat', 'value_paid', 'total', 'remaining_balance', 'value_glosa']);
+            $post = $request->except(['entity', 'patient', 'tipoNota', 'serviceVendor', 'policy', 'value_paid', 'total', 'remaining_balance', 'value_glosa']);
             $type = $request->input('type');
 
             $infoDataExtra = $this->saveDataExtraInvoice($type, $request->all());
 
             $post['typeable_type'] = $infoDataExtra['model'];
             $post['typeable_id'] = $infoDataExtra['id'];
+
+            $invoiceOld = $this->invoiceRepository->find($post['id']);
+
+            if ($invoiceOld->type->value == 'INVOICE_TYPE_002') {
+                $invoiceOld->typeable()->delete();
+            }
+
 
             $invoice = $this->invoiceRepository->store($post);
 
@@ -236,6 +270,13 @@ class InvoiceController extends Controller
 
             // Store JSON file
             $this->storeJsonFile($invoice, $jsonData);
+
+            $infoDataExtra = null;
+            // Recuperamos informacion extra dependiendo del tipo de factura
+            if ($invoice->type->value == 'INVOICE_TYPE_002') {
+                $policy = $this->invoicePolicyRepository->find($invoice->typeable_id);
+                $infoDataExtra = new InvoicePolicyFormResource($policy);
+            }
 
             return [
                 'code' => 200,
@@ -252,10 +293,10 @@ class InvoiceController extends Controller
 
         if ($type == 'INVOICE_TYPE_002') {
 
-            $dataSoat = array_merge($request['soat'], ['company_id' => $request['company_id']]);
+            $dataPolicy = array_merge($request['policy'], ['company_id' => $request['company_id']]);
 
-            // Store SOAT and invoice
-            $element = $this->invoiceSoatRepository->store($dataSoat);
+            // Store POLICY and invoice
+            $element = $this->invoicePolicyRepository->store($dataPolicy);
             $element['model'] = TypeInvoiceEnum::INVOICE_TYPE_002->model();
         }
 
@@ -303,24 +344,6 @@ class InvoiceController extends Controller
             return [
                 'code' => 200,
                 'excel' => $excelBase64,
-            ];
-        });
-    }
-
-    public function loadBtnCreate(Request $request)
-    {
-        return $this->execute(function () {
-
-            $TypeInvoiceEnumValues = array_map(function ($case) {
-                return [
-                    'id' => $case->value,
-                    'name' => $case->description(),
-                ];
-            }, TypeInvoiceEnum::cases());
-
-            return [
-                'code' => 200,
-                'TypeInvoiceEnumValues' => $TypeInvoiceEnumValues,
             ];
         });
     }
@@ -403,7 +426,7 @@ class InvoiceController extends Controller
         $newData['usuarios'] = $users;
 
         // Define file path
-        $nameFile = $invoice->invoice_number.'.json';
+        $nameFile = $invoice->invoice_number . '.json';
         $path = "companies/company_{$invoice->company_id}/invoices/invoice_{$invoice->id}/{$nameFile}";
         $disk = Constants::DISK_FILES;
 
@@ -473,7 +496,7 @@ class InvoiceController extends Controller
 
     private function storeJsonFile($invoice, array $jsonData): void
     {
-        $nameFile = $invoice->invoice_number.'.json';
+        $nameFile = $invoice->invoice_number . '.json';
         $path = "companies/company_{$invoice->company_id}/invoices/invoice_{$invoice->id}/{$nameFile}";
         $disk = Constants::DISK_FILES;
 
@@ -515,12 +538,12 @@ class InvoiceController extends Controller
 
         // Obtener el contenido del archivo
         $fileContent = Storage::disk($disk)->get($path);
-        $fileName = $invoice->invoice_number.'.json'; // Nombre del archivo para la descarga
+        $fileName = $invoice->invoice_number . '.json'; // Nombre del archivo para la descarga
 
         // Devolver el archivo como respuesta descargable
         return response($fileContent, 200, [
             'Content-Type' => 'application/json',
-            'Content-Disposition' => 'attachment; filename="'.$fileName.'"',
+            'Content-Disposition' => 'attachment; filename="' . $fileName . '"',
         ]);
     }
 
@@ -677,8 +700,8 @@ class InvoiceController extends Controller
                 File::makeDirectory($tempPath, 0755, true);
             }
 
-            $zipFileName = 'factura_'.$invoice->id.'.zip';
-            $zipPath = $tempPath.'/'.$zipFileName;
+            $zipFileName = 'factura_' . $invoice->id . '.zip';
+            $zipPath = $tempPath . '/' . $zipFileName;
 
             $zip = new ZipArchive;
             if ($zip->open($zipPath, ZipArchive::CREATE | ZipArchive::OVERWRITE) === true) {
@@ -698,7 +721,7 @@ class InvoiceController extends Controller
 
             return response()->json(['error' => 'Error al crear el ZIP'], 500);
         } catch (\Exception $e) {
-            \Log::error('Error en downloadZip: '.$e->getMessage());
+            \Log::error('Error en downloadZip: ' . $e->getMessage());
 
             return response()->json([
                 'error' => $e->getMessage(),

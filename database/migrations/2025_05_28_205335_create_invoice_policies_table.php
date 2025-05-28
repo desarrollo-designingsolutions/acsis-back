@@ -1,0 +1,34 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('invoice_policies', function (Blueprint $table) {
+            $table->uuid('id')->primary();
+            $table->foreignUuid('company_id')->constrained();
+            $table->foreignUuid('insurance_statuse_id')->constrained();
+            $table->string('policy_number');
+            $table->text('accident_date');
+            $table->text('start_date');
+            $table->text('end_date');
+            $table->timestamps();
+            $table->softDeletes();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('invoice_policies');
+    }
+};

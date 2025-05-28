@@ -36,11 +36,12 @@ class InvoiceStoreRequest extends FormRequest
 
         if ($this->type == 'INVOICE_TYPE_002') {
             $rules3 = [
-                'soat' => 'required',
-                'soat.policy_number' => 'required',
-                'soat.accident_date' => 'required|date',
-                'soat.start_date' => 'required|date',
-                'soat.end_date' => 'required|date',
+                'policy' => 'required',
+                'policy.policy_number' => 'required',
+                'policy.accident_date' => 'required|date',
+                'policy.start_date' => 'required|date',
+                'policy.end_date' => 'required|date',
+                'policy.insurance_statuse_id' => 'required',
             ];
             $rules = array_merge($rules, $rules3);
         }
@@ -61,25 +62,38 @@ class InvoiceStoreRequest extends FormRequest
             'radication_date.required' => 'El campo es obligatorio',
             'status.required' => 'El campo es obligatorio',
 
-            'soat.required' => 'El campo es obligatorio',
-            'soat.policy_number.required' => 'El campo es obligatorio',
-            'soat.accident_date.required' => 'El campo es obligatorio',
-            'soat.accident_date.date' => 'El campo debe ser una fecha',
-            'soat.start_date.required' => 'El campo es obligatorio',
-            'soat.start_date.date' => 'El campo debe ser una fecha',
-            'soat.end_date.required' => 'El campo es obligatorio',
-            'soat.end_date.date' => 'El campo debe ser una fecha',
+            'policy.required' => 'El campo es obligatorio',
+            'policy.policy_number.required' => 'El campo es obligatorio',
+            'policy.accident_date.required' => 'El campo es obligatorio',
+            'policy.accident_date.date' => 'El campo debe ser una fecha',
+            'policy.start_date.required' => 'El campo es obligatorio',
+            'policy.start_date.date' => 'El campo debe ser una fecha',
+            'policy.end_date.required' => 'El campo es obligatorio',
+            'policy.end_date.date' => 'El campo debe ser una fecha',
+            'policy.insurance_statuse_id.required' => 'El campo es obligatorio',
         ];
     }
 
     protected function prepareForValidation(): void
     {
-        $this->merge([
-            'service_vendor_id' => getValueSelectInfinite($this->service_vendor_id),
-            'entity_id' => getValueSelectInfinite($this->entity_id),
-            'patient_id' => getValueSelectInfinite($this->patient_id),
-            'tipo_nota_id' => getValueSelectInfinite($this->tipo_nota_id),
-        ]);
+        $merge = [];
+
+        if ($this->has('service_vendor_id')) {
+            $merge['service_vendor_id'] = getValueSelectInfinite($this->service_vendor_id);
+        }
+        if ($this->has('entity_id')) {
+            $merge['entity_id'] = getValueSelectInfinite($this->entity_id);
+        }
+        if ($this->has('patient_id')) {
+            $merge['patient_id'] = getValueSelectInfinite($this->patient_id);
+        }
+        if ($this->has('tipo_nota_id')) {
+            $merge['tipo_nota_id'] = getValueSelectInfinite($this->tipo_nota_id);
+        }
+        if ($this->has('policy.insurance_statuse_id')) {
+            $merge['policy.insurance_statuse_id'] = getValueSelectInfinite($this->policy['insurance_statuse_id']);
+        }
+        $this->merge($merge);
     }
 
     public function failedValidation(Validator $validator)

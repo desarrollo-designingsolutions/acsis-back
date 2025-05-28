@@ -23,6 +23,16 @@ class GeneralCodeGlosaSeeder extends Seeder
             ['id' => 6, 'type_code_glosa_id' => 1, 'general_code' => '6', 'description' => 'pertinencia', 'created_at' => now(), 'updated_at' => now()],
             ['id' => 8, 'type_code_glosa_id' => 1, 'general_code' => '8', 'description' => 'devoluciones', 'created_at' => now(), 'updated_at' => now()],
             ['id' => 9, 'type_code_glosa_id' => 1, 'general_code' => '9', 'description' => 'respuestas a glosas o devoluciones', 'created_at' => now(), 'updated_at' => now()],
+            
+            ['id' => 10, 'type_code_glosa_id' => 2, 'general_code' => 'FA', 'description' => 'FACTURACIÓN', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 11, 'type_code_glosa_id' => 2, 'general_code' => 'TA', 'description' => 'TARIFAS', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 12, 'type_code_glosa_id' => 2, 'general_code' => 'SO', 'description' => 'SOPORTES', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 13, 'type_code_glosa_id' => 2, 'general_code' => 'AU', 'description' => 'AUTORIZACIONES', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 14, 'type_code_glosa_id' => 2, 'general_code' => 'CO', 'description' => 'COBERTURA', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 15, 'type_code_glosa_id' => 2, 'general_code' => 'CL', 'description' => 'CALIDAD', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 16, 'type_code_glosa_id' => 2, 'general_code' => 'SA', 'description' => 'SEGUIMIENTO A LOS ACUERDOS', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 17, 'type_code_glosa_id' => 2, 'general_code' => 'RE', 'description' => 'GLOSA O DEVOLUCIÓN', 'created_at' => now(), 'updated_at' => now()],
+
         ];
 
         // Inicializar la barra de progreso
@@ -30,7 +40,10 @@ class GeneralCodeGlosaSeeder extends Seeder
         $bar = $this->command->getOutput()->createProgressBar(count($arrayData));
 
         foreach ($arrayData as $key => $value) {
-            $data = new GeneralCodeGlosa;
+            $data = GeneralCodeGlosa::find($value['id']);
+            if (! $data) {
+                $data = new GeneralCodeGlosa;
+            }
             $data->id = $value['id'];
             $data->type_code_glosa_id = $value['type_code_glosa_id'];
             $data->general_code = $value['general_code'];

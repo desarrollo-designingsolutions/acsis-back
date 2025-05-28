@@ -48,3 +48,5 @@ Route::post('/selectInfiniteCondicionyDestinoUsuarioEgreso', [QueryController::c
 Route::post('/selectInfiniteIpsNoReps', [QueryController::class, 'selectInfiniteIpsNoReps']);
 
 Route::post('/selectInfiniteIpsCodHabilitacion', [QueryController::class, 'selectInfiniteIpsCodHabilitacion']);
+
+Route::post('/selectInfiniteInsuranceStatus', [QueryController::class, 'selectInfiniteInsuranceStatus']);
