@@ -17,19 +17,21 @@ use App\Http\Resources\Invoice\InvoiceListResource;
 use App\Http\Resources\InvoiceSoat\InvoiceSoatFormResource;
 use App\Models\Invoice;
 use App\Models\Service;
-use App\Models\ServiceVendor;
 use App\Repositories\Cie10Repository;
 use App\Repositories\ConceptoRecaudoRepository;
 use App\Repositories\CondicionyDestinoUsuarioEgresoRepository;
 use App\Repositories\CupsRipsRepository;
 use App\Repositories\EntityRepository;
 use App\Repositories\GrupoServicioRepository;
+use App\Repositories\HospitalizationRepository;
 use App\Repositories\InvoiceRepository;
 use App\Repositories\InvoiceSoatRepository;
 use App\Repositories\MedicalConsultationRepository;
 use App\Repositories\MedicineRepository;
 use App\Repositories\ModalidadAtencionRepository;
 use App\Repositories\MunicipioRepository;
+use App\Repositories\NewlyBornRepository;
+use App\Repositories\OtherServiceRepository;
 use App\Repositories\PaisRepository;
 use App\Repositories\PatientRepository;
 use App\Repositories\ProcedureRepository;
@@ -37,6 +39,7 @@ use App\Repositories\RipsCausaExternaVersion2Repository;
 use App\Repositories\RipsFinalidadConsultaVersion2Repository;
 use App\Repositories\RipsTipoDiagnosticoPrincipalVersion2Repository;
 use App\Repositories\RipsTipoUsuarioVersion2Repository;
+use App\Repositories\ServiceRepository;
 use App\Repositories\ServiceVendorRepository;
 use App\Repositories\ServicioRepository;
 use App\Repositories\SexoRepository;
@@ -46,6 +49,7 @@ use App\Repositories\TipoNotaRepository;
 use App\Repositories\TipoOtrosServiciosRepository;
 use App\Repositories\TypeEntityRepository;
 use App\Repositories\UmmRepository;
+use App\Repositories\UrgencyRepository;
 use App\Repositories\ViaIngresoUsuarioRepository;
 use App\Repositories\ZonaVersion2Repository;
 use App\Services\CacheService;
@@ -57,8 +61,6 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 use ZipArchive;
-
-use function Psl\Type\object;
 
 class InvoiceController extends Controller
 {
@@ -102,6 +104,11 @@ class InvoiceController extends Controller
         protected MedicalConsultationRepository $medicalConsultationRepository,
         protected ProcedureRepository $procedureRepository,
         protected MedicineRepository $medicineRepository,
+        protected OtherServiceRepository $otherServiceRepository,
+        protected UrgencyRepository $urgencyRepository,
+        protected HospitalizationRepository $hospitalizationRepository,
+        protected NewlyBornRepository $newlyBornRepository,
+        protected ServiceRepository $serviceRepository,
 
     ) {
         $this->key_redis_project = env('KEY_REDIS_PROJECT');
@@ -396,7 +403,7 @@ class InvoiceController extends Controller
         $newData['usuarios'] = $users;
 
         // Define file path
-        $nameFile = $invoice->invoice_number . '.json';
+        $nameFile = $invoice->invoice_number.'.json';
         $path = "companies/company_{$invoice->company_id}/invoices/invoice_{$invoice->id}/{$nameFile}";
         $disk = Constants::DISK_FILES;
 
@@ -466,7 +473,7 @@ class InvoiceController extends Controller
 
     private function storeJsonFile($invoice, array $jsonData): void
     {
-        $nameFile = $invoice->invoice_number . '.json';
+        $nameFile = $invoice->invoice_number.'.json';
         $path = "companies/company_{$invoice->company_id}/invoices/invoice_{$invoice->id}/{$nameFile}";
         $disk = Constants::DISK_FILES;
 
@@ -508,12 +515,12 @@ class InvoiceController extends Controller
 
         // Obtener el contenido del archivo
         $fileContent = Storage::disk($disk)->get($path);
-        $fileName = $invoice->invoice_number . '.json'; // Nombre del archivo para la descarga
+        $fileName = $invoice->invoice_number.'.json'; // Nombre del archivo para la descarga
 
         // Devolver el archivo como respuesta descargable
         return response($fileContent, 200, [
             'Content-Type' => 'application/json',
-            'Content-Disposition' => 'attachment; filename="' . $fileName . '"',
+            'Content-Disposition' => 'attachment; filename="'.$fileName.'"',
         ]);
     }
 
@@ -670,8 +677,8 @@ class InvoiceController extends Controller
                 File::makeDirectory($tempPath, 0755, true);
             }
 
-            $zipFileName = 'factura_' . $invoice->id . '.zip';
-            $zipPath = $tempPath . '/' . $zipFileName;
+            $zipFileName = 'factura_'.$invoice->id.'.zip';
+            $zipPath = $tempPath.'/'.$zipFileName;
 
             $zip = new ZipArchive;
             if ($zip->open($zipPath, ZipArchive::CREATE | ZipArchive::OVERWRITE) === true) {
@@ -691,7 +698,7 @@ class InvoiceController extends Controller
 
             return response()->json(['error' => 'Error al crear el ZIP'], 500);
         } catch (\Exception $e) {
-            \Log::error('Error en downloadZip: ' . $e->getMessage());
+            \Log::error('Error en downloadZip: '.$e->getMessage());
 
             return response()->json([
                 'error' => $e->getMessage(),
@@ -704,6 +711,7 @@ class InvoiceController extends Controller
         return $this->execute(function () use ($request) {
 
             $id = $request->input('id', null);
+            $company_id = $request->input('company_id');
 
             // Paso 1: Validar la estructura del JSON
             $file = $request->file('archiveJson');
@@ -722,7 +730,7 @@ class InvoiceController extends Controller
             $jsonData = json_decode(file_get_contents($file->getRealPath()), true);
             $dataResponse = $this->jsonDataValidation->validate($jsonData);
 
-            if (!$dataResponse['isValid']) {
+            if (! $dataResponse['isValid']) {
                 return [
                     'code' => 422,
                     'isValid' => false,
@@ -732,139 +740,586 @@ class InvoiceController extends Controller
 
             // Paso 3: pasar la informacion del json al resourse del formulario
 
-            $formData = [
-                'id' => $id,
-                'service_vendor_id' => ""
-            ];
+            $invoice = InvoiceController::saveJsonToForm($dataResponse['validatedData'], $company_id);
 
             // Si ambas validaciones pasan, proceder con el procesamiento
             return [
                 'code' => 200,
-                'isValid' => true,
+                'invoice' => $invoice,
+                ...$dataResponse,
                 'message' => 'JSON validado correctamente (estructura y datos)',
-                'errors' => [],
             ];
         });
     }
 
-    public function jsonToForm(InvoiceUploadJsonRequest $request)
+    public function jsonToForm(Request $request)
     {
         return $this->execute(function () use ($request) {
 
             $json = $request->input('json');
+            $company_id = $request->input('company_id');
 
-            //Factura
-            $type = TypeInvoiceEnum::INVOICE_TYPE_001;
+            $invoice = InvoiceController::saveJsonToForm($json, $company_id);
 
-            $infoDataExtra = $this->saveDataExtraInvoice($type, $request->all());
-
-            $post['typeable_type'] = $infoDataExtra['model'];
-            $post['typeable_id'] = $infoDataExtra['id'];
-
-            $post['status_xml'] = StatusXmlInvoiceEnum::INVOICE_STATUS_XML_001;
-
-
-            $post['service_vendor_id'] = $json['numDocumentoIdObligado_data']['id'] ?? null;
-            $post['invoice_number'] = $json['numFactura'];
-            $post['tipo_nota_id'] = $json['tipoNota_data']['id'] ?? null;
-            $post['note_number'] = $json['numNota'];
-            $post['patient_id'] = $json['usuarios'][0]['numDocumentoIdentificacion_data']['id'] ?? null;
-
-            $invoice = $this->invoiceRepository->store($post);
-
-
-            //Consultas
-            $post = [];
-
-            $consultas = $json['usuarios'][0]['servicios']['consultas'];
-
-            if (count($consultas) > 0) {
-                foreach ($consultas as $key => $value) {
-                    $medicalConsultation = $this->medicalConsultationRepository->store([
-                        'fechaInicioAtencion' => $value['fechaInicioAtencion'],
-                        'numAutorizacion' => $value['numAutorizacion'],
-                        'codConsulta_id' => $value['codConsulta_data']['id'] ?? null,
-                        'modalidadGrupoServicioTecSal_id' => $value['modalidadGrupoServicioTecSal_data']['id'] ?? null,
-                        'grupoServicios_id' => $value['grupoServicios_data']['id'] ?? null,
-                        'codServicio_id' => $value['codServicio_data']['id'] ?? null,
-                        'finalidadTecnologiaSalud_id' => $value['finalidadTecnologiaSalud_data']['id'] ?? null,
-                        'causaMotivoAtencion_id' => $value['causaMotivoAtencion_data']['id'] ?? null,
-                        'codDiagnosticoPrincipal_id' => $value['codDiagnosticoPrincipal_data']['id'] ?? null,
-                        'codDiagnosticoRelacionado1_id' => $value['codDiagnosticoRelacionado1_data']['id'] ?? null,
-                        'codDiagnosticoRelacionado2_id' => $value['codDiagnosticoRelacionado2_data']['id'] ?? null,
-                        'codDiagnosticoRelacionado3_id' => $value['codDiagnosticoRelacionado3_data']['id'] ?? null,
-                        'tipoDiagnosticoPrincipal_id' => $value['tipoDiagnosticoPrincipal_data']['id'] ?? null,
-                        'valorPagoModerador' => $value['valorPagoModerador'],
-                        'vrServicio' => $value['vrServicio'],
-                        'conceptoRecaudo_id' => $value['conceptoRecaudo_data']['id'] ?? null,
-                        'tipoDocumentoIdentificacion_id' => $value['tipoDocumentoIdentificacion_data']['id'] ?? null,
-                        'numDocumentoIdentificacion' => $value['numDocumentoIdentificacion'],
-                        'numFEVPagoModerador' => $value['numFEVPagoModerador'],
-                    ]);
-                }
-            }
-
-            $procedimientos = $json['usuarios'][0]['servicios']['procedimientos'];
-
-            if (count($procedimientos) > 0) {
-                foreach ($procedimientos as $key => $value) {
-                    $procedure = $this->procedureRepository->store([
-                        'fechaInicioAtencion' => Carbon::parse($value['fechaInicioAtencion'])->format('Y-m-d H:i'),
-                        'idMIPRES' => $value['idMIPRES'],
-                        'numAutorizacion' => $value['numAutorizacion'],
-                        'codProcedimiento_id' => $value['codProcedimiento_data']['id'] ?? null,
-                        'viaIngresoServicioSalud_id' => $value['viaIngresoServicioSalud_data']['id'] ?? null,
-                        'modalidadGrupoServicioTecSal_id' => $value['modalidadGrupoServicioTecSal_data']['id'] ?? null,
-                        'grupoServicios_id' => $value['grupoServicios_data']['id'] ?? null,
-                        'codServicio_id' => $value['codServicio_data']['id'] ?? null,
-                        'finalidadTecnologiaSalud_id' => $value['finalidadTecnologiaSalud_data']['id'] ?? null,
-                        'codDiagnosticoPrincipal_id' => $value['codDiagnosticoPrincipal_data']['id'] ?? null,
-                        'codDiagnosticoRelacionado_id' => $value['codDiagnosticoRelacionado_data']['id'] ?? null,
-                        'codComplicacion_id' => $value['codComplicacion_data']['id'] ?? null,
-                        'valorPagoModerador' => $value['valorPagoModerador'],
-                        'vrServicio' => $value['vrServicio'],
-                        'conceptoRecaudo_id' => $value['conceptoRecaudo_data']['id'] ?? null,
-                        'tipoDocumentoIdentificacion_id' => $value['tipoDocumentoIdentificacion_data']['id'] ?? null,
-                        'numDocumentoIdentificacion' => $value['numDocumentoIdentificacion'],
-                        'numFEVPagoModerador' => $value['numFEVPagoModerador'],
-                    ]);
-                }
-            }
-
-            $medicamentos = $json['usuarios'][0]['servicios']['medicamentos'];
-
-            if (count($medicamentos) > 0) {
-                foreach ($medicamentos as $key => $value) {
-                    $medicine = $this->medicineRepository->store([
-                        'numAutorizacion' => $value['numAutorizacion'],
-                        'idMIPRES' => $value['idMIPRES'],
-                        'fechaDispensAdmon' => $value['fechaDispensAdmon'],
-                        'codDiagnosticoPrincipal_id' => $value['codDiagnosticoPrincipal_data']['id'] ?? null,
-                        'codDiagnosticoRelacionado_id' => $value['codDiagnosticoRelacionado_data']['id'] ?? null,
-                        'tipoMedicamento_id' => $value['tipoMedicamento_data']['id'] ?? null,
-                        'codTecnologiaSalud' => $value['codTecnologiaSalud'],
-                        'nomTecnologiaSalud' => $value['nomTecnologiaSalud'],
-                        'concentracionMedicamento' => $value['concentracionMedicamento'],
-                        'unidadMedida_id' => $value['unidadMedida_data']['id'] ?? null,
-                        'formaFarmaceutica' => $value['formaFarmaceutica'],
-                        'unidadMinDispensa' => $value['unidadMinDispensa'],
-                        'cantidadMedicamento' => $value['cantidadMedicamento'],
-                        'diasTratamiento' => $value['diasTratamiento'],
-                        'vrUnitMedicamento' => $value['vrUnitMedicamento'],
-                        'valorPagoModerador' => $value['valorPagoModerador'],
-                        'vrServicio' => $value['vrServicio'],
-                        'conceptoRecaudo_id' => $value['conceptoRecaudo_data']['id'] ?? null,
-                        'tipoDocumentoIdentificacion_id' => $value['tipoDocumentoIdentificacion_data']['id'] ?? null,
-                        'numDocumentoIdentificacion' => $value['numDocumentoIdentificacion'],
-                        'numFEVPagoModerador' => $value['numFEVPagoModerador'],
-                    ]);
-                }
-            }
-
-            // Si ambas validaciones pasan, proceder con el procesamiento
             return [
                 'code' => 200,
+                'invoice' => $invoice,
+
             ];
         });
+    }
+
+    public function saveJsonToForm($request, $company_id)
+    {
+
+        $json = $request;
+
+        // Factura
+        $type = TypeInvoiceEnum::INVOICE_TYPE_001;
+
+        $infoDataExtra = $this->saveDataExtraInvoice($type, $request);
+
+        $post['typeable_type'] = $infoDataExtra['model'];
+        $post['typeable_id'] = $infoDataExtra['id'];
+        $post['company_id'] = $company_id;
+        $post['type'] = $type;
+
+        $post['status_xml'] = StatusXmlInvoiceEnum::INVOICE_STATUS_XML_001;
+
+        $post['service_vendor_id'] = $json['numDocumentoIdObligado_data']['id'] ?? null;
+        $post['invoice_number'] = $json['numFactura'];
+        $post['tipo_nota_id'] = $json['tipoNota_data']['id'] ?? null;
+        $post['note_number'] = $json['numNota'];
+        $post['patient_id'] = $json['usuarios'][0]['numDocumentoIdentificacion_data']['id'] ?? null;
+
+        $invoice = $this->invoiceRepository->store($post);
+
+        // Build JSON structure
+        $jsonData = $this->buildInvoiceJson($invoice->id);
+
+        // Store JSON file
+        $this->storeJsonFile($invoice, $jsonData);
+
+        $post['invoice_id'] = $invoice->id;
+
+        // Consultas
+        $consultas = $json['usuarios'][0]['servicios']['consultas'];
+
+        if (count($consultas) > 0) {
+            foreach ($consultas as $key => $value) {
+
+                // Create MedicalConsultation
+                $medicalConsultation = $this->medicalConsultationRepository->store([
+                    'fechaInicioAtencion' => $value['fechaInicioAtencion'],
+                    'numAutorizacion' => $value['numAutorizacion'],
+                    'codConsulta_id' => $value['codConsulta_data']['id'] ?? null,
+                    'modalidadGrupoServicioTecSal_id' => $value['modalidadGrupoServicioTecSal_data']['id'] ?? null,
+                    'grupoServicios_id' => $value['grupoServicios_data']['id'] ?? null,
+                    'codServicio_id' => $value['codServicio_data']['id'] ?? null,
+                    'finalidadTecnologiaSalud_id' => $value['finalidadTecnologiaSalud_data']['id'] ?? null,
+                    'causaMotivoAtencion_id' => $value['causaMotivoAtencion_data']['id'] ?? null,
+                    'codDiagnosticoPrincipal_id' => $value['codDiagnosticoPrincipal_data']['id'] ?? null,
+                    'codDiagnosticoRelacionado1_id' => $value['codDiagnosticoRelacionado1_data']['id'] ?? null,
+                    'codDiagnosticoRelacionado2_id' => $value['codDiagnosticoRelacionado2_data']['id'] ?? null,
+                    'codDiagnosticoRelacionado3_id' => $value['codDiagnosticoRelacionado3_data']['id'] ?? null,
+                    'tipoDiagnosticoPrincipal_id' => $value['tipoDiagnosticoPrincipal_data']['id'] ?? null,
+                    'valorPagoModerador' => $value['valorPagoModerador'],
+                    'vrServicio' => $value['vrServicio'],
+                    'conceptoRecaudo_id' => $value['conceptoRecaudo_data']['id'] ?? null,
+                    'tipoDocumentoIdentificacion_id' => $value['tipoDocumentoIdentificacion_data']['id'] ?? null,
+                    'numDocumentoIdentificacion' => $value['numDocumentoIdentificacion'],
+                    'numFEVPagoModerador' => $value['numFEVPagoModerador'],
+                ]);
+
+                // Get the next consecutivo
+                $consecutivo = getNextConsecutivo($post['invoice_id'], TypeServiceEnum::SERVICE_TYPE_001);
+
+                $service = $this->serviceRepository->store([
+                    'company_id' => $post['company_id'],
+                    'invoice_id' => $post['invoice_id'],
+                    'consecutivo' => $consecutivo,
+                    'type' => TypeServiceEnum::SERVICE_TYPE_001,
+                    'serviceable_type' => TypeServiceEnum::SERVICE_TYPE_001->model(),
+                    'serviceable_id' => $medicalConsultation->id,
+                    'codigo_servicio' => $medicalConsultation->codConsulta->codigo,
+                    'nombre_servicio' => $medicalConsultation->codConsulta->nombre,
+                    'quantity' => 1,
+                    'unit_value' => $value['vrServicio'],
+                    'total_value' => $value['vrServicio'],
+                ]);
+
+                // Prepare service data for JSON
+                $serviceData = [
+                    'codPrestador' => $service->invoice?->serviceVendor?->ips_cod_habilitacion?->codigo,
+                    'fechaInicioAtencion' => Carbon::parse($value['fechaInicioAtencion'])->format('Y-m-d H:i'),
+                    'numAutorizacion' => $value['numAutorizacion'],
+                    'codConsulta' => $medicalConsultation->codConsulta?->codigo,
+                    'modalidadGrupoServicioTecSal' => $medicalConsultation->modalidadGrupoServicioTecSal?->codigo,
+                    'grupoServicios' => $medicalConsultation->grupoServicios?->codigo,
+                    'codServicio' => $medicalConsultation->codServicio?->codigo,
+                    'finalidadTecnologiaSalud' => $medicalConsultation->finalidadTecnologiaSalud?->codigo,
+                    'causaMotivoAtencion' => $medicalConsultation->causaMotivoAtencion?->codigo,
+                    'codDiagnosticoPrincipal' => $medicalConsultation->codDiagnosticoPrincipal?->codigo,
+                    'codDiagnosticoRelacionado1' => $medicalConsultation->codDiagnosticoRelacionado1?->codigo ?? '',
+                    'codDiagnosticoRelacionado2' => $medicalConsultation->codDiagnosticoRelacionado2?->codigo ?? '',
+                    'codDiagnosticoRelacionado3' => $medicalConsultation->codDiagnosticoRelacionado3?->codigo ?? '',
+                    'tipoDiagnosticoPrincipal' => $medicalConsultation->tipoDiagnosticoPrincipal?->codigo,
+                    'tipoDocumentoIdentificacion' => $medicalConsultation->tipoDocumentoIdentificacion?->codigo,
+                    'numDocumentoIdentificacion' => $value['numDocumentoIdentificacion'],
+                    'vrServicio' => floatval($value['vrServicio']),
+                    'conceptoRecaudo' => $medicalConsultation->conceptoRecaudo?->codigo,
+                    'valorPagoModerador' => floatval($value['valorPagoModerador']),
+                    'numFEVPagoModerador' => $value['numFEVPagoModerador'],
+                    'consecutivo' => $consecutivo,
+                ];
+
+                // Update JSON with new service
+                updateInvoiceServicesJson(
+                    $post['invoice_id'],
+                    TypeServiceEnum::SERVICE_TYPE_001,
+                    $serviceData,
+                    'add'
+                );
+            }
+        }
+        // Procedimientos
+        $procedimientos = $json['usuarios'][0]['servicios']['procedimientos'];
+
+        if (count($procedimientos) > 0) {
+            foreach ($procedimientos as $key => $value) {
+
+                // Create Procedure
+                $procedure = $this->procedureRepository->store([
+                    'fechaInicioAtencion' => Carbon::parse($value['fechaInicioAtencion'])->format('Y-m-d H:i'),
+                    'idMIPRES' => $value['idMIPRES'],
+                    'numAutorizacion' => $value['numAutorizacion'],
+                    'codProcedimiento_id' => $value['codProcedimiento_data']['id'] ?? null,
+                    'viaIngresoServicioSalud_id' => $value['viaIngresoServicioSalud_data']['id'] ?? null,
+                    'modalidadGrupoServicioTecSal_id' => $value['modalidadGrupoServicioTecSal_data']['id'] ?? null,
+                    'grupoServicios_id' => $value['grupoServicios_data']['id'] ?? null,
+                    'codServicio_id' => $value['codServicio_data']['id'] ?? null,
+                    'finalidadTecnologiaSalud_id' => $value['finalidadTecnologiaSalud_data']['id'] ?? null,
+                    'codDiagnosticoPrincipal_id' => $value['codDiagnosticoPrincipal_data']['id'] ?? null,
+                    'codDiagnosticoRelacionado_id' => $value['codDiagnosticoRelacionado_data']['id'] ?? null,
+                    'codComplicacion_id' => $value['codComplicacion_data']['id'] ?? null,
+                    'valorPagoModerador' => $value['valorPagoModerador'],
+                    'vrServicio' => $value['vrServicio'],
+                    'conceptoRecaudo_id' => $value['conceptoRecaudo_data']['id'] ?? null,
+                    'tipoDocumentoIdentificacion_id' => $value['tipoDocumentoIdentificacion_data']['id'] ?? null,
+                    'numDocumentoIdentificacion' => $value['numDocumentoIdentificacion'],
+                    'numFEVPagoModerador' => $value['numFEVPagoModerador'],
+                ]);
+
+                // Get the next consecutivo
+                $consecutivo = getNextConsecutivo($post['invoice_id'], TypeServiceEnum::SERVICE_TYPE_002);
+
+                // Create Service
+                $service = $this->serviceRepository->store([
+                    'company_id' => $post['company_id'],
+                    'invoice_id' => $post['invoice_id'],
+                    'consecutivo' => $consecutivo,
+                    'type' => TypeServiceEnum::SERVICE_TYPE_002,
+                    'serviceable_type' => TypeServiceEnum::SERVICE_TYPE_002->model(),
+                    'serviceable_id' => $procedure->id,
+                    'codigo_servicio' => $procedure->codProcedimiento->codigo,
+                    'nombre_servicio' => $procedure->codProcedimiento->nombre,
+                    'quantity' => 1,
+                    'unit_value' => $value['vrServicio'],
+                    'total_value' => $value['vrServicio'],
+                ]);
+
+                // Prepare service data for JSON
+                $serviceData = [
+                    'codPrestador' => $service->invoice?->serviceVendor?->ips_cod_habilitacion?->codigo,
+                    'fechaInicioAtencion' => Carbon::parse($value['fechaInicioAtencion'])->format('Y-m-d H:i'),
+                    'idMIPRES' => $value['idMIPRES'],
+                    'numAutorizacion' => $value['numAutorizacion'],
+                    'codProcedimiento' => $procedure->codProcedimiento?->codigo,
+                    'viaIngresoServicioSalud' => $procedure->viaIngresoServicioSalud?->codigo,
+                    'modalidadGrupoServicioTecSal' => $procedure->modalidadGrupoServicioTecSal?->codigo,
+                    'grupoServicios' => $procedure->grupoServicios?->codigo,
+                    'codServicio' => intval($procedure->codServicio?->codigo),
+                    'finalidadTecnologiaSalud' => $procedure->finalidadTecnologiaSalud?->codigo,
+                    'tipoDocumentoIdentificacion' => $procedure->tipoDocumentoIdentificacion?->codigo,
+                    'numDocumentoIdentificacion' => $value['numDocumentoIdentificacion'],
+                    'codDiagnosticoPrincipal' => $procedure->codDiagnosticoPrincipal?->codigo,
+                    'codDiagnosticoRelacionado' => $procedure->codDiagnosticoRelacionado?->codigo ?? '',
+                    'codComplicacion' => $procedure->codComplicacion?->codigo ?? '',
+                    'vrServicio' => floatval($value['vrServicio']),
+                    'conceptoRecaudo' => $procedure->conceptoRecaudo?->codigo,
+                    'valorPagoModerador' => floatval($value['valorPagoModerador']),
+                    'numFEVPagoModerador' => $value['numFEVPagoModerador'],
+                    'consecutivo' => $consecutivo,
+                ];
+
+                // Update JSON with new service
+                updateInvoiceServicesJson(
+                    $post['invoice_id'],
+                    TypeServiceEnum::SERVICE_TYPE_002,
+                    $serviceData,
+                    'add'
+                );
+            }
+        }
+
+        // Medicamentos
+        $medicamentos = $json['usuarios'][0]['servicios']['medicamentos'];
+
+        if (count($medicamentos) > 0) {
+            foreach ($medicamentos as $key => $value) {
+
+                // Create Medicine
+                $medicine = $this->medicineRepository->store([
+                    'numAutorizacion' => $value['numAutorizacion'],
+                    'idMIPRES' => $value['idMIPRES'],
+                    'fechaDispensAdmon' => $value['fechaDispensAdmon'],
+                    'codDiagnosticoPrincipal_id' => $value['codDiagnosticoPrincipal_data']['id'] ?? null,
+                    'codDiagnosticoRelacionado_id' => $value['codDiagnosticoRelacionado_data']['id'] ?? null,
+                    'tipoMedicamento_id' => $value['tipoMedicamento_data']['id'] ?? null,
+                    'codTecnologiaSalud' => $value['codTecnologiaSalud'],
+                    'nomTecnologiaSalud' => $value['nomTecnologiaSalud'],
+                    'concentracionMedicamento' => $value['concentracionMedicamento'],
+                    'unidadMedida_id' => $value['unidadMedida_data']['id'] ?? null,
+                    'formaFarmaceutica' => $value['formaFarmaceutica'],
+                    'unidadMinDispensa' => $value['unidadMinDispensa'],
+                    'cantidadMedicamento' => $value['cantidadMedicamento'],
+                    'diasTratamiento' => $value['diasTratamiento'],
+                    'vrUnitMedicamento' => $value['vrUnitMedicamento'],
+                    'valorPagoModerador' => $value['valorPagoModerador'],
+                    'vrServicio' => $value['vrServicio'],
+                    'conceptoRecaudo_id' => $value['conceptoRecaudo_data']['id'] ?? null,
+                    'tipoDocumentoIdentificacion_id' => $value['tipoDocumentoIdentificacion_data']['id'] ?? null,
+                    'numDocumentoIdentificacion' => $value['numDocumentoIdentificacion'],
+                    'numFEVPagoModerador' => $value['numFEVPagoModerador'],
+                ]);
+
+                // Get the next consecutivo
+                $consecutivo = getNextConsecutivo($post['invoice_id'], TypeServiceEnum::SERVICE_TYPE_006);
+
+                // Create Service
+                $service = $this->serviceRepository->store([
+                    'company_id' => $post['company_id'],
+                    'invoice_id' => $post['invoice_id'],
+                    'consecutivo' => $consecutivo,
+                    'type' => TypeServiceEnum::SERVICE_TYPE_006,
+                    'serviceable_type' => TypeServiceEnum::SERVICE_TYPE_006->model(),
+                    'serviceable_id' => $medicine->id,
+                    'codigo_servicio' => $value['codTecnologiaSalud'],
+                    'nombre_servicio' => $value['nomTecnologiaSalud'],
+                    'quantity' => $value['cantidadMedicamento'],
+                    'unit_value' => $value['vrServicio'],
+                    'total_value' => $value['vrServicio'],
+                ]);
+
+                // Prepare service data for JSON
+                $serviceData = [
+                    'codPrestador' => $service->invoice?->serviceVendor?->ips_cod_habilitacion?->codigo ?? '',
+                    'numAutorizacion' => $value['numAutorizacion'] ?? '',
+                    'idMIPRES' => $value['idMIPRES'] ?? '',
+                    'fechaDispensAdmon' => Carbon::parse($value['fechaDispensAdmon'])->format('Y-m-d H:i'),
+                    'codDiagnosticoPrincipal' => $medicine->codDiagnosticoPrincipal?->codigo,
+                    'codDiagnosticoRelacionado' => $medicine->codDiagnosticoRelacionado?->codigo ?? '',
+                    'tipoMedicamento' => $medicine->tipoMedicamento?->codigo,
+                    'codTecnologiaSalud' => $value['codTecnologiaSalud'],
+                    'nomTecnologiaSalud' => $value['nomTecnologiaSalud'] ?? '',
+                    'concentracionMedicamento' => floatval($value['concentracionMedicamento']) ?? '',
+                    'unidadMedida' => floatval($medicine->unidadMedida?->codigo) ?? '',
+                    'formaFarmaceutica' => $value['formaFarmaceutica'] ?? '',
+                    'unidadMinDispensa' => floatval($value['unidadMinDispensa']),
+                    'cantidadMedicamento' => intval($value['cantidadMedicamento']),
+                    'diasTratamiento' => intval($value['diasTratamiento']),
+                    'tipoDocumentoIdentificacion' => $medicine->tipoDocumentoIdentificacion?->codigo,
+                    'numDocumentoIdentificacion' => $value['numDocumentoIdentificacion'],
+                    'vrUnitMedicamento' => floatval($value['vrUnitMedicamento']),
+                    'vrServicio' => floatval($value['vrServicio']),
+                    'conceptoRecaudo' => $medicine->conceptoRecaudo?->codigo,
+                    'valorPagoModerador' => floatval($value['valorPagoModerador']),
+                    'numFEVPagoModerador' => $value['numFEVPagoModerador'],
+                    'consecutivo' => $consecutivo,
+                ];
+
+                // Update JSON with new service
+                updateInvoiceServicesJson(
+                    $post['invoice_id'],
+                    TypeServiceEnum::SERVICE_TYPE_006,
+                    $serviceData,
+                    'add'
+                );
+            }
+        }
+
+        // Otros Servicios
+        $otrosServicios = $json['usuarios'][0]['servicios']['otrosServicios'];
+
+        if (count($otrosServicios) > 0) {
+            foreach ($otrosServicios as $key => $value) {
+
+                // Create OtherService
+                $otherService = $this->otherServiceRepository->store([
+                    'idMIPRES' => $value['idMIPRES'],
+                    'numAutorizacion' => $value['numAutorizacion'],
+                    'fechaSuministroTecnologia' => $value['fechaSuministroTecnologia'],
+                    'tipoOS_id' => $value['tipoOS_data']['id'] ?? null,
+                    'codTecnologiaSalud' => $value['codTecnologiaSalud'],
+                    'nomTecnologiaSalud' => $value['nomTecnologiaSalud'],
+                    'cantidadOS' => $value['cantidadOS'],
+                    'vrUnitOS' => $value['vrUnitOS'],
+                    'valorPagoModerador' => $value['valorPagoModerador'],
+                    'vrServicio' => $value['vrServicio'],
+                    'conceptoRecaudo_id' => $value['conceptoRecaudo_data']['id'] ?? null,
+                    'tipoDocumentoIdentificacion_id' => $value['tipoDocumentoIdentificacion_data']['id'] ?? null,
+                    'numDocumentoIdentificacion' => $value['numDocumentoIdentificacion'],
+                    'numFEVPagoModerador' => $value['numFEVPagoModerador'],
+                ]);
+
+                // Get the next consecutivo
+                $consecutivo = getNextConsecutivo($post['invoice_id'], TypeServiceEnum::SERVICE_TYPE_007);
+
+                // Create Service
+                $service = $this->serviceRepository->store([
+                    'company_id' => $post['company_id'],
+                    'invoice_id' => $post['invoice_id'],
+                    'consecutivo' => $consecutivo,
+                    'type' => TypeServiceEnum::SERVICE_TYPE_007,
+                    'serviceable_type' => TypeServiceEnum::SERVICE_TYPE_007->model(),
+                    'serviceable_id' => $otherService->id,
+                    'codigo_servicio' => $value['codTecnologiaSalud'],
+                    'nombre_servicio' => $value['nomTecnologiaSalud'],
+                    'quantity' => $value['cantidadOS'],
+                    'unit_value' => $value['vrUnitOS'],
+                    'total_value' => $value['vrServicio'],
+                ]);
+
+                // Prepare service data for JSON
+                $serviceData = [
+                    'codPrestador' => $service->invoice?->serviceVendor?->ips_cod_habilitacion?->codigo,
+                    'numAutorizacion' => $value['numAutorizacion'],
+                    'idMIPRES' => $value['idMIPRES'] ?? '',
+                    'fechaSuministroTecnologia' => Carbon::parse($value['fechaSuministroTecnologia'])->format('Y-m-d H:i'),
+                    'tipoOS' => $otherService->tipoOtrosServicio?->codigo,
+                    'codTecnologiaSalud' => $value['codTecnologiaSalud'],
+                    'nomTecnologiaSalud' => $value['nomTecnologiaSalud'],
+                    'cantidadOS' => intval($value['cantidadOS']),
+                    'tipoDocumentoIdentificacion' => $otherService->tipoDocumentoIdentificacion?->codigo,
+                    'numDocumentoIdentificacion' => $value['numDocumentoIdentificacion'],
+                    'vrUnitOS' => floatval($value['vrUnitOS']),
+                    'vrServicio' => floatval($value['vrServicio']),
+                    'conceptoRecaudo' => $otherService->conceptoRecaudo?->codigo,
+                    'valorPagoModerador' => floatval($value['valorPagoModerador']),
+                    'numFEVPagoModerador' => $value['numFEVPagoModerador'],
+                    'consecutivo' => $consecutivo,
+                ];
+
+                // Update JSON with new service
+                updateInvoiceServicesJson(
+                    $post['invoice_id'],
+                    TypeServiceEnum::SERVICE_TYPE_007,
+                    $serviceData,
+                    'add'
+                );
+            }
+        }
+
+        // Urgencias
+        $urgencias = $json['usuarios'][0]['servicios']['urgencias'];
+
+        if (count($urgencias) > 0) {
+            foreach ($urgencias as $key => $value) {
+
+                // Create Urgency
+                $urgency = $this->urgencyRepository->store([
+                    'fechaInicioAtencion' => $value['fechaInicioAtencion'],
+                    'causaMotivoAtencion_id' => $value['causaMotivoAtencion_data']['id'] ?? null,
+                    'codDiagnosticoPrincipal_id' => $value['codDiagnosticoPrincipal_data']['id'] ?? null,
+                    'codDiagnosticoPrincipalE_id' => $value['codDiagnosticoPrincipalE_data']['id'] ?? null,
+                    'codDiagnosticoRelacionadoE1_id' => $value['codDiagnosticoRelacionadoE1_data']['id'] ?? null,
+                    'codDiagnosticoRelacionadoE2_id' => $value['codDiagnosticoRelacionadoE2_data']['id'] ?? null,
+                    'codDiagnosticoRelacionadoE3_id' => $value['codDiagnosticoRelacionadoE3_data']['id'] ?? null,
+                    'condicionDestinoUsuarioEgreso' => $value['condicionDestinoUsuarioEgreso'],
+                    'codDiagnosticoCausaMuerte_id' => $value['codDiagnosticoCausaMuerte_data']['id'] ?? null,
+                    'fechaEgreso' => $value['fechaEgreso'],
+                ]);
+
+                // Get the next consecutivo
+                $consecutivo = getNextConsecutivo($post['invoice_id'], TypeServiceEnum::SERVICE_TYPE_003);
+
+                // Create Service
+                $service = $this->serviceRepository->store([
+                    'company_id' => $post['company_id'],
+                    'invoice_id' => $post['invoice_id'],
+                    'consecutivo' => $consecutivo,
+                    'type' => TypeServiceEnum::SERVICE_TYPE_003,
+                    'serviceable_type' => TypeServiceEnum::SERVICE_TYPE_003->model(),
+                    'serviceable_id' => $urgency->id,
+                    'codigo_servicio' => null,
+                    'nombre_servicio' => null,
+                    'quantity' => 1,
+                    'unit_value' => 0,
+                    'total_value' => 0,
+                ]);
+
+                // Prepare service data for JSON
+                $serviceData = [
+                    'codPrestador' => $service->invoice?->serviceVendor?->ips_cod_habilitacion?->codigo,
+                    'fechaInicioAtencion' => Carbon::parse($value['fechaInicioAtencion'])->format('Y-m-d H:i'),
+                    'causaMotivoAtencion' => $urgency->causaMotivoAtencion?->codigo,
+                    'codDiagnosticoPrincipal' => $urgency->codDiagnosticoPrincipal?->codigo,
+                    'codDiagnosticoPrincipalE' => $urgency->codDiagnosticoPrincipalE?->codigo,
+                    'codDiagnosticoRelacionadoE1' => $urgency->codDiagnosticoRelacionadoE1?->codigo ?? '',
+                    'codDiagnosticoRelacionadoE2' => $urgency->codDiagnosticoRelacionadoE2?->codigo ?? '',
+                    'codDiagnosticoRelacionadoE3' => $urgency->codDiagnosticoRelacionadoE3?->codigo ?? '',
+                    'condicionDestinoUsuarioEgreso' => $value['condicionDestinoUsuarioEgreso'],
+                    'codDiagnosticoCausaMuerte' => $urgency->codDiagnosticoCausaMuerte?->codigo ?? '',
+                    'fechaEgreso' => Carbon::parse($value['fechaEgreso'])->format('Y-m-d H:i'),
+                    'consecutivo' => $consecutivo,
+                ];
+
+                // Update JSON with new service
+                updateInvoiceServicesJson(
+                    $post['invoice_id'],
+                    TypeServiceEnum::SERVICE_TYPE_003,
+                    $serviceData,
+                    'add'
+                );
+            }
+        }
+
+        // Hospitalizacion
+        $hospitalizacion = $json['usuarios'][0]['servicios']['hospitalizacion'];
+
+        if (count($hospitalizacion) > 0) {
+            foreach ($hospitalizacion as $key => $value) {
+
+                // Create Hospitalization
+                $hospitalization = $this->hospitalizationRepository->store([
+                    'viaIngresoServicioSalud_id' => $value['viaIngresoServicioSalud_data']['id'] ?? null,
+                    'fechaInicioAtencion' => $value['fechaInicioAtencion'],
+                    'numAutorizacion' => $value['numAutorizacion'],
+                    'causaMotivoAtencion_id' => $value['causaMotivoAtencion_data']['id'] ?? null,
+                    'codDiagnosticoPrincipal_id' => $value['codDiagnosticoPrincipal_data']['id'] ?? null,
+                    'codDiagnosticoPrincipalE_id' => $value['codDiagnosticoPrincipalE_data']['id'] ?? null,
+                    'codDiagnosticoRelacionadoE1_id' => $value['codDiagnosticoRelacionadoE1_data']['id'] ?? null,
+                    'codDiagnosticoRelacionadoE2_id' => $value['codDiagnosticoRelacionadoE2_data']['id'] ?? null,
+                    'codDiagnosticoRelacionadoE3_id' => $value['codDiagnosticoRelacionadoE3_data']['id'] ?? null,
+                    'codComplicacion_id' => $value['codComplicacion_data']['id'] ?? null,
+                    'condicionDestinoUsuarioEgreso_id' => $value['condicionDestinoUsuarioEgreso_data']['id'] ?? null,
+                    'codDiagnosticoCausaMuerte_id' => $value['codDiagnosticoCausaMuerte_data']['id'] ?? null,
+                    'fechaEgreso' => $value['fechaEgreso'],
+                ]);
+
+                // Get the next consecutivo
+                $consecutivo = getNextConsecutivo($post['invoice_id'], TypeServiceEnum::SERVICE_TYPE_004);
+
+                // Create Service
+                $service = $this->serviceRepository->store([
+                    'company_id' => $post['company_id'],
+                    'invoice_id' => $post['invoice_id'],
+                    'consecutivo' => $consecutivo,
+                    'type' => TypeServiceEnum::SERVICE_TYPE_004,
+                    'serviceable_type' => TypeServiceEnum::SERVICE_TYPE_004->model(),
+                    'serviceable_id' => $hospitalization->id,
+                    'codigo_servicio' => null,
+                    'nombre_servicio' => null,
+                    'quantity' => 1,
+                    'unit_value' => 0,
+                    'total_value' => 0,
+                ]);
+
+                // Prepare service data for JSON
+                $serviceData = [
+                    'codPrestador' => $service->invoice?->serviceVendor?->ips_cod_habilitacion?->codigo,
+                    'viaIngresoServicioSalud' => $hospitalization->viaIngresoServicioSalud?->codigo,
+                    'fechaInicioAtencion' => Carbon::parse($value['fechaInicioAtencion'])->format('Y-m-d H:i'),
+                    'numAutorizacion' => $value['numAutorizacion'],
+                    'causaMotivoAtencion' => $hospitalization->causaMotivoAtencion?->codigo,
+                    'codDiagnosticoPrincipal' => $hospitalization->codDiagnosticoPrincipal?->codigo,
+                    'codDiagnosticoPrincipalE' => $hospitalization->codDiagnosticoPrincipalE?->codigo,
+                    'codDiagnosticoRelacionadoE1' => $hospitalization->codDiagnosticoRelacionadoE1?->codigo ?? '',
+                    'codDiagnosticoRelacionadoE2' => $hospitalization->codDiagnosticoRelacionadoE2?->codigo ?? '',
+                    'codDiagnosticoRelacionadoE3' => $hospitalization->codDiagnosticoRelacionadoE3?->codigo ?? '',
+                    'codComplicacion' => $hospitalization->codComplicacion?->codigo ?? '',
+                    'condicionDestinoUsuarioEgreso' => $hospitalization->condicionDestinoUsuarioEgreso?->codigo,
+                    'codDiagnosticoCausaMuerte' => $hospitalization->codDiagnosticoCausaMuerte?->codigo ?? '',
+                    'fechaEgreso' => Carbon::parse($value['fechaEgreso'])->format('Y-m-d H:i'),
+                    'consecutivo' => $consecutivo,
+                ];
+
+                // Update JSON with new service
+                updateInvoiceServicesJson(
+                    $post['invoice_id'],
+                    TypeServiceEnum::SERVICE_TYPE_004,
+                    $serviceData,
+                    'add'
+                );
+            }
+        }
+
+        // Recien Nacidos
+        $recienNacidos = $json['usuarios'][0]['servicios']['recienNacidos'];
+
+        if (count($recienNacidos) > 0) {
+            foreach ($recienNacidos as $key => $value) {
+
+                // Create NewlyBorn
+                $newlyBorn = $this->newlyBornRepository->store([
+                    'fechaNacimiento' => $value['fechaNacimiento'],
+                    'edadGestacional' => $value['edadGestacional'],
+                    'numConsultasCPrenatal' => $value['numConsultasCPrenatal'],
+                    'codSexoBiologico_id' => $value['codSexoBiologico_data']['id'] ?? null,
+                    'peso' => $value['peso'],
+                    'codDiagnosticoPrincipal_id' => $value['codDiagnosticoPrincipal_data']['id'] ?? null,
+                    'condicionDestinoUsuarioEgreso_id' => $value['condicionDestinoUsuarioEgreso_data']['id'] ?? null,
+                    'codDiagnosticoCausaMuerte_id' => $value['codDiagnosticoCausaMuerte_data']['id'] ?? null,
+                    'fechaEgreso' => $value['fechaEgreso'],
+                    'tipoDocumentoIdentificacion_id' => $value['tipoDocumentoIdentificacion_data']['id'] ?? null,
+                    'numDocumentoIdentificacion' => $value['numDocumentoIdentificacion'],
+                ]);
+
+                // Get the next consecutivo
+                $consecutivo = getNextConsecutivo($post['invoice_id'], TypeServiceEnum::SERVICE_TYPE_005);
+
+                // Create Service
+                $service = $this->serviceRepository->store([
+                    'company_id' => $post['company_id'],
+                    'invoice_id' => $post['invoice_id'],
+                    'consecutivo' => $consecutivo,
+                    'type' => TypeServiceEnum::SERVICE_TYPE_005,
+                    'serviceable_type' => TypeServiceEnum::SERVICE_TYPE_005->model(),
+                    'serviceable_id' => $newlyBorn->id,
+                    'codigo_servicio' => null,
+                    'nombre_servicio' => null,
+                    'quantity' => 1,
+                    'unit_value' => 0,
+                    'total_value' => 0,
+                ]);
+
+                // Prepare service data for JSON
+                $serviceData = [
+                    'codPrestador' => $service->invoice?->serviceVendor?->ips_cod_habilitacion?->codigo,
+                    'tipoDocumentoIdentificacion' => $newlyBorn->tipoDocumentoIdentificacion?->codigo,
+                    'numDocumentoIdentificacion' => intval($value['numDocumentoIdentificacion']),
+                    'fechaNacimiento' => Carbon::parse($value['fechaNacimiento'])->format('Y-m-d H:i'),
+                    'edadGestacional' => intval($value['edadGestacional']),
+                    'numConsultasCPrenatal' => intval($value['numConsultasCPrenatal']),
+                    'codSexoBiologico' => $newlyBorn->codSexoBiologico?->codigo,
+                    'peso' => floatval($value['peso']),
+                    'codDiagnosticoPrincipal' => $newlyBorn->codDiagnosticoPrincipal?->codigo,
+                    'condicionDestinoUsuarioEgreso' => $newlyBorn->condicionDestinoUsuarioEgreso?->codigo,
+                    'codDiagnosticoCausaMuerte' => $newlyBorn->codDiagnosticoCausaMuerte?->codigo ?? '',
+                    'fechaEgreso' => Carbon::parse($value['fechaEgreso'])->format('Y-m-d H:i'),
+                    'consecutivo' => $consecutivo,
+                ];
+
+                // Update JSON with new service
+                updateInvoiceServicesJson(
+                    $post['invoice_id'],
+                    TypeServiceEnum::SERVICE_TYPE_005,
+                    $serviceData,
+                    'add'
+                );
+            }
+        }
+
+        return $invoice;
     }
 }

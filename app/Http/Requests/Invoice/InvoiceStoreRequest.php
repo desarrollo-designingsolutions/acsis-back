@@ -27,7 +27,7 @@ class InvoiceStoreRequest extends FormRequest
             'status' => 'required',
         ];
 
-        if (!$this->tipo_nota_id && !$this->note_number) {
+        if (! $this->tipo_nota_id && ! $this->note_number) {
             $rules2 = [
                 'invoice_number' => 'required',
             ];

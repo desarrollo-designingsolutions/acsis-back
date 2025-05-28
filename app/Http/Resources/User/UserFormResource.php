@@ -22,7 +22,7 @@ class UserFormResource extends JsonResource
             'email' => $this->email,
             'role_id' => $this->role_id,
             'company_id' => $this->company_id,
-            'service_vendor_ids' =>  ServiceVendorSelectResource::collection($this->serviceVendors),
+            'service_vendor_ids' => ServiceVendorSelectResource::collection($this->serviceVendors),
         ];
     }
 }

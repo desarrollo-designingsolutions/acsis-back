@@ -139,7 +139,7 @@ class ServiceVendorController extends Controller
 
             return [
                 'code' => 200,
-                'message' => 'Proveedor ' . $msg . ' con éxito',
+                'message' => 'Proveedor '.$msg.' con éxito',
             ];
         });
     }

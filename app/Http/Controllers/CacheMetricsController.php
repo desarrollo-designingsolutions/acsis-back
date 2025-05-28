@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\Redis;
 
 class CacheMetricsController extends Controller
 {
-
     use HttpResponseTrait;
 
     /**
@@ -22,7 +21,7 @@ class CacheMetricsController extends Controller
     private function getMetricsFromRedis(int $limit = 30): array
     {
         $rawMetrics = Redis::lrange('list:cache_metrics', 0, -1);
-        $metrics = array_map(fn($item) => json_decode($item, true), $rawMetrics);
+        $metrics = array_map(fn ($item) => json_decode($item, true), $rawMetrics);
 
         $grouped = [];
         foreach ($metrics as $metric) {
@@ -177,7 +176,7 @@ class CacheMetricsController extends Controller
         $redisRequests = array_reverse($redisRequests);
         $dbRequests = array_reverse($dbRequests);
 
-        $maxRequests = max(max(array_filter($redisRequests, fn($v) => $v > 0)), max(array_filter($dbRequests, fn($v) => $v > 0)));
+        $maxRequests = max(max(array_filter($redisRequests, fn ($v) => $v > 0)), max(array_filter($dbRequests, fn ($v) => $v > 0)));
         $maxRequests = $maxRequests > 0 ? ceil($maxRequests * 1.1) : 10;
 
         return response()->json([
@@ -365,9 +364,9 @@ class CacheMetricsController extends Controller
             $filter = $request->input('filter.inputGeneral');
             $sort = $request->input('sort', 'title'); // default sort by 'title'
 
-            $tables = DB::select("SHOW TABLES");
+            $tables = DB::select('SHOW TABLES');
 
-            $bd = env("DB_DATABASE"); // Ajusta si tu base de datos no es "acsis"
+            $bd = env('DB_DATABASE'); // Ajusta si tu base de datos no es "acsis"
             $tableKey = 'Tables_in_'.$bd; // Ajusta si tu base de datos no es "acsis"
             $results = [];
 
@@ -382,12 +381,12 @@ class CacheMetricsController extends Controller
                 try {
                     $count = DB::table($tableName)->count();
                 } catch (\Exception $e) {
-                    $count = 'Error: ' . $e->getMessage();
+                    $count = 'Error: '.$e->getMessage();
                 }
 
                 $results[] = [
                     'title' => $tableName,
-                    'count_records' => $count
+                    'count_records' => $count,
                 ];
             }
 
@@ -415,10 +414,10 @@ class CacheMetricsController extends Controller
             // Debe devolver algo como: App\Models\Invoice
             $model = getModelByTableName($table);
 
-            if (!$model) {
+            if (! $model) {
                 return [
                     'code' => 404,
-                    'message' => 'Modelo no encontrado para la tabla: ' . $table
+                    'message' => 'Modelo no encontrado para la tabla: '.$table,
                 ];
             }
 
@@ -430,7 +429,7 @@ class CacheMetricsController extends Controller
 
             return [
                 'code' => 200,
-                'message' => 'Sincronización iniciada'
+                'message' => 'Sincronización iniciada',
             ];
         });
     }

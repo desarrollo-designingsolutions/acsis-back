@@ -61,7 +61,7 @@ class ProcedureController extends Controller
             // Get the next consecutivo
             $consecutivo = getNextConsecutivo($post['invoice_id'], TypeServiceEnum::SERVICE_TYPE_002);
 
-            // Create MedicalConsultation
+            // Create Procedure
             $procedure = $this->procedureRepository->store([
                 'fechaInicioAtencion' => Carbon::parse($post['fechaInicioAtencion'])->format('Y-m-d H:i'),
                 'idMIPRES' => $post['idMIPRES'],
@@ -178,7 +178,7 @@ class ProcedureController extends Controller
 
             $post = $request->all();
 
-            // Update MedicalConsultation
+            // Update Procedure
             $procedure = $this->procedureRepository->store([
                 'fechaInicioAtencion' => $post['fechaInicioAtencion'],
                 'idMIPRES' => $post['idMIPRES'],

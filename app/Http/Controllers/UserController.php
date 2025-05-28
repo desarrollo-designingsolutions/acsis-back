@@ -65,7 +65,7 @@ class UserController extends Controller
             $user = $this->userRepository->store($post, withCompany: false);
             $user->syncRoles($request->input('role_id'));
 
-            if($request->input('service_vendor_ids')){
+            if ($request->input('service_vendor_ids')) {
                 $service_vendor_ids = collect($request->input('service_vendor_ids'))->pluck('value');
                 $user->serviceVendors()->sync($service_vendor_ids);
             }
@@ -105,7 +105,7 @@ class UserController extends Controller
             $user = $this->userRepository->store($post, $id, withCompany: false);
             $user->syncRoles($request->input('role_id'));
 
-            if($request->input('service_vendor_ids')){
+            if ($request->input('service_vendor_ids')) {
                 $service_vendor_ids = collect($request->input('service_vendor_ids'))->pluck('value');
                 $user->serviceVendors()->sync($service_vendor_ids);
             }
@@ -139,7 +139,7 @@ class UserController extends Controller
 
             return [
                 'code' => 200,
-                'message' => 'User ' . $msg . ' con éxito',
+                'message' => 'User '.$msg.' con éxito',
             ];
         });
     }
@@ -170,7 +170,7 @@ class UserController extends Controller
             // Cambiar la photo
             if ($request->file('photo')) {
                 $file = $request->file('photo');
-                $ruta = 'companies/company_' . $user->company_id . '/' . $user->id . $request->input('photo');
+                $ruta = 'companies/company_'.$user->company_id.'/'.$user->id.$request->input('photo');
                 $photo = $file->store($ruta, Constants::DISK_FILES);
                 $user->photo = $photo;
                 $user->save();

@@ -2,8 +2,8 @@
 
 namespace App\Helpers\Invoice;
 
-use Opis\JsonSchema\Validator;
 use Opis\JsonSchema\Errors\ErrorFormatter;
+use Opis\JsonSchema\Validator;
 
 class JsonStructureValidation
 {
@@ -16,19 +16,19 @@ class JsonStructureValidation
         $data = json_decode($jsonContent);
         if (json_last_error() !== JSON_ERROR_NONE) {
             return [
-                "isValid" => false,
-                "message" => "El archivo no contiene un JSON válido: " . json_last_error_msg(),
-                "errors" => []
+                'isValid' => false,
+                'message' => 'El archivo no contiene un JSON válido: '.json_last_error_msg(),
+                'errors' => [],
             ];
         }
 
         // Cargar el esquema desde el archivo
         $schemaPath = storage_path('jsonschemas/validJSONSchema.json');
-        if (!file_exists($schemaPath)) {
+        if (! file_exists($schemaPath)) {
             return [
-                "isValid" => false,
-                "message" => "El archivo de esquema JSON no se encuentra en: $schemaPath",
-                "errors" => []
+                'isValid' => false,
+                'message' => "El archivo de esquema JSON no se encuentra en: $schemaPath",
+                'errors' => [],
             ];
         }
 
@@ -38,31 +38,30 @@ class JsonStructureValidation
         $schemaData = json_decode($schemaContent);
         if (json_last_error() !== JSON_ERROR_NONE) {
             return [
-                "isValid" => false,
-                "message" => "El esquema JSON no es válido: " . json_last_error_msg(),
-                "errors" => []
+                'isValid' => false,
+                'message' => 'El esquema JSON no es válido: '.json_last_error_msg(),
+                'errors' => [],
             ];
         }
 
         // Validar con Opis\JsonSchema usando URI
-        $validator = new Validator();
+        $validator = new Validator;
         $validator->setMaxErrors(100); // Permitir recolectar hasta 100 errores
         $validator->setStopAtFirstError(false); // Permitir recolectar hasta 100 errores
         $result = $validator->validate($data, $schemaData);
 
         if ($result->isValid()) {
             return [
-                "isValid" => $result->isValid(),
-                "message" => "Archivo JSON válido y procesado correctamente.",
-                "errors" => []
+                'isValid' => $result->isValid(),
+                'message' => 'Archivo JSON válido y procesado correctamente.',
+                'errors' => [],
             ];
         }
 
         // \Log::info('Mensaje error', ['error' => $result->error()]);
 
-
         // Recolectar errores
-        $errorFormatter = new ErrorFormatter();
+        $errorFormatter = new ErrorFormatter;
         $errors = $errorFormatter->format($result->error());
         $formattedErrors = [];
 
@@ -72,12 +71,12 @@ class JsonStructureValidation
                 // \Log::info('Mensaje de error crudo', ['path' => $path, 'message' => $message]);
                 $errorList = self::simplifyErrorMessage($message, $path, $data);
                 foreach ($errorList as $error) {
-                    if (!empty($error['message'])) {
+                    if (! empty($error['message'])) {
                         $formattedErrors[] = [
                             'level' => $error['level'],
                             'key' => $error['key'],
                             'data' => $error['data'],
-                            'message' => $error['message']
+                            'message' => $error['message'],
                         ];
                     }
                 }
@@ -88,25 +87,25 @@ class JsonStructureValidation
         $uniqueErrors = [];
         $seenMessages = [];
         foreach ($formattedErrors as $error) {
-            if (!in_array($error['message'], $seenMessages)) {
+            if (! in_array($error['message'], $seenMessages)) {
                 $uniqueErrors[] = $error;
                 $seenMessages[] = $error['message'];
             }
         }
 
         return [
-            "isValid" => $result->isValid(),
-            "message" => "Error de validación JSON.",
-            'errors' => array_values($uniqueErrors)
+            'isValid' => $result->isValid(),
+            'message' => 'Error de validación JSON.',
+            'errors' => array_values($uniqueErrors),
         ];
     }
 
     /**
      * Simplifica y mejora los mensajes de error de validación JSON
      *
-     * @param string $message El mensaje de error original
-     * @param string $path La ruta del error
-     * @param mixed $data Los datos del JSON para extraer valores
+     * @param  string  $message  El mensaje de error original
+     * @param  string  $path  La ruta del error
+     * @param  mixed  $data  Los datos del JSON para extraer valores
      * @return array
      */
     private static function simplifyErrorMessage($message, $path = '', $data = null)
@@ -125,14 +124,14 @@ class JsonStructureValidation
             $missingFields = isset($matches[1]) ? array_map('trim', explode(',', $matches[1])) : ['desconocido'];
             foreach ($missingFields as $key) {
                 $value = ''; // Campo faltante, valor vacío
-                $mensaje = "En el nivel de $level falta el campo requerido '$key'" .
-                    ($cleanPath ? " (en $cleanPath)" : "") .
-                    ($userIndex !== null ? " (Usuario $userIndex)" : "");
+                $mensaje = "En el nivel de $level falta el campo requerido '$key'".
+                    ($cleanPath ? " (en $cleanPath)" : '').
+                    ($userIndex !== null ? " (Usuario $userIndex)" : '');
                 $errors[] = [
                     'level' => $level,
                     'key' => $key,
                     'data' => $value,
-                    'message' => $mensaje
+                    'message' => $mensaje,
                 ];
             }
         }
@@ -151,14 +150,14 @@ class JsonStructureValidation
 
             foreach ($invalidFields as $field) {
                 $value = self::getValueFromPath($data, $field);
-                $mensaje = "Campo no permitido en $level: '$field'" .
-                    ($cleanPath ? " (en $cleanPath)" : "") .
-                    ($userIndex !== null ? " (Usuario $userIndex)" : "");
+                $mensaje = "Campo no permitido en $level: '$field'".
+                    ($cleanPath ? " (en $cleanPath)" : '').
+                    ($userIndex !== null ? " (Usuario $userIndex)" : '');
                 $errors[] = [
                     'level' => $level,
                     'key' => $field,
                     'data' => $value,
-                    'message' => $mensaje
+                    'message' => $mensaje,
                 ];
             }
         }
@@ -167,28 +166,28 @@ class JsonStructureValidation
         elseif (strpos($message, 'must be') !== false) {
             $key = self::extractKeyFromPath($path);
             $value = self::getValueFromPath($data, $path);
-            $mensaje = "Tipo de dato incorrecto" .
-                ($cleanPath ? " en $cleanPath" : "") .
-                ": " . $message .
-                ($userIndex !== null ? " (Usuario $userIndex)" : "");
+            $mensaje = 'Tipo de dato incorrecto'.
+                ($cleanPath ? " en $cleanPath" : '').
+                ': '.$message.
+                ($userIndex !== null ? " (Usuario $userIndex)" : '');
             $errors[] = [
                 'level' => $level,
                 'key' => $key,
                 'data' => $value,
-                'message' => $mensaje
+                'message' => $mensaje,
             ];
         }
         // Mensaje genérico
         else {
             $key = self::extractKeyFromPath($path);
             $value = self::getValueFromPath($data, $path);
-            $mensaje = "Error en $level: $message" . ($cleanPath ? " (en $cleanPath)" : "") .
-                ($userIndex !== null ? " (Usuario $userIndex)" : "");
+            $mensaje = "Error en $level: $message".($cleanPath ? " (en $cleanPath)" : '').
+                ($userIndex !== null ? " (Usuario $userIndex)" : '');
             $errors[] = [
                 'level' => $level,
                 'key' => $key,
                 'data' => $value,
-                'message' => $mensaje
+                'message' => $mensaje,
             ];
         }
 
@@ -202,6 +201,7 @@ class JsonStructureValidation
         if (preg_match('#^/usuarios/(\d+)#', $path, $matches)) {
             return $matches[1];
         }
+
         return null;
     }
 
@@ -225,7 +225,7 @@ class JsonStructureValidation
                 'numDocumentoIdentificacion',
                 'tipoDocumentoIdentificacion',
                 'codZonaTerritorialResidencia',
-                'servicios'
+                'servicios',
             ];
         } elseif (preg_match('#^/usuarios/\d+/servicios$#', $path)) {
             return [
@@ -235,7 +235,7 @@ class JsonStructureValidation
                 'hospitalizacion',
                 'recienNacidos',
                 'medicamentos',
-                'otrosServicios'
+                'otrosServicios',
             ];
         } elseif (preg_match('#^/usuarios/\d+/servicios/consultas$#', $path)) {
             return [
@@ -259,7 +259,7 @@ class JsonStructureValidation
                 'numFEVPagoModerador',
                 'consecutivo',
                 'vrServicio',
-                'conceptoRecaudo'
+                'conceptoRecaudo',
             ];
         } elseif (preg_match('#^/usuarios/\d+/servicios/procedimientos$#', $path)) {
             return [
@@ -282,7 +282,7 @@ class JsonStructureValidation
                 'numFEVPagoModerador',
                 'consecutivo',
                 'vrServicio',
-                'conceptoRecaudo'
+                'conceptoRecaudo',
             ];
         } elseif (preg_match('#^/usuarios/\d+/servicios/urgencias$#', $path)) {
             return [
@@ -300,7 +300,7 @@ class JsonStructureValidation
                 'consecutivo',
                 'numFEVPagoModerador',
                 'numDocumentoIdentificacion',
-                'tipoDocumentoIdentificacion'
+                'tipoDocumentoIdentificacion',
             ];
         } elseif (preg_match('#^/usuarios/\d+/servicios/hospitalizacion$#', $path)) {
             return [
@@ -321,7 +321,7 @@ class JsonStructureValidation
                 'codPrestador',
                 'numDocumentoIdentificacion',
                 'tipoDocumentoIdentificacion',
-                'numFEVPagoModerador'
+                'numFEVPagoModerador',
             ];
         } elseif (preg_match('#^/usuarios/\d+/servicios/recienNacidos$#', $path)) {
             return [
@@ -339,7 +339,7 @@ class JsonStructureValidation
                 'codDiagnosticoCausaMuerte',
                 'fechaEgreso',
                 'consecutivo',
-                'numFEVPagoModerador'
+                'numFEVPagoModerador',
             ];
         } elseif (preg_match('#^/usuarios/\d+/servicios/medicamentos$#', $path)) {
             return [
@@ -365,7 +365,7 @@ class JsonStructureValidation
                 'numFEVPagoModerador',
                 'consecutivo',
                 'vrServicio',
-                'conceptoRecaudo'
+                'conceptoRecaudo',
             ];
         } elseif (preg_match('#^/usuarios/\d+/servicios/otrosServicios$#', $path)) {
             return [
@@ -384,31 +384,31 @@ class JsonStructureValidation
                 'conceptoRecaudo',
                 'valorPagoModerador',
                 'numFEVPagoModerador',
-                'consecutivo'
+                'consecutivo',
             ];
         }
+
         // Agrega más condiciones según sea necesario para otros niveles del esquema
         return [];
     }
 
-
     /**
      * Extrae el valor del JSON en la ruta especificada
      *
-     * @param mixed $data Los datos del JSON
-     * @param string $path La ruta del error
+     * @param  mixed  $data  Los datos del JSON
+     * @param  string  $path  La ruta del error
      * @return string
      */
     private static function getValueFromPath($data, $path)
     {
-        if (!$data) {
+        if (! $data) {
             return '';
         }
 
         // Normalizar la ruta eliminando el prefijo '#'
         $path = ltrim($path, '#');
         if (empty($path) || $path === '/') {
-            return is_object($data) || is_array($data) ? '[object]' : (string)$data;
+            return is_object($data) || is_array($data) ? '[object]' : (string) $data;
         }
 
         // Convertir la ruta en un arreglo de claves
@@ -438,13 +438,13 @@ class JsonStructureValidation
             return '[object]';
         }
 
-        return (string)$current;
+        return (string) $current;
     }
 
     /**
      * Extrae la clave desde la ruta del error
      *
-     * @param string $path
+     * @param  string  $path
      * @return string
      */
     private static function extractKeyFromPath($path)
@@ -457,13 +457,14 @@ class JsonStructureValidation
 
         // Tomar la última parte de la ruta como la clave
         $parts = explode('/', trim($path, '/'));
+
         return end($parts);
     }
 
     /**
      * Determina el nivel del error para mensajes más amigables
      *
-     * @param string $path
+     * @param  string  $path
      * @return string
      */
     private static function determineErrorLevel($path)
@@ -499,7 +500,7 @@ class JsonStructureValidation
     /**
      * Limpia y traduce la ruta del error para hacerla más legible
      *
-     * @param string $path
+     * @param  string  $path
      * @return string
      */
     private static function cleanJsonPath($path)
@@ -519,7 +520,7 @@ class JsonStructureValidation
             '/hospitalizacion' => 'Hospitalización',
             '/recienNacidos' => 'Recién Nacidos',
             '/medicamentos' => 'Medicamentos',
-            '/otrosServicios' => 'Otros Servicios'
+            '/otrosServicios' => 'Otros Servicios',
         ];
 
         // Reemplazar nombres de niveles
