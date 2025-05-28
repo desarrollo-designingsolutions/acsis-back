@@ -2,7 +2,6 @@
 
 namespace App\Jobs\Redis;
 
-use App\Events\ProgressCircular;
 use App\Models\Company;
 use App\Services\CacheService;
 use Carbon\Carbon;
@@ -11,7 +10,6 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Schema;
 
@@ -20,6 +18,7 @@ class ProcessRedisModel implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     protected $modelClass;
+
     protected $channel;
 
     public function __construct($modelClass, $channel)
@@ -60,16 +59,15 @@ class ProcessRedisModel implements ShouldQueue
             }
 
             // Ahora procesar los registros y guardarlos
-            Company::select('id')->cursor()->each(function ($company) use ( $hasCompany, $mainCacheKey,) {
+            Company::select('id')->cursor()->each(function ($company) use ($hasCompany) {
                 $query = $this->modelClass::query();
                 if ($hasCompany) {
                     $query->where('company_id', $company->id);
                 }
 
                 $query->chunkById(50, function ($elements) use (
-                    $mainCacheKey, $company
+                    $company
                 ) {
-                    
 
                     ProcessRedisBatch::dispatch($company->id, $this->modelClass, $elements, $this->channel)->onQueue('batches');
 
@@ -83,7 +81,7 @@ class ProcessRedisModel implements ShouldQueue
                 Redis::del("integer:progress_processed:{$this->channel}");
             }
         } catch (\Throwable $e) {
-            \Log::error("Error in ProcessRedisModel for {$this->modelClass}: " . $e->getMessage(), [
+            \Log::error("Error in ProcessRedisModel for {$this->modelClass}: ".$e->getMessage(), [
                 'model' => $this->modelClass,
                 'trace' => $e->getTraceAsString(),
             ]);

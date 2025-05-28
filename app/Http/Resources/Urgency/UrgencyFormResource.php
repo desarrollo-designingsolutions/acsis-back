@@ -4,7 +4,6 @@ namespace App\Http\Resources\Urgency;
 
 use App\Http\Resources\Cie10\Cie10SelectInfiniteResource;
 use App\Http\Resources\RipsCausaExternaVersion2\RipsCausaExternaVersion2SelectInfiniteResource;
-use App\Http\Resources\TipoIdPisis\TipoIdPisisSelectResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 

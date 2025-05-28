@@ -5,7 +5,6 @@ namespace App\Http\Resources\Hospitalization;
 use App\Http\Resources\Cie10\Cie10SelectInfiniteResource;
 use App\Http\Resources\CondicionyDestinoUsuarioEgreso\CondicionyDestinoUsuarioEgresoSelectInfiniteResource;
 use App\Http\Resources\RipsCausaExternaVersion2\RipsCausaExternaVersion2SelectInfiniteResource;
-use App\Http\Resources\TipoIdPisis\TipoIdPisisSelectResource;
 use App\Http\Resources\ViaIngresoUsuario\ViaIngresoUsuarioSelectInfiniteResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;

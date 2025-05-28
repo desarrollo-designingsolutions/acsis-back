@@ -12,7 +12,7 @@ class IpsCodHabilitacionSeeder extends Seeder
     /**
      * Run the database seeds.
      */
-     public function run(): void
+    public function run(): void
     {
         $excelService = new ExcelService;
         $sheet = null;

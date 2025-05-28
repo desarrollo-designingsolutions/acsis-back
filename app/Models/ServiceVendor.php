@@ -31,7 +31,7 @@ class ServiceVendor extends Model
     {
         return $this->belongsTo(IpsCodHabilitacion::class, 'ips_cod_habilitacion_id');
     }
-    
+
     public function users()
     {
         return $this->belongsToMany(User::class, 'service_vendor_users', 'service_vendor_id', 'user_id');

@@ -4,14 +4,15 @@ namespace App\Services\JsonValidation;
 
 use App\Helpers\Constants;
 use App\Services\CacheService;
+use DateTime;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Arr;
-use DateTime;
 
 class JsonDataValidation
 {
     protected $errors = [];
+
     protected $validatedData = [];
 
     public function __construct(protected CacheService $cacheService)
@@ -38,7 +39,8 @@ class JsonDataValidation
                 'validatedData' => $this->validatedData,
             ];
         } catch (\Exception $e) {
-            Log::error('Error en la validación de datos del JSON: ' . $e->getMessage(), ['jsonData' => $jsonData]);
+            Log::error('Error en la validación de datos del JSON: '.$e->getMessage(), ['jsonData' => $jsonData]);
+
             return [
                 'isValid' => false,
                 'message' => 'Error durante la validación de datos',
@@ -68,13 +70,14 @@ class JsonDataValidation
                     'data' => '',
                     'message' => "Formato de regla inválido para {$fieldPath}: se esperaba usuarios.*.servicios.<servicio>.*.<campo>.",
                 ];
+
                 return;
             }
 
             $serviceType = $middleParts[1]; // consultas, procedimientos, medicamentos
             $parentValues = Arr::get($jsonData, $parentPath, []);
 
-            if (!is_array($parentValues)) {
+            if (! is_array($parentValues)) {
 
                 $this->errors[] = [
                     'level' => $parentPath,
@@ -84,13 +87,14 @@ class JsonDataValidation
                 ];
 
                 Arr::set($this->validatedData, $parentPath, null);
+
                 return;
             }
 
             foreach ($parentValues as $userIndex => $parentValue) {
                 $serviceItems = Arr::get($parentValue, "{$middleParts[0]}.{$serviceType}", []);
 
-                if (!is_array($serviceItems)) {
+                if (! is_array($serviceItems)) {
                     $this->errors[] = [
                         'level' => "{$parentPath}[{$userIndex}].{$middlePath}",
                         'key' => $serviceType,
@@ -98,6 +102,7 @@ class JsonDataValidation
                         'message' => "Campo {$parentPath}[{$userIndex}].{$middlePath}: Se esperaba un array en {$serviceType}.",
                     ];
                     Arr::set($this->validatedData, "{$parentPath}.{$userIndex}.{$middleParts[0]}.{$serviceType}", null);
+
                     return;
                 }
 
@@ -106,7 +111,6 @@ class JsonDataValidation
                     // Log::info("Validando campo {$fieldPath}[{$userIndex}][{$itemIndex}]", ['value' => $value, 'rule' => $rule]);
 
                     if ($value === null) {
-
 
                         $this->errors[] = [
                             'level' => "{$parentPath}[{$userIndex}].{$middlePath}[{$itemIndex}].{$childField}",
@@ -119,6 +123,7 @@ class JsonDataValidation
                         if ($rule['type'] === 'exists') {
                             Arr::set($this->validatedData, "{$parentPath}.{$userIndex}.{$middleParts[0]}.{$serviceType}.{$itemIndex}.{$childField}_data", null);
                         }
+
                         continue;
                     }
 
@@ -142,7 +147,7 @@ class JsonDataValidation
                         }
                     } else {
                         $isValid = $this->validateValue($value, $rule);
-                        if (!$isValid) {
+                        if (! $isValid) {
                             $errorMessage = is_callable($rule['error_message'])
                                 ? $rule['error_message']($rule, $value)
                                 : $rule['error_message'];
@@ -165,7 +170,7 @@ class JsonDataValidation
             $childField = $pathParts[1];
             $parentValues = Arr::get($jsonData, $parentPath, []);
 
-            if (!is_array($parentValues)) {
+            if (! is_array($parentValues)) {
 
                 $this->errors[] = [
                     'level' => $parentPath,
@@ -175,6 +180,7 @@ class JsonDataValidation
                 ];
 
                 Arr::set($this->validatedData, $parentPath, null);
+
                 return;
             }
 
@@ -183,7 +189,6 @@ class JsonDataValidation
                 // Log::info("Validando campo {$fieldPath}[{$index}]", ['value' => $value, 'rule' => $rule]);
 
                 if ($value === null) {
-
 
                     $this->errors[] = [
                         'level' => "{$parentPath}[{$index}].{$childField}",
@@ -196,6 +201,7 @@ class JsonDataValidation
                     if ($rule['type'] === 'exists') {
                         Arr::set($this->validatedData, "{$parentPath}.{$index}.{$childField}_data", null);
                     }
+
                     continue;
                 }
 
@@ -219,7 +225,7 @@ class JsonDataValidation
                     }
                 } else {
                     $isValid = $this->validateValue($value, $rule);
-                    if (!$isValid) {
+                    if (! $isValid) {
                         $errorMessage = is_callable($rule['error_message'])
                             ? $rule['error_message']($rule, $value)
                             : $rule['error_message'];
@@ -253,6 +259,7 @@ class JsonDataValidation
                 if ($rule['type'] === 'exists') {
                     Arr::set($this->validatedData, "{$fieldPath}_data", null);
                 }
+
                 return;
             }
 
@@ -264,7 +271,7 @@ class JsonDataValidation
                         : $rule['error_message'];
 
                     $this->errors[] = [
-                        'level' => "/",
+                        'level' => '/',
                         'key' => "{$fieldPath}",
                         'data' => null,
                         'message' => "Campo {$fieldPath}: {$errorMessage}",
@@ -276,13 +283,13 @@ class JsonDataValidation
                 }
             } else {
                 $isValid = $this->validateValue($value, $rule);
-                if (!$isValid) {
+                if (! $isValid) {
                     $errorMessage = is_callable($rule['error_message'])
                         ? $rule['error_message']($rule, $value)
                         : $rule['error_message'];
 
                     $this->errors[] = [
-                        'level' => "/",
+                        'level' => '/',
                         'key' => "{$fieldPath}",
                         'data' => null,
                         'message' => "Campo {$fieldPath}: {$errorMessage}",
@@ -309,6 +316,7 @@ class JsonDataValidation
                 return $this->validateNumeric($value);
             default:
                 Log::warning("Tipo de validación desconocido: {$rule['type']}");
+
                 return false;
         }
     }
@@ -326,6 +334,7 @@ class JsonDataValidation
 
         return $this->cacheService->remember($cacheKey, function () use ($table, $column, $value, $select) {
             $record = DB::table($table)->where($column, $value)->select($select)->first();
+
             return $record ? (array) $record : false;
         }, Constants::REDIS_TTL);
     }
@@ -339,6 +348,7 @@ class JsonDataValidation
     {
         try {
             new DateTime($value);
+
             return true;
         } catch (\Exception $e) {
             return false;

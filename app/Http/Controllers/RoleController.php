@@ -48,11 +48,10 @@ class RoleController extends Controller
 
             $menus = MenuCheckBoxResource::collection($menus);
 
-
             unset($menus[1]);
 
             $user = User::find($request->input('user_id'));
-            if (!$user || $user->role_id !== Constants::ROLE_SUPERADMIN_UUID) {
+            if (! $user || $user->role_id !== Constants::ROLE_SUPERADMIN_UUID) {
                 // El usuario no existe o no es superadmin, entonces limitar menús
                 unset($menus[5]);
                 unset($menus[6]);
@@ -81,7 +80,7 @@ class RoleController extends Controller
             unset($menus[1]);
 
             $user = User::find($request->input('user_id'));
-            if (!$user || $user->role_id !== Constants::ROLE_SUPERADMIN_UUID) {
+            if (! $user || $user->role_id !== Constants::ROLE_SUPERADMIN_UUID) {
                 // El usuario no existe o no es superadmin, entonces limitar menús
                 unset($menus[5]);
                 unset($menus[6]);
@@ -123,7 +122,7 @@ class RoleController extends Controller
 
             return [
                 'code' => 200,
-                'message' => 'Registro ' . $msg . ' correctamente',
+                'message' => 'Registro '.$msg.' correctamente',
                 'data' => $data,
             ];
         });

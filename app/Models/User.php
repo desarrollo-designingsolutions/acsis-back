@@ -116,7 +116,7 @@ class User extends Authenticatable implements Auditable
     {
         return $this->morphMany(Notification::class, 'notifiable');
     }
-    
+
     public function serviceVendors()
     {
         return $this->belongsToMany(ServiceVendor::class, 'service_vendor_users', 'user_id', 'service_vendor_id');
