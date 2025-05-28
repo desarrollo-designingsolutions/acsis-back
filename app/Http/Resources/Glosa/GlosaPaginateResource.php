@@ -20,6 +20,7 @@ class GlosaPaginateResource extends JsonResource
             'id' => $this->id,
             'user_full_name' => $this->user?->full_name,
             'service_description' => $this->service?->description,
+            'code_glosa_code' => $this->code_glosa?->code,
             'code_glosa_description' => $this->code_glosa?->description,
             'glosa_value' => formatNumber($this->glosa_value),
             'observation' => $this->observation,

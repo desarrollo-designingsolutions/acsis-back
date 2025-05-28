@@ -26,5 +26,6 @@ class RoutesApi
         'routes/invoicePayment.php',
         'routes/patient.php',
         'routes/dashboard.php',
+        'routes/glosaAnswer.php',
     ];
 }
