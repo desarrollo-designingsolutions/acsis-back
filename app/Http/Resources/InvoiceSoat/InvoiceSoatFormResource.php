@@ -17,7 +17,7 @@ class InvoiceSoatFormResource extends JsonResource
 
         return [
             'id' => $this->id,
-            'policy_number' => $this->policy_number,
+            'soat_number' => $this->soat_number,
             'accident_date' => $this->accident_date,
             'start_date' => $this->start_date,
             'end_date' => $this->end_date,

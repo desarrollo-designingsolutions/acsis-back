@@ -13,7 +13,10 @@ enum TypeInvoiceEnum: string
     #[Description('Evento')]
     case INVOICE_TYPE_001 = 'INVOICE_TYPE_001';
 
-    #[Description('Poliza')]
-    #[Model('App\\Models\\InvoicePolicy')]
+    #[Description('Soat')]
+    #[Model('App\\Models\\InvoiceSoat')]
     case INVOICE_TYPE_002 = 'INVOICE_TYPE_002';
+
+    #[Description('Arl')]
+    case INVOICE_TYPE_003 = 'INVOICE_TYPE_003';
 }

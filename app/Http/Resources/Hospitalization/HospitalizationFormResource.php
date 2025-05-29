@@ -33,7 +33,7 @@ class HospitalizationFormResource extends JsonResource
             'codDiagnosticoRelacionadoE3_id' => new Cie10SelectInfiniteResource($this->codDiagnosticoRelacionadoE3),
             'codComplicacion_id' => new Cie10SelectInfiniteResource($this->codComplicacion),
             'condicionDestinoUsuarioEgreso_id' => new CondicionyDestinoUsuarioEgresoSelectInfiniteResource($this->condicionDestinoUsuarioEgreso),
-            'codDiagnosticoMuerte_id' => new Cie10SelectInfiniteResource($this->codDiagnosticoMuerte),
+            'codDiagnosticoCausaMuerte_id' => new Cie10SelectInfiniteResource($this->codDiagnosticoCausaMuerte),
             'fechaEgreso' => $this->fechaEgreso,
         ];
     }

@@ -13,7 +13,7 @@ use App\Http\Requests\Invoice\InvoiceStoreRequest;
 use App\Http\Requests\Invoice\InvoiceUploadJsonRequest;
 use App\Http\Resources\Invoice\InvoiceFormResource;
 use App\Http\Resources\Invoice\InvoiceListResource;
-use App\Http\Resources\InvoicePolicy\InvoicePolicyFormResource;
+use App\Http\Resources\InvoiceSoat\InvoiceSoatFormResource;
 use App\Models\Invoice;
 use App\Models\Service;
 use App\Repositories\Cie10Repository;
@@ -24,7 +24,7 @@ use App\Repositories\EntityRepository;
 use App\Repositories\GrupoServicioRepository;
 use App\Repositories\HospitalizationRepository;
 use App\Repositories\InvoiceRepository;
-use App\Repositories\InvoicePolicyRepository;
+use App\Repositories\InvoiceSoatRepository;
 use App\Repositories\MedicalConsultationRepository;
 use App\Repositories\MedicineRepository;
 use App\Repositories\ModalidadAtencionRepository;
@@ -73,7 +73,7 @@ class InvoiceController extends Controller
         protected TypeEntityRepository $typeEntityRepository,
         protected CacheService $cacheService,
         protected PatientRepository $patientRepository,
-        protected InvoicePolicyRepository $invoicePolicyRepository,
+        protected InvoiceSoatRepository $invoiceSoatRepository,
         protected ServiceVendorRepository $serviceVendorRepository,
         protected TipoNotaRepository $tipoNotaRepository,
         protected TipoIdPisisRepository $tipoIdPisisRepository,
@@ -171,7 +171,7 @@ class InvoiceController extends Controller
         return $this->runTransaction(function () use ($request) {
 
             // Extract and prepare data
-            $post = $request->except(['entity', 'patient', 'tipoNota', 'serviceVendor', 'policy', 'value_paid', 'total', 'remaining_balance', 'value_glosa']);
+            $post = $request->except(['entity', 'patient', 'tipoNota', 'serviceVendor', 'soat', 'value_paid', 'total', 'remaining_balance', 'value_glosa']);
             $type = $request->input('type');
 
             $infoDataExtra = $this->saveDataExtraInvoice($type, $request->all());
@@ -208,8 +208,8 @@ class InvoiceController extends Controller
             $infoDataExtra = null;
             // Recuperamos informacion extra dependiendo del tipo de factura
             if ($invoice->type->value == 'INVOICE_TYPE_002') {
-                $policy = $this->invoicePolicyRepository->find($form->typeable_id);
-                $infoDataExtra = new InvoicePolicyFormResource($policy);
+                $soat = $this->invoiceSoatRepository->find($form->typeable_id);
+                $infoDataExtra = new InvoiceSoatFormResource($soat);
             }
 
             $serviceVendors = $this->queryController->selectInfiniteServiceVendor(request());
@@ -248,7 +248,7 @@ class InvoiceController extends Controller
     {
         return $this->runTransaction(function () use ($request) {
 
-            $post = $request->except(['entity', 'patient', 'tipoNota', 'serviceVendor', 'policy', 'value_paid', 'total', 'remaining_balance', 'value_glosa']);
+            $post = $request->except(['entity', 'patient', 'tipoNota', 'serviceVendor', 'soat', 'value_paid', 'total', 'remaining_balance', 'value_glosa']);
             $type = $request->input('type');
 
             $infoDataExtra = $this->saveDataExtraInvoice($type, $request->all());
@@ -274,8 +274,8 @@ class InvoiceController extends Controller
             $infoDataExtra = null;
             // Recuperamos informacion extra dependiendo del tipo de factura
             if ($invoice->type->value == 'INVOICE_TYPE_002') {
-                $policy = $this->invoicePolicyRepository->find($invoice->typeable_id);
-                $infoDataExtra = new InvoicePolicyFormResource($policy);
+                $soat = $this->invoiceSoatRepository->find($invoice->typeable_id);
+                $infoDataExtra = new InvoiceSoatFormResource($soat);
             }
 
             return [
@@ -293,10 +293,10 @@ class InvoiceController extends Controller
 
         if ($type == 'INVOICE_TYPE_002') {
 
-            $dataPolicy = array_merge($request['policy'], ['company_id' => $request['company_id']]);
+            $dataSoat = array_merge($request['soat'], ['company_id' => $request['company_id']]);
 
             // Store POLICY and invoice
-            $element = $this->invoicePolicyRepository->store($dataPolicy);
+            $element = $this->invoiceSoatRepository->store($dataSoat);
             $element['model'] = TypeInvoiceEnum::INVOICE_TYPE_002->model();
         }
 
