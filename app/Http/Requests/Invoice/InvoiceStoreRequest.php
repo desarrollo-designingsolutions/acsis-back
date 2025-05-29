@@ -36,12 +36,12 @@ class InvoiceStoreRequest extends FormRequest
 
         if ($this->type == 'INVOICE_TYPE_002') {
             $rules3 = [
-                'policy' => 'required',
-                'policy.policy_number' => 'required',
-                'policy.accident_date' => 'required|date',
-                'policy.start_date' => 'required|date',
-                'policy.end_date' => 'required|date',
-                'policy.insurance_statuse_id' => 'required',
+                'soat' => 'required',
+                'soat.policy_number' => 'required',
+                'soat.accident_date' => 'required|date',
+                'soat.start_date' => 'required|date',
+                'soat.end_date' => 'required|date',
+                'soat.insurance_statuse_id' => 'required',
             ];
             $rules = array_merge($rules, $rules3);
         }
@@ -62,15 +62,15 @@ class InvoiceStoreRequest extends FormRequest
             'radication_date.required' => 'El campo es obligatorio',
             'status.required' => 'El campo es obligatorio',
 
-            'policy.required' => 'El campo es obligatorio',
-            'policy.policy_number.required' => 'El campo es obligatorio',
-            'policy.accident_date.required' => 'El campo es obligatorio',
-            'policy.accident_date.date' => 'El campo debe ser una fecha',
-            'policy.start_date.required' => 'El campo es obligatorio',
-            'policy.start_date.date' => 'El campo debe ser una fecha',
-            'policy.end_date.required' => 'El campo es obligatorio',
-            'policy.end_date.date' => 'El campo debe ser una fecha',
-            'policy.insurance_statuse_id.required' => 'El campo es obligatorio',
+            'soat.required' => 'El campo es obligatorio',
+            'soat.policy_number.required' => 'El campo es obligatorio',
+            'soat.accident_date.required' => 'El campo es obligatorio',
+            'soat.accident_date.date' => 'El campo debe ser una fecha',
+            'soat.start_date.required' => 'El campo es obligatorio',
+            'soat.start_date.date' => 'El campo debe ser una fecha',
+            'soat.end_date.required' => 'El campo es obligatorio',
+            'soat.end_date.date' => 'El campo debe ser una fecha',
+            'soat.insurance_statuse_id.required' => 'El campo es obligatorio',
         ];
     }
 
@@ -90,8 +90,8 @@ class InvoiceStoreRequest extends FormRequest
         if ($this->has('tipo_nota_id')) {
             $merge['tipo_nota_id'] = getValueSelectInfinite($this->tipo_nota_id);
         }
-        if ($this->has('policy.insurance_statuse_id')) {
-            $merge['policy.insurance_statuse_id'] = getValueSelectInfinite($this->policy['insurance_statuse_id']);
+        if ($this->has('soat.insurance_statuse_id')) {
+            $merge['soat.insurance_statuse_id'] = getValueSelectInfinite($this->soat['insurance_statuse_id']);
         }
         $this->merge($merge);
     }

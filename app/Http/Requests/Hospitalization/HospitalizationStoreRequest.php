@@ -79,8 +79,8 @@ class HospitalizationStoreRequest extends FormRequest
         if ($this->has('condicionDestinoUsuarioEgreso_id')) {
             $merge['condicionDestinoUsuarioEgreso_id'] = getValueSelectInfinite($this->condicionDestinoUsuarioEgreso_id);
         }
-        if ($this->has('codDiagnosticoMuerte_id')) {
-            $merge['codDiagnosticoMuerte_id'] = getValueSelectInfinite($this->codDiagnosticoMuerte_id);
+        if ($this->has('codDiagnosticoCausaMuerte_id')) {
+            $merge['codDiagnosticoCausaMuerte_id'] = getValueSelectInfinite($this->codDiagnosticoCausaMuerte_id);
         }
 
         $this->merge($merge);
