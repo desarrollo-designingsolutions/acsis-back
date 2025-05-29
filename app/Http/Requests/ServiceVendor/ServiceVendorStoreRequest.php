@@ -21,8 +21,10 @@ class ServiceVendorStoreRequest extends FormRequest
             'nit' => 'required',
             'phone' => 'required',
             'address' => 'required',
-            'email' => 'required|email|unique:companies,email,'.$this->id.',id',
-            'ips_cod_habilitacion_id' => 'required',
+            'email' => 'required|email|unique:companies,email,' . $this->id . ',id',
+            'type_vendor_id' => 'required',
+            'ipsable_id' => 'required',
+            'ipsable_type' => 'required',
         ];
 
         return $rules;
@@ -37,7 +39,9 @@ class ServiceVendorStoreRequest extends FormRequest
             'address.required' => 'El campo es obligatorio',
             'email.unique' => 'El Email ya existe',
             'email.email' => 'El campo debe contener un correo valido',
-            'ips_cod_habilitacion_id.required' => 'El campo es obligatorio',
+            'type_vendor_id.required' => 'El campo es obligatorio',
+            'ipsable_id.required' => 'El campo es obligatorio',
+            'ipsable_type.required' => 'El campo es obligatorio',
         ];
     }
 
@@ -45,8 +49,8 @@ class ServiceVendorStoreRequest extends FormRequest
     {
         $merge = [];
 
-        if ($this->has('ips_cod_habilitacion_id')) {
-            $merge['ips_cod_habilitacion_id'] = getValueSelectInfinite($this->ips_cod_habilitacion_id);
+        if ($this->has('ipsable_id')) {
+            $merge['ipsable_id'] = getValueSelectInfinite($this->ipsable_id);
         }
 
         $this->merge($merge);

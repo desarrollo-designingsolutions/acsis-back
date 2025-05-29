@@ -18,14 +18,11 @@ class TypeVendorSeeder extends Seeder
                 'name' => 'Prestador',
             ],
             [
-                'name' => 'Contratista',
+                'name' => 'Proveedor',
             ],
             [
-                'name' => 'Crítico',
-            ],
-            [
-                'name' => 'Comunitario',
-            ],
+                'name' => 'Profesional',
+            ]
         ];
 
         // Inicializar la barra de progreso

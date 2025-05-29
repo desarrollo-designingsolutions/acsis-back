@@ -20,16 +20,47 @@ class InvoiceStoreRequest extends FormRequest
             'service_vendor_id' => 'required',
             'entity_id' => 'required',
             'patient_id' => 'required',
-            'radication_number' => 'required',
             'invoice_date' => 'required',
             'type' => 'required',
-            'radication_date' => 'required',
             'status' => 'required',
         ];
 
-        if (! $this->tipo_nota_id && ! $this->note_number) {
+        //si no se selecciona el tipo de nota y no se ingresa el numero de nota entonces el numero de factura es obligatorio
+        if (! $this->tipo_nota_id) {
             $rules2 = [
                 'invoice_number' => 'required',
+            ];
+            $rules = array_merge($rules, $rules2);
+        }
+
+
+        //si se selecciona el tipo de nota entonces el numero de nota es obligatorio
+        if ($this->note_number) {
+            $rules2 = [
+                'tipo_nota_id' => 'required',
+            ];
+            $rules = array_merge($rules, $rules2);
+        }
+
+        //si el tipo de nota se leecciona entonces el numero de nota es obligatorio
+        if ($this->tipo_nota_id) {
+            $rules2 = [
+                'note_number' => 'required',
+            ];
+            $rules = array_merge($rules, $rules2);
+        }
+
+
+        if ($this->radication_number) {
+            $rules2 = [
+                'radication_date' => 'required',
+            ];
+            $rules = array_merge($rules, $rules2);
+        }
+
+        if ($this->radication_date) {
+            $rules2 = [
+                'radication_number' => 'required',
             ];
             $rules = array_merge($rules, $rules2);
         }

@@ -36,4 +36,9 @@ class ServiceVendor extends Model
     {
         return $this->belongsToMany(User::class, 'service_vendor_users', 'service_vendor_id', 'user_id');
     }
+
+    public function ipsable()
+    {
+        return $this->morphTo(__FUNCTION__, 'ipsable_type', 'ipsable_id');
+    }
 }

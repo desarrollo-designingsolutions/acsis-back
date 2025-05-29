@@ -45,12 +45,31 @@ class ServiceVendorController extends Controller
 
             $request['is_active'] = true;
             $type_vendors = $this->typeVendorRepository->selectList($request->all());
+
             $ipsCodHabilitacion = $this->queryController->selectInfiniteIpsCodHabilitacion($request);
+            $ipsNoReps = $this->queryController->selectInfiniteIpsNoReps($request);
+
+            $ipsables = [
+                [
+                    "value" => "App\Models\IpsCodHabilitacion",
+                    "label" => "IPS con código de habilitación",
+                    "url" => "/selectInfiniteIpsCodHabilitacion",
+                    "arrayInfo" => "ipsCodHabilitacion",
+                    "itemsData" => $ipsCodHabilitacion["ipsCodHabilitacion_arrayInfo"],
+                ],
+                [
+                    "value" => "App\Models\IpsNoReps",
+                    "label" => "IPS No REPS",
+                    "url" => "/selectInfiniteIpsNoReps",
+                    "arrayInfo" => "ipsNoReps",
+                    "itemsData" => $ipsNoReps["ipsNoReps_arrayInfo"],
+                ]
+            ];
 
             return [
                 'code' => 200,
                 'type_vendors' => $type_vendors,
-                ...$ipsCodHabilitacion,
+                'ipsables' => $ipsables,
             ];
         });
     }
@@ -76,16 +95,38 @@ class ServiceVendorController extends Controller
 
             $request['is_active'] = true;
             $type_vendors = $this->typeVendorRepository->selectList($request->all());
-            $ipsCodHabilitacion = $this->queryController->selectInfiniteIpsCodHabilitacion($request);
 
             $serviceVendor = $this->serviceVendorRepository->find($id);
             $form = new ServiceVendorFormResource($serviceVendor);
+
+
+            $ipsCodHabilitacion = $this->queryController->selectInfiniteIpsCodHabilitacion($request);
+            $ipsNoReps = $this->queryController->selectInfiniteIpsNoReps($request);
+
+            $ipsables = [
+                [
+                    "value" => "App\Models\IpsCodHabilitacion",
+                    "label" => "IPS con código de habilitación",
+                    "url" => "/selectInfiniteIpsCodHabilitacion",
+                    "arrayInfo" => "ipsCodHabilitacion",
+                    "itemsData" => $ipsCodHabilitacion["ipsCodHabilitacion_arrayInfo"],
+                ],
+                [
+                    "value" => "App\Models\IpsNoReps",
+                    "label" => "IPS No REPS",
+                    "url" => "/selectInfiniteIpsNoReps",
+                    "arrayInfo" => "ipsNoReps",
+                    "itemsData" => $ipsNoReps["ipsNoReps_arrayInfo"],
+                ]
+            ];
 
             return [
                 'code' => 200,
                 'form' => $form,
                 'type_vendors' => $type_vendors,
+                'ipsables' => $ipsables,
                 ...$ipsCodHabilitacion,
+                ...$ipsNoReps,
             ];
         });
     }
@@ -139,7 +180,7 @@ class ServiceVendorController extends Controller
 
             return [
                 'code' => 200,
-                'message' => 'Proveedor '.$msg.' con éxito',
+                'message' => 'Proveedor ' . $msg . ' con éxito',
             ];
         });
     }

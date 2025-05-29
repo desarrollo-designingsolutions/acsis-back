@@ -18,10 +18,13 @@ class TypeEntitySeeder extends Seeder
                 'name' => 'Eps',
             ],
             [
-                'name' => 'Aseguradora',
+                'name' => 'Asegurdora',
             ],
             [
                 'name' => 'Arl',
+            ],
+            [
+                'name' => 'Otras entidades',
             ],
         ];
 

@@ -2,7 +2,6 @@
 
 namespace App\Http\Resources\ServiceVendor;
 
-use App\Http\Resources\IpsCodHabilitacion\IpsCodHabilitacionSelectInfiniteResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -23,7 +22,11 @@ class ServiceVendorFormResource extends JsonResource
             'address' => $this->address,
             'email' => $this->email,
             'type_vendor_id' => $this->type_vendor_id,
-            'ips_cod_habilitacion_id' => new IpsCodHabilitacionSelectInfiniteResource($this->ips_cod_habilitacion),
+            'ipsable_type' => $this->ipsable_type,
+            'ipsable_id' => [
+                "value" => $this->ipsable_id,
+                "title" => $this->ipsable ? $this->ipsable->codigo . ' - ' . $this->ipsable->nombre : 'No asignado',
+            ],
         ];
     }
 }
