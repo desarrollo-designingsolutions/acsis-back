@@ -45,11 +45,25 @@ class GlosaController extends Controller
     {
         return $this->execute(function () {
 
-            $codeGlosa = $this->queryController->selectInfiniteCodeGlosa(request());
+            $filter = new Request([
+                "type_code_glosa_id" => 1
+            ]);
+            $codeGlosa1 = $this->queryController->selectInfiniteCodeGlosa($filter);
+            $filter = new Request([
+                "type_code_glosa_id" => 2
+            ]);
+            $codeGlosa2 = $this->queryController->selectInfiniteCodeGlosa($filter);
 
+            $typeCodeGlosa = $this->queryController->selectInfiniteTypeCodeGlosa(request());
+
+            $codeGlosa = [
+                'codeGlosa1' => $codeGlosa1,
+                'codeGlosa2' => $codeGlosa2,
+            ];
             return [
                 'code' => 200,
                 ...$codeGlosa,
+                ...$typeCodeGlosa,
             ];
         });
     }
@@ -63,7 +77,7 @@ class GlosaController extends Controller
 
             if ($request->file('file')) {
                 $file = $request->file('file');
-                $ruta = 'companies/company_'.$glosa->company_id.'/glosas/glosa_'.$glosa->id.$request->input('file');
+                $ruta = 'companies/company_' . $glosa->company_id . '/glosas/glosa_' . $glosa->id . $request->input('file');
 
                 $file = $file->store($ruta, Constants::DISK_FILES);
                 $glosa->file = $file;
@@ -84,12 +98,28 @@ class GlosaController extends Controller
             $glosa = $this->glosaRepository->find($id);
             $form = new GlosaFormResource($glosa);
 
-            $codeGlosa = $this->queryController->selectInfiniteCodeGlosa(request());
+            $filter = new Request([
+                "type_code_glosa_id" => 1
+            ]);
+            $codeGlosa1 = $this->queryController->selectInfiniteCodeGlosa($filter);
+            $filter = new Request([
+                "type_code_glosa_id" => 2
+            ]);
+            $codeGlosa2 = $this->queryController->selectInfiniteCodeGlosa($filter);
 
+
+            $codeGlosa = [
+                'codeGlosa1' => $codeGlosa1,
+                'codeGlosa2' => $codeGlosa2,
+            ];
+
+            $typeCodeGlosa = $this->queryController->selectInfiniteTypeCodeGlosa(request());
             return [
                 'code' => 200,
                 'form' => $form,
+                'type_code_glosa_id' => $glosa->code_glosa->generalCodeGlosa->type_code_glosa_id,
                 ...$codeGlosa,
+                ...$typeCodeGlosa,
             ];
         });
     }
@@ -117,7 +147,7 @@ class GlosaController extends Controller
 
             if ($request->file('file')) {
                 $file = $request->file('file');
-                $ruta = 'companies/company_'.$glosa->company_id.'/glosas/glosa_'.$glosa->id.$request->input('file');
+                $ruta = 'companies/company_' . $glosa->company_id . '/glosas/glosa_' . $glosa->id . $request->input('file');
 
                 $file = $file->store($ruta, Constants::DISK_FILES);
                 $glosa->file = $file;
@@ -185,9 +215,9 @@ class GlosaController extends Controller
 
                     $glosa = $this->glosaRepository->store($data);
 
-                    if ($request->file('file_file'.$key)) {
-                        $file = $request->file('file_file'.$key);
-                        $ruta = 'companies/company_'.$glosa->company_id.'/glosas/glosa_'.$glosa->id.$request->input('file_file'.$key);
+                    if ($request->file('file_file' . $key)) {
+                        $file = $request->file('file_file' . $key);
+                        $ruta = 'companies/company_' . $glosa->company_id . '/glosas/glosa_' . $glosa->id . $request->input('file_file' . $key);
 
                         $file = $file->store($ruta, Constants::DISK_FILES);
                         $glosa->file = $file;

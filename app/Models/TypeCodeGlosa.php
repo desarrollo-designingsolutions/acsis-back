@@ -10,4 +10,13 @@ class TypeCodeGlosa extends Model
 {
     use HasFactory;
     use HasUuids;
+
+
+    /**
+     * Relación uno a muchos con GeneralCodeGlosa.
+     */
+    public function generalCodeGlosas()
+    {
+        return $this->hasMany(GeneralCodeGlosa::class, 'type_code_glosa_id');
+    }
 }

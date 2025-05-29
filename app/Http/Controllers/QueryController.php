@@ -29,6 +29,7 @@ use App\Http\Resources\TipoIdPisis\TipoIdPisisSelectResource;
 use App\Http\Resources\TipoMedicamentoPosVersion2\TipoMedicamentoPosVersion2SelectInfiniteResource;
 use App\Http\Resources\TipoNota\TipoNotaSelectResource;
 use App\Http\Resources\TipoOtrosServicios\TipoOtrosServiciosSelectResource;
+use App\Http\Resources\TypeCodeGlosa\TypeCodeGlosaSelectResource;
 use App\Http\Resources\TypeDocument\TypeDocumentSelectResource;
 use App\Http\Resources\Umm\UmmSelectInfiniteResource;
 use App\Http\Resources\ViaIngresoUsuario\ViaIngresoUsuarioSelectInfiniteResource;
@@ -61,6 +62,7 @@ use App\Repositories\TipoIdPisisRepository;
 use App\Repositories\TipoMedicamentoPosVersion2Repository;
 use App\Repositories\TipoNotaRepository;
 use App\Repositories\TipoOtrosServiciosRepository;
+use App\Repositories\TypeCodeGlosaRepository;
 use App\Repositories\TypeDocumentRepository;
 use App\Repositories\TypeEntityRepository;
 use App\Repositories\TypeVendorRepository;
@@ -111,6 +113,7 @@ class QueryController extends Controller
         protected IpsNoRepsRepository $ipsNoRepsRepository,
         protected IpsCodHabilitacionRepository $ipsCodHabilitacionRepository,
         protected InsuranceStatusRepository $insuranceStatusRepository,
+        protected TypeCodeGlosaRepository $typeCodeGlosaRepository,
     ) {}
 
     public function selectInfiniteCountries(Request $request)
@@ -547,7 +550,7 @@ class QueryController extends Controller
             'ipsCodHabilitacion_countLinks' => $ipsCodHabilitacion->lastPage(),
         ];
     }
-    
+
     public function selectInfiniteInsuranceStatus(Request $request)
     {
 
@@ -558,6 +561,19 @@ class QueryController extends Controller
         return [
             'insuranceStatus_arrayInfo' => $dataCountries,
             'insuranceStatus_countLinks' => $insuranceStatus->lastPage(),
+        ];
+    }
+
+    public function selectInfiniteTypeCodeGlosa(Request $request)
+    {
+
+        $typeCodeGlosa = $this->typeCodeGlosaRepository->paginate($request->all());
+
+        $dataCountries = TypeCodeGlosaSelectResource::collection($typeCodeGlosa);
+
+        return [
+            'typeCodeGlosa_arrayInfo' => $dataCountries,
+            'typeCodeGlosa_countLinks' => $typeCodeGlosa->lastPage(),
         ];
     }
 }

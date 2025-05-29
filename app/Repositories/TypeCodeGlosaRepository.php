@@ -3,13 +3,13 @@
 namespace App\Repositories;
 
 use App\Helpers\Constants;
-use App\Models\InsuranceStatus;
+use App\Models\TypeCodeGlosa;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
-class InsuranceStatusRepository extends BaseRepository
+class TypeCodeGlosaRepository extends BaseRepository
 {
-    public function __construct(InsuranceStatus $modelo)
+    public function __construct(TypeCodeGlosa $modelo)
     {
         parent::__construct($modelo);
     }
@@ -28,7 +28,7 @@ class InsuranceStatusRepository extends BaseRepository
             ->allowedSorts([])->where(function ($query) use ($request) {
 
                 if (isset($request['searchQueryInfinite']) && ! empty($request['searchQueryInfinite'])) {
-                    $query->orWhere('code', 'like', '%' . $request['searchQueryInfinite'] . '%');
+                    $query->orWhere('type_code', 'like', '%' . $request['searchQueryInfinite'] . '%');
                     $query->orWhere('name', 'like', '%' . $request['searchQueryInfinite'] . '%');
                 }
             });

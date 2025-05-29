@@ -14,4 +14,13 @@ class CodeGlosa extends Model
     protected $customCachePrefixes = [
         'string:{table}_list*',
     ];
+
+
+    /**
+     * Relación muchos a uno con GeneralCodeGlosa.
+     */
+    public function generalCodeGlosa()
+    {
+        return $this->belongsTo(GeneralCodeGlosa::class, 'general_code_glosa_id');
+    }
 }
