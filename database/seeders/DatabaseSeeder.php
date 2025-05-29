@@ -69,6 +69,8 @@ class DatabaseSeeder extends Seeder
             // Correr Manualmente
             // IpsCodHabilitacionSeeder::class,
 
+            InsuranceStatusSeeder::class,
+
         ]);
 
         $client = new ClientRepository;
