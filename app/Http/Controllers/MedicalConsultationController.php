@@ -41,8 +41,10 @@ class MedicalConsultationController extends Controller
             $ripsCausaExternaVersion2 = $this->queryController->selectInfiniteRipsCausaExternaVersion2(request());
             $tipoDocumento = $this->queryController->selectInfiniteTipoIdPisis(request());
 
+            $invoice = $this->invoiceRepository->find(request('invoice_id'), select: ["id", "invoice_date"]);
             return [
                 'code' => 200,
+                'invoice' => $invoice,
                 ...$cupsRips,
                 ...$modalidadAtencion,
                 ...$grupoServicio,
@@ -167,9 +169,11 @@ class MedicalConsultationController extends Controller
             $ripsCausaExternaVersion2 = $this->queryController->selectInfiniteRipsCausaExternaVersion2(request());
             $tipoDocumento = $this->queryController->selectInfiniteTipoIdPisis(request());
 
+            $invoice = $this->invoiceRepository->find(request('invoice_id'), select: ["id", "invoice_date"]);
             return [
                 'code' => 200,
                 'form' => $form,
+                'invoice' => $invoice,
                 ...$cupsRips,
                 ...$modalidadAtencion,
                 ...$grupoServicio,

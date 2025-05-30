@@ -34,8 +34,10 @@ class OtherServiceController extends Controller
 
             $tipoDocumento = $this->queryController->selectInfiniteTipoIdPisis(request());
 
+            $invoice = $this->invoiceRepository->find(request('invoice_id'), select: ["id", "invoice_date"]);
             return [
                 'code' => 200,
+                'invoice' => $invoice,
                 ...$tipoOtrosServicios,
                 ...$conceptoRecaudo,
                 ...$cupsRips,
@@ -135,9 +137,11 @@ class OtherServiceController extends Controller
             $cupsRips = $this->queryController->selectInfiniteCupsRips(request());
             $tipoDocumento = $this->queryController->selectInfiniteTipoIdPisis(request());
 
+            $invoice = $this->invoiceRepository->find(request('invoice_id'), select: ["id", "invoice_date"]);
             return [
                 'code' => 200,
                 'form' => $form,
+                'invoice' => $invoice,
                 ...$tipoOtrosServicios,
                 ...$conceptoRecaudo,
                 ...$cupsRips,

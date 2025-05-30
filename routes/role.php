@@ -12,13 +12,13 @@ Route::middleware(['check.permission:menu.role'])->group(function () {
     |--------------------------------------------------------------------------
     */
 
-    Route::get('/role/list', [RoleController::class, 'index'])->name('role.index');
+    Route::get('/role/list', [RoleController::class, 'index']);
 
-    Route::get('/role/create', [RoleController::class, 'create'])->name('role.create');
+    Route::get('/role/create', [RoleController::class, 'create']);
 
-    Route::post('/role', [RoleController::class, 'store'])->name('role.store');
+    Route::post('/role', [RoleController::class, 'store']);
 
-    Route::get('role/{role}/edit', [RoleController::class, 'edit'])->name('role.edit');
+    Route::get('role/{role}/edit', [RoleController::class, 'edit']);
 
-    Route::delete('role/{role}', [RoleController::class, 'destroy'])->name('roles.destroy');
+    Route::delete('role/{role}', [RoleController::class, 'destroy']);
 });

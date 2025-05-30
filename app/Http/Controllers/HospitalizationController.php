@@ -33,8 +33,10 @@ class HospitalizationController extends Controller
             $condicionyDestinoUsuarioEgreso = $this->queryController->selectInfiniteCondicionyDestinoUsuarioEgreso(request());
             $cupsRips = $this->queryController->selectInfiniteCupsRips(request());
 
+            $invoice = $this->invoiceRepository->find(request('invoice_id'), select: ["id", "invoice_date"]);
             return [
                 'code' => 200,
+                'invoice' => $invoice,
                 ...$viaIngresoUsuario,
                 ...$ripsCausaExternaVersion2,
                 ...$cie10,
@@ -134,9 +136,11 @@ class HospitalizationController extends Controller
             $condicionyDestinoUsuarioEgreso = $this->queryController->selectInfiniteCondicionyDestinoUsuarioEgreso(request());
             $cupsRips = $this->queryController->selectInfiniteCupsRips(request());
 
+            $invoice = $this->invoiceRepository->find(request('invoice_id'), select: ["id", "invoice_date"]);
             return [
                 'code' => 200,
                 'form' => $form,
+                'invoice' => $invoice,
                 ...$viaIngresoUsuario,
                 ...$cie10,
                 ...$ripsCausaExternaVersion2,
