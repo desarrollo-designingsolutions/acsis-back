@@ -12,7 +12,7 @@ class Constants
 
     public const COUNTRY_ID = '48'; // Colombia
 
-    public const ITEMS_PER_PAGE = '10'; // PARA LA PAGINACIONES
+    public const ITEMS_PER_PAGE = '100'; // PARA LA PAGINACIONES
 
     public const ERROR_MESSAGE_VALIDATION_BACK = 'Se evidencia algunos errores.';
 
