@@ -395,9 +395,9 @@ class InvoiceController extends Controller
 
         // Build base invoice data
         $baseData = [
-            'numDocumentoIdObligado' => $nit ?? null,
+            'numDocumentoIdObligado' => $serviceVendor->nit ?? null,
             'numFactura' => $invoice->invoice_number ?? null,
-            'tipoNota' => $tipoNota->codigo ?? '',
+            'tipoNota' => $tipoNota->codigo ?? null,
             'numNota' => $invoice->note_number ?? null,
         ];
 

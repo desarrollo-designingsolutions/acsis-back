@@ -16,8 +16,9 @@ class IpsCodHabilitacionSelectInfiniteResource extends JsonResource
     {
         return [
             'value' => $this->id,
-            'title' => $this->nroIDPrestador.' - '.$this->nombre,
+            'title' => $this->nroIDPrestador . ' - ' . $this->nombre,
             'codigo' => $this->codigo,
+            'nit' => $this->nroIDPrestador,
         ];
     }
 }

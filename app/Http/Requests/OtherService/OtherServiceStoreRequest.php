@@ -18,7 +18,6 @@ class OtherServiceStoreRequest extends FormRequest
     {
         $rules = [
             'invoice_id' => 'required',
-            'numAutorizacion' => 'required',
             'fechaSuministroTecnologia' => 'required',
             'codTecnologiaSalud' => 'required',
             'cantidadOS' => 'required',

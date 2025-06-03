@@ -19,7 +19,7 @@ class IpsCodHabilitacionSeeder2 extends Seeder
 
         try {
             $sheet = $excelService
-                ->getSpreadsheetFromExcel(database_path('db/TablaReferencia_IpsCodHabilitacions__1.xlsx'))
+                ->getSpreadsheetFromExcel(database_path('db/TablaReferencia_IpsCodHabilitacions__2.xlsx'))
                 ->getSheetByName('Table')
                 ->toArray();
         } catch (Exception $e) {

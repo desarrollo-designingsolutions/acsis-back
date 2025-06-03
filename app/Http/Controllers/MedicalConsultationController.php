@@ -110,7 +110,7 @@ class MedicalConsultationController extends Controller
             $serviceData = [
                 'codPrestador' => $service->invoice?->serviceVendor?->ips_cod_habilitacion?->codigo,
                 'fechaInicioAtencion' => Carbon::parse($post['fechaInicioAtencion'])->format('Y-m-d H:i'),
-                'numAutorizacion' => $post['numAutorizacion'],
+                'numAutorizacion' => $post['numAutorizacion'] ?? null,
                 'codConsulta' => $medicalConsultation->codConsulta?->codigo,
                 'modalidadGrupoServicioTecSal' => $medicalConsultation->modalidadGrupoServicioTecSal?->codigo,
                 'grupoServicios' => $medicalConsultation->grupoServicios?->codigo,
@@ -197,7 +197,7 @@ class MedicalConsultationController extends Controller
             // Update MedicalConsultation
             $medicalConsultation = $this->medicalConsultationRepository->store([
                 'fechaInicioAtencion' => $post['fechaInicioAtencion'],
-                'numAutorizacion' => $post['numAutorizacion'],
+                'numAutorizacion' => $post['numAutorizacion'] ?? null,
                 'codConsulta_id' => $post['codConsulta_id'],
                 'modalidadGrupoServicioTecSal_id' => $post['modalidadGrupoServicioTecSal_id'],
                 'grupoServicios_id' => $post['grupoServicios_id'],
@@ -233,7 +233,7 @@ class MedicalConsultationController extends Controller
             $serviceData = [
                 'codPrestador' => $service->invoice?->serviceVendor?->ips_cod_habilitacion?->codigo,
                 'fechaInicioAtencion' => Carbon::parse($post['fechaInicioAtencion'])->format('Y-m-d H:i'),
-                'numAutorizacion' => $post['numAutorizacion'],
+                'numAutorizacion' => $post['numAutorizacion'] ?? null,
                 'codConsulta' => $medicalConsultation->codConsulta?->codigo,
                 'modalidadGrupoServicioTecSal' => $medicalConsultation->modalidadGrupoServicioTecSal?->codigo,
                 'grupoServicios' => $medicalConsultation->grupoServicios?->codigo,

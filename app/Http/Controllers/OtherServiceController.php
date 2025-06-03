@@ -91,8 +91,8 @@ class OtherServiceController extends Controller
             // Prepare service data for JSON
             $serviceData = [
                 'codPrestador' => $service->invoice?->serviceVendor?->ips_cod_habilitacion?->codigo,
-                'numAutorizacion' => $post['numAutorizacion'],
-                'idMIPRES' => $post['idMIPRES'] ?? '',
+                'numAutorizacion' => $post['numAutorizacion'] ?? "",
+                'idMIPRES' => $post['idMIPRES'] ?? null,
                 'fechaSuministroTecnologia' => Carbon::parse($post['fechaSuministroTecnologia'])->format('Y-m-d H:i'),
                 'tipoOS' => $otherService->tipoOtrosServicio?->codigo,
                 'codTecnologiaSalud' => $post['codTecnologiaSalud'],
@@ -189,8 +189,8 @@ class OtherServiceController extends Controller
             // Prepare service data for JSON
             $serviceData = [
                 'codPrestador' => $service->invoice?->serviceVendor?->ips_cod_habilitacion?->codigo,
-                'numAutorizacion' => $post['numAutorizacion'],
-                'idMIPRES' => $post['idMIPRES'] ?? '',
+                'numAutorizacion' => $post['numAutorizacion'] ?? "",
+                'idMIPRES' => $post['idMIPRES'] ?? null,
                 'fechaSuministroTecnologia' => Carbon::parse($post['fechaSuministroTecnologia'])->format('Y-m-d H:i'),
                 'tipoOS' => $otherService->tipoOtrosServicio?->codigo,
                 'codTecnologiaSalud' => $post['codTecnologiaSalud'],

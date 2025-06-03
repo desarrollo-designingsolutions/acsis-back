@@ -104,8 +104,8 @@ class ProcedureController extends Controller
             $serviceData = [
                 'codPrestador' => $service->invoice?->serviceVendor?->ips_cod_habilitacion?->codigo,
                 'fechaInicioAtencion' => Carbon::parse($post['fechaInicioAtencion'])->format('Y-m-d H:i'),
-                'idMIPRES' => $post['idMIPRES'],
-                'numAutorizacion' => $post['numAutorizacion'],
+                'idMIPRES' => $post['idMIPRES'] ?? null,
+                'numAutorizacion' => $post['numAutorizacion'] ?? null,
                 'codProcedimiento' => $procedure->codProcedimiento?->codigo,
                 'viaIngresoServicioSalud' => $procedure->viaIngresoServicioSalud?->codigo,
                 'modalidadGrupoServicioTecSal' => $procedure->modalidadGrupoServicioTecSal?->codigo,
@@ -220,8 +220,8 @@ class ProcedureController extends Controller
             $serviceData = [
                 'codPrestador' => $service->invoice?->serviceVendor?->ips_cod_habilitacion?->codigo,
                 'fechaInicioAtencion' => Carbon::parse($post['fechaInicioAtencion'])->format('Y-m-d H:i'),
-                'idMIPRES' => $post['idMIPRES'],
-                'numAutorizacion' => $post['numAutorizacion'],
+                'idMIPRES' => $post['idMIPRES'] ?? null,
+                'numAutorizacion' => $post['numAutorizacion'] ?? null,
                 'codProcedimiento' => $procedure->codProcedimiento?->codigo,
                 'viaIngresoServicioSalud' => $procedure->viaIngresoServicioSalud?->codigo,
                 'modalidadGrupoServicioTecSal' => $procedure->modalidadGrupoServicioTecSal?->codigo,
