@@ -392,10 +392,11 @@ class InvoiceController extends Controller
         $tipoIdPisis = $patient->tipo_id_pisi ?? null;
         $tipoNota = $invoice->tipoNota ?? null;
         $serviceVendor = $invoice->serviceVendor ?? null;
+        $nit = str_replace(['.', '-'], '', $serviceVendor->nit ?? '');
 
         // Build base invoice data
         $baseData = [
-            'numDocumentoIdObligado' => $serviceVendor->nit ?? null,
+            'numDocumentoIdObligado' => $nit ?? null,
             'numFactura' => $invoice->invoice_number ?? null,
             'tipoNota' => $tipoNota->codigo ?? null,
             'numNota' => $invoice->note_number ?? null,
