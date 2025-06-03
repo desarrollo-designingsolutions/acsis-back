@@ -354,6 +354,8 @@ class InvoiceController extends Controller
 
             $request->validate([
                 'invoice_number' => 'required|string',
+                'service_vendor_id' => 'required|string',
+                'entity_id' => 'required|string',
             ]);
 
             $exists = $this->invoiceRepository->validateInvoiceNumber($request->all());
@@ -392,7 +394,15 @@ class InvoiceController extends Controller
         $tipoIdPisis = $patient->tipo_id_pisi ?? null;
         $tipoNota = $invoice->tipoNota ?? null;
         $serviceVendor = $invoice->serviceVendor ?? null;
-        $nit = str_replace(['.', '-'], '', $serviceVendor->nit ?? '');
+
+
+        $nit = $serviceVendor->nit ?? '';
+        if (!empty($nit)) {
+            // Split on hyphen and take the first part (or whole string if no hyphen)
+            $nit = explode('-', $nit)[0];
+            // Remove dots
+            $nit = str_replace('.', '', $nit);
+        }
 
         // Build base invoice data
         $baseData = [
@@ -415,7 +425,7 @@ class InvoiceController extends Controller
                 'codSexo' => $sexo->codigo ?? null,
                 'codPaisResidencia' => $pais_residency->codigo ?? null,
                 'codMunicipioResidencia' => $municipio->codigo ?? null,
-                'codZonaTerritorialResidencia' => $zonaVersion2->codigo ?? null,
+                'codZonaTerritorialResidencia' => $zonaVersion2->codigo ?? "",
                 'incapacidad' => $patient ? $patient->incapacity == 1 ? 'SI' : 'NO' : '',
                 'consecutivo' => 1,
                 'codPaisOrigen' => $pais_origin->codigo ?? null,

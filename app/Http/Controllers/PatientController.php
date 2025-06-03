@@ -44,6 +44,7 @@ class PatientController extends Controller
         return $this->execute(function () {
 
             $tipoDocumento = $this->queryController->selectInfiniteTipoIdPisis(request());
+
             $tipoUsuario = $this->queryController->selectInfiniteTipoUsuario(request());
             $sexo = $this->queryController->selectInfiniteSexo(request());
             $pais = $this->queryController->selectInfinitePais(request());
