@@ -27,8 +27,8 @@ class ServiceVendorFormResource extends JsonResource
             'ipsable_id' => [
                 "value" => $this->ipsable_id,
                 "title" => $this->getIpsableIdTitle(),
-                'codigo' => $this->ipsable->codigo,
-                'nit' => $this->ipsable->nroIDPrestador ?? $this->ipsable->nit,
+                'codigo' => $this->ipsable?->codigo,
+                'nit' => $this->ipsable?->nroIDPrestador ?? $this->ipsable?->nit,
             ],
         ];
     }
