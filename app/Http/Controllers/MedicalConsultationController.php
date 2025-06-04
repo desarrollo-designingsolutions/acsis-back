@@ -40,7 +40,7 @@ class MedicalConsultationController extends Controller
             $newRequest = new Request(['codigo_in' => Constants::CODS_SELECT_FORM_SERVICE_MEDICAL_CONSULTATION_CAUSAMOTIVOATENCION]);
             $ripsCausaExternaVersion2 = $this->queryController->selectInfiniteRipsCausaExternaVersion2($newRequest);
 
-            $newRequest = new Request(['codigo_in' => Constants::CODS_SELECT_FORM_SERVICE_MEDICAL_CONSULTATION_TIPODOCUMENTOIDENTIFICACION]);
+            $newRequest = new Request(['codigo_in' => Constants::CODS_SELECT_FORM_SERVICE_TIPODOCUMENTOIDENTIFICACION]);
             $tipoDocumento = $this->queryController->selectInfiniteTipoIdPisis($newRequest);
 
             $modalidadAtencion = $this->queryController->selectInfiniteModalidadAtencion(request());
@@ -163,19 +163,26 @@ class MedicalConsultationController extends Controller
             $medicalConsultation = $service->serviceable;
             $form = new MedicalConsultationFormResource($medicalConsultation);
 
-            $cupsRips = $this->queryController->selectInfiniteCupsRips(request());
+            $newRequest = new Request(['codigo_in' => Constants::CODS_SELECT_FORM_SERVICE_MEDICAL_CONSULTATION_CODCONSULTA]);
+            $cupsRips = $this->queryController->selectInfiniteCupsRips($newRequest);
+
+            $newRequest = new Request(['codigo_in' => Constants::CODS_SELECT_FORM_SERVICE_MEDICAL_CONSULTATION_FINALIDADTECNOLOGIASALUD]);
+            $ripsFinalidadConsultaVersion2 = $this->queryController->selectInfiniteRipsFinalidadConsultaVersion2($newRequest);
+
+            $newRequest = new Request(['codigo_in' => Constants::CODS_SELECT_FORM_SERVICE_MEDICAL_CONSULTATION_CONCEPTORECAUDO]);
+            $conceptoRecaudo = $this->queryController->selectInfiniteConceptoRecaudo($newRequest);
+
+            $newRequest = new Request(['codigo_in' => Constants::CODS_SELECT_FORM_SERVICE_MEDICAL_CONSULTATION_CAUSAMOTIVOATENCION]);
+            $ripsCausaExternaVersion2 = $this->queryController->selectInfiniteRipsCausaExternaVersion2($newRequest);
+
+            $newRequest = new Request(['codigo_in' => Constants::CODS_SELECT_FORM_SERVICE_TIPODOCUMENTOIDENTIFICACION]);
+            $tipoDocumento = $this->queryController->selectInfiniteTipoIdPisis($newRequest);
+
             $modalidadAtencion = $this->queryController->selectInfiniteModalidadAtencion(request());
             $grupoServicio = $this->queryController->selectInfiniteGrupoServicio(request());
             $servicio = $this->queryController->selectInfiniteServicio(request());
-            $ripsFinalidadConsultaVersion2 = $this->queryController->selectInfiniteRipsFinalidadConsultaVersion2(request());
             $cie10 = $this->queryController->selectInfiniteCie10(request());
             $ripsTipoDiagnosticoPrincipalVersion2 = $this->queryController->selectInfiniteRipsTipoDiagnosticoPrincipalVersion2(request());
-
-            $newRequest = new Request(['codigo_in' => ['02', '03', '05']]);
-            $conceptoRecaudo = $this->queryController->selectInfiniteConceptoRecaudo($newRequest);
-
-            $ripsCausaExternaVersion2 = $this->queryController->selectInfiniteRipsCausaExternaVersion2(request());
-            $tipoDocumento = $this->queryController->selectInfiniteTipoIdPisis(request());
 
             $invoice = $this->invoiceRepository->find(request('invoice_id'), select: ["id", "invoice_date"]);
             return [

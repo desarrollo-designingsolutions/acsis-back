@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\Service\TypeServiceEnum;
+use App\Helpers\Constants;
 use App\Http\Requests\NewlyBorn\NewlyBornStoreRequest;
 use App\Http\Resources\NewlyBorn\NewlyBornFormResource;
 use App\Repositories\InvoiceRepository;
@@ -31,7 +32,7 @@ class NewlyBornController extends Controller
             $condicionyDestinoUsuarioEgreso = $this->queryController->selectInfiniteCondicionyDestinoUsuarioEgreso(request());
             $sexo = $this->queryController->selectInfiniteSexo(request());
 
-            $newRequest = new Request(['codigo_in' => ['CN', 'RC', 'MS']]);
+            $newRequest = new Request(['codigo_in' => Constants::CODS_SELECT_FORM_SERVICE_NEWBORN_TIPODOCUMENTOIDENTIFICACION]);
             $tipoDocumento = $this->queryController->selectInfiniteTipoIdPisis($newRequest);
 
             $invoice = $this->invoiceRepository->find(request('invoice_id'), select: ["id", "invoice_date"]);
@@ -130,7 +131,7 @@ class NewlyBornController extends Controller
             $condicionyDestinoUsuarioEgreso = $this->queryController->selectInfiniteCondicionyDestinoUsuarioEgreso(request());
             $sexo = $this->queryController->selectInfiniteSexo(request());
 
-            $newRequest = new Request(['codigo_in' => ['CN', 'RC', 'MS']]);
+            $newRequest = new Request(['codigo_in' => Constants::CODS_SELECT_FORM_SERVICE_NEWBORN_TIPODOCUMENTOIDENTIFICACION]);
             $tipoDocumento = $this->queryController->selectInfiniteTipoIdPisis($newRequest);
 
             $invoice = $this->invoiceRepository->find(request('invoice_id'), select: ["id", "invoice_date"]);

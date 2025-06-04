@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\Service\TypeServiceEnum;
+use App\Helpers\Constants;
 use App\Http\Requests\Procedure\ProcedureStoreRequest;
 use App\Http\Resources\Procedure\ProcedureFormResource;
 use App\Repositories\InvoiceRepository;
@@ -27,15 +28,21 @@ class ProcedureController extends Controller
     {
         return $this->execute(function () {
 
+            $newRequest = new Request(['codigo_in' => Constants::CODS_SELECT_FORM_SERVICE_PROCEDURE_FINALIDADTECNOLOGIASALUD]);
+            $ripsFinalidadConsultaVersion2 = $this->queryController->selectInfiniteRipsFinalidadConsultaVersion2($newRequest);
+
+            $newRequest = new Request(['codigo_in' => Constants::CODS_SELECT_FORM_SERVICE_TIPODOCUMENTOIDENTIFICACION]);
+            $tipoDocumento = $this->queryController->selectInfiniteTipoIdPisis($newRequest);
+
+            $newRequest = new Request(['codigo_in' => Constants::CODS_SELECT_FORM_SERVICE_PROCEDURE_CONCEPTORECAUDO]);
+            $conceptoRecaudo = $this->queryController->selectInfiniteConceptoRecaudo($newRequest);
+
             $cupsRips = $this->queryController->selectInfiniteCupsRips(request());
             $viaIngresoUsuario = $this->queryController->selectInfiniteViaIngresoUsuario(request());
             $modalidadAtencion = $this->queryController->selectInfiniteModalidadAtencion(request());
             $grupoServicio = $this->queryController->selectInfiniteGrupoServicio(request());
             $servicio = $this->queryController->selectInfiniteServicio(request());
-            $ripsFinalidadConsultaVersion2 = $this->queryController->selectInfiniteRipsFinalidadConsultaVersion2(request());
             $cie10 = $this->queryController->selectInfiniteCie10(request());
-            $conceptoRecaudo = $this->queryController->selectInfiniteConceptoRecaudo(request());
-            $tipoDocumento = $this->queryController->selectInfiniteTipoIdPisis(request());
 
             $invoice = $this->invoiceRepository->find(request('invoice_id'), select: ["id", "invoice_date"]);
             return [
@@ -148,15 +155,22 @@ class ProcedureController extends Controller
             $procedure = $service->serviceable;
             $form = new ProcedureFormResource($procedure);
 
+            $newRequest = new Request(['codigo_in' => Constants::CODS_SELECT_FORM_SERVICE_PROCEDURE_FINALIDADTECNOLOGIASALUD]);
+            $ripsFinalidadConsultaVersion2 = $this->queryController->selectInfiniteRipsFinalidadConsultaVersion2($newRequest);
+
+            $newRequest = new Request(['codigo_in' => Constants::CODS_SELECT_FORM_SERVICE_TIPODOCUMENTOIDENTIFICACION]);
+            $tipoDocumento = $this->queryController->selectInfiniteTipoIdPisis($newRequest);
+
+            $newRequest = new Request(['codigo_in' => Constants::CODS_SELECT_FORM_SERVICE_PROCEDURE_CONCEPTORECAUDO]);
+            $conceptoRecaudo = $this->queryController->selectInfiniteConceptoRecaudo($newRequest);
+
+
             $cupsRips = $this->queryController->selectInfiniteCupsRips(request());
             $viaIngresoUsuario = $this->queryController->selectInfiniteViaIngresoUsuario(request());
             $modalidadAtencion = $this->queryController->selectInfiniteModalidadAtencion(request());
             $grupoServicio = $this->queryController->selectInfiniteGrupoServicio(request());
             $servicio = $this->queryController->selectInfiniteServicio(request());
-            $ripsFinalidadConsultaVersion2 = $this->queryController->selectInfiniteRipsFinalidadConsultaVersion2(request());
             $cie10 = $this->queryController->selectInfiniteCie10(request());
-            $conceptoRecaudo = $this->queryController->selectInfiniteConceptoRecaudo(request());
-            $tipoDocumento = $this->queryController->selectInfiniteTipoIdPisis(request());
 
             $invoice = $this->invoiceRepository->find(request('invoice_id'), select: ["id", "invoice_date"]);
             return [

@@ -27,7 +27,7 @@ class Constants
 
 
 
-    // REGLAS O CODIGOS PARA LOS SELECECTS DEL FORMULARIO DEL SERVICIO DE CONSULTAS
+    // REGLAS O CODIGOS PARA LOS SELECECTS DEL FORMULARIO DEL SERVICIO
     public const CODS_SELECT_FORM_SERVICE_MEDICAL_CONSULTATION_CODCONSULTA = [
         "890101",
         "890102",
@@ -153,7 +153,7 @@ class Constants
         "29",
         "30",
     ];
-    public const CODS_SELECT_FORM_SERVICE_MEDICAL_CONSULTATION_TIPODOCUMENTOIDENTIFICACION = [
+    public const CODS_SELECT_FORM_SERVICE_TIPODOCUMENTOIDENTIFICACION = [
         "CC",
         "CE",
         "CD",
@@ -164,6 +164,61 @@ class Constants
         "PT",
     ];
     public const CODS_SELECT_FORM_SERVICE_MEDICAL_CONSULTATION_CONCEPTORECAUDO = [
+        "02",
+        "03",
+        "05",
+    ];
+
+    public const CODS_SELECT_FORM_SERVICE_PROCEDURE_FINALIDADTECNOLOGIASALUD = [
+        "12",
+        "13",
+        "14",
+        "15",
+        "16",
+        "17",
+        "18",
+        "19",
+        "20",
+        "22",
+        "23",
+        "24",
+        "25",
+        "26",
+        "27",
+        "28",
+        "29",
+        "30",
+        "31",
+        "32",
+        "33",
+        "34",
+        "35",
+        "36",
+        "37",
+        "38",
+        "39",
+        "40",
+        "41",
+        "42",
+        "43",
+        "44",
+    ];
+
+
+    public const CODS_SELECT_FORM_SERVICE_PROCEDURE_CONCEPTORECAUDO = [
+        "01",
+        "02",
+        "03",
+        "05",
+    ];
+
+    public const CODS_SELECT_FORM_SERVICE_NEWBORN_TIPODOCUMENTOIDENTIFICACION = [
+        'CN',
+        'RC',
+        'MS'
+    ];
+
+    public const CODS_SELECT_FORM_SERVICE_OTHERSERVICE_CONCEPTORECAUDO = [
         "02",
         "03",
         "05",

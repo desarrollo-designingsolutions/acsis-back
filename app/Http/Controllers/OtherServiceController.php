@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\Service\TypeServiceEnum;
+use App\Helpers\Constants;
 use App\Http\Requests\OtherService\OtherServiceStoreRequest;
 use App\Http\Resources\OtherService\OtherServiceFormResource;
 use App\Models\Service;
@@ -29,10 +30,13 @@ class OtherServiceController extends Controller
         return $this->execute(function () {
 
             $tipoOtrosServicios = $this->queryController->selectInfiniteTipoOtrosServicios(request());
-            $conceptoRecaudo = $this->queryController->selectInfiniteConceptoRecaudo(request());
             $cupsRips = $this->queryController->selectInfiniteCupsRips(request());
 
-            $tipoDocumento = $this->queryController->selectInfiniteTipoIdPisis(request());
+            $newRequest = new Request(['codigo_in' => Constants::CODS_SELECT_FORM_SERVICE_TIPODOCUMENTOIDENTIFICACION]);
+            $tipoDocumento = $this->queryController->selectInfiniteTipoIdPisis($newRequest);
+
+            $newRequest = new Request(['codigo_in' => Constants::CODS_SELECT_FORM_SERVICE_OTHERSERVICE_CONCEPTORECAUDO]);
+            $conceptoRecaudo = $this->queryController->selectInfiniteConceptoRecaudo($newRequest);
 
             $invoice = $this->invoiceRepository->find(request('invoice_id'), select: ["id", "invoice_date"]);
             return [
@@ -133,9 +137,13 @@ class OtherServiceController extends Controller
             $form = new OtherServiceFormResource($otherService);
 
             $tipoOtrosServicios = $this->queryController->selectInfiniteTipoOtrosServicios(request());
-            $conceptoRecaudo = $this->queryController->selectInfiniteConceptoRecaudo(request());
             $cupsRips = $this->queryController->selectInfiniteCupsRips(request());
-            $tipoDocumento = $this->queryController->selectInfiniteTipoIdPisis(request());
+
+            $newRequest = new Request(['codigo_in' => Constants::CODS_SELECT_FORM_SERVICE_TIPODOCUMENTOIDENTIFICACION]);
+            $tipoDocumento = $this->queryController->selectInfiniteTipoIdPisis($newRequest);
+
+            $newRequest = new Request(['codigo_in' => Constants::CODS_SELECT_FORM_SERVICE_OTHERSERVICE_CONCEPTORECAUDO]);
+            $conceptoRecaudo = $this->queryController->selectInfiniteConceptoRecaudo($newRequest);
 
             $invoice = $this->invoiceRepository->find(request('invoice_id'), select: ["id", "invoice_date"]);
             return [

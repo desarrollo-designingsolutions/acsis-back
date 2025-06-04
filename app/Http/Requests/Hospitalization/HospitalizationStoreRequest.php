@@ -21,11 +21,10 @@ class HospitalizationStoreRequest extends FormRequest
 
             'viaIngresoServicioSalud_id' => 'required',
             'fechaInicioAtencion' => 'required',
-            'numAutorizacion' => 'required',
             'causaMotivoAtencion_id' => 'required',
             'codDiagnosticoPrincipal_id' => 'required',
-            'codComplicacion_id' => 'required',
             'condicionDestinoUsuarioEgreso_id' => 'required',
+            'codDiagnosticoPrincipalE_id' => 'required',
             'fechaEgreso' => 'required',
         ];
 
@@ -39,11 +38,10 @@ class HospitalizationStoreRequest extends FormRequest
 
             'viaIngresoServicioSalud_id.required' => 'El campo es obligatorio',
             'fechaInicioAtencion.required' => 'El campo es obligatorio',
-            'numAutorizacion.required' => 'El campo es obligatorio',
             'causaMotivoAtencion_id.required' => 'El campo es obligatorio',
             'codDiagnosticoPrincipal_id.required' => 'El campo es obligatorio',
-            'codComplicacion_id.required' => 'El campo es obligatorio',
             'condicionDestinoUsuarioEgreso_id.required' => 'El campo es obligatorio',
+            'codDiagnosticoPrincipalE_id.required' => 'El campo es obligatorio',
             'fechaEgreso.required' => 'El campo es obligatorio',
         ];
     }

@@ -19,11 +19,8 @@ class MedicineStoreRequest extends FormRequest
         $rules = [
             'invoice_id' => 'required',
 
-            'numAutorizacion' => 'required',
-            'idMIPRES' => 'required',
             'fechaDispensAdmon' => 'required',
             'codDiagnosticoPrincipal_id' => 'required',
-            'codDiagnosticoRelacionado_id' => 'required',
             'tipoMedicamento_id' => 'required',
             'codTecnologiaSalud' => 'required',
             'nomTecnologiaSalud' => 'required',
@@ -53,11 +50,8 @@ class MedicineStoreRequest extends FormRequest
         return [
             'invoice_id.required' => 'El campo es obligatorio',
 
-            'numAutorizacion' => 'El campo es obligatorio',
-            'idMIPRES' => 'El campo es obligatorio',
             'fechaDispensAdmon' => 'El campo es obligatorio',
             'codDiagnosticoPrincipal_id' => 'El campo es obligatorio',
-            'codDiagnosticoRelacionado_id' => 'El campo es obligatorio',
             'tipoMedicamento_id' => 'El campo es obligatorio',
             'codTecnologiaSalud' => 'El campo es obligatorio',
             'nomTecnologiaSalud' => 'El campo es obligatorio',
