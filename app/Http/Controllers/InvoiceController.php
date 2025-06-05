@@ -833,7 +833,7 @@ class InvoiceController extends Controller
         $post['invoice_id'] = $invoice->id;
 
         // Consultas
-        $consultas = $json['usuarios'][0]['servicios']['consultas'];
+        $consultas = $json['usuarios'][0]['servicios']['consultas'] ?? [];
 
         if (count($consultas) > 0) {
             foreach ($consultas as $key => $value) {
@@ -913,7 +913,7 @@ class InvoiceController extends Controller
             }
         }
         // Procedimientos
-        $procedimientos = $json['usuarios'][0]['servicios']['procedimientos'];
+        $procedimientos = $json['usuarios'][0]['servicios']['procedimientos'] ?? [];
 
         if (count($procedimientos) > 0) {
             foreach ($procedimientos as $key => $value) {
@@ -993,7 +993,7 @@ class InvoiceController extends Controller
         }
 
         // Medicamentos
-        $medicamentos = $json['usuarios'][0]['servicios']['medicamentos'];
+        $medicamentos = $json['usuarios'][0]['servicios']['medicamentos']?? [];
 
         if (count($medicamentos) > 0) {
             foreach ($medicamentos as $key => $value) {
@@ -1079,7 +1079,7 @@ class InvoiceController extends Controller
         }
 
         // Otros Servicios
-        $otrosServicios = $json['usuarios'][0]['servicios']['otrosServicios'];
+        $otrosServicios = $json['usuarios'][0]['servicios']['otrosServicios']?? [];
 
         if (count($otrosServicios) > 0) {
             foreach ($otrosServicios as $key => $value) {
@@ -1151,7 +1151,7 @@ class InvoiceController extends Controller
         }
 
         // Urgencias
-        $urgencias = $json['usuarios'][0]['servicios']['urgencias'];
+        $urgencias = $json['usuarios'][0]['servicios']['urgencias']?? [];
 
         if (count($urgencias) > 0) {
             foreach ($urgencias as $key => $value) {
@@ -1215,7 +1215,7 @@ class InvoiceController extends Controller
         }
 
         // Hospitalizacion
-        $hospitalizacion = $json['usuarios'][0]['servicios']['hospitalizacion'];
+        $hospitalizacion = $json['usuarios'][0]['servicios']['hospitalizacion']?? [];
 
         if (count($hospitalizacion) > 0) {
             foreach ($hospitalizacion as $key => $value) {
@@ -1285,7 +1285,7 @@ class InvoiceController extends Controller
         }
 
         // Recien Nacidos
-        $recienNacidos = $json['usuarios'][0]['servicios']['recienNacidos'];
+        $recienNacidos = $json['usuarios'][0]['servicios']['recienNacidos']?? [];
 
         if (count($recienNacidos) > 0) {
             foreach ($recienNacidos as $key => $value) {
