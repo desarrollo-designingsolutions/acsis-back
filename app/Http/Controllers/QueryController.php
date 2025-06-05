@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\Invoice\StatusInvoiceEnum;
+use App\Http\Resources\CatalogoCum\CatalogoCumSelectResource;
 use App\Http\Resources\Cie10\Cie10SelectInfiniteResource;
 use App\Http\Resources\CodeGlosa\CodeGlosaSelectInfiniteResource;
 use App\Http\Resources\ConceptoRecaudo\ConceptoRecaudoSelectResource;
@@ -34,6 +35,7 @@ use App\Http\Resources\TypeDocument\TypeDocumentSelectResource;
 use App\Http\Resources\Umm\UmmSelectInfiniteResource;
 use App\Http\Resources\ViaIngresoUsuario\ViaIngresoUsuarioSelectInfiniteResource;
 use App\Http\Resources\ZonaVersion2\ZonaVersion2SelectResource;
+use App\Repositories\CatalogoCumRepository;
 use App\Repositories\Cie10Repository;
 use App\Repositories\CityRepository;
 use App\Repositories\CodeGlosaRepository;
@@ -114,6 +116,7 @@ class QueryController extends Controller
         protected IpsCodHabilitacionRepository $ipsCodHabilitacionRepository,
         protected InsuranceStatusRepository $insuranceStatusRepository,
         protected TypeCodeGlosaRepository $typeCodeGlosaRepository,
+        protected CatalogoCumRepository $catalogoCumRepository,
     ) {}
 
     public function selectInfiniteCountries(Request $request)
@@ -574,6 +577,18 @@ class QueryController extends Controller
         return [
             'typeCodeGlosa_arrayInfo' => $dataCountries,
             'typeCodeGlosa_countLinks' => $typeCodeGlosa->lastPage(),
+        ];
+    }
+
+    public function selectInfiniteCatalogoCum(Request $request)
+    {
+        $catalogoCum = $this->catalogoCumRepository->list($request->all());
+
+        $dataCountries = CatalogoCumSelectResource::collection($catalogoCum);
+
+        return [
+            'catalogoCum_arrayInfo' => $dataCountries,
+            'catalogoCum_countLinks' => $catalogoCum->lastPage(),
         ];
     }
 }

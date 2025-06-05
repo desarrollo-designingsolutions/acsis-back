@@ -23,7 +23,7 @@ class GeneralCodeGlosaSeeder extends Seeder
             ['id' => 6, 'type_code_glosa_id' => 1, 'general_code' => '6', 'description' => 'pertinencia', 'created_at' => now(), 'updated_at' => now()],
             ['id' => 8, 'type_code_glosa_id' => 1, 'general_code' => '8', 'description' => 'devoluciones', 'created_at' => now(), 'updated_at' => now()],
             ['id' => 9, 'type_code_glosa_id' => 1, 'general_code' => '9', 'description' => 'respuestas a glosas o devoluciones', 'created_at' => now(), 'updated_at' => now()],
-            
+
             ['id' => 10, 'type_code_glosa_id' => 2, 'general_code' => 'FA', 'description' => 'FACTURACIÓN', 'created_at' => now(), 'updated_at' => now()],
             ['id' => 11, 'type_code_glosa_id' => 2, 'general_code' => 'TA', 'description' => 'TARIFAS', 'created_at' => now(), 'updated_at' => now()],
             ['id' => 12, 'type_code_glosa_id' => 2, 'general_code' => 'SO', 'description' => 'SOPORTES', 'created_at' => now(), 'updated_at' => now()],

@@ -44,7 +44,8 @@ class ProcedureController extends Controller
             $servicio = $this->queryController->selectInfiniteServicio(request());
             $cie10 = $this->queryController->selectInfiniteCie10(request());
 
-            $invoice = $this->invoiceRepository->find(request('invoice_id'), select: ["id", "invoice_date"]);
+            $invoice = $this->invoiceRepository->find(request('invoice_id'), select: ['id', 'invoice_date']);
+
             return [
                 'code' => 200,
                 'invoice' => $invoice,
@@ -164,7 +165,6 @@ class ProcedureController extends Controller
             $newRequest = new Request(['codigo_in' => Constants::CODS_SELECT_FORM_SERVICE_PROCEDURE_CONCEPTORECAUDO]);
             $conceptoRecaudo = $this->queryController->selectInfiniteConceptoRecaudo($newRequest);
 
-
             $cupsRips = $this->queryController->selectInfiniteCupsRips(request());
             $viaIngresoUsuario = $this->queryController->selectInfiniteViaIngresoUsuario(request());
             $modalidadAtencion = $this->queryController->selectInfiniteModalidadAtencion(request());
@@ -172,7 +172,8 @@ class ProcedureController extends Controller
             $servicio = $this->queryController->selectInfiniteServicio(request());
             $cie10 = $this->queryController->selectInfiniteCie10(request());
 
-            $invoice = $this->invoiceRepository->find(request('invoice_id'), select: ["id", "invoice_date"]);
+            $invoice = $this->invoiceRepository->find(request('invoice_id'), select: ['id', 'invoice_date']);
+
             return [
                 'code' => 200,
                 'form' => $form,

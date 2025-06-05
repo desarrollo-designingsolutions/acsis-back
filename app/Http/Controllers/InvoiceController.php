@@ -151,8 +151,6 @@ class InvoiceController extends Controller
                 return $case->value;
             }));
 
-
-
             return [
                 'code' => 200,
                 ...$statusInvoiceEnum,
@@ -261,7 +259,6 @@ class InvoiceController extends Controller
             if ($invoiceOld->type->value == 'INVOICE_TYPE_002') {
                 $invoiceOld->typeable()->delete();
             }
-
 
             $invoice = $this->invoiceRepository->store($post);
 
@@ -395,9 +392,8 @@ class InvoiceController extends Controller
         $tipoNota = $invoice->tipoNota ?? null;
         $serviceVendor = $invoice->serviceVendor ?? null;
 
-
         $nit = $serviceVendor->nit ?? '';
-        if (!empty($nit)) {
+        if (! empty($nit)) {
             // Split on hyphen and take the first part (or whole string if no hyphen)
             $nit = explode('-', $nit)[0];
             // Remove dots
@@ -425,7 +421,7 @@ class InvoiceController extends Controller
                 'codSexo' => $sexo->codigo ?? null,
                 'codPaisResidencia' => $pais_residency->codigo ?? null,
                 'codMunicipioResidencia' => $municipio->codigo ?? null,
-                'codZonaTerritorialResidencia' => $zonaVersion2->codigo ?? "",
+                'codZonaTerritorialResidencia' => $zonaVersion2->codigo ?? '',
                 'incapacidad' => $patient ? $patient->incapacity == 1 ? 'SI' : 'NO' : '',
                 'consecutivo' => 1,
                 'codPaisOrigen' => $pais_origin->codigo ?? null,
@@ -437,7 +433,7 @@ class InvoiceController extends Controller
         $newData['usuarios'] = $users;
 
         // Define file path
-        $nameFile = $invoice->invoice_number . '.json';
+        $nameFile = $invoice->invoice_number.'.json';
         $path = "companies/company_{$invoice->company_id}/invoices/invoice_{$invoice->id}/{$nameFile}";
         $disk = Constants::DISK_FILES;
 
@@ -507,7 +503,7 @@ class InvoiceController extends Controller
 
     private function storeJsonFile($invoice, array $jsonData): void
     {
-        $nameFile = $invoice->invoice_number . '.json';
+        $nameFile = $invoice->invoice_number.'.json';
         $path = "companies/company_{$invoice->company_id}/invoices/invoice_{$invoice->id}/{$nameFile}";
         $disk = Constants::DISK_FILES;
 
@@ -549,12 +545,12 @@ class InvoiceController extends Controller
 
         // Obtener el contenido del archivo
         $fileContent = Storage::disk($disk)->get($path);
-        $fileName = $invoice->invoice_number . '.json'; // Nombre del archivo para la descarga
+        $fileName = $invoice->invoice_number.'.json'; // Nombre del archivo para la descarga
 
         // Devolver el archivo como respuesta descargable
         return response($fileContent, 200, [
             'Content-Type' => 'application/json',
-            'Content-Disposition' => 'attachment; filename="' . $fileName . '"',
+            'Content-Disposition' => 'attachment; filename="'.$fileName.'"',
         ]);
     }
 
@@ -711,8 +707,8 @@ class InvoiceController extends Controller
                 File::makeDirectory($tempPath, 0755, true);
             }
 
-            $zipFileName = 'factura_' . $invoice->id . '.zip';
-            $zipPath = $tempPath . '/' . $zipFileName;
+            $zipFileName = 'factura_'.$invoice->id.'.zip';
+            $zipPath = $tempPath.'/'.$zipFileName;
 
             $zip = new ZipArchive;
             if ($zip->open($zipPath, ZipArchive::CREATE | ZipArchive::OVERWRITE) === true) {
@@ -732,7 +728,7 @@ class InvoiceController extends Controller
 
             return response()->json(['error' => 'Error al crear el ZIP'], 500);
         } catch (\Exception $e) {
-            \Log::error('Error en downloadZip: ' . $e->getMessage());
+            \Log::error('Error en downloadZip: '.$e->getMessage());
 
             return response()->json([
                 'error' => $e->getMessage(),

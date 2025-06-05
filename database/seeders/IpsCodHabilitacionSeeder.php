@@ -2,68 +2,60 @@
 
 namespace Database\Seeders;
 
-use App\Models\IpsCodHabilitacion;
-use App\Services\ExcelService;
+use App\Imports\Seeders\IpsCodHabilitacionImport;
 use Illuminate\Database\Seeder;
-use PhpOffice\PhpSpreadsheet\Reader\Exception;
+use Maatwebsite\Excel\Facades\Excel;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 
 class IpsCodHabilitacionSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        $excelService = new ExcelService;
-        $sheet = null;
-
         try {
-            $sheet = $excelService
-                ->getSpreadsheetFromExcel(database_path('db/TablaReferencia_IpsCodHabilitacions__1.xlsx'))
-                ->getSheetByName('Table')
-                ->toArray();
-        } catch (Exception $e) {
-            // $this->error('Error al leer el excel');
-        } catch (\PhpOffice\PhpSpreadsheet\Exception $e) {
-            // $this->error('Error al obtener la hoja');
-        }
+            $filesPath = [
+                database_path('db/19-TablaReferencia_IPSCodHabilitacion__1.xlsx'),
+                database_path('db/19-TablaReferencia_IPSCodHabilitacion__2.xlsx'),
+            ];
 
-        if ($sheet) {
-            unset($sheet[0]);
+            foreach ($filesPath as $key => $path) {
+                // Determine maxRecords (e.g., 10 for limited, null for all)
+                $maxRecords = null; // Change to null to process all records
 
-            // Inicializar la barra de progreso
-            $this->command->info('Starting Seed Data ...');
-            $bar = $this->command->getOutput()->createProgressBar(count($sheet));
+                // Count total rows for progress bar if processing all records
+                $totalRows = $maxRecords ?? $this->countExcelRows($path);
+                $this->command->info('Procesando hasta '.($maxRecords ?? 'todos los').' registros...');
 
-            foreach ($sheet as $dataSheet) {
-                IpsCodHabilitacion::updateOrCreate(
-                    ['codigo' => $dataSheet[1]], // condiciones para buscar el registro
-                    [
-                        'nombre' => $dataSheet[2],
-                        'descripcion' => $dataSheet[3],
-                        'habilitado' => $dataSheet[4],
-                        'aplicacion' => $dataSheet[5],
-                        'isStandardGEL' => $dataSheet[6],
-                        'isStandardMSPS' => $dataSheet[7],
-                        'tipoIDPrestador' => $dataSheet[8],
-                        'nroIDPrestador' => $dataSheet[9],
-                        'codigoPrestador' => $dataSheet[10],
-                        'codMpioSede' => $dataSheet[11],
-                        'nombreMpioSede' => $dataSheet[12],
-                        'nombreDptoSede' => $dataSheet[13],
-                        'clasePrestador' => $dataSheet[14],
-                        'nomClasePrestador' => $dataSheet[15],
-                        'extra_IX' => $dataSheet[16],
-                        'extra_X' => $dataSheet[17],
-                        'valorRegistro' => $dataSheet[18],
-                        'usuarioResponsable' => $dataSheet[19],
-                        'fecha_actualizacion' => $dataSheet[20],
-                        'isPublicPrivate' => $dataSheet[21],
-                    ]
-                );
-                $bar->advance();
+                // Initialize progress bar
+                $bar = $this->command->getOutput()->createProgressBar($totalRows);
+                $bar->start();
+
+                // Instantiate import with maxRecords
+                $import = new IpsCodHabilitacionImport($maxRecords);
+                $import->withProgressBar($bar);
+
+                Excel::import($import, $path, null, \Maatwebsite\Excel\Excel::XLSX, [
+                    'sheet' => 'Table',
+                ]);
+
+                $bar->finish();
+                $this->command->info("\nSeeding completed.");
             }
-            $bar->finish(); // Finalizar la barra
+        } catch (\Exception $e) {
+            $this->command->error('Error importing Excel: '.$e->getMessage());
         }
+    }
+
+    /**
+     * Count the number of rows in the Excel file's "Table" sheet, excluding header.
+     */
+    protected function countExcelRows($filePath): int
+    {
+        $spreadsheet = IOFactory::load($filePath);
+        $sheet = $spreadsheet->getSheetByName('Table');
+        if (! $sheet) {
+            throw new \Exception('No se encontró la hoja "Table" en el archivo Excel.');
+        }
+
+        return $sheet->getHighestRow() - 1; // Subtract 1 for header
     }
 }

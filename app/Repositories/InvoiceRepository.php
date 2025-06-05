@@ -198,7 +198,7 @@ class InvoiceRepository extends BaseRepository
             'color' => 'success',
             'title' => $title,
             'value' => $value,
-            'secondary_data' => $invoiceCount . ' facturas',
+            'secondary_data' => $invoiceCount.' facturas',
             'isHover' => false,
             'type' => 1,
             'to' => [],
@@ -228,8 +228,8 @@ class InvoiceRepository extends BaseRepository
         $approvedPercentage = $totalSum > 0 ? ($approvedSum / $totalSum) * 100 : 0;
         $glosaPercentage = $totalSum > 0 ? ($glosaSum / $totalSum) * 100 : 0;
 
-        $value = round($approvedPercentage, 2) . '% / ' . round($glosaPercentage, 2) . '%';
-        $secondary_data = formatNumber($approvedSum) . ' aprobados / ' . formatNumber($glosaSum) . ' glosados';
+        $value = round($approvedPercentage, 2).'% / '.round($glosaPercentage, 2).'%';
+        $secondary_data = formatNumber($approvedSum).' aprobados / '.formatNumber($glosaSum).' glosados';
 
         return [
             'title' => 'Facturación Aprobada vs Glosada',
@@ -267,8 +267,8 @@ class InvoiceRepository extends BaseRepository
         $pendingCount = $pendingQuery->count();
         $pendingSum = $pendingQuery->sum('total');
 
-        $value = $inReviewCount . ' / ' . $pendingCount;
-        $secondary_data = formatNumber($inReviewSum) . '  en revisión / ' . formatNumber($pendingSum) . 'pendientes';
+        $value = $inReviewCount.' / '.$pendingCount;
+        $secondary_data = formatNumber($inReviewSum).'  en revisión / '.formatNumber($pendingSum).'pendientes';
 
         return [
             'title' => 'Facturas en Revisión / Pendientes',

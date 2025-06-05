@@ -52,3 +52,5 @@ Route::post('/selectInfiniteIpsCodHabilitacion', [QueryController::class, 'selec
 Route::post('/selectInfiniteInsuranceStatus', [QueryController::class, 'selectInfiniteInsuranceStatus']);
 
 Route::post('/selectInfiniteTypeCodeGlosa', [QueryController::class, 'selectInfiniteTypeCodeGlosa']);
+
+Route::post('/selectInfiniteCatalogoCum', [QueryController::class, 'selectInfiniteCatalogoCum']);

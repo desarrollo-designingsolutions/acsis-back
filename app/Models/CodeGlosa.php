@@ -15,7 +15,6 @@ class CodeGlosa extends Model
         'string:{table}_list*',
     ];
 
-
     /**
      * Relación muchos a uno con GeneralCodeGlosa.
      */

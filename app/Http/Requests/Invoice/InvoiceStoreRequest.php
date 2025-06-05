@@ -25,7 +25,7 @@ class InvoiceStoreRequest extends FormRequest
             'status' => 'required',
         ];
 
-        //si no se selecciona el tipo de nota y no se ingresa el numero de nota entonces el numero de factura es obligatorio
+        // si no se selecciona el tipo de nota y no se ingresa el numero de nota entonces el numero de factura es obligatorio
         if (! $this->tipo_nota_id) {
             $rules2 = [
                 'invoice_number' => 'required',
@@ -33,8 +33,7 @@ class InvoiceStoreRequest extends FormRequest
             $rules = array_merge($rules, $rules2);
         }
 
-
-        //si se selecciona el tipo de nota entonces el numero de nota es obligatorio
+        // si se selecciona el tipo de nota entonces el numero de nota es obligatorio
         if ($this->note_number) {
             $rules2 = [
                 'tipo_nota_id' => 'required',
@@ -42,14 +41,13 @@ class InvoiceStoreRequest extends FormRequest
             $rules = array_merge($rules, $rules2);
         }
 
-        //si el tipo de nota se leecciona entonces el numero de nota es obligatorio
+        // si el tipo de nota se leecciona entonces el numero de nota es obligatorio
         if ($this->tipo_nota_id) {
             $rules2 = [
                 'note_number' => 'required',
             ];
             $rules = array_merge($rules, $rules2);
         }
-
 
         if ($this->radication_number) {
             $rules2 = [

@@ -25,8 +25,8 @@ class ServiceVendorFormResource extends JsonResource
             'type_vendor_id' => $this->type_vendor_id,
             'ipsable_type' => $this->ipsable_type,
             'ipsable_id' => [
-                "value" => $this->ipsable_id,
-                "title" => $this->getIpsableIdTitle(),
+                'value' => $this->ipsable_id,
+                'title' => $this->getIpsableIdTitle(),
                 'codigo' => $this->ipsable?->codigo,
                 'nit' => $this->ipsable?->nroIDPrestador ?? $this->ipsable?->nit,
             ],
@@ -35,12 +35,10 @@ class ServiceVendorFormResource extends JsonResource
 
     /**
      * Get the title for ipsable_id.
-     *
-     * @return string
      */
     private function getIpsableIdTitle(): string
     {
-        if (!$this->ipsable) {
+        if (! $this->ipsable) {
             return 'No asignado';
         }
 
@@ -48,6 +46,6 @@ class ServiceVendorFormResource extends JsonResource
             return $this->ipsable->nroIDPrestador;
         }
 
-        return $this->ipsable->nit . ' - ' . $this->ipsable->nombre;
+        return $this->ipsable->nit.' - '.$this->ipsable->nombre;
     }
 }

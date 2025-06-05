@@ -35,7 +35,8 @@ class NewlyBornController extends Controller
             $newRequest = new Request(['codigo_in' => Constants::CODS_SELECT_FORM_SERVICE_NEWBORN_TIPODOCUMENTOIDENTIFICACION]);
             $tipoDocumento = $this->queryController->selectInfiniteTipoIdPisis($newRequest);
 
-            $invoice = $this->invoiceRepository->find(request('invoice_id'), select: ["id", "invoice_date"]);
+            $invoice = $this->invoiceRepository->find(request('invoice_id'), select: ['id', 'invoice_date']);
+
             return [
                 'code' => 200,
                 'invoice' => $invoice,
@@ -134,7 +135,8 @@ class NewlyBornController extends Controller
             $newRequest = new Request(['codigo_in' => Constants::CODS_SELECT_FORM_SERVICE_NEWBORN_TIPODOCUMENTOIDENTIFICACION]);
             $tipoDocumento = $this->queryController->selectInfiniteTipoIdPisis($newRequest);
 
-            $invoice = $this->invoiceRepository->find(request('invoice_id'), select: ["id", "invoice_date"]);
+            $invoice = $this->invoiceRepository->find(request('invoice_id'), select: ['id', 'invoice_date']);
+
             return [
                 'code' => 200,
                 'form' => $form,

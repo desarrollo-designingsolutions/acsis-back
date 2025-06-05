@@ -22,7 +22,7 @@ class TypeVendorSeeder extends Seeder
             ],
             [
                 'name' => 'Profesional',
-            ]
+            ],
         ];
 
         // Inicializar la barra de progreso

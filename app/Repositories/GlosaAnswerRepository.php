@@ -6,10 +6,7 @@ use App\Enums\GlosaAnswer\StatusGlosaAnswerEnum;
 use App\Helpers\Constants;
 use App\Models\GlosaAnswer;
 use App\QueryBuilder\Filters\QueryFilters;
-use App\QueryBuilder\Sort\DynamicConcatSort;
-use App\QueryBuilder\Sort\RelatedTableSort;
 use Spatie\QueryBuilder\AllowedFilter;
-use Spatie\QueryBuilder\AllowedSort;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class GlosaAnswerRepository extends BaseRepository

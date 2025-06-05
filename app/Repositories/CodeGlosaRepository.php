@@ -27,13 +27,13 @@ class CodeGlosaRepository extends BaseRepository
                 })
                 ->where(function ($query) use ($request) {
                     if (isset($request['searchQueryInfinite']) && ! empty($request['searchQueryInfinite'])) {
-                        $query->where('code', 'like', '%' . $request['searchQueryInfinite'] . '%');
-                        $query->orWhere('description', 'like', '%' . $request['searchQueryInfinite'] . '%');
+                        $query->where('code', 'like', '%'.$request['searchQueryInfinite'].'%');
+                        $query->orWhere('description', 'like', '%'.$request['searchQueryInfinite'].'%');
                     }
                 })
                 ->where(function ($query) use ($request) {
 
-                    if (isset($request['type_code_glosa_id']) && !empty($request['type_code_glosa_id'])) {
+                    if (isset($request['type_code_glosa_id']) && ! empty($request['type_code_glosa_id'])) {
                         $query->whereHas('generalCodeGlosa', function ($subQuery) use ($request) {
                             $subQuery->where('type_code_glosa_id', $request['type_code_glosa_id']);
                         });
@@ -78,8 +78,8 @@ class CodeGlosaRepository extends BaseRepository
                 $query->where('company_id', $request['company_id']);
             }
             if (! empty($request['string'])) {
-                $query->where('description', 'like', '%' . $request['string'] . '%');
-                $query->orWhere('code', 'like', '%' . $request['string'] . '%');
+                $query->where('description', 'like', '%'.$request['string'].'%');
+                $query->orWhere('code', 'like', '%'.$request['string'].'%');
             }
         });
 
@@ -91,7 +91,7 @@ class CodeGlosaRepository extends BaseRepository
         $data = $query->get()->map(function ($value) use ($with, $select, $fieldValue) {
             $data = [
                 'value' => $value->$fieldValue,
-                'title' => $value->code . ' - ' . $value->description,
+                'title' => $value->code.' - '.$value->description,
             ];
 
             if (count($select) > 0) {

@@ -33,7 +33,8 @@ class MedicineController extends Controller
             $conceptoRecaudo = $this->queryController->selectInfiniteConceptoRecaudo(request());
             $tipoDocumento = $this->queryController->selectInfiniteTipoIdPisis(request());
 
-            $invoice = $this->invoiceRepository->find(request('invoice_id'), select: ["id", "invoice_date"]);
+            $invoice = $this->invoiceRepository->find(request('invoice_id'), select: ['id', 'invoice_date']);
+
             return [
                 'code' => 200,
                 'invoice' => $invoice,
@@ -152,7 +153,8 @@ class MedicineController extends Controller
             $conceptoRecaudo = $this->queryController->selectInfiniteConceptoRecaudo(request());
             $tipoDocumento = $this->queryController->selectInfiniteTipoIdPisis(request());
 
-            $invoice = $this->invoiceRepository->find(request('invoice_id'), select: ["id", "invoice_date"]);
+            $invoice = $this->invoiceRepository->find(request('invoice_id'), select: ['id', 'invoice_date']);
+
             return [
                 'code' => 200,
                 'form' => $form,

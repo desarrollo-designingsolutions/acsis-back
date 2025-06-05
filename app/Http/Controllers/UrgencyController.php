@@ -31,7 +31,8 @@ class UrgencyController extends Controller
             $cie10 = $this->queryController->selectInfiniteCie10(request());
             $cupsRips = $this->queryController->selectInfiniteCupsRips(request());
 
-            $invoice = $this->invoiceRepository->find(request('invoice_id'), select: ["id", "invoice_date"]);
+            $invoice = $this->invoiceRepository->find(request('invoice_id'), select: ['id', 'invoice_date']);
+
             return [
                 'code' => 200,
                 'invoice' => $invoice,
@@ -124,7 +125,8 @@ class UrgencyController extends Controller
             $cie10 = $this->queryController->selectInfiniteCie10(request());
             $cupsRips = $this->queryController->selectInfiniteCupsRips(request());
 
-            $invoice = $this->invoiceRepository->find(request('invoice_id'), select: ["id", "invoice_date"]);
+            $invoice = $this->invoiceRepository->find(request('invoice_id'), select: ['id', 'invoice_date']);
+
             return [
                 'code' => 200,
                 'form' => $form,

@@ -11,7 +11,6 @@ class TypeCodeGlosa extends Model
     use HasFactory;
     use HasUuids;
 
-
     /**
      * Relación uno a muchos con GeneralCodeGlosa.
      */

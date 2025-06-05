@@ -22,14 +22,14 @@ class InsuranceStatusRepository extends BaseRepository
         $query = QueryBuilder::for($this->model->query())
             ->allowedFilters([
                 AllowedFilter::callback('inputGeneral', function ($query, $value) {
-                    $query->where(function ($subQuery) use ($value) {});
+                    $query->where(function ($subQuery) {});
                 }),
             ])
             ->allowedSorts([])->where(function ($query) use ($request) {
 
                 if (isset($request['searchQueryInfinite']) && ! empty($request['searchQueryInfinite'])) {
-                    $query->orWhere('code', 'like', '%' . $request['searchQueryInfinite'] . '%');
-                    $query->orWhere('name', 'like', '%' . $request['searchQueryInfinite'] . '%');
+                    $query->orWhere('code', 'like', '%'.$request['searchQueryInfinite'].'%');
+                    $query->orWhere('name', 'like', '%'.$request['searchQueryInfinite'].'%');
                 }
             });
 

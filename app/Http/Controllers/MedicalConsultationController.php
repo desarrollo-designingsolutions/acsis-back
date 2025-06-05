@@ -49,7 +49,8 @@ class MedicalConsultationController extends Controller
             $cie10 = $this->queryController->selectInfiniteCie10(request());
             $ripsTipoDiagnosticoPrincipalVersion2 = $this->queryController->selectInfiniteRipsTipoDiagnosticoPrincipalVersion2(request());
 
-            $invoice = $this->invoiceRepository->find(request('invoice_id'), select: ["id", "invoice_date"]);
+            $invoice = $this->invoiceRepository->find(request('invoice_id'), select: ['id', 'invoice_date']);
+
             return [
                 'code' => 200,
                 'invoice' => $invoice,
@@ -184,7 +185,8 @@ class MedicalConsultationController extends Controller
             $cie10 = $this->queryController->selectInfiniteCie10(request());
             $ripsTipoDiagnosticoPrincipalVersion2 = $this->queryController->selectInfiniteRipsTipoDiagnosticoPrincipalVersion2(request());
 
-            $invoice = $this->invoiceRepository->find(request('invoice_id'), select: ["id", "invoice_date"]);
+            $invoice = $this->invoiceRepository->find(request('invoice_id'), select: ['id', 'invoice_date']);
+
             return [
                 'code' => 200,
                 'form' => $form,

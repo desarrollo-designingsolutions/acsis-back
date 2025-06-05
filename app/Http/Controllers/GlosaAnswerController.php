@@ -43,7 +43,6 @@ class GlosaAnswerController extends Controller
     {
         return $this->execute(function () {
 
-
             $statusGlosaAnswerEnumValues = array_map(function ($case) {
                 return [
                     'value' => $case->value,
@@ -66,7 +65,7 @@ class GlosaAnswerController extends Controller
 
             if ($request->file('file')) {
                 $file = $request->file('file');
-                $ruta = 'companies/company_' . $answer->company_id . '/respuestas/respuesta_' . $answer->id . $request->input('file');
+                $ruta = 'companies/company_'.$answer->company_id.'/respuestas/respuesta_'.$answer->id.$request->input('file');
 
                 $file = $file->store($ruta, Constants::DISK_FILES);
                 $answer->file = $file;
@@ -111,7 +110,7 @@ class GlosaAnswerController extends Controller
 
             if ($request->file('file')) {
                 $file = $request->file('file');
-                $ruta = 'companies/company_' . $answer->company_id . '/respuestas/respuesta_' . $answer->id . $request->input('file');
+                $ruta = 'companies/company_'.$answer->company_id.'/respuestas/respuesta_'.$answer->id.$request->input('file');
 
                 $file = $file->store($ruta, Constants::DISK_FILES);
                 $answer->file = $file;
@@ -144,5 +143,4 @@ class GlosaAnswerController extends Controller
             ];
         }, 200);
     }
-
 }

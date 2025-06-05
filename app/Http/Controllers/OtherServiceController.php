@@ -38,7 +38,8 @@ class OtherServiceController extends Controller
             $newRequest = new Request(['codigo_in' => Constants::CODS_SELECT_FORM_SERVICE_OTHERSERVICE_CONCEPTORECAUDO]);
             $conceptoRecaudo = $this->queryController->selectInfiniteConceptoRecaudo($newRequest);
 
-            $invoice = $this->invoiceRepository->find(request('invoice_id'), select: ["id", "invoice_date"]);
+            $invoice = $this->invoiceRepository->find(request('invoice_id'), select: ['id', 'invoice_date']);
+
             return [
                 'code' => 200,
                 'invoice' => $invoice,
@@ -95,7 +96,7 @@ class OtherServiceController extends Controller
             // Prepare service data for JSON
             $serviceData = [
                 'codPrestador' => $service->invoice?->serviceVendor?->ips_cod_habilitacion?->codigo,
-                'numAutorizacion' => $post['numAutorizacion'] ?? "",
+                'numAutorizacion' => $post['numAutorizacion'] ?? '',
                 'idMIPRES' => $post['idMIPRES'] ?? null,
                 'fechaSuministroTecnologia' => Carbon::parse($post['fechaSuministroTecnologia'])->format('Y-m-d H:i'),
                 'tipoOS' => $otherService->tipoOtrosServicio?->codigo,
@@ -145,7 +146,8 @@ class OtherServiceController extends Controller
             $newRequest = new Request(['codigo_in' => Constants::CODS_SELECT_FORM_SERVICE_OTHERSERVICE_CONCEPTORECAUDO]);
             $conceptoRecaudo = $this->queryController->selectInfiniteConceptoRecaudo($newRequest);
 
-            $invoice = $this->invoiceRepository->find(request('invoice_id'), select: ["id", "invoice_date"]);
+            $invoice = $this->invoiceRepository->find(request('invoice_id'), select: ['id', 'invoice_date']);
+
             return [
                 'code' => 200,
                 'form' => $form,
@@ -197,7 +199,7 @@ class OtherServiceController extends Controller
             // Prepare service data for JSON
             $serviceData = [
                 'codPrestador' => $service->invoice?->serviceVendor?->ips_cod_habilitacion?->codigo,
-                'numAutorizacion' => $post['numAutorizacion'] ?? "",
+                'numAutorizacion' => $post['numAutorizacion'] ?? '',
                 'idMIPRES' => $post['idMIPRES'] ?? null,
                 'fechaSuministroTecnologia' => Carbon::parse($post['fechaSuministroTecnologia'])->format('Y-m-d H:i'),
                 'tipoOS' => $otherService->tipoOtrosServicio?->codigo,
