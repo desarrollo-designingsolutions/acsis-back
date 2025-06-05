@@ -22,18 +22,21 @@ class MedicineStoreRequest extends FormRequest
             'fechaDispensAdmon' => 'required',
             'codDiagnosticoPrincipal_id' => 'required',
             'tipoMedicamento_id' => 'required',
-            'codTecnologiaSalud' => 'required',
-            'nomTecnologiaSalud' => 'required',
+            'nomTecnologiaSalud_id' => 'required',
             'concentracionMedicamento' => 'required',
             'unidadMedida_id' => 'required',
-            'formaFarmaceutica' => 'required',
-            'unidadMinDispensa' => 'required',
+            'formaFarmaceutica_id' => 'required',
+            'unidadMinDispensa_id' => 'required',
             'cantidadMedicamento' => 'required',
             'diasTratamiento' => 'required',
             'vrUnitMedicamento' => 'required',
             'vrServicio' => 'required',
             'tipoDocumentoIdentificacion_id' => 'required',
             'numDocumentoIdentificacion' => 'required',
+
+
+            'codTecnologiaSaludable_id' => 'required',
+            'codTecnologiaSaludable_type' => 'required',
 
         ];
 
@@ -53,12 +56,13 @@ class MedicineStoreRequest extends FormRequest
             'fechaDispensAdmon' => 'El campo es obligatorio',
             'codDiagnosticoPrincipal_id' => 'El campo es obligatorio',
             'tipoMedicamento_id' => 'El campo es obligatorio',
-            'codTecnologiaSalud' => 'El campo es obligatorio',
-            'nomTecnologiaSalud' => 'El campo es obligatorio',
+            'codTecnologiaSaludable_id' => 'El campo es obligatorio',
+            'codTecnologiaSaludable_type' => 'El campo es obligatorio',
+            'nomTecnologiaSalud_id' => 'El campo es obligatorio',
             'concentracionMedicamento' => 'El campo es obligatorio',
             'unidadMedida_id' => 'El campo es obligatorio',
-            'formaFarmaceutica' => 'El campo es obligatorio',
-            'unidadMinDispensa' => 'El campo es obligatorio',
+            'formaFarmaceutica_id' => 'El campo es obligatorio',
+            'unidadMinDispensa_id' => 'El campo es obligatorio',
             'cantidadMedicamento' => 'El campo es obligatorio',
             'diasTratamiento' => 'El campo es obligatorio',
             'vrUnitMedicamento' => 'El campo es obligatorio',
@@ -95,6 +99,18 @@ class MedicineStoreRequest extends FormRequest
         }
         if ($this->has('tipoDocumentoIdentificacion_id')) {
             $merge['tipoDocumentoIdentificacion_id'] = getValueSelectInfinite($this->tipoDocumentoIdentificacion_id);
+        }
+        if ($this->has('unidadMinDispensa_id')) {
+            $merge['unidadMinDispensa_id'] = getValueSelectInfinite($this->unidadMinDispensa_id);
+        }
+        if ($this->has('formaFarmaceutica_id')) {
+            $merge['formaFarmaceutica_id'] = getValueSelectInfinite($this->formaFarmaceutica_id);
+        }
+        if ($this->has('nomTecnologiaSalud_id')) {
+            $merge['nomTecnologiaSalud_id'] = getValueSelectInfinite($this->nomTecnologiaSalud_id);
+        }
+        if ($this->has('codTecnologiaSaludable_id')) {
+            $merge['codTecnologiaSaludable_id'] = getValueSelectInfinite($this->codTecnologiaSaludable_id);
         }
 
         $this->merge($merge);

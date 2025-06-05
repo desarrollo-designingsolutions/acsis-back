@@ -48,4 +48,22 @@ class Medicine extends Model
     {
         return $this->belongsTo(TipoIdPisis::class, 'tipoDocumentoIdentificacion_id');
     }
+
+    public function unidadMinDispensa()
+    {
+        return $this->belongsTo(Upr::class, 'unidadMinDispensa_id');
+    }
+    public function formaFarmaceutica()
+    {
+        return $this->belongsTo(Ffm::class, 'formaFarmaceutica_id');
+    }
+    public function nomTecnologiaSalud()
+    {
+        return $this->belongsTo(Dci::class, 'nomTecnologiaSalud_id');
+    }
+
+    public function codTecnologiaSaludable()
+    {
+        return $this->morphTo(__FUNCTION__, 'codTecnologiaSaludable_type', 'codTecnologiaSaludable_id');
+    }
 }

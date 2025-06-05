@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Resources\CatalogoCum;
+namespace App\Http\Resources\Upr;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class CatalogoCumSelectResource extends JsonResource
+class UprSelectResource extends JsonResource
 {
     /**
      * Transform the resource into an array.

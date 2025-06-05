@@ -10,11 +10,14 @@ use App\Http\Resources\ConceptoRecaudo\ConceptoRecaudoSelectResource;
 use App\Http\Resources\CondicionyDestinoUsuarioEgreso\CondicionyDestinoUsuarioEgresoSelectInfiniteResource;
 use App\Http\Resources\Country\CountrySelectResource;
 use App\Http\Resources\CupsRips\CupsRipsSelectInfiniteResource;
+use App\Http\Resources\Dci\DciSelectResource;
 use App\Http\Resources\Entity\EntitySelectResource;
+use App\Http\Resources\Ffm\FfmSelectResource;
 use App\Http\Resources\GrupoServicio\GrupoServicioSelectInfiniteResource;
 use App\Http\Resources\InsuranceStatus\InsuranceStatusSelectResource;
 use App\Http\Resources\IpsCodHabilitacion\IpsCodHabilitacionSelectInfiniteResource;
 use App\Http\Resources\IpsNoReps\IpsNoRepsSelectInfiniteResource;
+use App\Http\Resources\Ium\IumSelectResource;
 use App\Http\Resources\ModalidadAtencion\ModalidadAtencionSelectInfiniteResource;
 use App\Http\Resources\Municipio\MunicipioSelectResource;
 use App\Http\Resources\Pais\PaisSelectResource;
@@ -33,6 +36,7 @@ use App\Http\Resources\TipoOtrosServicios\TipoOtrosServiciosSelectResource;
 use App\Http\Resources\TypeCodeGlosa\TypeCodeGlosaSelectResource;
 use App\Http\Resources\TypeDocument\TypeDocumentSelectResource;
 use App\Http\Resources\Umm\UmmSelectInfiniteResource;
+use App\Http\Resources\Upr\UprSelectResource;
 use App\Http\Resources\ViaIngresoUsuario\ViaIngresoUsuarioSelectInfiniteResource;
 use App\Http\Resources\ZonaVersion2\ZonaVersion2SelectResource;
 use App\Repositories\CatalogoCumRepository;
@@ -43,11 +47,14 @@ use App\Repositories\ConceptoRecaudoRepository;
 use App\Repositories\CondicionyDestinoUsuarioEgresoRepository;
 use App\Repositories\CountryRepository;
 use App\Repositories\CupsRipsRepository;
+use App\Repositories\DciRepository;
 use App\Repositories\EntityRepository;
+use App\Repositories\FfmRepository;
 use App\Repositories\GrupoServicioRepository;
 use App\Repositories\InsuranceStatusRepository;
 use App\Repositories\IpsCodHabilitacionRepository;
 use App\Repositories\IpsNoRepsRepository;
+use App\Repositories\IumRepository;
 use App\Repositories\ModalidadAtencionRepository;
 use App\Repositories\MunicipioRepository;
 use App\Repositories\PaisRepository;
@@ -69,6 +76,7 @@ use App\Repositories\TypeDocumentRepository;
 use App\Repositories\TypeEntityRepository;
 use App\Repositories\TypeVendorRepository;
 use App\Repositories\UmmRepository;
+use App\Repositories\UprRepository;
 use App\Repositories\UserRepository;
 use App\Repositories\ViaIngresoUsuarioRepository;
 use App\Repositories\ZonaVersion2Repository;
@@ -117,6 +125,10 @@ class QueryController extends Controller
         protected InsuranceStatusRepository $insuranceStatusRepository,
         protected TypeCodeGlosaRepository $typeCodeGlosaRepository,
         protected CatalogoCumRepository $catalogoCumRepository,
+        protected UprRepository $uprRepository,
+        protected FfmRepository $ffmRepository,
+        protected DciRepository $dciRepository,
+        protected IumRepository $iumRepository,
     ) {}
 
     public function selectInfiniteCountries(Request $request)
@@ -559,10 +571,10 @@ class QueryController extends Controller
 
         $insuranceStatus = $this->insuranceStatusRepository->paginate($request->all());
 
-        $dataCountries = InsuranceStatusSelectResource::collection($insuranceStatus);
+        $dataInsuranceStatus = InsuranceStatusSelectResource::collection($insuranceStatus);
 
         return [
-            'insuranceStatus_arrayInfo' => $dataCountries,
+            'insuranceStatus_arrayInfo' => $dataInsuranceStatus,
             'insuranceStatus_countLinks' => $insuranceStatus->lastPage(),
         ];
     }
@@ -572,10 +584,10 @@ class QueryController extends Controller
 
         $typeCodeGlosa = $this->typeCodeGlosaRepository->paginate($request->all());
 
-        $dataCountries = TypeCodeGlosaSelectResource::collection($typeCodeGlosa);
+        $dataTypeCodeGlosa = TypeCodeGlosaSelectResource::collection($typeCodeGlosa);
 
         return [
-            'typeCodeGlosa_arrayInfo' => $dataCountries,
+            'typeCodeGlosa_arrayInfo' => $dataTypeCodeGlosa,
             'typeCodeGlosa_countLinks' => $typeCodeGlosa->lastPage(),
         ];
     }
@@ -584,11 +596,59 @@ class QueryController extends Controller
     {
         $catalogoCum = $this->catalogoCumRepository->list($request->all());
 
-        $dataCountries = CatalogoCumSelectResource::collection($catalogoCum);
+        $dataCatalogoCum = CatalogoCumSelectResource::collection($catalogoCum);
 
         return [
-            'catalogoCum_arrayInfo' => $dataCountries,
+            'catalogoCum_arrayInfo' => $dataCatalogoCum,
             'catalogoCum_countLinks' => $catalogoCum->lastPage(),
+        ];
+    }
+
+    public function selectInfiniteUpr(Request $request)
+    {
+        $upr = $this->uprRepository->list($request->all());
+
+        $dataUpr = UprSelectResource::collection($upr);
+
+        return [
+            'upr_arrayInfo' => $dataUpr,
+            'upr_countLinks' => $upr->lastPage(),
+        ];
+    }
+
+    public function selectInfiniteFfm(Request $request)
+    {
+        $ffm = $this->ffmRepository->list($request->all());
+
+        $dataFfm = FfmSelectResource::collection($ffm);
+
+        return [
+            'ffm_arrayInfo' => $dataFfm,
+            'ffm_countLinks' => $ffm->lastPage(),
+        ];
+    }
+
+    public function selectInfiniteDci(Request $request)
+    {
+        $dci = $this->dciRepository->list($request->all());
+
+        $dataDci = DciSelectResource::collection($dci);
+
+        return [
+            'dci_arrayInfo' => $dataDci,
+            'dci_countLinks' => $dci->lastPage(),
+        ];
+    }
+
+    public function selectInfiniteIum(Request $request)
+    {
+        $ium = $this->iumRepository->list($request->all());
+
+        $dataIum = IumSelectResource::collection($ium);
+
+        return [
+            'ium_arrayInfo' => $dataIum,
+            'ium_countLinks' => $ium->lastPage(),
         ];
     }
 }

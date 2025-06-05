@@ -21,7 +21,7 @@ class ServiceVendorStoreRequest extends FormRequest
             'nit' => 'required',
             'phone' => 'required',
             'address' => 'required',
-            'email' => 'required|email|unique:companies,email,'.$this->id.',id',
+            'email' => 'required|email|unique:companies,email,' . $this->id . ',id',
             'type_vendor_id' => 'required',
             'ipsable_id' => 'required',
             'ipsable_type' => 'required',

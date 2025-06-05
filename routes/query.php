@@ -54,3 +54,8 @@ Route::post('/selectInfiniteInsuranceStatus', [QueryController::class, 'selectIn
 Route::post('/selectInfiniteTypeCodeGlosa', [QueryController::class, 'selectInfiniteTypeCodeGlosa']);
 
 Route::post('/selectInfiniteCatalogoCum', [QueryController::class, 'selectInfiniteCatalogoCum']);
+
+Route::post('/selectInfiniteUpr', [QueryController::class, 'selectInfiniteUpr']);
+Route::post('/selectInfiniteFfm', [QueryController::class, 'selectInfiniteFfm']);
+Route::post('/selectInfiniteDci', [QueryController::class, 'selectInfiniteDci']);
+Route::post('/selectInfiniteIum', [QueryController::class, 'selectInfiniteIum']);

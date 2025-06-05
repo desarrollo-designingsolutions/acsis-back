@@ -28,8 +28,7 @@ class MedicalConsultationController extends Controller
     {
         return $this->execute(function () {
 
-            $newRequest = new Request(['codigo_in' => Constants::CODS_SELECT_FORM_SERVICE_MEDICAL_CONSULTATION_CODCONSULTA]);
-            $cupsRips = $this->queryController->selectInfiniteCupsRips($newRequest);
+            $cupsRips = $this->queryController->selectInfiniteCupsRips(request());
 
             $newRequest = new Request(['codigo_in' => Constants::CODS_SELECT_FORM_SERVICE_MEDICAL_CONSULTATION_FINALIDADTECNOLOGIASALUD]);
             $ripsFinalidadConsultaVersion2 = $this->queryController->selectInfiniteRipsFinalidadConsultaVersion2($newRequest);
@@ -164,8 +163,7 @@ class MedicalConsultationController extends Controller
             $medicalConsultation = $service->serviceable;
             $form = new MedicalConsultationFormResource($medicalConsultation);
 
-            $newRequest = new Request(['codigo_in' => Constants::CODS_SELECT_FORM_SERVICE_MEDICAL_CONSULTATION_CODCONSULTA]);
-            $cupsRips = $this->queryController->selectInfiniteCupsRips($newRequest);
+            $cupsRips = $this->queryController->selectInfiniteCupsRips(request());
 
             $newRequest = new Request(['codigo_in' => Constants::CODS_SELECT_FORM_SERVICE_MEDICAL_CONSULTATION_FINALIDADTECNOLOGIASALUD]);
             $ripsFinalidadConsultaVersion2 = $this->queryController->selectInfiniteRipsFinalidadConsultaVersion2($newRequest);

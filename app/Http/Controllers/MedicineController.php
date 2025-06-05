@@ -32,17 +32,45 @@ class MedicineController extends Controller
             $umm = $this->queryController->selectInfiniteUmm(request());
             $conceptoRecaudo = $this->queryController->selectInfiniteConceptoRecaudo(request());
             $tipoDocumento = $this->queryController->selectInfiniteTipoIdPisis(request());
+            $upr = $this->queryController->selectInfiniteUpr(request());
+            $ffm = $this->queryController->selectInfiniteFfm(request());
+            $dci = $this->queryController->selectInfiniteDci(request());
 
             $invoice = $this->invoiceRepository->find(request('invoice_id'), select: ['id', 'invoice_date']);
+
+
+            $ium = $this->queryController->selectInfiniteIum(request());
+            $catalogoCum = $this->queryController->selectInfiniteCatalogoCum(request());
+
+            $codTecnologiaSaludables = [
+                [
+                    'value' => "App\Models\Ium",
+                    'label' => 'Ium',
+                    'url' => '/selectInfiniteIum',
+                    'arrayInfo' => 'ium',
+                    'itemsData' => $ium['ium_arrayInfo'],
+                ],
+                [
+                    'value' => "App\Models\CatalogoCum",
+                    'label' => 'CatalogoCum',
+                    'url' => '/selectInfiniteCatalogoCum',
+                    'arrayInfo' => 'catalogoCum',
+                    'itemsData' => $catalogoCum['catalogoCum_arrayInfo'],
+                ],
+            ];
 
             return [
                 'code' => 200,
                 'invoice' => $invoice,
+                'codTecnologiaSaludables' => $codTecnologiaSaludables,
                 ...$cie10,
                 ...$tipoMedicamentoPosVersion2,
                 ...$umm,
                 ...$conceptoRecaudo,
                 ...$tipoDocumento,
+                ...$upr,
+                ...$ffm,
+                ...$dci,
             ];
         });
     }
@@ -64,12 +92,13 @@ class MedicineController extends Controller
                 'codDiagnosticoPrincipal_id' => $post['codDiagnosticoPrincipal_id'],
                 'codDiagnosticoRelacionado_id' => $post['codDiagnosticoRelacionado_id'],
                 'tipoMedicamento_id' => $post['tipoMedicamento_id'],
-                'codTecnologiaSalud' => $post['codTecnologiaSalud'],
-                'nomTecnologiaSalud' => $post['nomTecnologiaSalud'],
+                'codTecnologiaSaludable_id' => $post['codTecnologiaSaludable_id'],
+                'codTecnologiaSaludable_type' => $post['codTecnologiaSaludable_type'],
+                'nomTecnologiaSalud_id' => $post['nomTecnologiaSalud_id'],
                 'concentracionMedicamento' => $post['concentracionMedicamento'],
                 'unidadMedida_id' => $post['unidadMedida_id'],
-                'formaFarmaceutica' => $post['formaFarmaceutica'],
-                'unidadMinDispensa' => $post['unidadMinDispensa'],
+                'formaFarmaceutica_id' => $post['formaFarmaceutica_id'],
+                'unidadMinDispensa_id' => $post['unidadMinDispensa_id'],
                 'cantidadMedicamento' => $post['cantidadMedicamento'],
                 'diasTratamiento' => $post['diasTratamiento'],
                 'vrUnitMedicamento' => $post['vrUnitMedicamento'],
@@ -89,8 +118,8 @@ class MedicineController extends Controller
                 'type' => TypeServiceEnum::SERVICE_TYPE_006,
                 'serviceable_type' => TypeServiceEnum::SERVICE_TYPE_006->model(),
                 'serviceable_id' => $medicine->id,
-                'codigo_servicio' => $post['codTecnologiaSalud'],
-                'nombre_servicio' => $post['nomTecnologiaSalud'],
+                'codigo_servicio' => $medicine->codTecnologiaSaludable?->codigo ?? null,
+                'nombre_servicio' => $medicine->nomTecnologiaSalud?->nombre ?? null,
                 'quantity' => $post['cantidadMedicamento'],
                 'unit_value' => $post['vrServicio'],
                 'total_value' => $post['vrServicio'],
@@ -105,12 +134,14 @@ class MedicineController extends Controller
                 'codDiagnosticoPrincipal' => $medicine->codDiagnosticoPrincipal?->codigo,
                 'codDiagnosticoRelacionado' => $medicine->codDiagnosticoRelacionado?->codigo ?? '',
                 'tipoMedicamento' => $medicine->tipoMedicamento?->codigo,
-                'codTecnologiaSalud' => $post['codTecnologiaSalud'],
-                'nomTecnologiaSalud' => $post['nomTecnologiaSalud'] ?? null,
+
+                'codTecnologiaSalud' => $medicine->codTecnologiaSaludable?->codigo,
+
+                'nomTecnologiaSalud' => $medicine->nomTecnologiaSalud?->nombre ?? null,
                 'concentracionMedicamento' => floatval($post['concentracionMedicamento']) ?? null,
                 'unidadMedida' => floatval($medicine->unidadMedida?->codigo) ?? null,
-                'formaFarmaceutica' => $post['formaFarmaceutica'] ?? null,
-                'unidadMinDispensa' => floatval($post['unidadMinDispensa']),
+                'formaFarmaceutica' => $medicine->formaFarmaceutica?->codigo ?? null,
+                'unidadMinDispensa' => floatval($medicine->unidadMinDispensa?->codigo) ?? null,
                 'cantidadMedicamento' => intval($post['cantidadMedicamento']),
                 'diasTratamiento' => intval($post['diasTratamiento']),
                 'tipoDocumentoIdentificacion' => $medicine->tipoDocumentoIdentificacion?->codigo,
@@ -152,18 +183,45 @@ class MedicineController extends Controller
             $umm = $this->queryController->selectInfiniteUmm(request());
             $conceptoRecaudo = $this->queryController->selectInfiniteConceptoRecaudo(request());
             $tipoDocumento = $this->queryController->selectInfiniteTipoIdPisis(request());
+            $upr = $this->queryController->selectInfiniteUpr(request());
+            $ffm = $this->queryController->selectInfiniteFfm(request());
+            $dci = $this->queryController->selectInfiniteDci(request());
 
             $invoice = $this->invoiceRepository->find(request('invoice_id'), select: ['id', 'invoice_date']);
+
+            $ium = $this->queryController->selectInfiniteIum(request());
+            $catalogoCum = $this->queryController->selectInfiniteCatalogoCum(request());
+
+            $codTecnologiaSaludables = [
+                [
+                    'value' => "App\Models\Ium",
+                    'label' => 'Ium',
+                    'url' => '/selectInfiniteIum',
+                    'arrayInfo' => 'ium',
+                    'itemsData' => $ium['ium_arrayInfo'],
+                ],
+                [
+                    'value' => "App\Models\CatalogoCum",
+                    'label' => 'CatalogoCum',
+                    'url' => '/selectInfiniteCatalogoCum',
+                    'arrayInfo' => 'catalogoCum',
+                    'itemsData' => $catalogoCum['catalogoCum_arrayInfo'],
+                ],
+            ];
 
             return [
                 'code' => 200,
                 'form' => $form,
                 'invoice' => $invoice,
+                'codTecnologiaSaludables' => $codTecnologiaSaludables,
                 ...$cie10,
                 ...$tipoMedicamentoPosVersion2,
                 ...$umm,
                 ...$conceptoRecaudo,
                 ...$tipoDocumento,
+                ...$upr,
+                ...$ffm,
+                ...$dci,
             ];
         });
     }
@@ -182,12 +240,13 @@ class MedicineController extends Controller
                 'codDiagnosticoPrincipal_id' => $post['codDiagnosticoPrincipal_id'],
                 'codDiagnosticoRelacionado_id' => $post['codDiagnosticoRelacionado_id'],
                 'tipoMedicamento_id' => $post['tipoMedicamento_id'],
-                'codTecnologiaSalud' => $post['codTecnologiaSalud'],
-                'nomTecnologiaSalud' => $post['nomTecnologiaSalud'],
+                'codTecnologiaSaludable_id' => $post['codTecnologiaSaludable_id'],
+                'codTecnologiaSaludable_type' => $post['codTecnologiaSaludable_type'],
+                'nomTecnologiaSalud_id' => $post['nomTecnologiaSalud_id'],
                 'concentracionMedicamento' => $post['concentracionMedicamento'],
                 'unidadMedida_id' => $post['unidadMedida_id'],
-                'formaFarmaceutica' => $post['formaFarmaceutica'],
-                'unidadMinDispensa' => $post['unidadMinDispensa'],
+                'formaFarmaceutica_id' => $post['formaFarmaceutica_id'],
+                'unidadMinDispensa_id' => $post['unidadMinDispensa_id'],
                 'cantidadMedicamento' => $post['cantidadMedicamento'],
                 'diasTratamiento' => $post['diasTratamiento'],
                 'vrUnitMedicamento' => $post['vrUnitMedicamento'],
@@ -201,8 +260,8 @@ class MedicineController extends Controller
 
             // Update Service
             $service = $this->serviceRepository->store([
-                'codigo_servicio' => $post['codTecnologiaSalud'],
-                'nombre_servicio' => $post['nomTecnologiaSalud'],
+                'codigo_servicio' => $medicine->codTecnologiaSaludable?->codigo,
+                'nombre_servicio' => $medicine->nomTecnologiaSalud?->nombre ?? null,
                 'quantity' => $post['cantidadMedicamento'],
                 'unit_value' => $post['vrServicio'],
                 'total_value' => $post['vrServicio'],
@@ -220,12 +279,12 @@ class MedicineController extends Controller
                 'codDiagnosticoPrincipal' => $medicine->codDiagnosticoPrincipal?->codigo,
                 'codDiagnosticoRelacionado' => $medicine->codDiagnosticoRelacionado?->codigo ?? '',
                 'tipoMedicamento' => $medicine->tipoMedicamento?->codigo,
-                'codTecnologiaSalud' => $post['codTecnologiaSalud'],
-                'nomTecnologiaSalud' => $post['nomTecnologiaSalud'] ?? null,
+                'codTecnologiaSalud' => $medicine->codTecnologiaSaludable?->codigo,
+                'nomTecnologiaSalud' => $medicine->nomTecnologiaSalud?->nombre ?? null,
                 'concentracionMedicamento' => floatval($post['concentracionMedicamento']) ?? null,
                 'unidadMedida' => floatval($medicine->unidadMedida?->codigo) ?? null,
-                'formaFarmaceutica' => $post['formaFarmaceutica'] ?? null,
-                'unidadMinDispensa' => floatval($post['unidadMinDispensa']),
+                'formaFarmaceutica' => $medicine->formaFarmaceutica?->codigo ?? null,
+                'unidadMinDispensa' => floatval($medicine->unidadMinDispensa?->codigo) ?? null,
                 'cantidadMedicamento' => intval($post['cantidadMedicamento']),
                 'diasTratamiento' => intval($post['diasTratamiento']),
                 'tipoDocumentoIdentificacion' => $medicine->tipoDocumentoIdentificacion?->codigo,
