@@ -223,4 +223,10 @@ class Constants
         '03',
         '05',
     ];
+
+    public const CODS_SELECT_FORM_SERVICE_MEDICINE_CONCEPTORECAUDO = [
+        '01',
+        '03',
+        '05',
+    ];
 }

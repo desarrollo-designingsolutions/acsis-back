@@ -19,7 +19,7 @@ class CondicionyDestinoUsuarioEgresoSeeder extends Seeder
 
         try {
             $sheet = $excelService
-                ->getSpreadsheetFromExcel(database_path('db/TablaReferencia_CondicionyDestinoUsuarioEgreso__1 (1).xlsx'))
+                ->getSpreadsheetFromExcel(database_path('db/20-TablaReferencia_CondicionyDestinoUsuarioEgreso__1.xlsx'))
                 ->getSheetByName('Table')
                 ->toArray();
         } catch (Exception $e) {

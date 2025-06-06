@@ -110,7 +110,7 @@ class ProcedureController extends Controller
 
             // Prepare service data for JSON
             $serviceData = [
-                'codPrestador' => $service->invoice?->serviceVendor?->ips_cod_habilitacion?->codigo,
+                'codPrestador' => $service->invoice?->serviceVendor?->ipsable?->codigo,
                 'fechaInicioAtencion' => Carbon::parse($post['fechaInicioAtencion'])->format('Y-m-d H:i'),
                 'idMIPRES' => $post['idMIPRES'] ?? null,
                 'numAutorizacion' => $post['numAutorizacion'] ?? null,
@@ -233,7 +233,7 @@ class ProcedureController extends Controller
 
             // Prepare service data for JSON
             $serviceData = [
-                'codPrestador' => $service->invoice?->serviceVendor?->ips_cod_habilitacion?->codigo,
+                'codPrestador' => $service->invoice?->serviceVendor?->ipsable?->codigo,
                 'fechaInicioAtencion' => Carbon::parse($post['fechaInicioAtencion'])->format('Y-m-d H:i'),
                 'idMIPRES' => $post['idMIPRES'] ?? null,
                 'numAutorizacion' => $post['numAutorizacion'] ?? null,

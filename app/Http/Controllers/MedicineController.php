@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\Service\TypeServiceEnum;
+use App\Helpers\Constants;
 use App\Http\Requests\Medicine\MedicineStoreRequest;
 use App\Http\Resources\Medicine\MedicineFormResource;
 use App\Repositories\InvoiceRepository;
@@ -27,17 +28,20 @@ class MedicineController extends Controller
     {
         return $this->execute(function () {
 
+            $newRequest = new Request(['codigo_in' => Constants::CODS_SELECT_FORM_SERVICE_TIPODOCUMENTOIDENTIFICACION]);
+            $tipoDocumento = $this->queryController->selectInfiniteTipoIdPisis($newRequest);
+
+            $newRequest = new Request(['codigo_in' => Constants::CODS_SELECT_FORM_SERVICE_MEDICINE_CONCEPTORECAUDO]);
+            $conceptoRecaudo = $this->queryController->selectInfiniteConceptoRecaudo($newRequest);
+
             $cie10 = $this->queryController->selectInfiniteCie10(request());
             $tipoMedicamentoPosVersion2 = $this->queryController->selectInfiniteTipoMedicamentoPosVersion2(request());
             $umm = $this->queryController->selectInfiniteUmm(request());
-            $conceptoRecaudo = $this->queryController->selectInfiniteConceptoRecaudo(request());
-            $tipoDocumento = $this->queryController->selectInfiniteTipoIdPisis(request());
             $upr = $this->queryController->selectInfiniteUpr(request());
             $ffm = $this->queryController->selectInfiniteFfm(request());
             $dci = $this->queryController->selectInfiniteDci(request());
 
             $invoice = $this->invoiceRepository->find(request('invoice_id'), select: ['id', 'invoice_date']);
-
 
             $ium = $this->queryController->selectInfiniteIum(request());
             $catalogoCum = $this->queryController->selectInfiniteCatalogoCum(request());
@@ -127,7 +131,7 @@ class MedicineController extends Controller
 
             // Prepare service data for JSON
             $serviceData = [
-                'codPrestador' => $service->invoice?->serviceVendor?->ips_cod_habilitacion?->codigo ?? '',
+                'codPrestador' => $service->invoice?->serviceVendor?->ipsable?->codigo ?? '',
                 'numAutorizacion' => $post['numAutorizacion'] ?? null,
                 'idMIPRES' => $post['idMIPRES'] ?? null,
                 'fechaDispensAdmon' => Carbon::parse($post['fechaDispensAdmon'])->format('Y-m-d H:i'),
@@ -178,11 +182,15 @@ class MedicineController extends Controller
             $medicine = $service->serviceable;
             $form = new MedicineFormResource($medicine);
 
+            $newRequest = new Request(['codigo_in' => Constants::CODS_SELECT_FORM_SERVICE_TIPODOCUMENTOIDENTIFICACION]);
+            $tipoDocumento = $this->queryController->selectInfiniteTipoIdPisis($newRequest);
+
+            $newRequest = new Request(['codigo_in' => Constants::CODS_SELECT_FORM_SERVICE_MEDICINE_CONCEPTORECAUDO]);
+            $conceptoRecaudo = $this->queryController->selectInfiniteConceptoRecaudo($newRequest);
+
             $cie10 = $this->queryController->selectInfiniteCie10(request());
             $tipoMedicamentoPosVersion2 = $this->queryController->selectInfiniteTipoMedicamentoPosVersion2(request());
             $umm = $this->queryController->selectInfiniteUmm(request());
-            $conceptoRecaudo = $this->queryController->selectInfiniteConceptoRecaudo(request());
-            $tipoDocumento = $this->queryController->selectInfiniteTipoIdPisis(request());
             $upr = $this->queryController->selectInfiniteUpr(request());
             $ffm = $this->queryController->selectInfiniteFfm(request());
             $dci = $this->queryController->selectInfiniteDci(request());
@@ -272,7 +280,7 @@ class MedicineController extends Controller
 
             // Prepare service data for JSON
             $serviceData = [
-                'codPrestador' => $service->invoice?->serviceVendor?->ips_cod_habilitacion?->codigo ?? '',
+                'codPrestador' => $service->invoice?->serviceVendor?->ipsable?->codigo ?? '',
                 'numAutorizacion' => $post['numAutorizacion'] ?? null,
                 'idMIPRES' => $post['idMIPRES'] ?? null,
                 'fechaDispensAdmon' => Carbon::parse($post['fechaDispensAdmon'])->format('Y-m-d H:i'),

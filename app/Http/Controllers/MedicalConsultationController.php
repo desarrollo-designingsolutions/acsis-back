@@ -116,7 +116,7 @@ class MedicalConsultationController extends Controller
 
             // Prepare service data for JSON
             $serviceData = [
-                'codPrestador' => $service->invoice?->serviceVendor?->ips_cod_habilitacion?->codigo,
+                'codPrestador' => $service->invoice?->serviceVendor?->ipsable?->codigo,
                 'fechaInicioAtencion' => Carbon::parse($post['fechaInicioAtencion'])->format('Y-m-d H:i'),
                 'numAutorizacion' => $post['numAutorizacion'] ?? null,
                 'codConsulta' => $medicalConsultation->codConsulta?->codigo,
@@ -246,7 +246,7 @@ class MedicalConsultationController extends Controller
 
             // Prepare service data for JSON
             $serviceData = [
-                'codPrestador' => $service->invoice?->serviceVendor?->ips_cod_habilitacion?->codigo,
+                'codPrestador' => $service->invoice?->serviceVendor?->ipsable?->codigo,
                 'fechaInicioAtencion' => Carbon::parse($post['fechaInicioAtencion'])->format('Y-m-d H:i'),
                 'numAutorizacion' => $post['numAutorizacion'] ?? null,
                 'codConsulta' => $medicalConsultation->codConsulta?->codigo,

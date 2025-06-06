@@ -33,7 +33,6 @@ class MedicineFormResource extends JsonResource
             'codDiagnosticoRelacionado_id' => new Cie10SelectInfiniteResource($this->codDiagnosticoRelacionado),
             'tipoMedicamento_id' => new TipoMedicamentoPosVersion2SelectInfiniteResource($this->tipoMedicamento),
 
-
             'codTecnologiaSaludable_type' => $this->codTecnologiaSaludable_type,
 
             'codTecnologiaSaludable_id' => [
@@ -42,9 +41,6 @@ class MedicineFormResource extends JsonResource
                 'codigo' => $this->codTecnologiaSaludable?->codigo,
                 'nit' => $this->codTecnologiaSaludable?->nroIDPrestador ?? $this->codTecnologiaSaludable?->nit,
             ],
-
-
-
 
             'nomTecnologiaSalud_id' => new DciSelectResource($this->nomTecnologiaSalud),
             'concentracionMedicamento' => $this->concentracionMedicamento,
@@ -76,6 +72,6 @@ class MedicineFormResource extends JsonResource
             return $this->codTecnologiaSaludable->nroIDPrestador;
         }
 
-        return $this->codTecnologiaSaludable->nit . ' - ' . $this->codTecnologiaSaludable->nombre;
+        return $this->codTecnologiaSaludable->nit.' - '.$this->codTecnologiaSaludable->nombre;
     }
 }

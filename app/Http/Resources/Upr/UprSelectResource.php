@@ -16,7 +16,7 @@ class UprSelectResource extends JsonResource
     {
         return [
             'value' => $this->id,
-            'title' => $this->codigo . ' - ' . $this->nombre,
+            'title' => $this->codigo.' - '.$this->nombre,
         ];
     }
 }

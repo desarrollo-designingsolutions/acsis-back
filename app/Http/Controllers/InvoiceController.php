@@ -408,9 +408,6 @@ class InvoiceController extends Controller
             'numNota' => $invoice->note_number ?? null,
         ];
 
-        // Convert null values to empty strings
-        $baseData = convertNullToEmptyString($baseData);
-
         // Build user data
         $users = [
             [
@@ -421,7 +418,7 @@ class InvoiceController extends Controller
                 'codSexo' => $sexo->codigo ?? null,
                 'codPaisResidencia' => $pais_residency->codigo ?? null,
                 'codMunicipioResidencia' => $municipio->codigo ?? null,
-                'codZonaTerritorialResidencia' => $zonaVersion2->codigo ?? '',
+                'codZonaTerritorialResidencia' => $zonaVersion2->codigo ?? null,
                 'incapacidad' => $patient ? $patient->incapacity == 1 ? 'SI' : 'NO' : '',
                 'consecutivo' => 1,
                 'codPaisOrigen' => $pais_origin->codigo ?? null,
@@ -433,7 +430,7 @@ class InvoiceController extends Controller
         $newData['usuarios'] = $users;
 
         // Define file path
-        $nameFile = $invoice->invoice_number.'.json';
+        $nameFile = $invoice->id.'.json';
         $path = "companies/company_{$invoice->company_id}/invoices/invoice_{$invoice->id}/{$nameFile}";
         $disk = Constants::DISK_FILES;
 
@@ -503,7 +500,7 @@ class InvoiceController extends Controller
 
     private function storeJsonFile($invoice, array $jsonData): void
     {
-        $nameFile = $invoice->invoice_number.'.json';
+        $nameFile = $invoice->id.'.json';
         $path = "companies/company_{$invoice->company_id}/invoices/invoice_{$invoice->id}/{$nameFile}";
         $disk = Constants::DISK_FILES;
 
@@ -545,7 +542,7 @@ class InvoiceController extends Controller
 
         // Obtener el contenido del archivo
         $fileContent = Storage::disk($disk)->get($path);
-        $fileName = $invoice->invoice_number.'.json'; // Nombre del archivo para la descarga
+        $fileName = $invoice->id.'.json'; // Nombre del archivo para la descarga
 
         // Devolver el archivo como respuesta descargable
         return response($fileContent, 200, [
@@ -880,7 +877,7 @@ class InvoiceController extends Controller
 
                 // Prepare service data for JSON
                 $serviceData = [
-                    'codPrestador' => $service->invoice?->serviceVendor?->ips_cod_habilitacion?->codigo,
+                    'codPrestador' => $service->invoice?->serviceVendor?->ipsable?->codigo,
                     'fechaInicioAtencion' => Carbon::parse($value['fechaInicioAtencion'])->format('Y-m-d H:i'),
                     'numAutorizacion' => $value['numAutorizacion'],
                     'codConsulta' => $medicalConsultation->codConsulta?->codigo,
@@ -960,7 +957,7 @@ class InvoiceController extends Controller
 
                 // Prepare service data for JSON
                 $serviceData = [
-                    'codPrestador' => $service->invoice?->serviceVendor?->ips_cod_habilitacion?->codigo,
+                    'codPrestador' => $service->invoice?->serviceVendor?->ipsable?->codigo,
                     'fechaInicioAtencion' => Carbon::parse($value['fechaInicioAtencion'])->format('Y-m-d H:i'),
                     'idMIPRES' => $value['idMIPRES'],
                     'numAutorizacion' => $value['numAutorizacion'],
@@ -993,7 +990,7 @@ class InvoiceController extends Controller
         }
 
         // Medicamentos
-        $medicamentos = $json['usuarios'][0]['servicios']['medicamentos']?? [];
+        $medicamentos = $json['usuarios'][0]['servicios']['medicamentos'] ?? [];
 
         if (count($medicamentos) > 0) {
             foreach ($medicamentos as $key => $value) {
@@ -1043,7 +1040,7 @@ class InvoiceController extends Controller
 
                 // Prepare service data for JSON
                 $serviceData = [
-                    'codPrestador' => $service->invoice?->serviceVendor?->ips_cod_habilitacion?->codigo ?? '',
+                    'codPrestador' => $service->invoice?->serviceVendor?->ipsable?->codigo ?? '',
                     'numAutorizacion' => $value['numAutorizacion'] ?? '',
                     'idMIPRES' => $value['idMIPRES'] ?? '',
                     'fechaDispensAdmon' => Carbon::parse($value['fechaDispensAdmon'])->format('Y-m-d H:i'),
@@ -1079,7 +1076,7 @@ class InvoiceController extends Controller
         }
 
         // Otros Servicios
-        $otrosServicios = $json['usuarios'][0]['servicios']['otrosServicios']?? [];
+        $otrosServicios = $json['usuarios'][0]['servicios']['otrosServicios'] ?? [];
 
         if (count($otrosServicios) > 0) {
             foreach ($otrosServicios as $key => $value) {
@@ -1122,7 +1119,7 @@ class InvoiceController extends Controller
 
                 // Prepare service data for JSON
                 $serviceData = [
-                    'codPrestador' => $service->invoice?->serviceVendor?->ips_cod_habilitacion?->codigo,
+                    'codPrestador' => $service->invoice?->serviceVendor?->ipsable?->codigo,
                     'numAutorizacion' => $value['numAutorizacion'],
                     'idMIPRES' => $value['idMIPRES'] ?? '',
                     'fechaSuministroTecnologia' => Carbon::parse($value['fechaSuministroTecnologia'])->format('Y-m-d H:i'),
@@ -1151,7 +1148,7 @@ class InvoiceController extends Controller
         }
 
         // Urgencias
-        $urgencias = $json['usuarios'][0]['servicios']['urgencias']?? [];
+        $urgencias = $json['usuarios'][0]['servicios']['urgencias'] ?? [];
 
         if (count($urgencias) > 0) {
             foreach ($urgencias as $key => $value) {
@@ -1190,7 +1187,7 @@ class InvoiceController extends Controller
 
                 // Prepare service data for JSON
                 $serviceData = [
-                    'codPrestador' => $service->invoice?->serviceVendor?->ips_cod_habilitacion?->codigo,
+                    'codPrestador' => $service->invoice?->serviceVendor?->ipsable?->codigo,
                     'fechaInicioAtencion' => Carbon::parse($value['fechaInicioAtencion'])->format('Y-m-d H:i'),
                     'causaMotivoAtencion' => $urgency->causaMotivoAtencion?->codigo,
                     'codDiagnosticoPrincipal' => $urgency->codDiagnosticoPrincipal?->codigo,
@@ -1215,7 +1212,7 @@ class InvoiceController extends Controller
         }
 
         // Hospitalizacion
-        $hospitalizacion = $json['usuarios'][0]['servicios']['hospitalizacion']?? [];
+        $hospitalizacion = $json['usuarios'][0]['servicios']['hospitalizacion'] ?? [];
 
         if (count($hospitalizacion) > 0) {
             foreach ($hospitalizacion as $key => $value) {
@@ -1257,7 +1254,7 @@ class InvoiceController extends Controller
 
                 // Prepare service data for JSON
                 $serviceData = [
-                    'codPrestador' => $service->invoice?->serviceVendor?->ips_cod_habilitacion?->codigo,
+                    'codPrestador' => $service->invoice?->serviceVendor?->ipsable?->codigo,
                     'viaIngresoServicioSalud' => $hospitalization->viaIngresoServicioSalud?->codigo,
                     'fechaInicioAtencion' => Carbon::parse($value['fechaInicioAtencion'])->format('Y-m-d H:i'),
                     'numAutorizacion' => $value['numAutorizacion'],
@@ -1285,7 +1282,7 @@ class InvoiceController extends Controller
         }
 
         // Recien Nacidos
-        $recienNacidos = $json['usuarios'][0]['servicios']['recienNacidos']?? [];
+        $recienNacidos = $json['usuarios'][0]['servicios']['recienNacidos'] ?? [];
 
         if (count($recienNacidos) > 0) {
             foreach ($recienNacidos as $key => $value) {
@@ -1325,7 +1322,7 @@ class InvoiceController extends Controller
 
                 // Prepare service data for JSON
                 $serviceData = [
-                    'codPrestador' => $service->invoice?->serviceVendor?->ips_cod_habilitacion?->codigo,
+                    'codPrestador' => $service->invoice?->serviceVendor?->ipsable?->codigo,
                     'tipoDocumentoIdentificacion' => $newlyBorn->tipoDocumentoIdentificacion?->codigo,
                     'numDocumentoIdentificacion' => intval($value['numDocumentoIdentificacion']),
                     'fechaNacimiento' => Carbon::parse($value['fechaNacimiento'])->format('Y-m-d H:i'),

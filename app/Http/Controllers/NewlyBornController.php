@@ -89,7 +89,7 @@ class NewlyBornController extends Controller
 
             // Prepare service data for JSON
             $serviceData = [
-                'codPrestador' => $service->invoice?->serviceVendor?->ips_cod_habilitacion?->codigo,
+                'codPrestador' => $service->invoice?->serviceVendor?->ipsable?->codigo,
                 'tipoDocumentoIdentificacion' => $newlyBorn->tipoDocumentoIdentificacion?->codigo,
                 'numDocumentoIdentificacion' => intval($post['numDocumentoIdentificacion']),
                 'fechaNacimiento' => Carbon::parse($post['fechaNacimiento'])->format('Y-m-d H:i'),
@@ -184,7 +184,7 @@ class NewlyBornController extends Controller
 
             // Prepare service data for JSON
             $serviceData = [
-                'codPrestador' => $service->invoice?->serviceVendor?->ips_cod_habilitacion?->codigo,
+                'codPrestador' => $service->invoice?->serviceVendor?->ipsable?->codigo,
                 'tipoDocumentoIdentificacion' => $newlyBorn->tipoDocumentoIdentificacion?->codigo,
                 'numDocumentoIdentificacion' => intval($post['numDocumentoIdentificacion']),
                 'fechaNacimiento' => Carbon::parse($post['fechaNacimiento'])->format('Y-m-d H:i'),

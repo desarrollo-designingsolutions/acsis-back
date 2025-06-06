@@ -34,7 +34,6 @@ class MedicineStoreRequest extends FormRequest
             'tipoDocumentoIdentificacion_id' => 'required',
             'numDocumentoIdentificacion' => 'required',
 
-
             'codTecnologiaSaludable_id' => 'required',
             'codTecnologiaSaludable_type' => 'required',
 

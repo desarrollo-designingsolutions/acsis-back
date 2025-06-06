@@ -22,7 +22,8 @@ class UrgencyStoreRequest extends FormRequest
             'fechaInicioAtencion' => 'required',
             'causaMotivoAtencion_id' => 'required',
             'codDiagnosticoPrincipal_id' => 'required',
-            'condicionDestinoUsuarioEgreso' => 'required',
+            'codDiagnosticoPrincipalE_id' => 'required',
+            'condicionDestinoUsuarioEgreso_id' => 'required',
             'fechaEgreso' => 'required',
 
         ];
@@ -38,7 +39,8 @@ class UrgencyStoreRequest extends FormRequest
             'fechaInicioAtencion' => 'El campo es obligatorio',
             'causaMotivoAtencion_id' => 'El campo es obligatorio',
             'codDiagnosticoPrincipal_id' => 'El campo es obligatorio',
-            'condicionDestinoUsuarioEgreso' => 'El campo es obligatorio',
+            'codDiagnosticoPrincipalE_id' => 'El campo es obligatorio',
+            'condicionDestinoUsuarioEgreso_id' => 'El campo es obligatorio',
             'fechaEgreso' => 'El campo es obligatorio',
         ];
     }
@@ -67,6 +69,9 @@ class UrgencyStoreRequest extends FormRequest
         }
         if ($this->has('codDiagnosticoCausaMuerte_id')) {
             $merge['codDiagnosticoCausaMuerte_id'] = getValueSelectInfinite($this->codDiagnosticoCausaMuerte_id);
+        }
+        if ($this->has('condicionDestinoUsuarioEgreso_id')) {
+            $merge['condicionDestinoUsuarioEgreso_id'] = getValueSelectInfinite($this->condicionDestinoUsuarioEgreso_id);
         }
 
         $this->merge($merge);

@@ -49,7 +49,7 @@ class ServiceVendorController extends Controller
             $ipsCodHabilitacion = $this->queryController->selectInfiniteIpsCodHabilitacion($request);
             $ipsNoReps = $this->queryController->selectInfiniteIpsNoReps($request);
 
-            $codTecnologiaSaludables = [
+            $ipsables = [
                 [
                     'value' => "App\Models\IpsCodHabilitacion",
                     'label' => 'IPS con código de habilitación',
@@ -69,7 +69,7 @@ class ServiceVendorController extends Controller
             return [
                 'code' => 200,
                 'type_vendors' => $type_vendors,
-                'codTecnologiaSaludables' => $codTecnologiaSaludables,
+                'ipsables' => $ipsables,
             ];
         });
     }
@@ -102,7 +102,7 @@ class ServiceVendorController extends Controller
             $ipsCodHabilitacion = $this->queryController->selectInfiniteIpsCodHabilitacion($request);
             $ipsNoReps = $this->queryController->selectInfiniteIpsNoReps($request);
 
-            $codTecnologiaSaludables = [
+            $ipsables = [
                 [
                     'value' => "App\Models\IpsCodHabilitacion",
                     'label' => 'IPS con código de habilitación',
@@ -123,7 +123,7 @@ class ServiceVendorController extends Controller
                 'code' => 200,
                 'form' => $form,
                 'type_vendors' => $type_vendors,
-                'codTecnologiaSaludables' => $codTecnologiaSaludables,
+                'ipsables' => $ipsables,
                 ...$ipsCodHabilitacion,
                 ...$ipsNoReps,
             ];
@@ -179,7 +179,7 @@ class ServiceVendorController extends Controller
 
             return [
                 'code' => 200,
-                'message' => 'Proveedor ' . $msg . ' con éxito',
+                'message' => 'Proveedor '.$msg.' con éxito',
             ];
         });
     }

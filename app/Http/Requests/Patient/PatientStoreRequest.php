@@ -23,7 +23,6 @@ class PatientStoreRequest extends FormRequest
             'birth_date' => 'required|date',
             'sexo_id' => 'required',
             'pais_residency_id' => 'required',
-            'zona_version2_id' => 'required',
             'incapacity' => 'required',
             'pais_origin_id' => 'required',
             'first_name' => 'required',
@@ -43,7 +42,6 @@ class PatientStoreRequest extends FormRequest
             'birth_date.date' => 'El campo debe ser una fecha',
             'sexo_id.required' => 'El campo es obligatorio',
             'pais_residency_id.required' => 'El campo es obligatorio',
-            'zona_version2_id.required' => 'El campo es obligatorio',
             'incapacity.required' => 'El campo es obligatorio',
             'pais_origin_id.required' => 'El campo es obligatorio',
             'first_name.required' => 'El campo es obligatorio',
@@ -53,16 +51,33 @@ class PatientStoreRequest extends FormRequest
 
     protected function prepareForValidation(): void
     {
-        $this->merge([
-            'tipo_id_pisi_id' => getValueSelectInfinite($this->tipo_id_pisi_id),
-            'rips_tipo_usuario_version2_id' => getValueSelectInfinite($this->rips_tipo_usuario_version2_id),
-            'sexo_id' => getValueSelectInfinite($this->sexo_id),
-            'pais_residency_id' => getValueSelectInfinite($this->pais_residency_id),
-            'municipio_residency_id' => getValueSelectInfinite($this->municipio_residency_id),
-            'zona_version2_id' => getValueSelectInfinite($this->zona_version2_id),
-            'incapacity' => $this->incapacity === 'Si' ? 1 : 0,
-            'pais_origin_id' => getValueSelectInfinite($this->pais_origin_id),
-        ]);
+        $merge = [];
+
+        if ($this->has('tipo_id_pisi_id')) {
+            $merge['tipo_id_pisi_id'] = getValueSelectInfinite($this->tipo_id_pisi_id);
+        }
+        if ($this->has('rips_tipo_usuario_version2_id')) {
+            $merge['rips_tipo_usuario_version2_id'] = getValueSelectInfinite($this->rips_tipo_usuario_version2_id);
+        }
+        if ($this->has('sexo_id')) {
+            $merge['sexo_id'] = getValueSelectInfinite($this->sexo_id);
+        }
+        if ($this->has('pais_residency_id')) {
+            $merge['pais_residency_id'] = getValueSelectInfinite($this->pais_residency_id);
+        }
+        if ($this->has('municipio_residency_id')) {
+            $merge['municipio_residency_id'] = getValueSelectInfinite($this->municipio_residency_id);
+        }
+        if ($this->has('zona_version2_id')) {
+            $merge['zona_version2_id'] = getValueSelectInfinite($this->zona_version2_id);
+        }
+        if ($this->has('pais_origin_id')) {
+            $merge['pais_origin_id'] = getValueSelectInfinite($this->pais_origin_id);
+        }
+
+        $merge['incapacity'] = $this->incapacity === 'Si' ? 1 : 0;
+
+        $this->merge($merge);
     }
 
     public function failedValidation(Validator $validator)

@@ -53,10 +53,12 @@ class Medicine extends Model
     {
         return $this->belongsTo(Upr::class, 'unidadMinDispensa_id');
     }
+
     public function formaFarmaceutica()
     {
         return $this->belongsTo(Ffm::class, 'formaFarmaceutica_id');
     }
+
     public function nomTecnologiaSalud()
     {
         return $this->belongsTo(Dci::class, 'nomTecnologiaSalud_id');

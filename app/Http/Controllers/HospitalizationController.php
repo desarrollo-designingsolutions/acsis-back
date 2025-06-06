@@ -31,7 +31,6 @@ class HospitalizationController extends Controller
             $ripsCausaExternaVersion2 = $this->queryController->selectInfiniteRipsCausaExternaVersion2(request());
             $cie10 = $this->queryController->selectInfiniteCie10(request());
             $condicionyDestinoUsuarioEgreso = $this->queryController->selectInfiniteCondicionyDestinoUsuarioEgreso(request());
-            $cupsRips = $this->queryController->selectInfiniteCupsRips(request());
 
             $invoice = $this->invoiceRepository->find(request('invoice_id'), select: ['id', 'invoice_date']);
 
@@ -42,7 +41,6 @@ class HospitalizationController extends Controller
                 ...$ripsCausaExternaVersion2,
                 ...$cie10,
                 ...$condicionyDestinoUsuarioEgreso,
-                ...$cupsRips,
             ];
         });
     }
@@ -90,7 +88,7 @@ class HospitalizationController extends Controller
 
             // Prepare service data for JSON
             $serviceData = [
-                'codPrestador' => $service->invoice?->serviceVendor?->ips_cod_habilitacion?->codigo,
+                'codPrestador' => $service->invoice?->serviceVendor?->ipsable?->codigo,
                 'viaIngresoServicioSalud' => $hospitalization->viaIngresoServicioSalud?->codigo,
                 'fechaInicioAtencion' => Carbon::parse($post['fechaInicioAtencion'])->format('Y-m-d H:i'),
                 'numAutorizacion' => $post['numAutorizacion'] ?? null,
@@ -135,7 +133,6 @@ class HospitalizationController extends Controller
             $ripsCausaExternaVersion2 = $this->queryController->selectInfiniteRipsCausaExternaVersion2(request());
             $cie10 = $this->queryController->selectInfiniteCie10(request());
             $condicionyDestinoUsuarioEgreso = $this->queryController->selectInfiniteCondicionyDestinoUsuarioEgreso(request());
-            $cupsRips = $this->queryController->selectInfiniteCupsRips(request());
 
             $invoice = $this->invoiceRepository->find(request('invoice_id'), select: ['id', 'invoice_date']);
 
@@ -147,7 +144,6 @@ class HospitalizationController extends Controller
                 ...$cie10,
                 ...$ripsCausaExternaVersion2,
                 ...$condicionyDestinoUsuarioEgreso,
-                ...$cupsRips,
             ];
         });
     }
@@ -189,7 +185,7 @@ class HospitalizationController extends Controller
 
             // Prepare service data for JSON
             $serviceData = [
-                'codPrestador' => $service->invoice?->serviceVendor?->ips_cod_habilitacion?->codigo,
+                'codPrestador' => $service->invoice?->serviceVendor?->ipsable?->codigo,
                 'viaIngresoServicioSalud' => $hospitalization->viaIngresoServicioSalud?->codigo,
                 'fechaInicioAtencion' => Carbon::parse($post['fechaInicioAtencion'])->format('Y-m-d H:i'),
                 'numAutorizacion' => $post['numAutorizacion'] ?? null,

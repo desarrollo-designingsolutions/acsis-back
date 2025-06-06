@@ -3,7 +3,9 @@
 namespace Database\Seeders;
 
 use App\Models\RipsCausaExternaVersion2;
+use App\Services\ExcelService;
 use Illuminate\Database\Seeder;
+use PhpOffice\PhpSpreadsheet\Reader\Exception;
 
 class RipsCausaExternaVersion2Seeder extends Seeder
 {
@@ -13,68 +15,55 @@ class RipsCausaExternaVersion2Seeder extends Seeder
     public function run(): void
     {
 
-        $arrayData = [
-            ['id' => '1', 'codigo' => '21', 'nombre' => 'Accidente de trabajo', 'descripcion' => null, 'habilitado' => 'SI', 'aplicacion' => null, 'isStandardGEL' => 'False', 'isStandardMSPS' => 'False', 'extra_I' => 'SI', 'extra_II' => 'NA', 'extra_III' => 'SI', 'extra_IV' => 'SI', 'extra_V' => 'NA', 'extra_VI' => null, 'extra_VII' => null, 'extra_VIII' => null, 'extra_IX' => null, 'extra_X' => null, 'valorRegistro' => null, 'usuarioResponsable' => null, 'fecha_actualizacion' => '2022-06-16 04:17:45 PM', 'isPublicPrivate' => null, 'created_at' => null, 'updated_at' => null],
-            ['id' => '2', 'codigo' => '22', 'nombre' => 'Accidente en el hogar', 'descripcion' => null, 'habilitado' => 'SI', 'aplicacion' => null, 'isStandardGEL' => 'False', 'isStandardMSPS' => 'False', 'extra_I' => 'SI', 'extra_II' => 'NA', 'extra_III' => 'SI', 'extra_IV' => 'SI', 'extra_V' => 'NA', 'extra_VI' => null, 'extra_VII' => null, 'extra_VIII' => null, 'extra_IX' => null, 'extra_X' => null, 'valorRegistro' => null, 'usuarioResponsable' => null, 'fecha_actualizacion' => '2022-06-16 04:17:45 PM', 'isPublicPrivate' => null, 'created_at' => null, 'updated_at' => null],
-            ['id' => '3', 'codigo' => '23', 'nombre' => 'Accidente de tránsito de origen común', 'descripcion' => null, 'habilitado' => 'SI', 'aplicacion' => null, 'isStandardGEL' => 'False', 'isStandardMSPS' => 'False', 'extra_I' => 'SI', 'extra_II' => 'NA', 'extra_III' => 'SI', 'extra_IV' => 'SI', 'extra_V' => 'NA', 'extra_VI' => null, 'extra_VII' => null, 'extra_VIII' => null, 'extra_IX' => null, 'extra_X' => null, 'valorRegistro' => null, 'usuarioResponsable' => null, 'fecha_actualizacion' => '2022-06-16 04:17:45 PM', 'isPublicPrivate' => null, 'created_at' => null, 'updated_at' => null],
-            ['id' => '4', 'codigo' => '24', 'nombre' => 'Accidente de tránsito de origen  laboral', 'descripcion' => null, 'habilitado' => 'SI', 'aplicacion' => null, 'isStandardGEL' => 'False', 'isStandardMSPS' => 'False', 'extra_I' => 'SI', 'extra_II' => 'NA', 'extra_III' => 'SI', 'extra_IV' => 'SI', 'extra_V' => 'NA', 'extra_VI' => null, 'extra_VII' => null, 'extra_VIII' => null, 'extra_IX' => null, 'extra_X' => null, 'valorRegistro' => null, 'usuarioResponsable' => null, 'fecha_actualizacion' => '2022-06-16 04:17:45 PM', 'isPublicPrivate' => null, 'created_at' => null, 'updated_at' => null],
-            ['id' => '5', 'codigo' => '25', 'nombre' => 'Accidente en el entorno educativo', 'descripcion' => null, 'habilitado' => 'SI', 'aplicacion' => null, 'isStandardGEL' => 'False', 'isStandardMSPS' => 'False', 'extra_I' => 'SI', 'extra_II' => 'NA', 'extra_III' => 'SI', 'extra_IV' => 'SI', 'extra_V' => 'NA', 'extra_VI' => null, 'extra_VII' => null, 'extra_VIII' => null, 'extra_IX' => null, 'extra_X' => null, 'valorRegistro' => null, 'usuarioResponsable' => null, 'fecha_actualizacion' => '2022-06-16 04:17:45 PM', 'isPublicPrivate' => null, 'created_at' => null, 'updated_at' => null],
-            ['id' => '6', 'codigo' => '26', 'nombre' => 'Otro tipo de accidente', 'descripcion' => null, 'habilitado' => 'SI', 'aplicacion' => null, 'isStandardGEL' => 'False', 'isStandardMSPS' => 'False', 'extra_I' => 'SI', 'extra_II' => 'NA', 'extra_III' => 'SI', 'extra_IV' => 'SI', 'extra_V' => 'NA', 'extra_VI' => null, 'extra_VII' => null, 'extra_VIII' => null, 'extra_IX' => null, 'extra_X' => null, 'valorRegistro' => null, 'usuarioResponsable' => null, 'fecha_actualizacion' => '2022-06-16 04:17:45 PM', 'isPublicPrivate' => null, 'created_at' => null, 'updated_at' => null],
-            ['id' => '7', 'codigo' => '27', 'nombre' => 'Evento catastrófico de origen natural', 'descripcion' => null, 'habilitado' => 'SI', 'aplicacion' => null, 'isStandardGEL' => 'False', 'isStandardMSPS' => 'False', 'extra_I' => 'SI', 'extra_II' => 'NA', 'extra_III' => 'SI', 'extra_IV' => 'SI', 'extra_V' => 'NA', 'extra_VI' => null, 'extra_VII' => null, 'extra_VIII' => null, 'extra_IX' => null, 'extra_X' => null, 'valorRegistro' => null, 'usuarioResponsable' => null, 'fecha_actualizacion' => '2022-06-16 04:17:45 PM', 'isPublicPrivate' => null, 'created_at' => null, 'updated_at' => null],
-            ['id' => '8', 'codigo' => '28', 'nombre' => 'Lesión por agresión', 'descripcion' => null, 'habilitado' => 'SI', 'aplicacion' => null, 'isStandardGEL' => 'False', 'isStandardMSPS' => 'False', 'extra_I' => 'SI', 'extra_II' => 'NA', 'extra_III' => 'SI', 'extra_IV' => 'SI', 'extra_V' => 'NA', 'extra_VI' => null, 'extra_VII' => null, 'extra_VIII' => null, 'extra_IX' => null, 'extra_X' => null, 'valorRegistro' => null, 'usuarioResponsable' => null, 'fecha_actualizacion' => '2022-06-16 04:17:45 PM', 'isPublicPrivate' => null, 'created_at' => null, 'updated_at' => null],
-            ['id' => '9', 'codigo' => '29', 'nombre' => 'Lesión auto infligida', 'descripcion' => null, 'habilitado' => 'SI', 'aplicacion' => null, 'isStandardGEL' => 'False', 'isStandardMSPS' => 'False', 'extra_I' => 'SI', 'extra_II' => 'NA', 'extra_III' => 'SI', 'extra_IV' => 'SI', 'extra_V' => 'NA', 'extra_VI' => null, 'extra_VII' => null, 'extra_VIII' => null, 'extra_IX' => null, 'extra_X' => null, 'valorRegistro' => null, 'usuarioResponsable' => null, 'fecha_actualizacion' => '2022-06-16 04:17:45 PM', 'isPublicPrivate' => null, 'created_at' => null, 'updated_at' => null],
-            ['id' => '10', 'codigo' => '30', 'nombre' => 'Sospecha de violencia física', 'descripcion' => null, 'habilitado' => 'SI', 'aplicacion' => null, 'isStandardGEL' => 'False', 'isStandardMSPS' => 'False', 'extra_I' => 'SI', 'extra_II' => 'NA', 'extra_III' => 'SI', 'extra_IV' => 'SI', 'extra_V' => 'NA', 'extra_VI' => null, 'extra_VII' => null, 'extra_VIII' => null, 'extra_IX' => null, 'extra_X' => null, 'valorRegistro' => null, 'usuarioResponsable' => null, 'fecha_actualizacion' => '2022-06-16 04:17:45 PM', 'isPublicPrivate' => null, 'created_at' => null, 'updated_at' => null],
-            ['id' => '11', 'codigo' => '31', 'nombre' => 'Sospecha de violencia psicológica', 'descripcion' => null, 'habilitado' => 'SI', 'aplicacion' => null, 'isStandardGEL' => 'False', 'isStandardMSPS' => 'False', 'extra_I' => 'SI', 'extra_II' => 'NA', 'extra_III' => 'SI', 'extra_IV' => 'SI', 'extra_V' => 'NA', 'extra_VI' => null, 'extra_VII' => null, 'extra_VIII' => null, 'extra_IX' => null, 'extra_X' => null, 'valorRegistro' => null, 'usuarioResponsable' => null, 'fecha_actualizacion' => '2022-06-16 04:17:45 PM', 'isPublicPrivate' => null, 'created_at' => null, 'updated_at' => null],
-            ['id' => '12', 'codigo' => '32', 'nombre' => 'Sospecha de violencia sexual', 'descripcion' => null, 'habilitado' => 'SI', 'aplicacion' => null, 'isStandardGEL' => 'False', 'isStandardMSPS' => 'False', 'extra_I' => 'SI', 'extra_II' => 'NA', 'extra_III' => 'SI', 'extra_IV' => 'SI', 'extra_V' => 'NA', 'extra_VI' => null, 'extra_VII' => null, 'extra_VIII' => null, 'extra_IX' => null, 'extra_X' => null, 'valorRegistro' => null, 'usuarioResponsable' => null, 'fecha_actualizacion' => '2022-06-16 04:17:45 PM', 'isPublicPrivate' => null, 'created_at' => null, 'updated_at' => null],
-            ['id' => '13', 'codigo' => '33', 'nombre' => 'Sospecha de negligencia y abandono', 'descripcion' => null, 'habilitado' => 'SI', 'aplicacion' => null, 'isStandardGEL' => 'False', 'isStandardMSPS' => 'False', 'extra_I' => 'SI', 'extra_II' => 'NA', 'extra_III' => 'SI', 'extra_IV' => 'SI', 'extra_V' => 'NA', 'extra_VI' => null, 'extra_VII' => null, 'extra_VIII' => null, 'extra_IX' => null, 'extra_X' => null, 'valorRegistro' => null, 'usuarioResponsable' => null, 'fecha_actualizacion' => '2022-06-16 04:17:45 PM', 'isPublicPrivate' => null, 'created_at' => null, 'updated_at' => null],
-            ['id' => '14', 'codigo' => '34', 'nombre' => 'IVE relacionado con peligro a la Salud o  vida de la mujer', 'descripcion' => null, 'habilitado' => 'SI', 'aplicacion' => null, 'isStandardGEL' => 'False', 'isStandardMSPS' => 'False', 'extra_I' => 'SI', 'extra_II' => 'NA', 'extra_III' => 'SI', 'extra_IV' => 'SI', 'extra_V' => 'NA', 'extra_VI' => null, 'extra_VII' => null, 'extra_VIII' => null, 'extra_IX' => null, 'extra_X' => null, 'valorRegistro' => null, 'usuarioResponsable' => null, 'fecha_actualizacion' => '2022-06-16 04:17:45 PM', 'isPublicPrivate' => null, 'created_at' => null, 'updated_at' => null],
-            ['id' => '15', 'codigo' => '35', 'nombre' => 'IVE por malformación congénita  incompatible con la vida', 'descripcion' => null, 'habilitado' => 'SI', 'aplicacion' => null, 'isStandardGEL' => 'False', 'isStandardMSPS' => 'False', 'extra_I' => 'SI', 'extra_II' => 'NA', 'extra_III' => 'SI', 'extra_IV' => 'SI', 'extra_V' => 'NA', 'extra_VI' => null, 'extra_VII' => null, 'extra_VIII' => null, 'extra_IX' => null, 'extra_X' => null, 'valorRegistro' => null, 'usuarioResponsable' => null, 'fecha_actualizacion' => '2022-06-16 04:17:45 PM', 'isPublicPrivate' => null, 'created_at' => null, 'updated_at' => null],
-            ['id' => '16', 'codigo' => '36', 'nombre' => 'IVE por violencia sexual, incesto o por inseminación artificial o  transferencia de ovulo fecundado no consentida', 'descripcion' => null, 'habilitado' => 'SI', 'aplicacion' => null, 'isStandardGEL' => 'False', 'isStandardMSPS' => 'False', 'extra_I' => 'SI', 'extra_II' => 'NA', 'extra_III' => 'SI', 'extra_IV' => 'SI', 'extra_V' => 'NA', 'extra_VI' => null, 'extra_VII' => null, 'extra_VIII' => null, 'extra_IX' => null, 'extra_X' => null, 'valorRegistro' => null, 'usuarioResponsable' => null, 'fecha_actualizacion' => '2022-06-16 04:17:45 PM', 'isPublicPrivate' => null, 'created_at' => null, 'updated_at' => null],
-            ['id' => '17', 'codigo' => '37', 'nombre' => 'Evento adverso en salud', 'descripcion' => null, 'habilitado' => 'SI', 'aplicacion' => null, 'isStandardGEL' => 'False', 'isStandardMSPS' => 'False', 'extra_I' => 'SI', 'extra_II' => 'NA', 'extra_III' => 'SI', 'extra_IV' => 'SI', 'extra_V' => 'NA', 'extra_VI' => null, 'extra_VII' => null, 'extra_VIII' => null, 'extra_IX' => null, 'extra_X' => null, 'valorRegistro' => null, 'usuarioResponsable' => null, 'fecha_actualizacion' => '2022-06-16 04:17:45 PM', 'isPublicPrivate' => null, 'created_at' => null, 'updated_at' => null],
-            ['id' => '18', 'codigo' => '38', 'nombre' => 'Enfermedad general', 'descripcion' => null, 'habilitado' => 'SI', 'aplicacion' => null, 'isStandardGEL' => 'False', 'isStandardMSPS' => 'False', 'extra_I' => 'SI', 'extra_II' => 'NA', 'extra_III' => 'SI', 'extra_IV' => 'SI', 'extra_V' => 'NA', 'extra_VI' => null, 'extra_VII' => null, 'extra_VIII' => null, 'extra_IX' => null, 'extra_X' => null, 'valorRegistro' => null, 'usuarioResponsable' => null, 'fecha_actualizacion' => '2022-06-16 04:17:45 PM', 'isPublicPrivate' => null, 'created_at' => null, 'updated_at' => null],
-            ['id' => '19', 'codigo' => '39', 'nombre' => 'Enfermedad laboral', 'descripcion' => null, 'habilitado' => 'SI', 'aplicacion' => null, 'isStandardGEL' => 'False', 'isStandardMSPS' => 'False', 'extra_I' => 'SI', 'extra_II' => 'NA', 'extra_III' => 'SI', 'extra_IV' => 'SI', 'extra_V' => 'NA', 'extra_VI' => null, 'extra_VII' => null, 'extra_VIII' => null, 'extra_IX' => null, 'extra_X' => null, 'valorRegistro' => null, 'usuarioResponsable' => null, 'fecha_actualizacion' => '2022-06-16 04:17:45 PM', 'isPublicPrivate' => null, 'created_at' => null, 'updated_at' => null],
-            ['id' => '20', 'codigo' => '40', 'nombre' => 'Promoción y mantenimiento de la salud – intervenciones individuales', 'descripcion' => null, 'habilitado' => 'SI', 'aplicacion' => null, 'isStandardGEL' => 'False', 'isStandardMSPS' => 'False', 'extra_I' => 'SI', 'extra_II' => 'NA', 'extra_III' => 'NO', 'extra_IV' => 'NO', 'extra_V' => 'NA', 'extra_VI' => null, 'extra_VII' => null, 'extra_VIII' => null, 'extra_IX' => null, 'extra_X' => null, 'valorRegistro' => null, 'usuarioResponsable' => null, 'fecha_actualizacion' => '2022-06-16 04:17:45 PM', 'isPublicPrivate' => null, 'created_at' => null, 'updated_at' => null],
-            ['id' => '21', 'codigo' => '41', 'nombre' => 'Intervención colectiva', 'descripcion' => null, 'habilitado' => 'SI', 'aplicacion' => null, 'isStandardGEL' => 'False', 'isStandardMSPS' => 'False', 'extra_I' => 'NO', 'extra_II' => 'NA', 'extra_III' => 'SI', 'extra_IV' => 'SI', 'extra_V' => 'NA', 'extra_VI' => null, 'extra_VII' => null, 'extra_VIII' => null, 'extra_IX' => null, 'extra_X' => null, 'valorRegistro' => null, 'usuarioResponsable' => null, 'fecha_actualizacion' => '2022-06-16 04:17:45 PM', 'isPublicPrivate' => null, 'created_at' => null, 'updated_at' => null],
-            ['id' => '22', 'codigo' => '42', 'nombre' => 'Atención de población materno perinatal', 'descripcion' => null, 'habilitado' => 'SI', 'aplicacion' => null, 'isStandardGEL' => 'False', 'isStandardMSPS' => 'False', 'extra_I' => 'SI', 'extra_II' => 'NA', 'extra_III' => 'SI', 'extra_IV' => 'SI', 'extra_V' => 'NA', 'extra_VI' => null, 'extra_VII' => null, 'extra_VIII' => null, 'extra_IX' => null, 'extra_X' => null, 'valorRegistro' => null, 'usuarioResponsable' => null, 'fecha_actualizacion' => '2022-06-16 04:17:45 PM', 'isPublicPrivate' => null, 'created_at' => null, 'updated_at' => null],
-            ['id' => '23', 'codigo' => '43', 'nombre' => 'Riesgo ambiental', 'descripcion' => null, 'habilitado' => 'SI', 'aplicacion' => null, 'isStandardGEL' => 'False', 'isStandardMSPS' => 'False', 'extra_I' => 'SI', 'extra_II' => 'NA', 'extra_III' => 'SI', 'extra_IV' => 'SI', 'extra_V' => 'NA', 'extra_VI' => null, 'extra_VII' => null, 'extra_VIII' => null, 'extra_IX' => null, 'extra_X' => null, 'valorRegistro' => null, 'usuarioResponsable' => null, 'fecha_actualizacion' => '2022-06-16 04:17:45 PM', 'isPublicPrivate' => null, 'created_at' => null, 'updated_at' => null],
-            ['id' => '24', 'codigo' => '44', 'nombre' => 'Otros eventos Catastróficos', 'descripcion' => null, 'habilitado' => 'SI', 'aplicacion' => null, 'isStandardGEL' => 'False', 'isStandardMSPS' => 'False', 'extra_I' => 'SI', 'extra_II' => 'NA', 'extra_III' => 'SI', 'extra_IV' => 'SI', 'extra_V' => 'NA', 'extra_VI' => null, 'extra_VII' => null, 'extra_VIII' => null, 'extra_IX' => null, 'extra_X' => null, 'valorRegistro' => null, 'usuarioResponsable' => null, 'fecha_actualizacion' => '2022-06-16 04:17:45 PM', 'isPublicPrivate' => null, 'created_at' => null, 'updated_at' => null],
-            ['id' => '25', 'codigo' => '45', 'nombre' => 'Accidente de mina antipersonal – MAP', 'descripcion' => null, 'habilitado' => 'SI', 'aplicacion' => null, 'isStandardGEL' => 'False', 'isStandardMSPS' => 'False', 'extra_I' => 'SI', 'extra_II' => 'NA', 'extra_III' => 'SI', 'extra_IV' => 'SI', 'extra_V' => 'NA', 'extra_VI' => null, 'extra_VII' => null, 'extra_VIII' => null, 'extra_IX' => null, 'extra_X' => null, 'valorRegistro' => null, 'usuarioResponsable' => null, 'fecha_actualizacion' => '2022-06-16 04:17:45 PM', 'isPublicPrivate' => null, 'created_at' => null, 'updated_at' => null],
-            ['id' => '26', 'codigo' => '46', 'nombre' => 'Accidente de Artefacto Explosivo Improvisado – AEI', 'descripcion' => null, 'habilitado' => 'SI', 'aplicacion' => null, 'isStandardGEL' => 'False', 'isStandardMSPS' => 'False', 'extra_I' => 'SI', 'extra_II' => 'NA', 'extra_III' => 'SI', 'extra_IV' => 'SI', 'extra_V' => 'NA', 'extra_VI' => null, 'extra_VII' => null, 'extra_VIII' => null, 'extra_IX' => null, 'extra_X' => null, 'valorRegistro' => null, 'usuarioResponsable' => null, 'fecha_actualizacion' => '2022-06-16 04:17:45 PM', 'isPublicPrivate' => null, 'created_at' => null, 'updated_at' => null],
-            ['id' => '27', 'codigo' => '47', 'nombre' => 'Accidente de Munición Sin Explotar- MUSE', 'descripcion' => null, 'habilitado' => 'SI', 'aplicacion' => null, 'isStandardGEL' => 'False', 'isStandardMSPS' => 'False', 'extra_I' => 'SI', 'extra_II' => 'NA', 'extra_III' => 'SI', 'extra_IV' => 'SI', 'extra_V' => 'NA', 'extra_VI' => null, 'extra_VII' => null, 'extra_VIII' => null, 'extra_IX' => null, 'extra_X' => null, 'valorRegistro' => null, 'usuarioResponsable' => null, 'fecha_actualizacion' => '2022-06-16 04:17:45 PM', 'isPublicPrivate' => null, 'created_at' => null, 'updated_at' => null],
-            ['id' => '28', 'codigo' => '48', 'nombre' => 'Otra víctima de conflicto armado colombiano', 'descripcion' => null, 'habilitado' => 'SI', 'aplicacion' => null, 'isStandardGEL' => 'False', 'isStandardMSPS' => 'False', 'extra_I' => 'SI', 'extra_II' => 'NA', 'extra_III' => 'SI', 'extra_IV' => 'SI', 'extra_V' => 'NA', 'extra_VI' => null, 'extra_VII' => null, 'extra_VIII' => null, 'extra_IX' => null, 'extra_X' => null, 'valorRegistro' => null, 'usuarioResponsable' => null, 'fecha_actualizacion' => '2022-06-16 04:17:45 PM', 'isPublicPrivate' => null, 'created_at' => null, 'updated_at' => null],
-        ];
+        $excelService = new ExcelService;
+        $sheet = null;
 
-        // Inicializar la barra de progreso
-        $this->command->info('Starting Seed Data ...');
-        $bar = $this->command->getOutput()->createProgressBar(count($arrayData));
-
-        foreach ($arrayData as $value) {
-            $data = new RipsCausaExternaVersion2;
-            $data->codigo = $value['codigo'];
-            $data->nombre = $value['nombre'];
-            $data->descripcion = $value['descripcion'];
-            $data->habilitado = $value['habilitado'];
-            $data->aplicacion = $value['aplicacion'];
-            $data->isStandardGEL = $value['isStandardGEL'];
-            $data->isStandardMSPS = $value['isStandardMSPS'];
-            $data->extra_I = $value['extra_I'];
-            $data->extra_II = $value['extra_II'];
-            $data->extra_III = $value['extra_III'];
-            $data->extra_IV = $value['extra_IV'];
-            $data->extra_V = $value['extra_V'];
-            $data->extra_VI = $value['extra_VI'];
-            $data->extra_VII = $value['extra_VII'];
-            $data->extra_VIII = $value['extra_VIII'];
-            $data->extra_IX = $value['extra_IX'];
-            $data->extra_X = $value['extra_X'];
-            $data->valorRegistro = $value['valorRegistro'];
-            $data->usuarioResponsable = $value['usuarioResponsable'];
-            $data->fecha_actualizacion = $value['fecha_actualizacion'];
-            $data->isPublicPrivate = $value['isPublicPrivate'];
-
-            $data->save();
-            $bar->advance();
+        try {
+            $sheet = $excelService
+                ->getSpreadsheetFromExcel(database_path('db/13-TablaReferencia_RIPSCausaExternaVersion2__1.xlsx'))
+                ->getSheetByName('Table')
+                ->toArray();
+        } catch (Exception $e) {
+            // $this->error('Error al leer el excel');
+        } catch (\PhpOffice\PhpSpreadsheet\Exception $e) {
+            // $this->error('Error al obtener la hoja');
         }
-        $bar->finish(); // Finalizar la barra
+
+        if ($sheet) {
+            // Inicializar la barra de progreso
+            $this->command->info('Starting Seed Data ...');
+            $bar = $this->command->getOutput()->createProgressBar(count($sheet));
+
+            unset($sheet[0]);
+            foreach ($sheet as $dataSheet) {
+                RipsCausaExternaVersion2::updateOrCreate(
+                    ['codigo' => $dataSheet[1]], // condiciones para buscar el registro
+                    [
+                        'nombre' => $dataSheet[2],
+                        'descripcion' => $dataSheet[3],
+                        'habilitado' => $dataSheet[3],
+                        'aplicacion' => $dataSheet[4],
+                        'isStandardGEL' => $dataSheet[5],
+                        'isStandardMSPS' => $dataSheet[6],
+                        'extra_I' => $dataSheet[7],
+                        'extra_II' => $dataSheet[8],
+                        'extra_III' => $dataSheet[9],
+                        'extra_IV' => $dataSheet[10],
+                        'extra_V' => $dataSheet[11],
+                        'extra_VI' => $dataSheet[12],
+                        'extra_VII' => $dataSheet[13],
+                        'extra_VIII' => $dataSheet[14],
+                        'extra_IX' => $dataSheet[15],
+                        'extra_X' => $dataSheet[16],
+                        'valorRegistro' => $dataSheet[17],
+                        'usuarioResponsable' => $dataSheet[18],
+                        'fecha_actualizacion' => $dataSheet[19],
+                        'isPublicPrivate' => $dataSheet[20],
+                    ]
+                );
+                $bar->advance();
+            }
+            $bar->finish(); // Finalizar la barra
+        }
     }
 }

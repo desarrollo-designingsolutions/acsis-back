@@ -1,929 +1,929 @@
 {
-  "type": "object",
-  "properties": {
-    "numDocumentoIdObligado": {
-      "type": "string",
-      "minLength": 4,
-      "maxLength": 12
-    },
-    "numFactura": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "tipoNota": {
-      "anyOf": [
-        {
-          "type": "null"
-        },
-        {
-          "type": "string",
-          "pattern": "^(.{0}|.{2})$"
-        }
-      ]
-    },
-    "numNota": {
-      "anyOf": [
-        {
-          "type": "null"
-        },
-        {
-          "type": "string",
-          "pattern": "^(|.{0,20})$"
-        }
-      ]
-    },
-    "usuarios": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "properties": {
-          "tipoDocumentoIdentificacion": {
-            "type": "string",
-            "pattern": "^(|.{2})$"
-          },
-          "numDocumentoIdentificacion": {
+    "type": "object",
+    "properties": {
+        "numDocumentoIdObligado": {
             "type": "string",
             "minLength": 4,
-            "maxLength": 20
-          },
-          "tipoUsuario": {
-            "type": "string",
-            "pattern": "^(|.{2})$"
-          },
-          "fechaNacimiento": {
-            "type": "string",
-            "format": "date-time-custom-user"
-          },
-          "codSexo": {
-            "type": "string",
-            "pattern": "^(|.{1})$"
-          },
-          "codPaisResidencia": {
-            "type": "string",
-            "pattern": "^(|.{3})$"
-          },
-          "codMunicipioResidencia": {
+            "maxLength": 12
+        },
+        "numFactura": {
+            "type": [
+                "string",
+                "null"
+            ]
+        },
+        "tipoNota": {
             "anyOf": [
-              {
-                "type": "null"
-              },
-              {
-                "type": "string",
-                "pattern": "^(.{0}|.{5})$"
-              }
+                {
+                    "type": "null"
+                },
+                {
+                    "type": "string",
+                    "pattern": "^(.{0}|.{2})$"
+                }
             ]
-          },
-          "codZonaTerritorialResidencia": {
-            "type": "string",
-            "pattern": "^(.{0}|.{2})$"
-          },
-          "incapacidad": {
-            "type": "string",
-            "pattern": "^(|.{2})$",
-            "enum": [
-              "SI",
-              "NO"
+        },
+        "numNota": {
+            "anyOf": [
+                {
+                    "type": "null"
+                },
+                {
+                    "type": "string",
+                    "pattern": "^(|.{0,20})$"
+                }
             ]
-          },
-          "consecutivo": {
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 9999999
-          },
-          "codPaisOrigen": {
-            "type": "string",
-            "pattern": "^(|.{3})$"
-          },
-          "servicios": {
-            "type": "object",
-            "properties": {
-              "consultas": {
-                "type": "array",
-                "items": {
-                  "type": "object",
-                  "properties": {
-                    "codPrestador": {
-                      "type": "string",
-                      "pattern": "^(|.{12})$"
-                    },
-                    "fechaInicioAtencion": {
-                      "type": "string",
-                      "format": "date-time-custom"
-                    },
-                    "numAutorizacion": {
-                      "anyOf": [
-                        {
-                          "type": "null"
-                        },
-                        {
-                          "type": "string",
-                          "pattern": "^(|.{0,30})$"
-                        }
-                      ]
-                    },
-                    "codConsulta": {
-                      "type": "string",
-                      "pattern": "^(|.{6})$"
-                    },
-                    "modalidadGrupoServicioTecSal": {
-                      "type": "string",
-                      "pattern": "^(|.{2})$"
-                    },
-                    "grupoServicios": {
-                      "type": "string",
-                      "pattern": "^(|.{2})$"
-                    },
-                    "codServicio": {
-                      "type": "integer",
-                      "pattern": "^(|.{3,4})$"
-                    },
-                    "finalidadTecnologiaSalud": {
-                      "type": "string",
-                      "pattern": "^(|.{2})$"
-                    },
-                    "causaMotivoAtencion": {
-                      "type": "string",
-                      "pattern": "^(|.{2})$"
-                    },
-                    "codDiagnosticoPrincipal": {
-                      "type": "string",
-                      "pattern": "^(|.{4,25})$"
-                    },
-                    "codDiagnosticoRelacionado1": {
-                      "type": "string",
-                      "pattern": "^(.{0}|.{4,25})$"
-                    },
-                    "codDiagnosticoRelacionado2": {
-                      "type": "string",
-                      "pattern": "^(.{0}|.{4,25})$"
-                    },
-                    "codDiagnosticoRelacionado3": {
-                      "type": "string",
-                      "pattern": "^(.{0}|.{4,25})$"
-                    },
-                    "tipoDiagnosticoPrincipal": {
-                      "type": "string",
-                      "pattern": "^(|.{2})$"
-                    },
+        },
+        "usuarios": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
                     "tipoDocumentoIdentificacion": {
-                      "type": "string",
-                      "pattern": "^(|.{2})$"
+                        "type": "string",
+                        "pattern": "^(|.{2})$"
                     },
                     "numDocumentoIdentificacion": {
-                      "type": "string",
-                      "pattern": "^(|.{4,20})$"
+                        "type": "string",
+                        "minLength": 4,
+                        "maxLength": 20
                     },
-                    "vrServicio": {
-                      "type": "number",
-                      "pattern": "^(|.{1,10})$"
-                    },
-                    "conceptoRecaudo": {
-                      "type": "string",
-                      "pattern": "^(|.{2})$"
-                    },
-                    "valorPagoModerador": {
-                      "type": "number",
-                      "pattern": "^(|.{1,10})$"
-                    },
-                    "numFEVPagoModerador": {
-                      "anyOf": [
-                        {
-                          "type": "null"
-                        },
-                        {
-                          "type": "string"
-                        }
-                      ]
-                    },
-                    "consecutivo": {
-                      "type": "integer",
-                      "minimum": 1,
-                      "maximum": 9999999
-                    }
-                  },
-                  "required": [
-                    "codPrestador",
-                    "fechaInicioAtencion",
-                    "numAutorizacion",
-                    "codConsulta",
-                    "modalidadGrupoServicioTecSal",
-                    "grupoServicios",
-                    "codServicio",
-                    "finalidadTecnologiaSalud",
-                    "causaMotivoAtencion",
-                    "codDiagnosticoPrincipal",
-                    "codDiagnosticoRelacionado1",
-                    "codDiagnosticoRelacionado2",
-                    "codDiagnosticoRelacionado3",
-                    "tipoDiagnosticoPrincipal",
-                    "tipoDocumentoIdentificacion",
-                    "numDocumentoIdentificacion",
-                    "vrServicio",
-                    "conceptoRecaudo",
-                    "valorPagoModerador",
-                    "numFEVPagoModerador",
-                    "consecutivo"
-                  ],
-                  "additionalProperties": false
-                }
-              },
-              "procedimientos": {
-                "type": "array",
-                "items": {
-                  "type": "object",
-                  "properties": {
-                    "codPrestador": {
-                      "type": "string",
-                      "pattern": "^(|.{12})$"
-                    },
-                    "fechaInicioAtencion": {
-                      "type": "string",
-                      "format": "date-time-custom"
-                    },
-                    "idMIPRES": {
-                      "anyOf": [
-                        {
-                          "type": "null"
-                        },
-                        {
-                          "type": "string",
-                          "pattern": "^(|.{0,15})$"
-                        }
-                      ]
-                    },
-                    "numAutorizacion": {
-                      "anyOf": [
-                        {
-                          "type": "null"
-                        },
-                        {
-                          "type": "string",
-                          "pattern": "^(|.{0,30})$"
-                        }
-                      ]
-                    },
-                    "codProcedimiento": {
-                      "type": "string",
-                      "pattern": "^(|.{6})$"
-                    },
-                    "viaIngresoServicioSalud": {
-                      "type": "string",
-                      "pattern": "^(|.{2})$"
-                    },
-                    "modalidadGrupoServicioTecSal": {
-                      "type": "string",
-                      "pattern": "^(|.{2})$"
-                    },
-                    "grupoServicios": {
-                      "type": "string",
-                      "pattern": "^(|.{2})$"
-                    },
-                    "codServicio": {
-                      "type": "integer",
-                      "pattern": "^(|.{3,4})$"
-                    },
-                    "finalidadTecnologiaSalud": {
-                      "type": "string",
-                      "pattern": "^(|.{2})$"
-                    },
-                    "tipoDocumentoIdentificacion": {
-                      "type": "string",
-                      "pattern": "^(|.{2})$"
-                    },
-                    "numDocumentoIdentificacion": {
-                      "type": "string",
-                      "pattern": "^(|.{4,20})$"
-                    },
-                    "codDiagnosticoPrincipal": {
-                      "type": "string",
-                      "pattern": "^(|.{4,25})$"
-                    },
-                    "codDiagnosticoRelacionado": {
-                      "type": "string",
-                      "pattern": "^(.{0}|.{4,25})$"
-                    },
-                    "codComplicacion": {
-                      "type": "string",
-                      "pattern": "^(.{0}|.{4,25})$"
-                    },
-                    "vrServicio": {
-                      "type": "number",
-                      "pattern": "^(|.{1,15})$"
-                    },
-                    "conceptoRecaudo": {
-                      "type": "string",
-                      "pattern": "^(|.{2})$"
-                    },
-                    "valorPagoModerador": {
-                      "type": "number",
-                      "pattern": "^(|.{1,10})$"
-                    },
-                    "numFEVPagoModerador": {
-                      "anyOf": [
-                        {
-                          "type": "null"
-                        },
-                        {
-                          "type": "string"
-                        }
-                      ]
-                    },
-                    "consecutivo": {
-                      "type": "integer",
-                      "minimum": 1,
-                      "maximum": 9999999
-                    }
-                  },
-                  "required": [
-                    "codPrestador",
-                    "fechaInicioAtencion",
-                    "idMIPRES",
-                    "numAutorizacion",
-                    "codProcedimiento",
-                    "viaIngresoServicioSalud",
-                    "modalidadGrupoServicioTecSal",
-                    "grupoServicios",
-                    "codServicio",
-                    "finalidadTecnologiaSalud",
-                    "tipoDocumentoIdentificacion",
-                    "numDocumentoIdentificacion",
-                    "codDiagnosticoPrincipal",
-                    "codDiagnosticoRelacionado",
-                    "codComplicacion",
-                    "vrServicio",
-                    "conceptoRecaudo",
-                    "valorPagoModerador",
-                    "numFEVPagoModerador",
-                    "consecutivo"
-                  ],
-                  "additionalProperties": false
-                }
-              },
-              "urgencias": {
-                "type": "array",
-                "items": {
-                  "type": "object",
-                  "properties": {
-                    "codPrestador": {
-                      "type": "string",
-                      "pattern": "^(|.{12})$"
-                    },
-                    "fechaInicioAtencion": {
-                      "type": "string",
-                      "format": "date-time-custom"
-                    },
-                    "causaMotivoAtencion": {
-                      "type": "string",
-                      "pattern": "^(|.{2})$"
-                    },
-                    "codDiagnosticoPrincipal": {
-                      "type": "string",
-                      "pattern": "^(|.{4,20})$"
-                    },
-                    "codDiagnosticoPrincipalE": {
-                      "type": "string",
-                      "pattern": "^(|.{4,25})$"
-                    },
-                    "codDiagnosticoRelacionadoE1": {
-                      "type": "string",
-                      "pattern": "^(.{0}|.{4,25})$"
-                    },
-                    "codDiagnosticoRelacionadoE2": {
-                      "type": "string",
-                      "pattern": "^(.{0}|.{4,25})$"
-                    },
-                    "codDiagnosticoRelacionadoE3": {
-                      "type": "string",
-                      "pattern": "^(.{0}|.{4,25})$"
-                    },
-                    "condicionDestinoUsuarioEgreso": {
-                      "type": "string",
-                      "pattern": "^(|.{2})$"
-                    },
-                    "codDiagnosticoCausaMuerte": {
-                      "type": "string",
-                      "pattern": "^(.{0}|.{4,25})$"
-                    },
-                    "fechaEgreso": {
-                      "type": "string",
-                      "format": "date-time-custom"
-                    },
-                    "consecutivo": {
-                      "type": "integer",
-                      "minimum": 1,
-                      "maximum": 9999999
-                    }
-                  },
-                  "required": [
-                    "codPrestador",
-                    "fechaInicioAtencion",
-                    "causaMotivoAtencion",
-                    "codDiagnosticoPrincipal",
-                    "codDiagnosticoPrincipalE",
-                    "codDiagnosticoRelacionadoE1",
-                    "codDiagnosticoRelacionadoE2",
-                    "codDiagnosticoRelacionadoE3",
-                    "condicionDestinoUsuarioEgreso",
-                    "codDiagnosticoCausaMuerte",
-                    "fechaEgreso",
-                    "consecutivo"
-                  ],
-                  "additionalProperties": false
-                }
-              },
-              "hospitalizacion": {
-                "type": "array",
-                "items": {
-                  "type": "object",
-                  "properties": {
-                    "codPrestador": {
-                      "type": "string",
-                      "pattern": "^(|.{12})$"
-                    },
-                    "viaIngresoServicioSalud": {
-                      "type": "string",
-                      "pattern": "^(|.{2})$"
-                    },
-                    "fechaInicioAtencion": {
-                      "type": "string",
-                      "format": "date-time-custom"
-                    },
-                    "numAutorizacion": {
-                      "anyOf": [
-                        {
-                          "type": "null"
-                        },
-                        {
-                          "type": "string",
-                          "pattern": "^(|.{0,30})$"
-                        }
-                      ]
-                    },
-                    "causaMotivoAtencion": {
-                      "type": "string",
-                      "pattern": "^(|.{2})$"
-                    },
-                    "codDiagnosticoPrincipal": {
-                      "type": "string",
-                      "pattern": "^(|.{4,20})$"
-                    },
-                    "codDiagnosticoPrincipalE": {
-                      "type": "string",
-                      "pattern": "^(|.{4,25})$"
-                    },
-                    "codDiagnosticoRelacionadoE1": {
-                      "type": "string",
-                      "pattern": "^(.{0}|.{4,25})$"
-                    },
-                    "codDiagnosticoRelacionadoE2": {
-                      "type": "string",
-                      "pattern": "^(.{0}|.{4,25})$"
-                    },
-                    "codDiagnosticoRelacionadoE3": {
-                      "type": "string",
-                      "pattern": "^(.{0}|.{4,25})$"
-                    },
-                    "codComplicacion": {
-                      "type": "string",
-                      "pattern": "^(.{0}|.{4,25})$"
-                    },
-                    "condicionDestinoUsuarioEgreso": {
-                      "type": "string",
-                      "pattern": "^(|.{2})$"
-                    },
-                    "codDiagnosticoCausaMuerte": {
-                      "type": "string",
-                      "pattern": "^(.{0}|.{4,25})$"
-                    },
-                    "fechaEgreso": {
-                      "type": "string",
-                      "format": "date-time-custom"
-                    },
-                    "consecutivo": {
-                      "type": "integer",
-                      "minimum": 1,
-                      "maximum": 9999999
-                    }
-                  },
-                  "required": [
-                    "codPrestador",
-                    "viaIngresoServicioSalud",
-                    "fechaInicioAtencion",
-                    "numAutorizacion",
-                    "causaMotivoAtencion",
-                    "codDiagnosticoPrincipal",
-                    "codDiagnosticoPrincipalE",
-                    "codDiagnosticoRelacionadoE1",
-                    "codDiagnosticoRelacionadoE2",
-                    "codDiagnosticoRelacionadoE3",
-                    "codComplicacion",
-                    "condicionDestinoUsuarioEgreso",
-                    "codDiagnosticoCausaMuerte",
-                    "fechaEgreso",
-                    "consecutivo"
-                  ],
-                  "additionalProperties": false
-                }
-              },
-              "recienNacidos": {
-                "type": "array",
-                "items": {
-                  "type": "object",
-                  "properties": {
-                    "codPrestador": {
-                      "type": "string",
-                      "pattern": "^(|.{12})$"
-                    },
-                    "tipoDocumentoIdentificacion": {
-                      "type": "string",
-                      "pattern": "^(|.{2})$"
-                    },
-                    "numDocumentoIdentificacion": {
-                      "type": "integer",
-                      "pattern": "^(|.{4,20})$"
+                    "tipoUsuario": {
+                        "type": "string",
+                        "pattern": "^(|.{2})$"
                     },
                     "fechaNacimiento": {
-                      "type": "string",
-                      "format": "date-time-custom"
+                        "type": "string",
+                        "format": "date-time-custom-user"
                     },
-                    "edadGestacional": {
-                      "type": "integer",
-                      "pattern": "^(|.{2})$"
+                    "codSexo": {
+                        "type": "string",
+                        "pattern": "^(|.{1})$"
                     },
-                    "numConsultasCPrenatal": {
-                      "type": "integer",
-                      "pattern": "^(|.{2})$"
+                    "codPaisResidencia": {
+                        "type": "string",
+                        "pattern": "^(|.{3})$"
                     },
-                    "codSexoBiologico": {
-                      "type": "string",
-                      "pattern": "^(|.{1})$"
+                    "codMunicipioResidencia": {
+                        "anyOf": [
+                            {
+                                "type": "null"
+                            },
+                            {
+                                "type": "string",
+                                "pattern": "^(.{0}|.{5})$"
+                            }
+                        ]
                     },
-                    "peso": {
-                      "type": "integer",
-                      "pattern": "^(|.{3,4})$"
+                    "codZonaTerritorialResidencia": {
+                        "type": "string",
+                        "pattern": "^(.{0}|.{2})$"
                     },
-                    "codDiagnosticoPrincipal": {
-                      "type": "string",
-                      "pattern": "^(|.{4,25})$"
-                    },
-                    "condicionDestinoUsuarioEgreso": {
-                      "type": "string",
-                      "pattern": "^(|.{2})$"
-                    },
-                    "codDiagnosticoCausaMuerte": {
-                      "type": "string",
-                      "pattern": "^(.{0}|.{4,25})$"
-                    },
-                    "fechaEgreso": {
-                      "type": "string",
-                      "format": "date-time-custom"
+                    "incapacidad": {
+                        "type": "string",
+                        "pattern": "^(|.{2})$",
+                        "enum": [
+                            "SI",
+                            "NO"
+                        ]
                     },
                     "consecutivo": {
-                      "type": "integer",
-                      "minimum": 1,
-                      "maximum": 9999999
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 9999999
+                    },
+                    "codPaisOrigen": {
+                        "type": "string",
+                        "pattern": "^(|.{3})$"
+                    },
+                    "servicios": {
+                        "type": "object",
+                        "properties": {
+                            "consultas": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "codPrestador": {
+                                            "type": "string",
+                                            "pattern": "^(|.{12})$"
+                                        },
+                                        "fechaInicioAtencion": {
+                                            "type": "string",
+                                            "format": "date-time-custom"
+                                        },
+                                        "numAutorizacion": {
+                                            "anyOf": [
+                                                {
+                                                    "type": "null"
+                                                },
+                                                {
+                                                    "type": "string",
+                                                    "pattern": "^(|.{0,30})$"
+                                                }
+                                            ]
+                                        },
+                                        "codConsulta": {
+                                            "type": "string",
+                                            "pattern": "^(|.{6})$"
+                                        },
+                                        "modalidadGrupoServicioTecSal": {
+                                            "type": "string",
+                                            "pattern": "^(|.{2})$"
+                                        },
+                                        "grupoServicios": {
+                                            "type": "string",
+                                            "pattern": "^(|.{2})$"
+                                        },
+                                        "codServicio": {
+                                            "type": "integer",
+                                            "pattern": "^(|.{3,4})$"
+                                        },
+                                        "finalidadTecnologiaSalud": {
+                                            "type": "string",
+                                            "pattern": "^(|.{2})$"
+                                        },
+                                        "causaMotivoAtencion": {
+                                            "type": "string",
+                                            "pattern": "^(|.{2})$"
+                                        },
+                                        "codDiagnosticoPrincipal": {
+                                            "type": "string",
+                                            "pattern": "^(|.{4,25})$"
+                                        },
+                                        "codDiagnosticoRelacionado1": {
+                                            "type": "string",
+                                            "pattern": "^(.{0}|.{4,25})$"
+                                        },
+                                        "codDiagnosticoRelacionado2": {
+                                            "type": "string",
+                                            "pattern": "^(.{0}|.{4,25})$"
+                                        },
+                                        "codDiagnosticoRelacionado3": {
+                                            "type": "string",
+                                            "pattern": "^(.{0}|.{4,25})$"
+                                        },
+                                        "tipoDiagnosticoPrincipal": {
+                                            "type": "string",
+                                            "pattern": "^(|.{2})$"
+                                        },
+                                        "tipoDocumentoIdentificacion": {
+                                            "type": "string",
+                                            "pattern": "^(|.{2})$"
+                                        },
+                                        "numDocumentoIdentificacion": {
+                                            "type": "string",
+                                            "pattern": "^(|.{4,20})$"
+                                        },
+                                        "vrServicio": {
+                                            "type": "number",
+                                            "pattern": "^(|.{1,10})$"
+                                        },
+                                        "conceptoRecaudo": {
+                                            "type": "string",
+                                            "pattern": "^(|.{2})$"
+                                        },
+                                        "valorPagoModerador": {
+                                            "type": "number",
+                                            "pattern": "^(|.{1,10})$"
+                                        },
+                                        "numFEVPagoModerador": {
+                                            "anyOf": [
+                                                {
+                                                    "type": "null"
+                                                },
+                                                {
+                                                    "type": "string"
+                                                }
+                                            ]
+                                        },
+                                        "consecutivo": {
+                                            "type": "integer",
+                                            "minimum": 1,
+                                            "maximum": 9999999
+                                        }
+                                    },
+                                    "required": [
+                                        "codPrestador",
+                                        "fechaInicioAtencion",
+                                        "numAutorizacion",
+                                        "codConsulta",
+                                        "modalidadGrupoServicioTecSal",
+                                        "grupoServicios",
+                                        "codServicio",
+                                        "finalidadTecnologiaSalud",
+                                        "causaMotivoAtencion",
+                                        "codDiagnosticoPrincipal",
+                                        "codDiagnosticoRelacionado1",
+                                        "codDiagnosticoRelacionado2",
+                                        "codDiagnosticoRelacionado3",
+                                        "tipoDiagnosticoPrincipal",
+                                        "tipoDocumentoIdentificacion",
+                                        "numDocumentoIdentificacion",
+                                        "vrServicio",
+                                        "conceptoRecaudo",
+                                        "valorPagoModerador",
+                                        "numFEVPagoModerador",
+                                        "consecutivo"
+                                    ],
+                                    "additionalProperties": false
+                                }
+                            },
+                            "procedimientos": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "codPrestador": {
+                                            "type": "string",
+                                            "pattern": "^(|.{12})$"
+                                        },
+                                        "fechaInicioAtencion": {
+                                            "type": "string",
+                                            "format": "date-time-custom"
+                                        },
+                                        "idMIPRES": {
+                                            "anyOf": [
+                                                {
+                                                    "type": "null"
+                                                },
+                                                {
+                                                    "type": "string",
+                                                    "pattern": "^(|.{0,15})$"
+                                                }
+                                            ]
+                                        },
+                                        "numAutorizacion": {
+                                            "anyOf": [
+                                                {
+                                                    "type": "null"
+                                                },
+                                                {
+                                                    "type": "string",
+                                                    "pattern": "^(|.{0,30})$"
+                                                }
+                                            ]
+                                        },
+                                        "codProcedimiento": {
+                                            "type": "string",
+                                            "pattern": "^(|.{6})$"
+                                        },
+                                        "viaIngresoServicioSalud": {
+                                            "type": "string",
+                                            "pattern": "^(|.{2})$"
+                                        },
+                                        "modalidadGrupoServicioTecSal": {
+                                            "type": "string",
+                                            "pattern": "^(|.{2})$"
+                                        },
+                                        "grupoServicios": {
+                                            "type": "string",
+                                            "pattern": "^(|.{2})$"
+                                        },
+                                        "codServicio": {
+                                            "type": "integer",
+                                            "pattern": "^(|.{3,4})$"
+                                        },
+                                        "finalidadTecnologiaSalud": {
+                                            "type": "string",
+                                            "pattern": "^(|.{2})$"
+                                        },
+                                        "tipoDocumentoIdentificacion": {
+                                            "type": "string",
+                                            "pattern": "^(|.{2})$"
+                                        },
+                                        "numDocumentoIdentificacion": {
+                                            "type": "string",
+                                            "pattern": "^(|.{4,20})$"
+                                        },
+                                        "codDiagnosticoPrincipal": {
+                                            "type": "string",
+                                            "pattern": "^(|.{4,25})$"
+                                        },
+                                        "codDiagnosticoRelacionado": {
+                                            "type": "string",
+                                            "pattern": "^(.{0}|.{4,25})$"
+                                        },
+                                        "codComplicacion": {
+                                            "type": "string",
+                                            "pattern": "^(.{0}|.{4,25})$"
+                                        },
+                                        "vrServicio": {
+                                            "type": "number",
+                                            "pattern": "^(|.{1,15})$"
+                                        },
+                                        "conceptoRecaudo": {
+                                            "type": "string",
+                                            "pattern": "^(|.{2})$"
+                                        },
+                                        "valorPagoModerador": {
+                                            "type": "number",
+                                            "pattern": "^(|.{1,10})$"
+                                        },
+                                        "numFEVPagoModerador": {
+                                            "anyOf": [
+                                                {
+                                                    "type": "null"
+                                                },
+                                                {
+                                                    "type": "string"
+                                                }
+                                            ]
+                                        },
+                                        "consecutivo": {
+                                            "type": "integer",
+                                            "minimum": 1,
+                                            "maximum": 9999999
+                                        }
+                                    },
+                                    "required": [
+                                        "codPrestador",
+                                        "fechaInicioAtencion",
+                                        "idMIPRES",
+                                        "numAutorizacion",
+                                        "codProcedimiento",
+                                        "viaIngresoServicioSalud",
+                                        "modalidadGrupoServicioTecSal",
+                                        "grupoServicios",
+                                        "codServicio",
+                                        "finalidadTecnologiaSalud",
+                                        "tipoDocumentoIdentificacion",
+                                        "numDocumentoIdentificacion",
+                                        "codDiagnosticoPrincipal",
+                                        "codDiagnosticoRelacionado",
+                                        "codComplicacion",
+                                        "vrServicio",
+                                        "conceptoRecaudo",
+                                        "valorPagoModerador",
+                                        "numFEVPagoModerador",
+                                        "consecutivo"
+                                    ],
+                                    "additionalProperties": false
+                                }
+                            },
+                            "urgencias": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "codPrestador": {
+                                            "type": "string",
+                                            "pattern": "^(|.{12})$"
+                                        },
+                                        "fechaInicioAtencion": {
+                                            "type": "string",
+                                            "format": "date-time-custom"
+                                        },
+                                        "causaMotivoAtencion": {
+                                            "type": "string",
+                                            "pattern": "^(|.{2})$"
+                                        },
+                                        "codDiagnosticoPrincipal": {
+                                            "type": "string",
+                                            "pattern": "^(|.{4,20})$"
+                                        },
+                                        "codDiagnosticoPrincipalE": {
+                                            "type": "string",
+                                            "pattern": "^(|.{4,25})$"
+                                        },
+                                        "codDiagnosticoRelacionadoE1": {
+                                            "type": "string",
+                                            "pattern": "^(.{0}|.{4,25})$"
+                                        },
+                                        "codDiagnosticoRelacionadoE2": {
+                                            "type": "string",
+                                            "pattern": "^(.{0}|.{4,25})$"
+                                        },
+                                        "codDiagnosticoRelacionadoE3": {
+                                            "type": "string",
+                                            "pattern": "^(.{0}|.{4,25})$"
+                                        },
+                                        "condicionDestinoUsuarioEgreso": {
+                                            "type": "string",
+                                            "pattern": "^(|.{2})$"
+                                        },
+                                        "codDiagnosticoCausaMuerte": {
+                                            "type": "string",
+                                            "pattern": "^(.{0}|.{4,25})$"
+                                        },
+                                        "fechaEgreso": {
+                                            "type": "string",
+                                            "format": "date-time-custom"
+                                        },
+                                        "consecutivo": {
+                                            "type": "integer",
+                                            "minimum": 1,
+                                            "maximum": 9999999
+                                        }
+                                    },
+                                    "required": [
+                                        "codPrestador",
+                                        "fechaInicioAtencion",
+                                        "causaMotivoAtencion",
+                                        "codDiagnosticoPrincipal",
+                                        "codDiagnosticoPrincipalE",
+                                        "codDiagnosticoRelacionadoE1",
+                                        "codDiagnosticoRelacionadoE2",
+                                        "codDiagnosticoRelacionadoE3",
+                                        "condicionDestinoUsuarioEgreso",
+                                        "codDiagnosticoCausaMuerte",
+                                        "fechaEgreso",
+                                        "consecutivo"
+                                    ],
+                                    "additionalProperties": false
+                                }
+                            },
+                            "hospitalizacion": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "codPrestador": {
+                                            "type": "string",
+                                            "pattern": "^(|.{12})$"
+                                        },
+                                        "viaIngresoServicioSalud": {
+                                            "type": "string",
+                                            "pattern": "^(|.{2})$"
+                                        },
+                                        "fechaInicioAtencion": {
+                                            "type": "string",
+                                            "format": "date-time-custom"
+                                        },
+                                        "numAutorizacion": {
+                                            "anyOf": [
+                                                {
+                                                    "type": "null"
+                                                },
+                                                {
+                                                    "type": "string",
+                                                    "pattern": "^(|.{0,30})$"
+                                                }
+                                            ]
+                                        },
+                                        "causaMotivoAtencion": {
+                                            "type": "string",
+                                            "pattern": "^(|.{2})$"
+                                        },
+                                        "codDiagnosticoPrincipal": {
+                                            "type": "string",
+                                            "pattern": "^(|.{4,20})$"
+                                        },
+                                        "codDiagnosticoPrincipalE": {
+                                            "type": "string",
+                                            "pattern": "^(|.{4,25})$"
+                                        },
+                                        "codDiagnosticoRelacionadoE1": {
+                                            "type": "string",
+                                            "pattern": "^(.{0}|.{4,25})$"
+                                        },
+                                        "codDiagnosticoRelacionadoE2": {
+                                            "type": "string",
+                                            "pattern": "^(.{0}|.{4,25})$"
+                                        },
+                                        "codDiagnosticoRelacionadoE3": {
+                                            "type": "string",
+                                            "pattern": "^(.{0}|.{4,25})$"
+                                        },
+                                        "codComplicacion": {
+                                            "type": "string",
+                                            "pattern": "^(.{0}|.{4,25})$"
+                                        },
+                                        "condicionDestinoUsuarioEgreso": {
+                                            "type": "string",
+                                            "pattern": "^(|.{2})$"
+                                        },
+                                        "codDiagnosticoCausaMuerte": {
+                                            "type": "string",
+                                            "pattern": "^(.{0}|.{4,25})$"
+                                        },
+                                        "fechaEgreso": {
+                                            "type": "string",
+                                            "format": "date-time-custom"
+                                        },
+                                        "consecutivo": {
+                                            "type": "integer",
+                                            "minimum": 1,
+                                            "maximum": 9999999
+                                        }
+                                    },
+                                    "required": [
+                                        "codPrestador",
+                                        "viaIngresoServicioSalud",
+                                        "fechaInicioAtencion",
+                                        "numAutorizacion",
+                                        "causaMotivoAtencion",
+                                        "codDiagnosticoPrincipal",
+                                        "codDiagnosticoPrincipalE",
+                                        "codDiagnosticoRelacionadoE1",
+                                        "codDiagnosticoRelacionadoE2",
+                                        "codDiagnosticoRelacionadoE3",
+                                        "codComplicacion",
+                                        "condicionDestinoUsuarioEgreso",
+                                        "codDiagnosticoCausaMuerte",
+                                        "fechaEgreso",
+                                        "consecutivo"
+                                    ],
+                                    "additionalProperties": false
+                                }
+                            },
+                            "recienNacidos": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "codPrestador": {
+                                            "type": "string",
+                                            "pattern": "^(|.{12})$"
+                                        },
+                                        "tipoDocumentoIdentificacion": {
+                                            "type": "string",
+                                            "pattern": "^(|.{2})$"
+                                        },
+                                        "numDocumentoIdentificacion": {
+                                            "type": "integer",
+                                            "pattern": "^(|.{4,20})$"
+                                        },
+                                        "fechaNacimiento": {
+                                            "type": "string",
+                                            "format": "date-time-custom"
+                                        },
+                                        "edadGestacional": {
+                                            "type": "integer",
+                                            "pattern": "^(|.{2})$"
+                                        },
+                                        "numConsultasCPrenatal": {
+                                            "type": "integer",
+                                            "pattern": "^(|.{2})$"
+                                        },
+                                        "codSexoBiologico": {
+                                            "type": "string",
+                                            "pattern": "^(|.{1})$"
+                                        },
+                                        "peso": {
+                                            "type": "integer",
+                                            "pattern": "^(|.{3,4})$"
+                                        },
+                                        "codDiagnosticoPrincipal": {
+                                            "type": "string",
+                                            "pattern": "^(|.{4,25})$"
+                                        },
+                                        "condicionDestinoUsuarioEgreso": {
+                                            "type": "string",
+                                            "pattern": "^(|.{2})$"
+                                        },
+                                        "codDiagnosticoCausaMuerte": {
+                                            "type": "string",
+                                            "pattern": "^(.{0}|.{4,25})$"
+                                        },
+                                        "fechaEgreso": {
+                                            "type": "string",
+                                            "format": "date-time-custom"
+                                        },
+                                        "consecutivo": {
+                                            "type": "integer",
+                                            "minimum": 1,
+                                            "maximum": 9999999
+                                        }
+                                    },
+                                    "required": [
+                                        "codPrestador",
+                                        "tipoDocumentoIdentificacion",
+                                        "numDocumentoIdentificacion",
+                                        "fechaNacimiento",
+                                        "edadGestacional",
+                                        "numConsultasCPrenatal",
+                                        "codSexoBiologico",
+                                        "peso",
+                                        "codDiagnosticoPrincipal",
+                                        "condicionDestinoUsuarioEgreso",
+                                        "codDiagnosticoCausaMuerte",
+                                        "fechaEgreso",
+                                        "consecutivo"
+                                    ],
+                                    "additionalProperties": false
+                                }
+                            },
+                            "medicamentos": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "codPrestador": {
+                                            "type": "string",
+                                            "pattern": "^(.{0}|.{12})$"
+                                        },
+                                        "numAutorizacion": {
+                                            "anyOf": [
+                                                {
+                                                    "type": "null"
+                                                },
+                                                {
+                                                    "type": "string",
+                                                    "pattern": "^(|.{0,30})$"
+                                                }
+                                            ]
+                                        },
+                                        "idMIPRES": {
+                                            "anyOf": [
+                                                {
+                                                    "type": "null"
+                                                },
+                                                {
+                                                    "type": "string",
+                                                    "pattern": "^(|.{0,15})$"
+                                                }
+                                            ]
+                                        },
+                                        "fechaDispensAdmon": {
+                                            "type": "string",
+                                            "format": "date-time-custom"
+                                        },
+                                        "codDiagnosticoPrincipal": {
+                                            "type": "string",
+                                            "pattern": "^(|.{4,25})$"
+                                        },
+                                        "codDiagnosticoRelacionado": {
+                                            "type": "string",
+                                            "pattern": "^(.{0}|.{4,25})$"
+                                        },
+                                        "tipoMedicamento": {
+                                            "type": "string",
+                                            "pattern": "^(|.{2})$"
+                                        },
+                                        "codTecnologiaSalud": {
+                                            "type": "string",
+                                            "pattern": "^(|.{1,20})$"
+                                        },
+                                        "nomTecnologiaSalud": {
+                                            "anyOf": [
+                                                {
+                                                    "type": "null"
+                                                },
+                                                {
+                                                    "type": "string",
+                                                    "pattern": "^(|.{0,30})$"
+                                                }
+                                            ]
+                                        },
+                                        "concentracionMedicamento": {
+                                            "anyOf": [
+                                                {
+                                                    "type": "null"
+                                                },
+                                                {
+                                                    "type": "integer",
+                                                    "pattern": "^(|.{0,3})$"
+                                                }
+                                            ]
+                                        },
+                                        "unidadMedida": {
+                                            "anyOf": [
+                                                {
+                                                    "type": "null"
+                                                },
+                                                {
+                                                    "type": "integer",
+                                                    "pattern": "^(|.{0,4})$"
+                                                }
+                                            ]
+                                        },
+                                        "formaFarmaceutica": {
+                                            "anyOf": [
+                                                {
+                                                    "type": "null"
+                                                },
+                                                {
+                                                    "type": "string",
+                                                    "pattern": "^(.{0}|.{6}|.{8})$"
+                                                }
+                                            ]
+                                        },
+                                        "unidadMinDispensa": {
+                                            "type": "integer",
+                                            "pattern": "^(|.{1,2})$"
+                                        },
+                                        "cantidadMedicamento": {
+                                            "type": "integer",
+                                            "pattern": "^(|.{1,10})$"
+                                        },
+                                        "diasTratamiento": {
+                                            "type": "integer",
+                                            "pattern": "^(|.{1,3})$"
+                                        },
+                                        "tipoDocumentoIdentificacion": {
+                                            "type": "string",
+                                            "pattern": "^(|.{2})$"
+                                        },
+                                        "numDocumentoIdentificacion": {
+                                            "type": "string",
+                                            "pattern": "^(|.{4,20})$"
+                                        },
+                                        "vrUnitMedicamento": {
+                                            "type": "integer",
+                                            "pattern": "^(|.{1,15})$"
+                                        },
+                                        "vrServicio": {
+                                            "type": "integer",
+                                            "pattern": "^(|.{1,15})$"
+                                        },
+                                        "conceptoRecaudo": {
+                                            "type": "string",
+                                            "pattern": "^(|.{2})$"
+                                        },
+                                        "valorPagoModerador": {
+                                            "type": "integer",
+                                            "pattern": "^(|.{1,10})$"
+                                        },
+                                        "numFEVPagoModerador": {
+                                            "anyOf": [
+                                                {
+                                                    "type": "null"
+                                                },
+                                                {
+                                                    "type": "string"
+                                                }
+                                            ]
+                                        },
+                                        "consecutivo": {
+                                            "type": "integer",
+                                            "minimum": 1,
+                                            "maximum": 9999999
+                                        }
+                                    },
+                                    "required": [
+                                        "codPrestador",
+                                        "numAutorizacion",
+                                        "idMIPRES",
+                                        "fechaDispensAdmon",
+                                        "codDiagnosticoPrincipal",
+                                        "codDiagnosticoRelacionado",
+                                        "tipoMedicamento",
+                                        "codTecnologiaSalud",
+                                        "nomTecnologiaSalud",
+                                        "concentracionMedicamento",
+                                        "unidadMedida",
+                                        "formaFarmaceutica",
+                                        "unidadMinDispensa",
+                                        "cantidadMedicamento",
+                                        "tipoDocumentoIdentificacion",
+                                        "numDocumentoIdentificacion",
+                                        "vrUnitMedicamento",
+                                        "vrServicio",
+                                        "conceptoRecaudo",
+                                        "valorPagoModerador",
+                                        "numFEVPagoModerador",
+                                        "consecutivo"
+                                    ],
+                                    "additionalProperties": false
+                                }
+                            },
+                            "otrosServicios": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "codPrestador": {
+                                            "anyOf": [
+                                                {
+                                                    "type": "null"
+                                                },
+                                                {
+                                                    "type": "string",
+                                                    "pattern": "^(.{0}|.{12})$"
+                                                }
+                                            ]
+                                        },
+                                        "numAutorizacion": {
+                                            "type": "string",
+                                            "pattern": "^(|.{0,30})$"
+                                        },
+                                        "idMIPRES": {
+                                            "anyOf": [
+                                                {
+                                                    "type": "null"
+                                                },
+                                                {
+                                                    "type": "string",
+                                                    "pattern": "^(|.{0,15})$"
+                                                }
+                                            ]
+                                        },
+                                        "fechaSuministroTecnologia": {
+                                            "type": "string",
+                                            "format": "date-time-custom"
+                                        },
+                                        "tipoOS": {
+                                            "type": "string",
+                                            "pattern": "^(|.{2})$"
+                                        },
+                                        "codTecnologiaSalud": {
+                                            "type": "string",
+                                            "pattern": "^(|.{1,20})$"
+                                        },
+                                        "nomTecnologiaSalud": {
+                                            "anyOf": [
+                                                {
+                                                    "type": "null"
+                                                },
+                                                {
+                                                    "type": "string",
+                                                    "pattern": "^(|.{0,60})$"
+                                                }
+                                            ]
+                                        },
+                                        "cantidadOS": {
+                                            "type": "integer",
+                                            "pattern": "^(|.{1,5})$"
+                                        },
+                                        "tipoDocumentoIdentificacion": {
+                                            "type": "string",
+                                            "pattern": "^(.{0}|.{2})$"
+                                        },
+                                        "numDocumentoIdentificacion": {
+                                            "type": "string",
+                                            "pattern": "^(.{0}|.{4,20})$"
+                                        },
+                                        "vrUnitOS": {
+                                            "type": "integer",
+                                            "pattern": "^(|.{1,15})$"
+                                        },
+                                        "vrServicio": {
+                                            "type": "integer",
+                                            "pattern": "^(|.{1,15})$"
+                                        },
+                                        "conceptoRecaudo": {
+                                            "type": "string",
+                                            "pattern": "^(|.{2})$"
+                                        },
+                                        "valorPagoModerador": {
+                                            "type": "integer",
+                                            "pattern": "^(|.{1,10})$"
+                                        },
+                                        "numFEVPagoModerador": {
+                                            "anyOf": [
+                                                {
+                                                    "type": "null"
+                                                },
+                                                {
+                                                    "type": "string"
+                                                }
+                                            ]
+                                        },
+                                        "consecutivo": {
+                                            "type": "integer",
+                                            "minimum": 1,
+                                            "maximum": 9999999
+                                        }
+                                    },
+                                    "required": [
+                                        "codPrestador",
+                                        "numAutorizacion",
+                                        "idMIPRES",
+                                        "fechaSuministroTecnologia",
+                                        "tipoOS",
+                                        "codTecnologiaSalud",
+                                        "nomTecnologiaSalud",
+                                        "cantidadOS",
+                                        "tipoDocumentoIdentificacion",
+                                        "numDocumentoIdentificacion",
+                                        "vrUnitOS",
+                                        "vrServicio",
+                                        "conceptoRecaudo",
+                                        "valorPagoModerador",
+                                        "numFEVPagoModerador",
+                                        "consecutivo"
+                                    ],
+                                    "additionalProperties": false
+                                }
+                            }
+                        },
+                        "additionalProperties": false
                     }
-                  },
-                  "required": [
-                    "codPrestador",
+                },
+                "required": [
                     "tipoDocumentoIdentificacion",
                     "numDocumentoIdentificacion",
+                    "tipoUsuario",
                     "fechaNacimiento",
-                    "edadGestacional",
-                    "numConsultasCPrenatal",
-                    "codSexoBiologico",
-                    "peso",
-                    "codDiagnosticoPrincipal",
-                    "condicionDestinoUsuarioEgreso",
-                    "codDiagnosticoCausaMuerte",
-                    "fechaEgreso",
-                    "consecutivo"
-                  ],
-                  "additionalProperties": false
-                }
-              },
-              "medicamentos": {
-                "type": "array",
-                "items": {
-                  "type": "object",
-                  "properties": {
-                    "codPrestador": {
-                      "type": "string",
-                      "pattern": "^(.{0}|.{12})$"
-                    },
-                    "numAutorizacion": {
-                      "anyOf": [
-                        {
-                          "type": "null"
-                        },
-                        {
-                          "type": "string",
-                          "pattern": "^(|.{0,30})$"
-                        }
-                      ]
-                    },
-                    "idMIPRES": {
-                      "anyOf": [
-                        {
-                          "type": "null"
-                        },
-                        {
-                          "type": "string",
-                          "pattern": "^(|.{0,15})$"
-                        }
-                      ]
-                    },
-                    "fechaDispensAdmon": {
-                      "type": "string",
-                      "format": "date-time-custom"
-                    },
-                    "codDiagnosticoPrincipal": {
-                      "type": "string",
-                      "pattern": "^(|.{4,25})$"
-                    },
-                    "codDiagnosticoRelacionado": {
-                      "type": "string",
-                      "pattern": "^(.{0}|.{4,25})$"
-                    },
-                    "tipoMedicamento": {
-                      "type": "string",
-                      "pattern": "^(|.{2})$"
-                    },
-                    "codTecnologiaSalud": {
-                      "type": "string",
-                      "pattern": "^(|.{1,20})$"
-                    },
-                    "nomTecnologiaSalud": {
-                      "anyOf": [
-                        {
-                          "type": "null"
-                        },
-                        {
-                          "type": "string",
-                          "pattern": "^(|.{0,30})$"
-                        }
-                      ]
-                    },
-                    "concentracionMedicamento": {
-                      "anyOf": [
-                        {
-                          "type": "null"
-                        },
-                        {
-                          "type": "integer",
-                          "pattern": "^(|.{0,3})$"
-                        }
-                      ]
-                    },
-                    "unidadMedida": {
-                      "anyOf": [
-                        {
-                          "type": "null"
-                        },
-                        {
-                          "type": "integer",
-                          "pattern": "^(|.{0,4})$"
-                        }
-                      ]
-                    },
-                    "formaFarmaceutica": {
-                      "anyOf": [
-                        {
-                          "type": "null"
-                        },
-                        {
-                          "type": "string",
-                          "pattern": "^(.{0}|.{6}|.{8})$"
-                        }
-                      ]
-                    },
-                    "unidadMinDispensa": {
-                      "type": "integer",
-                      "pattern": "^(|.{1,2})$"
-                    },
-                    "cantidadMedicamento": {
-                      "type": "integer",
-                      "pattern": "^(|.{1,10})$"
-                    },
-                    "diasTratamiento": {
-                      "type": "integer",
-                      "pattern": "^(|.{1,3})$"
-                    },
-                    "tipoDocumentoIdentificacion": {
-                      "type": "string",
-                      "pattern": "^(|.{2})$"
-                    },
-                    "numDocumentoIdentificacion": {
-                      "type": "string",
-                      "pattern": "^(|.{4,20})$"
-                    },
-                    "vrUnitMedicamento": {
-                      "type": "integer",
-                      "pattern": "^(|.{1,15})$"
-                    },
-                    "vrServicio": {
-                      "type": "integer",
-                      "pattern": "^(|.{1,15})$"
-                    },
-                    "conceptoRecaudo": {
-                      "type": "string",
-                      "pattern": "^(|.{2})$"
-                    },
-                    "valorPagoModerador": {
-                      "type": "integer",
-                      "pattern": "^(|.{1,10})$"
-                    },
-                    "numFEVPagoModerador": {
-                      "anyOf": [
-                        {
-                          "type": "null"
-                        },
-                        {
-                          "type": "string"
-                        }
-                      ]
-                    },
-                    "consecutivo": {
-                      "type": "integer",
-                      "minimum": 1,
-                      "maximum": 9999999
-                    }
-                  },
-                  "required": [
-                    "codPrestador",
-                    "numAutorizacion",
-                    "idMIPRES",
-                    "fechaDispensAdmon",
-                    "codDiagnosticoPrincipal",
-                    "codDiagnosticoRelacionado",
-                    "tipoMedicamento",
-                    "codTecnologiaSalud",
-                    "nomTecnologiaSalud",
-                    "concentracionMedicamento",
-                    "unidadMedida",
-                    "formaFarmaceutica",
-                    "unidadMinDispensa",
-                    "cantidadMedicamento",
-                    "tipoDocumentoIdentificacion",
-                    "numDocumentoIdentificacion",
-                    "vrUnitMedicamento",
-                    "vrServicio",
-                    "conceptoRecaudo",
-                    "valorPagoModerador",
-                    "numFEVPagoModerador",
-                    "consecutivo"
-                  ],
-                  "additionalProperties": false
-                }
-              },
-              "otrosServicios": {
-                "type": "array",
-                "items": {
-                  "type": "object",
-                  "properties": {
-                    "codPrestador": {
-                      "anyOf": [
-                        {
-                          "type": "null"
-                        },
-                        {
-                          "type": "string",
-                          "pattern": "^(.{0}|.{12})$"
-                        }
-                      ]
-                    },
-                    "numAutorizacion": {
-                      "type": "string",
-                      "pattern": "^(|.{0,30})$"
-                    },
-                    "idMIPRES": {
-                      "anyOf": [
-                        {
-                          "type": "null"
-                        },
-                        {
-                          "type": "string",
-                          "pattern": "^(|.{0,15})$"
-                        }
-                      ]
-                    },
-                    "fechaSuministroTecnologia": {
-                      "type": "string",
-                      "format": "date-time-custom"
-                    },
-                    "tipoOS": {
-                      "type": "string",
-                      "pattern": "^(|.{2})$"
-                    },
-                    "codTecnologiaSalud": {
-                      "type": "string",
-                      "pattern": "^(|.{1,20})$"
-                    },
-                    "nomTecnologiaSalud": {
-                      "anyOf": [
-                        {
-                          "type": "null"
-                        },
-                        {
-                          "type": "string",
-                          "pattern": "^(|.{0,60})$"
-                        }
-                      ]
-                    },
-                    "cantidadOS": {
-                      "type": "integer",
-                      "pattern": "^(|.{5})$"
-                    },
-                    "tipoDocumentoIdentificacion": {
-                      "type": "string",
-                      "pattern": "^(.{0}|.{2})$"
-                    },
-                    "numDocumentoIdentificacion": {
-                      "type": "string",
-                      "pattern": "^(.{0}|.{4,20})$"
-                    },
-                    "vrUnitOS": {
-                      "type": "integer",
-                      "pattern": "^(|.{1,15})$"
-                    },
-                    "vrServicio": {
-                      "type": "integer",
-                      "pattern": "^(|.{1,15})$"
-                    },
-                    "conceptoRecaudo": {
-                      "type": "string",
-                      "pattern": "^(|.{2})$"
-                    },
-                    "valorPagoModerador": {
-                      "type": "integer",
-                      "pattern": "^(|.{1,10})$"
-                    },
-                    "numFEVPagoModerador": {
-                      "anyOf": [
-                        {
-                          "type": "null"
-                        },
-                        {
-                          "type": "string"
-                        }
-                      ]
-                    },
-                    "consecutivo": {
-                      "type": "integer",
-                      "minimum": 1,
-                      "maximum": 9999999
-                    }
-                  },
-                  "required": [
-                    "codPrestador",
-                    "numAutorizacion",
-                    "idMIPRES",
-                    "fechaSuministroTecnologia",
-                    "tipoOS",
-                    "codTecnologiaSalud",
-                    "nomTecnologiaSalud",
-                    "cantidadOS",
-                    "tipoDocumentoIdentificacion",
-                    "numDocumentoIdentificacion",
-                    "vrUnitOS",
-                    "vrServicio",
-                    "conceptoRecaudo",
-                    "valorPagoModerador",
-                    "numFEVPagoModerador",
-                    "consecutivo"
-                  ],
-                  "additionalProperties": false
-                }
-              }
-            },
-            "additionalProperties": false
-          }
-        },
-        "required": [
-          "tipoDocumentoIdentificacion",
-          "numDocumentoIdentificacion",
-          "tipoUsuario",
-          "fechaNacimiento",
-          "codSexo",
-          "codPaisResidencia",
-          "codMunicipioResidencia",
-          "codZonaTerritorialResidencia",
-          "incapacidad",
-          "consecutivo",
-          "codPaisOrigen"
-        ],
-        "additionalProperties": false
-      }
-    }
-  },
-  "required": [
-    "numDocumentoIdObligado",
-    "numFactura",
-    "tipoNota",
-    "numNota",
-    "usuarios"
-  ],
-  "additionalProperties": false
+                    "codSexo",
+                    "codPaisResidencia",
+                    "codMunicipioResidencia",
+                    "codZonaTerritorialResidencia",
+                    "incapacidad",
+                    "consecutivo",
+                    "codPaisOrigen"
+                ],
+                "additionalProperties": false
+            }
+        }
+    },
+    "required": [
+        "numDocumentoIdObligado",
+        "numFactura",
+        "tipoNota",
+        "numNota",
+        "usuarios"
+    ],
+    "additionalProperties": false
 }

@@ -58,4 +58,9 @@ class Urgency extends Model
     {
         return $this->belongsTo(TipoIdPisis::class, 'tipoDocumentoIdentificacion_id');
     }
+
+    public function condicionDestinoUsuarioEgreso()
+    {
+        return $this->belongsTo(CondicionyDestinoUsuarioEgreso::class, 'condicionDestinoUsuarioEgreso_id');
+    }
 }

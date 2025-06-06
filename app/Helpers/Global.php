@@ -159,7 +159,7 @@ function updateInvoiceServicesJson(string $invoice_id, TypeServiceEnum $serviceT
     $invoice = Invoice::select(['id', 'path_json', 'invoice_number', 'company_id'])->find($invoice_id);
 
     // Define file path
-    $nameFile = $invoice->invoice_number.'.json';
+    $nameFile = $invoice->id.'.json';
     $path = "companies/company_{$invoice->company_id}/invoices/invoice_{$invoice->id}/{$nameFile}";
     $disk = Constants::DISK_FILES;
 

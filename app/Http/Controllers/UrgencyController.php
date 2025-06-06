@@ -29,7 +29,7 @@ class UrgencyController extends Controller
 
             $ripsCausaExternaVersion2 = $this->queryController->selectInfiniteRipsCausaExternaVersion2(request());
             $cie10 = $this->queryController->selectInfiniteCie10(request());
-            $cupsRips = $this->queryController->selectInfiniteCupsRips(request());
+            $condicionyDestinoUsuarioEgreso = $this->queryController->selectInfiniteCondicionyDestinoUsuarioEgreso(request());
 
             $invoice = $this->invoiceRepository->find(request('invoice_id'), select: ['id', 'invoice_date']);
 
@@ -38,7 +38,7 @@ class UrgencyController extends Controller
                 'invoice' => $invoice,
                 ...$cie10,
                 ...$ripsCausaExternaVersion2,
-                ...$cupsRips,
+                ...$condicionyDestinoUsuarioEgreso,
             ];
         });
     }
@@ -61,7 +61,7 @@ class UrgencyController extends Controller
                 'codDiagnosticoRelacionadoE1_id' => $post['codDiagnosticoRelacionadoE1_id'],
                 'codDiagnosticoRelacionadoE2_id' => $post['codDiagnosticoRelacionadoE2_id'],
                 'codDiagnosticoRelacionadoE3_id' => $post['codDiagnosticoRelacionadoE3_id'],
-                'condicionDestinoUsuarioEgreso' => $post['condicionDestinoUsuarioEgreso'],
+                'condicionDestinoUsuarioEgreso_id' => $post['condicionDestinoUsuarioEgreso_id'],
                 'codDiagnosticoCausaMuerte_id' => $post['codDiagnosticoCausaMuerte_id'],
                 'fechaEgreso' => $post['fechaEgreso'],
             ]);
@@ -83,7 +83,7 @@ class UrgencyController extends Controller
 
             // Prepare service data for JSON
             $serviceData = [
-                'codPrestador' => $service->invoice?->serviceVendor?->ips_cod_habilitacion?->codigo,
+                'codPrestador' => $service->invoice?->serviceVendor?->ipsable?->codigo,
                 'fechaInicioAtencion' => Carbon::parse($post['fechaInicioAtencion'])->format('Y-m-d H:i'),
                 'causaMotivoAtencion' => $urgency->causaMotivoAtencion?->codigo,
                 'codDiagnosticoPrincipal' => $urgency->codDiagnosticoPrincipal?->codigo,
@@ -91,7 +91,7 @@ class UrgencyController extends Controller
                 'codDiagnosticoRelacionadoE1' => $urgency->codDiagnosticoRelacionadoE1?->codigo ?? '',
                 'codDiagnosticoRelacionadoE2' => $urgency->codDiagnosticoRelacionadoE2?->codigo ?? '',
                 'codDiagnosticoRelacionadoE3' => $urgency->codDiagnosticoRelacionadoE3?->codigo ?? '',
-                'condicionDestinoUsuarioEgreso' => $post['condicionDestinoUsuarioEgreso'],
+                'condicionDestinoUsuarioEgreso' => $urgency->condicionDestinoUsuarioEgreso?->codigo ?? '',
                 'codDiagnosticoCausaMuerte' => $urgency->codDiagnosticoCausaMuerte?->codigo ?? '',
                 'fechaEgreso' => Carbon::parse($post['fechaEgreso'])->format('Y-m-d H:i'),
                 'consecutivo' => $consecutivo,
@@ -123,7 +123,7 @@ class UrgencyController extends Controller
 
             $ripsCausaExternaVersion2 = $this->queryController->selectInfiniteRipsCausaExternaVersion2(request());
             $cie10 = $this->queryController->selectInfiniteCie10(request());
-            $cupsRips = $this->queryController->selectInfiniteCupsRips(request());
+            $condicionyDestinoUsuarioEgreso = $this->queryController->selectInfiniteCondicionyDestinoUsuarioEgreso(request());
 
             $invoice = $this->invoiceRepository->find(request('invoice_id'), select: ['id', 'invoice_date']);
 
@@ -133,7 +133,7 @@ class UrgencyController extends Controller
                 'invoice' => $invoice,
                 ...$cie10,
                 ...$ripsCausaExternaVersion2,
-                ...$cupsRips,
+                ...$condicionyDestinoUsuarioEgreso,
             ];
         });
     }
@@ -153,7 +153,7 @@ class UrgencyController extends Controller
                 'codDiagnosticoRelacionadoE1_id' => $post['codDiagnosticoRelacionadoE1_id'],
                 'codDiagnosticoRelacionadoE2_id' => $post['codDiagnosticoRelacionadoE2_id'],
                 'codDiagnosticoRelacionadoE3_id' => $post['codDiagnosticoRelacionadoE3_id'],
-                'condicionDestinoUsuarioEgreso' => $post['condicionDestinoUsuarioEgreso'],
+                'condicionDestinoUsuarioEgreso_id' => $post['condicionDestinoUsuarioEgreso_id'],
                 'codDiagnosticoCausaMuerte_id' => $post['codDiagnosticoCausaMuerte_id'],
                 'fechaEgreso' => $post['fechaEgreso'],
             ], $id);
@@ -172,7 +172,7 @@ class UrgencyController extends Controller
 
             // Prepare service data for JSON
             $serviceData = [
-                'codPrestador' => $service->invoice?->serviceVendor?->ips_cod_habilitacion?->codigo,
+                'codPrestador' => $service->invoice?->serviceVendor?->ipsable?->codigo,
                 'fechaInicioAtencion' => Carbon::parse($post['fechaInicioAtencion'])->format('Y-m-d H:i'),
                 'causaMotivoAtencion' => $urgency->causaMotivoAtencion?->codigo,
                 'codDiagnosticoPrincipal' => $urgency->codDiagnosticoPrincipal?->codigo,
@@ -180,7 +180,7 @@ class UrgencyController extends Controller
                 'codDiagnosticoRelacionadoE1' => $urgency->codDiagnosticoRelacionadoE1?->codigo ?? '',
                 'codDiagnosticoRelacionadoE2' => $urgency->codDiagnosticoRelacionadoE2?->codigo ?? '',
                 'codDiagnosticoRelacionadoE3' => $urgency->codDiagnosticoRelacionadoE3?->codigo ?? '',
-                'condicionDestinoUsuarioEgreso' => $post['condicionDestinoUsuarioEgreso'],
+                'condicionDestinoUsuarioEgreso' => $urgency->condicionDestinoUsuarioEgreso?->codigo ?? '',
                 'codDiagnosticoCausaMuerte' => $urgency->codDiagnosticoCausaMuerte?->codigo ?? '',
                 'fechaEgreso' => Carbon::parse($post['fechaEgreso'])->format('Y-m-d H:i'),
                 'consecutivo' => $consecutivo,
