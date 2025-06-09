@@ -245,22 +245,23 @@ class InvoiceController extends Controller
     public function update(InvoiceStoreRequest $request, $id)
     {
         return $this->runTransaction(function () use ($request) {
+           
 
             $post = $request->except(['entity', 'patient', 'tipoNota', 'serviceVendor', 'soat', 'value_paid', 'total', 'remaining_balance', 'value_glosa']);
-            $type = $request->input('type');
+             $type = $request->input('type');
 
-            $infoDataExtra = $this->saveDataExtraInvoice($type, $request->all());
+             $infoDataExtra = $this->saveDataExtraInvoice($type, $request->all());
 
             $post['typeable_type'] = $infoDataExtra['model'];
             $post['typeable_id'] = $infoDataExtra['id'];
 
-            $invoiceOld = $this->invoiceRepository->find($post['id']);
+             $invoiceOld = $this->invoiceRepository->find($post['id']);
 
-            if ($invoiceOld->type->value == 'INVOICE_TYPE_002') {
-                $invoiceOld->typeable()->delete();
-            }
+            // if ($invoiceOld->type->value == 'INVOICE_TYPE_002') {
+            //     $invoiceOld->typeable()->delete();
+            // }
 
-            $invoice = $this->invoiceRepository->store($post);
+             $invoice = $this->invoiceRepository->store($post);
 
             // Build JSON structure
             $jsonData = $this->buildInvoiceJson($invoice->id);
@@ -292,8 +293,12 @@ class InvoiceController extends Controller
 
             $dataSoat = array_merge($request['soat'], ['company_id' => $request['company_id']]);
 
+
+            unset($dataSoat['model']);
+            logMessage("dataSoat");
+            logMessage($dataSoat);
             // Store POLICY and invoice
-            $element = $this->invoiceSoatRepository->store($dataSoat);
+              $element = $this->invoiceSoatRepository->store($dataSoat);
             $element['model'] = TypeInvoiceEnum::INVOICE_TYPE_002->model();
         }
 
