@@ -8,9 +8,11 @@ use App\Http\Requests\GlosaAnswer\GlosaAnswerStoreRequest;
 use App\Http\Resources\GlosaAnswer\GlosaAnswerFormResource;
 use App\Http\Resources\GlosaAnswer\GlosaAnswerPaginateResource;
 use App\Repositories\GlosaAnswerRepository;
+use App\Repositories\GlosaRepository;
 use App\Repositories\ServiceRepository;
 use App\Traits\HttpResponseTrait;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 
 class GlosaAnswerController extends Controller
 {
@@ -18,6 +20,7 @@ class GlosaAnswerController extends Controller
 
     public function __construct(
         protected GlosaAnswerRepository $answerRepository,
+        protected GlosaRepository $glosaRepository,
         protected ServiceRepository $serviceRepository,
         protected QueryController $queryController,
     ) {}
@@ -39,9 +42,9 @@ class GlosaAnswerController extends Controller
         });
     }
 
-    public function create()
+    public function create(Request $request)
     {
-        return $this->execute(function () {
+        return $this->execute(function () use ($request) {
 
             $statusGlosaAnswerEnumValues = array_map(function ($case) {
                 return [
@@ -50,9 +53,13 @@ class GlosaAnswerController extends Controller
                 ];
             }, StatusGlosaAnswerEnum::cases());
 
+            $glosa = $this->glosaRepository->find($request->input('glosa_id'));
+            $glosa_date = Carbon::parse($glosa->date)->format('Y-m-d H:i');
+
             return [
                 'code' => 200,
                 'statusGlosaAnswerEnumValues' => $statusGlosaAnswerEnumValues,
+                'glosa_date' => $glosa_date,
             ];
         });
     }
@@ -65,7 +72,7 @@ class GlosaAnswerController extends Controller
 
             if ($request->file('file')) {
                 $file = $request->file('file');
-                $ruta = 'companies/company_'.$answer->company_id.'/respuestas/respuesta_'.$answer->id.$request->input('file');
+                $ruta = 'companies/company_' . $answer->company_id . '/respuestas/respuesta_' . $answer->id . $request->input('file');
 
                 $file = $file->store($ruta, Constants::DISK_FILES);
                 $answer->file = $file;
@@ -79,9 +86,9 @@ class GlosaAnswerController extends Controller
         });
     }
 
-    public function edit($id)
+    public function edit(Request $request, $id)
     {
-        return $this->execute(function () use ($id) {
+        return $this->execute(function () use ($request, $id) {
 
             $answer = $this->answerRepository->find($id);
             $form = new GlosaAnswerFormResource($answer);
@@ -92,11 +99,14 @@ class GlosaAnswerController extends Controller
                     'title' => $case->description(),
                 ];
             }, StatusGlosaAnswerEnum::cases());
+            $glosa = $this->glosaRepository->find($request->input('glosa_id'));
+            $glosa_date = Carbon::parse($glosa->date)->format('Y-m-d H:i');
 
             return [
                 'code' => 200,
                 'form' => $form,
                 'statusGlosaAnswerEnumValues' => $statusGlosaAnswerEnumValues,
+                'glosa_date' => $glosa_date,
             ];
         });
     }
@@ -110,7 +120,7 @@ class GlosaAnswerController extends Controller
 
             if ($request->file('file')) {
                 $file = $request->file('file');
-                $ruta = 'companies/company_'.$answer->company_id.'/respuestas/respuesta_'.$answer->id.$request->input('file');
+                $ruta = 'companies/company_' . $answer->company_id . '/respuestas/respuesta_' . $answer->id . $request->input('file');
 
                 $file = $file->store($ruta, Constants::DISK_FILES);
                 $answer->file = $file;

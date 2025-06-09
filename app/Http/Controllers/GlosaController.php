@@ -13,6 +13,7 @@ use App\Repositories\InvoiceRepository;
 use App\Repositories\ServiceRepository;
 use App\Traits\HttpResponseTrait;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 
 class GlosaController extends Controller
 {
@@ -64,7 +65,7 @@ class GlosaController extends Controller
             ];
 
             $invoice = $this->invoiceRepository->find($request->input('invoice_id'));
-            $radication_date = $invoice->radication_date;
+            $radication_date = Carbon::parse($invoice->radication_date)->format('Y-m-d H:i');
 
             return [
                 'code' => 200,
@@ -122,7 +123,7 @@ class GlosaController extends Controller
             $typeCodeGlosa = $this->queryController->selectInfiniteTypeCodeGlosa(request());
 
             $invoice = $this->invoiceRepository->find($request->input('invoice_id'));
-            $radication_date = $invoice->radication_date;
+            $radication_date = Carbon::parse($invoice->radication_date)->format('d-m-Y H:i');
 
             return [
                 'code' => 200,
