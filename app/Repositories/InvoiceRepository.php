@@ -155,6 +155,9 @@ class InvoiceRepository extends BaseRepository
     {
         $data = $this->model
             ->where(function ($query) use ($request) {
+                if (! empty($request['id'])) {
+                    $query->where('id', $request['id']);
+                }
                 if (! empty($request['company_id'])) {
                     $query->where('company_id', $request['company_id']);
                 }
