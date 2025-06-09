@@ -21,6 +21,8 @@ class InvoiceSoatRepository extends BaseRepository
         if (! empty($idToUse)) {
             $data = $this->model->find($idToUse);
         } else {
+            logMessage("crear");
+
             $data = $this->model::newModelInstance();
         }
 

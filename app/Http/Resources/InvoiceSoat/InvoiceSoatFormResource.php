@@ -4,6 +4,8 @@ namespace App\Http\Resources\InvoiceSoat;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use App\Http\Resources\InsuranceStatus\InsuranceStatusSelectResource;
+
 
 class InvoiceSoatFormResource extends JsonResource
 {
@@ -17,10 +19,11 @@ class InvoiceSoatFormResource extends JsonResource
 
         return [
             'id' => $this->id,
-            'soat_number' => $this->soat_number,
+            'policy_number' => $this->policy_number,
             'accident_date' => $this->accident_date,
             'start_date' => $this->start_date,
             'end_date' => $this->end_date,
+            'insurance_statuse_id' => new InsuranceStatusSelectResource($this->insurance_statuse),
         ];
     }
 }
