@@ -18,6 +18,7 @@ class InvoiceListResource extends JsonResource
         return [
             'id' => $this->id,
             'serviceVendor_nit' => $this->serviceVendor?->nit,
+
             'entity_name' => $this->entity?->corporate_name,
             'invoice_number' => $this->invoice_number,
             'type' => $this->type,
