@@ -9,6 +9,7 @@ use App\Http\Resources\Glosa\GlosaFormResource;
 use App\Http\Resources\Glosa\GlosaPaginateResource;
 use App\Repositories\CodeGlosaRepository;
 use App\Repositories\GlosaRepository;
+use App\Repositories\InvoiceRepository;
 use App\Repositories\ServiceRepository;
 use App\Traits\HttpResponseTrait;
 use Illuminate\Http\Request;
@@ -22,6 +23,7 @@ class GlosaController extends Controller
         protected GlosaRepository $glosaRepository,
         protected ServiceRepository $serviceRepository,
         protected QueryController $queryController,
+        protected InvoiceRepository $invoiceRepository,
     ) {}
 
     public function paginate(Request $request)
@@ -41,9 +43,9 @@ class GlosaController extends Controller
         });
     }
 
-    public function create()
+    public function create(Request $request)
     {
-        return $this->execute(function () {
+        return $this->execute(function () use ($request) {
 
             $filter = new Request([
                 'type_code_glosa_id' => 1,
@@ -61,10 +63,14 @@ class GlosaController extends Controller
                 'codeGlosa2' => $codeGlosa2,
             ];
 
+            $invoice = $this->invoiceRepository->find($request->input('invoice_id'));
+            $radication_date = $invoice->radication_date;
+
             return [
                 'code' => 200,
                 ...$codeGlosa,
                 ...$typeCodeGlosa,
+                'radication_date' => $radication_date,
             ];
         });
     }
@@ -78,7 +84,7 @@ class GlosaController extends Controller
 
             if ($request->file('file')) {
                 $file = $request->file('file');
-                $ruta = 'companies/company_'.$glosa->company_id.'/glosas/glosa_'.$glosa->id.$request->input('file');
+                $ruta = 'companies/company_' . $glosa->company_id . '/glosas/glosa_' . $glosa->id . $request->input('file');
 
                 $file = $file->store($ruta, Constants::DISK_FILES);
                 $glosa->file = $file;
@@ -92,9 +98,9 @@ class GlosaController extends Controller
         });
     }
 
-    public function edit($id)
+    public function edit(Request $request, $id)
     {
-        return $this->execute(function () use ($id) {
+        return $this->execute(function () use ($request, $id) {
 
             $glosa = $this->glosaRepository->find($id);
             $form = new GlosaFormResource($glosa);
@@ -115,12 +121,16 @@ class GlosaController extends Controller
 
             $typeCodeGlosa = $this->queryController->selectInfiniteTypeCodeGlosa(request());
 
+            $invoice = $this->invoiceRepository->find($request->input('invoice_id'));
+            $radication_date = $invoice->radication_date;
+
             return [
                 'code' => 200,
                 'form' => $form,
                 'type_code_glosa_id' => $glosa->code_glosa->generalCodeGlosa->type_code_glosa_id,
                 ...$codeGlosa,
                 ...$typeCodeGlosa,
+                'radication_date' => $radication_date,
             ];
         });
     }
@@ -148,7 +158,7 @@ class GlosaController extends Controller
 
             if ($request->file('file')) {
                 $file = $request->file('file');
-                $ruta = 'companies/company_'.$glosa->company_id.'/glosas/glosa_'.$glosa->id.$request->input('file');
+                $ruta = 'companies/company_' . $glosa->company_id . '/glosas/glosa_' . $glosa->id . $request->input('file');
 
                 $file = $file->store($ruta, Constants::DISK_FILES);
                 $glosa->file = $file;
@@ -216,9 +226,9 @@ class GlosaController extends Controller
 
                     $glosa = $this->glosaRepository->store($data);
 
-                    if ($request->file('file_file'.$key)) {
-                        $file = $request->file('file_file'.$key);
-                        $ruta = 'companies/company_'.$glosa->company_id.'/glosas/glosa_'.$glosa->id.$request->input('file_file'.$key);
+                    if ($request->file('file_file' . $key)) {
+                        $file = $request->file('file_file' . $key);
+                        $ruta = 'companies/company_' . $glosa->company_id . '/glosas/glosa_' . $glosa->id . $request->input('file_file' . $key);
 
                         $file = $file->store($ruta, Constants::DISK_FILES);
                         $glosa->file = $file;

@@ -248,7 +248,7 @@ function getNextConsecutivo(string $invoice_id, TypeServiceEnum $typeService)
 {
     // Check JSON first
     $invoice = Invoice::select(['id', 'path_json', 'invoice_number', 'company_id'])->find($invoice_id);
-    $path = "companies/company_{$invoice->company_id}/invoices/invoice_{$invoice->id}/{$invoice->invoice_number}.json";
+    $path = "companies/company_{$invoice->company_id}/invoices/invoice_{$invoice->id}/{$invoice->id}.json";
     $disk = Constants::DISK_FILES;
 
     $maxConsecutivo = 0;
