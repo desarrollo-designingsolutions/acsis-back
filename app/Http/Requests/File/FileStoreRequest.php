@@ -33,7 +33,7 @@ class FileStoreRequest extends FormRequest
         ];
 
         if ($this->id && $this->file) {
-            $rules['file'] = 'required|file|max:3048|extensions:jpg,jpeg,png,doc,docx,xls,xlsx,pdf,ppt,pptx'; // Ejemplo: permitir JPEG, PNG, PDF, DOC, DOCX; tamaño máximo 30MB
+            $rules['file'] = 'required|file|max:30720|extensions:jpg,jpeg,png,doc,docx,xls,xlsx,pdf,ppt,pptx'; // Ejemplo: permitir JPEG, PNG, PDF, DOC, DOCX; tamaño máximo 30MB
         }
 
         return $rules;
