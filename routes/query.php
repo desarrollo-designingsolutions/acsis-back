@@ -59,3 +59,14 @@ Route::post('/selectInfiniteUpr', [QueryController::class, 'selectInfiniteUpr'])
 Route::post('/selectInfiniteFfm', [QueryController::class, 'selectInfiniteFfm']);
 Route::post('/selectInfiniteDci', [QueryController::class, 'selectInfiniteDci']);
 Route::post('/selectInfiniteIum', [QueryController::class, 'selectInfiniteIum']);
+
+Route::post('/selectRgoResponseEnum', [QueryController::class, 'selectRgoResponseEnum']);
+Route::post('/selectVictimConditionEnum', [QueryController::class, 'selectVictimConditionEnum']);
+Route::post('/selectEventNatureEnum', [QueryController::class, 'selectEventNatureEnum']);
+Route::post('/selectEventZoneEnum', [QueryController::class, 'selectEventZoneEnum']);
+Route::post('/selectReferenceTypeEnum', [QueryController::class, 'selectReferenceTypeEnum']);
+Route::post('/selectVehicleTypeEnum', [QueryController::class, 'selectVehicleTypeEnum']);
+Route::post('/selectYesNoEnum', [QueryController::class, 'selectYesNoEnum']);
+Route::post('/selectSurgicalComplexityEnum', [QueryController::class, 'selectSurgicalComplexityEnum']);
+Route::post('/selectTransportServiceTypeEnum', [QueryController::class, 'selectTransportServiceTypeEnum']);
+Route::post('/selectPickupZoneEnum', [QueryController::class, 'selectPickupZoneEnum']);

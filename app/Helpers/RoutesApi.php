@@ -27,5 +27,6 @@ class RoutesApi
         'routes/patient.php',
         'routes/dashboard.php',
         'routes/glosaAnswer.php',
+        'routes/furips1.php',
     ];
 }

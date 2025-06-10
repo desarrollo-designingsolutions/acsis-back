@@ -12,6 +12,8 @@ class Cie10Import implements ToCollection, WithChunkReading
 {
     use Importable;
 
+    private $isFirstChunk = true;
+
     protected $maxRecords; // Maximum number of records to process (null for all)
 
     protected $processedRecords = 0; // Counter for processed records
@@ -42,8 +44,10 @@ class Cie10Import implements ToCollection, WithChunkReading
     {
         $batch = [];
 
-        // Skip the first row if it contains headers
-        $rows = $rows->skip(1);
+        if ($this->isFirstChunk) {
+            $rows = $rows->skip(1);
+            $this->isFirstChunk = false;
+        }
 
         foreach ($rows as $row) {
             // Stop if we've processed the maximum number of records (if set)
