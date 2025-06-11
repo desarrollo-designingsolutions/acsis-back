@@ -2,18 +2,18 @@
 
 namespace Database\Seeders;
 
-use App\Imports\Seeders\PaisImport;
+use App\Imports\Seeders\DepartamentoImport;
 use Illuminate\Database\Seeder;
 use Maatwebsite\Excel\Facades\Excel;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 
-class PaisSeeder extends Seeder
+class DepartamentoSeeder extends Seeder
 {
     public function run(): void
     {
         try {
             $filesPath = [
-                database_path('db/TablaReferencia_Pais1__1.xlsx'),
+                database_path('db/TablaReferencia_Departamento__1.xlsx'),
             ];
 
             foreach ($filesPath as $key => $path) {
@@ -29,7 +29,7 @@ class PaisSeeder extends Seeder
                 $bar->start();
 
                 // Instantiate import with maxRecords
-                $import = new PaisImport($maxRecords);
+                $import = new DepartamentoImport($maxRecords);
                 $import->withProgressBar($bar);
 
                 Excel::import($import, $path, null, \Maatwebsite\Excel\Excel::XLSX, [

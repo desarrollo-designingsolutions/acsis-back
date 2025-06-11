@@ -28,8 +28,8 @@ class InvoiceRepository extends BaseRepository
 
         return $this->cacheService->remember($cacheKey, function () use ($request) {
             $query = QueryBuilder::for($this->model->query())
-                ->with(['patient', 'entity', "serviceVendor"])
-                ->select(['invoices.id', 'invoices.entity_id', 'invoices.type', 'invoices.patient_id', 'invoices.invoice_number', 'invoices.radication_number', 'invoices.value_glosa', 'invoices.value_paid', 'invoices.invoice_date', 'invoices.radication_date', 'invoices.is_active', 'invoices.status', 'invoices.status_xml', 'invoices.path_xml','invoices.service_vendor_id'])
+                ->with(['patient', 'entity', "serviceVendor", "furips1"])
+                ->select(['invoices.id', 'invoices.entity_id', 'invoices.type', 'invoices.patient_id', 'invoices.invoice_number', 'invoices.radication_number', 'invoices.value_glosa', 'invoices.value_paid', 'invoices.invoice_date', 'invoices.radication_date', 'invoices.is_active', 'invoices.status', 'invoices.status_xml', 'invoices.path_xml', 'invoices.service_vendor_id'])
                 ->allowedFilters([
 
                     AllowedFilter::callback('inputGeneral', function ($query, $value) {

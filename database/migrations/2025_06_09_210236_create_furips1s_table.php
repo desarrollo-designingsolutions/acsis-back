@@ -13,73 +13,99 @@ return new class extends Migration
     {
         Schema::create('furips1s', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->foreignId('user_id')->nullable()->constrained()->onDelete('cascade');
-            $table->string('previous_filing_number')->nullable();
-            $table->string('rgo_response')->nullable();
-            $table->string('consecutive_claim_number')->nullable();
-            $table->string('victim_residence_address')->nullable();
-            $table->string('victim_phone')->nullable();
-            $table->string('victim_condition')->nullable();
-            $table->string('event_nature')->nullable();
-            $table->string('other_event_description')->nullable();
-            $table->string('event_occurrence_address')->nullable();
-            $table->string('event_occurrence_date')->nullable();
-            $table->string('event_occurrence_time')->nullable();
-            $table->string('event_department_code')->nullable();
-            $table->string('event_municipality_code')->nullable();
-            $table->string('event_zone')->nullable();
-            $table->string('reference_type')->nullable();
-            $table->string('referral_date')->nullable();
-            $table->string('departure_time')->nullable();
-            $table->string('referring_health_provider_code')->nullable();
-            $table->string('referring_professional')->nullable();
-            $table->string('referring_person_position')->nullable();
-            $table->string('admission_date')->nullable();
-            $table->string('admission_time')->nullable();
-            $table->string('receiving_health_provider_code')->nullable();
-            $table->string('receiving_professional')->nullable();
-            $table->string('interinstitutional_transfer_ambulance_plate')->nullable();
-            $table->string('vehicle_brand')->nullable();
-            $table->string('vehicle_plate')->nullable();
-            $table->string('vehicle_type')->nullable();
-            $table->string('siras_filing_number')->nullable();
-            $table->string('insurer_cap_exhaustion_charge')->nullable();
-            $table->string('surgical_procedure_complexity')->nullable();
-            $table->string('owner_document_type')->nullable();
-            $table->string('owner_document_number')->nullable();
-            $table->string('owner_first_last_name')->nullable();
-            $table->string('owner_second_last_name')->nullable();
-            $table->string('owner_first_name')->nullable();
-            $table->string('owner_second_name')->nullable();
-            $table->string('owner_residence_address')->nullable();
-            $table->string('owner_residence_phone')->nullable();
-            $table->string('owner_residence_department_code')->nullable();
-            $table->string('owner_residence_municipality_code')->nullable();
-            $table->string('driver_first_last_name')->nullable();
-            $table->string('driver_second_last_name')->nullable();
-            $table->string('driver_first_name')->nullable();
-            $table->string('driver_second_name')->nullable();
-            $table->string('driver_document_type')->nullable();
-            $table->string('driver_document_number')->nullable();
-            $table->string('driver_residence_address')->nullable();
-            $table->string('driver_residence_department_code')->nullable();
-            $table->string('driver_residence_municipality_code')->nullable();
-            $table->string('driver_residence_phone')->nullable();
-            $table->string('primary_transfer_ambulance_plate')->nullable();
-            $table->string('victim_transport_from_event_site')->nullable();
-            $table->string('victim_transport_to_end')->nullable();
-            $table->string('transport_service_type')->nullable();
-            $table->string('victim_pickup_zone')->nullable();
-            $table->string('doctor_first_last_name')->nullable();
-            $table->string('doctor_second_last_name')->nullable();
-            $table->string('doctor_first_name')->nullable();
-            $table->string('doctor_second_name')->nullable();
-            $table->string('doctor_registration_number')->nullable();
-            $table->string('total_billed_medical_surgical')->nullable();
-            $table->string('total_claimed_medical_surgical')->nullable();
-            $table->string('total_billed_transport')->nullable();
-            $table->string('total_claimed_transport')->nullable();
-            $table->string('enabled_services_confirmation')->nullable();
+            $table->foreignUuid('invoice_id')->nullable()->constrained();
+
+
+            // Datos de la reclamación
+            $table->string('previousFilingNumber', 10)->nullable();
+            $table->string('rgoResponse')->nullable();
+            $table->string('consecutiveClaimNumber', 12)->nullable();
+
+            // Datos de la víctima
+            $table->string('victimResidenceAddress', 40)->nullable();
+            $table->string('victimPhone', 10)->nullable();
+            $table->string('victimCondition')->nullable();
+
+            // Datos del sitio del evento
+            $table->string('eventNature')->nullable();
+            $table->string('otherEventDescription', 25)->nullable();
+            $table->string('eventOccurrenceAddress', 40)->nullable();
+            $table->string('eventOccurrenceDate')->nullable();
+            $table->string('eventOccurrenceTime')->nullable();
+            $table->foreignUuid('eventDepartmentCode_id')->nullable()->constrained("departamentos");
+            $table->foreignUuid('eventMunicipalityCode_id')->nullable()->constrained("municipios");
+            $table->string('eventZone')->nullable();
+
+            // Datos de remisión
+            $table->string('referenceType')->nullable();
+            $table->string('referralDate')->nullable();
+            $table->string('departureTime')->nullable();
+            $table->foreignUuid('referringHealthProviderCode_id')->nullable()->constrained("ips_cod_habilitacions");
+            $table->string('referringProfessional', 60)->nullable();
+            $table->string('referringPersonPosition', 30)->nullable();
+            $table->string('admissionDate')->nullable();
+            $table->string('admissionTime')->nullable();
+            $table->foreignUuid('receivingHealthProviderCode_id')->nullable()->constrained("ips_cod_habilitacions");
+            $table->string('receivingProfessional', 60)->nullable();
+            $table->string('interinstitutionalTransferAmbulancePlate', 6)->nullable();
+
+            // Datos del vehículo
+            $table->string('vehicleBrand', 15)->nullable();
+            $table->string('vehiclePlate', 10)->nullable();
+            $table->string('vehicleType')->nullable();
+            $table->string('sirasFilingNumber', 20)->nullable();
+            $table->string('insurerCapExhaustionCharge')->nullable();
+
+            // Datos relacionados con la atención
+            $table->string('surgicalProcedureComplexity')->nullable();
+
+            // Datos del propietario
+            $table->foreignUuid('ownerDocumentType_id')->nullable()->constrained("tipo_id_pisis");
+            $table->string('ownerDocumentNumber', 16)->nullable();
+            $table->string('ownerFirstLastName', 40)->nullable();
+            $table->string('ownerSecondLastName', 30)->nullable();
+            $table->string('ownerFirstName', 20)->nullable();
+            $table->string('ownerSecondName', 30)->nullable();
+            $table->string('ownerResidenceAddress', 40)->nullable();
+            $table->string('ownerResidencePhone', 10)->nullable();
+            $table->foreignUuid('ownerResidenceDepartmentCode_id')->nullable()->constrained("departamentos");
+            $table->foreignUuid('ownerResidenceMunicipalityCode_id')->nullable()->constrained("municipios");
+
+            // Datos del conductor
+            $table->string('driverFirstLastName', 20)->nullable();
+            $table->string('driverSecondLastName', 30)->nullable();
+            $table->string('driverFirstName', 20)->nullable();
+            $table->string('driverSecondName', 30)->nullable();
+            $table->foreignUuid('driverDocumentType_id')->nullable()->constrained("tipo_id_pisis");
+            $table->string('driverDocumentNumber', 16)->nullable();
+            $table->string('driverResidenceAddress', 40)->nullable();
+            $table->foreignUuid('driverResidenceDepartmentCode_id')->nullable()->constrained("departamentos");
+            $table->foreignUuid('driverResidenceMunicipalityCode_id')->nullable()->constrained("municipios");
+            $table->string('driverResidencePhone', 10)->nullable();
+
+            // Transporte y movilización
+            $table->string('primaryTransferAmbulancePlate', 6)->nullable();
+            $table->string('victimTransportFromEventSite', 40)->nullable();
+            $table->string('victimTransportToEnd', 40)->nullable();
+            $table->string('transportServiceType')->nullable();
+            $table->string('victimPickupZone')->nullable();
+
+            // Datos del médico
+            $table->string('doctorFirstLastName', 20)->nullable();
+            $table->string('doctorSecondLastName', 30)->nullable();
+            $table->string('doctorFirstName', 20)->nullable();
+            $table->string('doctorSecondName', 30)->nullable();
+            $table->string('doctorRegistrationNumber', 16)->nullable();
+
+            // Amparos que reclama
+            $table->string('totalBilledMedicalSurgical', 15)->nullable();
+            $table->string('totalClaimedMedicalSurgical', 15)->nullable();
+            $table->string('totalBilledTransport', 15)->nullable();
+            $table->string('totalClaimedTransport', 15)->nullable();
+
+            // Confirmación servicios habilitados
+            $table->string('enabledServicesConfirmation')->nullable();
+
             $table->timestamps();
             $table->softDeletes();
         });

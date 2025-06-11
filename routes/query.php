@@ -27,6 +27,7 @@ Route::post('/selectInfiniteTipoUsuario', [QueryController::class, 'selectInfini
 Route::post('/selectInfiniteSexo', [QueryController::class, 'selectInfiniteSexo']);
 Route::post('/selectInfinitePais', [QueryController::class, 'selectInfinitePais']);
 Route::post('/selectInfiniteMunicipio', [QueryController::class, 'selectInfiniteMunicipio']);
+Route::post('/selectInfiniteDepartamento', [QueryController::class, 'selectInfiniteDepartamento']);
 Route::post('/selectInfiniteZonaVersion2', [QueryController::class, 'selectInfiniteZonaVersion2']);
 
 Route::post('/selectInfiniteTipoOtrosServicios', [QueryController::class, 'selectInfiniteTipoOtrosServicios']);

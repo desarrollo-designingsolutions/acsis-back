@@ -59,6 +59,10 @@ class Furips1Controller extends Controller
             $surgicalComplexityEnum = $this->queryController->selectSurgicalComplexityEnum(request());
             $transportServiceTypeEnum = $this->queryController->selectTransportServiceTypeEnum(request());
             $pickupZoneEnum = $this->queryController->selectPickupZoneEnum(request());
+            $pais = $this->queryController->selectInfinitePais(request());
+            $municipio = $this->queryController->selectInfiniteMunicipio(request());
+            $departamento = $this->queryController->selectInfiniteDepartamento(request());
+
 
             $newRequest = new Request(['codigo_in' => Constants::CODS_SELECT_FORM_FURIPS1_OWNERDOCUMENTTYPE]);
             $tipoIdPisis1 = $this->queryController->selectInfiniteTipoIdPisis($newRequest);
@@ -85,6 +89,9 @@ class Furips1Controller extends Controller
                 ...$tipoIdPisis,
                 ...$transportServiceTypeEnum,
                 ...$pickupZoneEnum,
+                ...$pais,
+                ...$municipio,
+                ...$departamento,
             ];
         });
     }
@@ -99,7 +106,8 @@ class Furips1Controller extends Controller
 
             return [
                 'code' => 200,
-                'message' => 'Furips1 agregada correctamente',
+                'message' => 'Furips1 agregado correctamente',
+                'furips1' => $furips1,
             ];
         });
     }
@@ -111,9 +119,57 @@ class Furips1Controller extends Controller
             $furips1 = $this->furips1Repository->find($id);
             $form = new Furips1FormResource($furips1);
 
+            $invoice = $this->invoiceRepository->find($furips1->invoice_id, with: ["typeable:id,insurance_statuse_id", "typeable.insurance_statuse:id,code"], select: ['id', 'type', 'typeable_type', 'typeable_id']);
+            $invoice = [
+                "id" => $invoice->id,
+                "insurance_statuse_code" => $invoice->typeable?->insurance_statuse?->code,
+            ];
+
+            $rgoResponseEnum = $this->queryController->selectRgoResponseEnum(request());
+            $victimConditionEnum = $this->queryController->selectVictimConditionEnum(request());
+            $eventNatureEnum = $this->queryController->selectEventNatureEnum(request());
+            $eventZoneEnum = $this->queryController->selectEventZoneEnum(request());
+            $referenceTypeEnum = $this->queryController->selectReferenceTypeEnum(request());
+            $ipsCodHabilitacion = $this->queryController->selectInfiniteIpsCodHabilitacion(request());
+            $vehicleTypeEnum = $this->queryController->selectVehicleTypeEnum(request());
+            $yesNoEnum = $this->queryController->selectYesNoEnum(request());
+            $surgicalComplexityEnum = $this->queryController->selectSurgicalComplexityEnum(request());
+            $transportServiceTypeEnum = $this->queryController->selectTransportServiceTypeEnum(request());
+            $pickupZoneEnum = $this->queryController->selectPickupZoneEnum(request());
+            $pais = $this->queryController->selectInfinitePais(request());
+            $municipio = $this->queryController->selectInfiniteMunicipio(request());
+            $departamento = $this->queryController->selectInfiniteDepartamento(request());
+
+
+            $newRequest = new Request(['codigo_in' => Constants::CODS_SELECT_FORM_FURIPS1_OWNERDOCUMENTTYPE]);
+            $tipoIdPisis1 = $this->queryController->selectInfiniteTipoIdPisis($newRequest);
+
+            $newRequest = new Request(['codigo_in' => Constants::CODS_SELECT_FORM_FURIPS1_DRIVERDOCUMENTTYPE]);
+            $tipoIdPisis2 = $this->queryController->selectInfiniteTipoIdPisis($newRequest);
+
+            $tipoIdPisis = [
+                "ownerDocumentType_arrayInfo" => $tipoIdPisis1["tipoIdPisis_arrayInfo"],
+                "driverDocumentType_arrayInfo" => $tipoIdPisis2["tipoIdPisis_arrayInfo"],
+            ];
             return [
                 'code' => 200,
                 'form' => $form,
+                'invoice' => $invoice,
+                ...$rgoResponseEnum,
+                ...$victimConditionEnum,
+                ...$eventNatureEnum,
+                ...$eventZoneEnum,
+                ...$referenceTypeEnum,
+                ...$ipsCodHabilitacion,
+                ...$vehicleTypeEnum,
+                ...$yesNoEnum,
+                ...$surgicalComplexityEnum,
+                ...$tipoIdPisis,
+                ...$transportServiceTypeEnum,
+                ...$pickupZoneEnum,
+                ...$pais,
+                ...$municipio,
+                ...$departamento,
             ];
         });
     }

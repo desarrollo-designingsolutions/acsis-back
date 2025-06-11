@@ -26,8 +26,7 @@ class Furips1StoreRequest extends FormRequest
     {
 
         $rules = [
-            'user_id' => 'required',
-            'company_id' => 'required',
+            'invoice_id' => 'required',
         ];
 
         return $rules;
@@ -36,8 +35,7 @@ class Furips1StoreRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'user_id.required' => 'El campo es obligatorio',
-            'company_id.required' => 'El campo es obligatorio',
+            'invoice_id.required' => 'El campo es obligatorio',
 
         ];
     }
@@ -45,6 +43,39 @@ class Furips1StoreRequest extends FormRequest
     protected function prepareForValidation(): void
     {
         $merge = [];
+
+        if ($this->has('driverDocumentType')) {
+            $merge['driverDocumentType'] = getValueSelectInfinite($this->driverDocumentType);
+        }
+        if ($this->has('driverResidenceDepartmentCode')) {
+            $merge['driverResidenceDepartmentCode'] = getValueSelectInfinite($this->driverResidenceDepartmentCode);
+        }
+        if ($this->has('driverResidenceMunicipalityCode')) {
+            $merge['driverResidenceMunicipalityCode'] = getValueSelectInfinite($this->driverResidenceMunicipalityCode);
+        }
+        if ($this->has('eventDepartmentCode')) {
+            $merge['eventDepartmentCode'] = getValueSelectInfinite($this->eventDepartmentCode);
+        }
+        if ($this->has('eventMunicipalityCode')) {
+            $merge['eventMunicipalityCode'] = getValueSelectInfinite($this->eventMunicipalityCode);
+        }
+        if ($this->has('ownerDocumentType')) {
+            $merge['ownerDocumentType'] = getValueSelectInfinite($this->ownerDocumentType);
+        }
+        if ($this->has('ownerResidenceDepartmentCode')) {
+            $merge['ownerResidenceDepartmentCode'] = getValueSelectInfinite($this->ownerResidenceDepartmentCode);
+        }
+        if ($this->has('ownerResidenceMunicipalityCode')) {
+            $merge['ownerResidenceMunicipalityCode'] = getValueSelectInfinite($this->ownerResidenceMunicipalityCode);
+        }
+        if ($this->has('receivingHealthProviderCode')) {
+            $merge['receivingHealthProviderCode'] = getValueSelectInfinite($this->receivingHealthProviderCode);
+        }
+        if ($this->has('referringHealthProviderCode')) {
+            $merge['referringHealthProviderCode'] = getValueSelectInfinite($this->referringHealthProviderCode);
+        }
+
+
         $this->merge($merge);
     }
 

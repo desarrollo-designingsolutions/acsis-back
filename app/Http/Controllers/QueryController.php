@@ -21,6 +21,7 @@ use App\Http\Resources\CondicionyDestinoUsuarioEgreso\CondicionyDestinoUsuarioEg
 use App\Http\Resources\Country\CountrySelectResource;
 use App\Http\Resources\CupsRips\CupsRipsSelectInfiniteResource;
 use App\Http\Resources\Dci\DciSelectResource;
+use App\Http\Resources\Departamento\DepartamentoSelectResource;
 use App\Http\Resources\Entity\EntitySelectResource;
 use App\Http\Resources\Ffm\FfmSelectResource;
 use App\Http\Resources\GrupoServicio\GrupoServicioSelectInfiniteResource;
@@ -58,6 +59,7 @@ use App\Repositories\CondicionyDestinoUsuarioEgresoRepository;
 use App\Repositories\CountryRepository;
 use App\Repositories\CupsRipsRepository;
 use App\Repositories\DciRepository;
+use App\Repositories\DepartamentoRepository;
 use App\Repositories\EntityRepository;
 use App\Repositories\FfmRepository;
 use App\Repositories\GrupoServicioRepository;
@@ -139,6 +141,7 @@ class QueryController extends Controller
         protected FfmRepository $ffmRepository,
         protected DciRepository $dciRepository,
         protected IumRepository $iumRepository,
+        protected DepartamentoRepository $departamentoRepository,
     ) {}
 
     public function selectInfiniteCountries(Request $request)
@@ -353,6 +356,17 @@ class QueryController extends Controller
             'code' => 200,
             'municipios_arrayInfo' => $data,
             'municipios_countLinks' => $municipio->lastPage(),
+        ];
+    }
+    public function selectInfiniteDepartamento(Request $request)
+    {
+        $departamento = $this->departamentoRepository->paginate($request->all());
+        $data = DepartamentoSelectResource::collection($departamento);
+
+        return [
+            'code' => 200,
+            'departamentos_arrayInfo' => $data,
+            'departamentos_countLinks' => $departamento->lastPage(),
         ];
     }
 
