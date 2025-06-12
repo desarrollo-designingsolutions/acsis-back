@@ -2,6 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\Furips1\RgoResponseEnum;
+use App\Enums\Furips1\VictimConditionEnum;
+use App\Enums\Furips1\EventNatureEnum;
+use App\Enums\Furips1\EventZoneEnum;
+use App\Enums\Furips1\YesNoEnum;
+use App\Enums\Furips1\PickupZoneEnum;
+use App\Enums\Furips1\ReferenceTypeEnum;
+use App\Enums\Furips1\SurgicalComplexityEnum;
+use App\Enums\Furips1\TransportServiceTypeEnum;
+use App\Enums\Furips1\VehicleTypeEnum;
 use App\Enums\Invoice\StatusInvoiceEnum;
 use App\Http\Resources\CatalogoCum\CatalogoCumSelectResource;
 use App\Http\Resources\Cie10\Cie10SelectInfiniteResource;
@@ -11,6 +21,7 @@ use App\Http\Resources\CondicionyDestinoUsuarioEgreso\CondicionyDestinoUsuarioEg
 use App\Http\Resources\Country\CountrySelectResource;
 use App\Http\Resources\CupsRips\CupsRipsSelectInfiniteResource;
 use App\Http\Resources\Dci\DciSelectResource;
+use App\Http\Resources\Departamento\DepartamentoSelectResource;
 use App\Http\Resources\Entity\EntitySelectResource;
 use App\Http\Resources\Ffm\FfmSelectResource;
 use App\Http\Resources\GrupoServicio\GrupoServicioSelectInfiniteResource;
@@ -48,6 +59,7 @@ use App\Repositories\CondicionyDestinoUsuarioEgresoRepository;
 use App\Repositories\CountryRepository;
 use App\Repositories\CupsRipsRepository;
 use App\Repositories\DciRepository;
+use App\Repositories\DepartamentoRepository;
 use App\Repositories\EntityRepository;
 use App\Repositories\FfmRepository;
 use App\Repositories\GrupoServicioRepository;
@@ -129,6 +141,7 @@ class QueryController extends Controller
         protected FfmRepository $ffmRepository,
         protected DciRepository $dciRepository,
         protected IumRepository $iumRepository,
+        protected DepartamentoRepository $departamentoRepository,
     ) {}
 
     public function selectInfiniteCountries(Request $request)
@@ -343,6 +356,17 @@ class QueryController extends Controller
             'code' => 200,
             'municipios_arrayInfo' => $data,
             'municipios_countLinks' => $municipio->lastPage(),
+        ];
+    }
+    public function selectInfiniteDepartamento(Request $request)
+    {
+        $departamento = $this->departamentoRepository->paginate($request->all());
+        $data = DepartamentoSelectResource::collection($departamento);
+
+        return [
+            'code' => 200,
+            'departamentos_arrayInfo' => $data,
+            'departamentos_countLinks' => $departamento->lastPage(),
         ];
     }
 
@@ -649,6 +673,286 @@ class QueryController extends Controller
         return [
             'ium_arrayInfo' => $dataIum,
             'ium_countLinks' => $ium->lastPage(),
+        ];
+    }
+
+    public function selectRgoResponseEnum(Request $request)
+    {
+        // Obtener todos los casos del enum
+        $status = RgoResponseEnum::cases();
+
+        // Mapear los casos a un formato con value y title
+        $status = collect($status)->map(function ($item) {
+            return [
+                'value' => $item,
+                'title' => $item->description(),
+            ];
+        });
+
+        // Filtrar por descripción si se envía un parámetro de búsqueda
+        if ($request->has('searchQueryInfinite') && ! empty($request->input('searchQueryInfinite'))) {
+            $searchTerm = strtolower($request->input('searchQueryInfinite'));
+            $status = $status->filter(function ($item) use ($searchTerm) {
+                return str_contains(strtolower($item['title']), $searchTerm);
+            });
+        }
+
+        return [
+            'code' => 200,
+            'rgoResponseEnum_arrayInfo' => $status->values()->toArray(), // Convertir a array y resetear índices
+            'rgoResponseEnum_countLinks' => 1,
+        ];
+    }
+
+    public function selectVictimConditionEnum(Request $request)
+    {
+        // Obtener todos los casos del enum
+        $status = VictimConditionEnum::cases();
+
+        // Mapear los casos a un formato con value y title
+        $status = collect($status)->map(function ($item) {
+            return [
+                'value' => $item,
+                'title' => $item->description(),
+            ];
+        });
+
+        // Filtrar por descripción si se envía un parámetro de búsqueda
+        if ($request->has('searchQueryInfinite') && ! empty($request->input('searchQueryInfinite'))) {
+            $searchTerm = strtolower($request->input('searchQueryInfinite'));
+            $status = $status->filter(function ($item) use ($searchTerm) {
+                return str_contains(strtolower($item['title']), $searchTerm);
+            });
+        }
+
+        return [
+            'code' => 200,
+            'victimConditionEnum_arrayInfo' => $status->values()->toArray(), // Convertir a array y resetear índices
+            'victimConditionEnum_countLinks' => 1,
+        ];
+    }
+
+    public function selectEventNatureEnum(Request $request)
+    {
+        // Obtener todos los casos del enum
+        $status = EventNatureEnum::cases();
+
+        // Mapear los casos a un formato con value y title
+        $status = collect($status)->map(function ($item) {
+            return [
+                'value' => $item,
+                'title' => $item->description(),
+            ];
+        });
+
+        // Filtrar por descripción si se envía un parámetro de búsqueda
+        if ($request->has('searchQueryInfinite') && ! empty($request->input('searchQueryInfinite'))) {
+            $searchTerm = strtolower($request->input('searchQueryInfinite'));
+            $status = $status->filter(function ($item) use ($searchTerm) {
+                return str_contains(strtolower($item['title']), $searchTerm);
+            });
+        }
+
+        return [
+            'code' => 200,
+            'eventNatureEnum_arrayInfo' => $status->values()->toArray(), // Convertir a array y resetear índices
+            'eventNatureEnum_countLinks' => 1,
+        ];
+    }
+
+    public function selectEventZoneEnum(Request $request)
+    {
+        // Obtener todos los casos del enum
+        $status = EventZoneEnum::cases();
+
+        // Mapear los casos a un formato con value y title
+        $status = collect($status)->map(function ($item) {
+            return [
+                'value' => $item,
+                'title' => $item->description(),
+            ];
+        });
+
+        // Filtrar por descripción si se envía un parámetro de búsqueda
+        if ($request->has('searchQueryInfinite') && ! empty($request->input('searchQueryInfinite'))) {
+            $searchTerm = strtolower($request->input('searchQueryInfinite'));
+            $status = $status->filter(function ($item) use ($searchTerm) {
+                return str_contains(strtolower($item['title']), $searchTerm);
+            });
+        }
+
+        return [
+            'code' => 200,
+            'eventZoneEnum_arrayInfo' => $status->values()->toArray(), // Convertir a array y resetear índices
+            'eventZoneEnum_countLinks' => 1,
+        ];
+    }
+
+    public function selectReferenceTypeEnum(Request $request)
+    {
+        // Obtener todos los casos del enum
+        $status = ReferenceTypeEnum::cases();
+
+        // Mapear los casos a un formato con value y title
+        $status = collect($status)->map(function ($item) {
+            return [
+                'value' => $item,
+                'title' => $item->description(),
+            ];
+        });
+
+        // Filtrar por descripción si se envía un parámetro de búsqueda
+        if ($request->has('searchQueryInfinite') && ! empty($request->input('searchQueryInfinite'))) {
+            $searchTerm = strtolower($request->input('searchQueryInfinite'));
+            $status = $status->filter(function ($item) use ($searchTerm) {
+                return str_contains(strtolower($item['title']), $searchTerm);
+            });
+        }
+
+        return [
+            'code' => 200,
+            'referenceTypeEnum_arrayInfo' => $status->values()->toArray(), // Convertir a array y resetear índices
+            'referenceTypeEnum_countLinks' => 1,
+        ];
+    }
+
+    public function selectVehicleTypeEnum(Request $request)
+    {
+        // Obtener todos los casos del enum
+        $status = VehicleTypeEnum::cases();
+
+        // Mapear los casos a un formato con value y title
+        $status = collect($status)->map(function ($item) {
+            return [
+                'value' => $item,
+                'title' => $item->description(),
+            ];
+        });
+
+        // Filtrar por descripción si se envía un parámetro de búsqueda
+        if ($request->has('searchQueryInfinite') && ! empty($request->input('searchQueryInfinite'))) {
+            $searchTerm = strtolower($request->input('searchQueryInfinite'));
+            $status = $status->filter(function ($item) use ($searchTerm) {
+                return str_contains(strtolower($item['title']), $searchTerm);
+            });
+        }
+
+        return [
+            'code' => 200,
+            'vehicleTypeEnum_arrayInfo' => $status->values()->toArray(), // Convertir a array y resetear índices
+            'vehicleTypeEnum_countLinks' => 1,
+        ];
+    }
+
+    public function selectYesNoEnum(Request $request)
+    {
+        // Obtener todos los casos del enum
+        $status = YesNoEnum::cases();
+
+        // Mapear los casos a un formato con value y title
+        $status = collect($status)->map(function ($item) {
+            return [
+                'value' => $item,
+                'title' => $item->description(),
+            ];
+        });
+
+        // Filtrar por descripción si se envía un parámetro de búsqueda
+        if ($request->has('searchQueryInfinite') && ! empty($request->input('searchQueryInfinite'))) {
+            $searchTerm = strtolower($request->input('searchQueryInfinite'));
+            $status = $status->filter(function ($item) use ($searchTerm) {
+                return str_contains(strtolower($item['title']), $searchTerm);
+            });
+        }
+
+        return [
+            'code' => 200,
+            'yesNoEnum_arrayInfo' => $status->values()->toArray(), // Convertir a array y resetear índices
+            'yesNoEnum_countLinks' => 1,
+        ];
+    }
+
+    public function selectSurgicalComplexityEnum(Request $request)
+    {
+        // Obtener todos los casos del enum
+        $status = SurgicalComplexityEnum::cases();
+
+        // Mapear los casos a un formato con value y title
+        $status = collect($status)->map(function ($item) {
+            return [
+                'value' => $item,
+                'title' => $item->description(),
+            ];
+        });
+
+        // Filtrar por descripción si se envía un parámetro de búsqueda
+        if ($request->has('searchQueryInfinite') && ! empty($request->input('searchQueryInfinite'))) {
+            $searchTerm = strtolower($request->input('searchQueryInfinite'));
+            $status = $status->filter(function ($item) use ($searchTerm) {
+                return str_contains(strtolower($item['title']), $searchTerm);
+            });
+        }
+
+        return [
+            'code' => 200,
+            'surgicalComplexityEnum_arrayInfo' => $status->values()->toArray(), // Convertir a array y resetear índices
+            'surgicalComplexityEnum_countLinks' => 1,
+        ];
+    }
+
+    public function selectTransportServiceTypeEnum(Request $request)
+    {
+        // Obtener todos los casos del enum
+        $status = TransportServiceTypeEnum::cases();
+
+        // Mapear los casos a un formato con value y title
+        $status = collect($status)->map(function ($item) {
+            return [
+                'value' => $item,
+                'title' => $item->description(),
+            ];
+        });
+
+        // Filtrar por descripción si se envía un parámetro de búsqueda
+        if ($request->has('searchQueryInfinite') && ! empty($request->input('searchQueryInfinite'))) {
+            $searchTerm = strtolower($request->input('searchQueryInfinite'));
+            $status = $status->filter(function ($item) use ($searchTerm) {
+                return str_contains(strtolower($item['title']), $searchTerm);
+            });
+        }
+
+        return [
+            'code' => 200,
+            'transportServiceTypeEnum_arrayInfo' => $status->values()->toArray(), // Convertir a array y resetear índices
+            'transportServiceTypeEnum_countLinks' => 1,
+        ];
+    }
+
+    public function selectPickupZoneEnum(Request $request)
+    {
+        // Obtener todos los casos del enum
+        $status = PickupZoneEnum::cases();
+
+        // Mapear los casos a un formato con value y title
+        $status = collect($status)->map(function ($item) {
+            return [
+                'value' => $item,
+                'title' => $item->description(),
+            ];
+        });
+
+        // Filtrar por descripción si se envía un parámetro de búsqueda
+        if ($request->has('searchQueryInfinite') && ! empty($request->input('searchQueryInfinite'))) {
+            $searchTerm = strtolower($request->input('searchQueryInfinite'));
+            $status = $status->filter(function ($item) use ($searchTerm) {
+                return str_contains(strtolower($item['title']), $searchTerm);
+            });
+        }
+
+        return [
+            'code' => 200,
+            'pickupZoneEnum_arrayInfo' => $status->values()->toArray(), // Convertir a array y resetear índices
+            'pickupZoneEnum_countLinks' => 1,
         ];
     }
 }

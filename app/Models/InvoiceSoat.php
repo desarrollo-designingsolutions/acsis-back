@@ -23,7 +23,7 @@ class InvoiceSoat extends Model
         return $this->belongsTo(Company::class);
     }
 
-     public function insurance_statuse()
+    public function insurance_statuse()
     {
         return $this->belongsTo(InsuranceStatus::class);
     }

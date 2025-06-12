@@ -229,4 +229,27 @@ class Constants
         '03',
         '05',
     ];
+
+    public const CODS_SELECT_FORM_FURIPS1_OWNERDOCUMENTTYPE = [
+        'CC',
+        'CE',
+        'CD',
+        'DE',
+        'SC',
+        'PE',
+        'PT',
+        'NI',
+    ];
+    public const CODS_SELECT_FORM_FURIPS1_DRIVERDOCUMENTTYPE = [
+        'CC',
+        'CE',
+        'PA',
+        'RC',
+        'TI',
+        'CD',
+        'SC',
+        'DE',
+        'PE',
+        'PT',
+    ];
 }

@@ -37,6 +37,8 @@ class InvoiceListResource extends JsonResource
 
             'path_xml' => $this->path_xml,
 
+            'furips1_id' => $this->furips1?->id,
+
         ];
     }
 }

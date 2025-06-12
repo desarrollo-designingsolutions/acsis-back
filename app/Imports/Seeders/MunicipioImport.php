@@ -2,13 +2,13 @@
 
 namespace App\Imports\Seeders;
 
-use App\Models\CupsRips;
+use App\Models\Municipio;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\Importable;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
 
-class CupsRipsImport implements ToCollection, WithChunkReading
+class MunicipioImport implements ToCollection, WithChunkReading
 {
     use Importable;
 
@@ -44,7 +44,6 @@ class CupsRipsImport implements ToCollection, WithChunkReading
     {
         $batch = [];
 
-        // Skip the first row if it contains headers
         if ($this->isFirstChunk) {
             $rows = $rows->skip(1);
             $this->isFirstChunk = false;
@@ -61,31 +60,32 @@ class CupsRipsImport implements ToCollection, WithChunkReading
             }
 
             $batch[] = [
-                'codigo' => $row[1] ?? null,
-                'nombre' => $row[2] ?? null,
-                'descripcion' => $row[3] ?? null,
-                'habilitado' => $row[4] ?? null,
-                'aplicacion' => $row[5] ?? null,
-                'isStandardGEL' => $row[6] ?? null,
-                'isStandardMSPS' => $row[7] ?? null,
-                'extra_I' => $row[8] ?? null,
-                'extra_II' => $row[9] ?? null,
-                'extra_III' => $row[10] ?? null,
-                'extra_IV' => $row[11] ?? null,
-                'extra_V' => $row[12] ?? null,
-                'extra_VI' => $row[13] ?? null,
-                'extra_VII' => $row[14] ?? null,
-                'extra_VIII' => $row[15] ?? null,
-                'extra_IX' => $row[16] ?? null,
-                'extra_X' => $row[17] ?? null,
-                'valorRegistro' => $row[18] ?? null,
-                'usuarioResponsable' => $row[19] ?? null,
-                'fecha_actualizacion' => $row[20] ?? null,
-                'isPublicPrivate' => $row[21] ?? null,
+                'codigo' => $row[1],
+                'nombre' => $row[2],
+                'descripcion' => $row[3],
+                'habilitado' => $row[4],
+                'aplicacion' => $row[5],
+                'isStandardGEL' => $row[6],
+                'isStandardMSPS' => $row[7],
+                'extra_I' => $row[8],
+                'extra_II' => $row[9],
+                'extra_III' => $row[10],
+                'extra_IV' => $row[11],
+                'extra_V' => $row[12],
+                'extra_VI' => $row[13],
+                'extra_VII' => $row[14],
+                'extra_VIII' => $row[15],
+                'extra_IX' => $row[16],
+                'extra_X' => $row[17],
+                'valorRegistro' => $row[18],
+                'usuarioResponsable' => $row[19],
+                'fecha_actualizacion' => $row[20],
+                'isPublicPrivate' => $row[21],
 
                 'created_at' => now(),
                 'updated_at' => now(),
             ];
+            // logMessage(count($batch));
 
             $this->processedRecords++;
 
@@ -96,7 +96,7 @@ class CupsRipsImport implements ToCollection, WithChunkReading
         }
 
         if (! empty($batch)) {
-            CupsRips::upsert(
+            Municipio::upsert(
                 $batch,
                 ['codigo'],
                 [

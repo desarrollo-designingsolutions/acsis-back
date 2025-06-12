@@ -51,7 +51,6 @@ use App\Repositories\UmmRepository;
 use App\Repositories\UrgencyRepository;
 use App\Repositories\ViaIngresoUsuarioRepository;
 use App\Repositories\ZonaVersion2Repository;
-use App\Services\CacheService;
 use App\Services\JsonValidation\JsonDataValidation;
 use App\Traits\HttpResponseTrait;
 use Illuminate\Http\Request;
@@ -71,7 +70,6 @@ class InvoiceController extends Controller
         protected InvoiceRepository $invoiceRepository,
         protected QueryController $queryController,
         protected TypeEntityRepository $typeEntityRepository,
-        protected CacheService $cacheService,
         protected PatientRepository $patientRepository,
         protected InvoiceSoatRepository $invoiceSoatRepository,
         protected ServiceVendorRepository $serviceVendorRepository,
@@ -245,23 +243,23 @@ class InvoiceController extends Controller
     public function update(InvoiceStoreRequest $request, $id)
     {
         return $this->runTransaction(function () use ($request) {
-           
+
 
             $post = $request->except(['entity', 'patient', 'tipoNota', 'serviceVendor', 'soat', 'value_paid', 'total', 'remaining_balance', 'value_glosa']);
-             $type = $request->input('type');
+            $type = $request->input('type');
 
-             $infoDataExtra = $this->saveDataExtraInvoice($type, $request->all());
+            $infoDataExtra = $this->saveDataExtraInvoice($type, $request->all());
 
             $post['typeable_type'] = $infoDataExtra['model'];
             $post['typeable_id'] = $infoDataExtra['id'];
 
-             $invoiceOld = $this->invoiceRepository->find($post['id']);
+            $invoiceOld = $this->invoiceRepository->find($post['id']);
 
             // if ($invoiceOld->type->value == 'INVOICE_TYPE_002') {
             //     $invoiceOld->typeable()->delete();
             // }
 
-             $invoice = $this->invoiceRepository->store($post);
+            $invoice = $this->invoiceRepository->store($post);
 
             // Build JSON structure
             $jsonData = $this->buildInvoiceJson($invoice->id);
@@ -298,7 +296,7 @@ class InvoiceController extends Controller
             logMessage("dataSoat");
             logMessage($dataSoat);
             // Store POLICY and invoice
-              $element = $this->invoiceSoatRepository->store($dataSoat);
+            $element = $this->invoiceSoatRepository->store($dataSoat);
             $element['model'] = TypeInvoiceEnum::INVOICE_TYPE_002->model();
         }
 
@@ -435,7 +433,7 @@ class InvoiceController extends Controller
         $newData['usuarios'] = $users;
 
         // Define file path
-        $nameFile = $invoice->id.'.json';
+        $nameFile = $invoice->id . '.json';
         $path = "companies/company_{$invoice->company_id}/invoices/invoice_{$invoice->id}/{$nameFile}";
         $disk = Constants::DISK_FILES;
 
@@ -505,7 +503,7 @@ class InvoiceController extends Controller
 
     private function storeJsonFile($invoice, array $jsonData): void
     {
-        $nameFile = $invoice->id.'.json';
+        $nameFile = $invoice->id . '.json';
         $path = "companies/company_{$invoice->company_id}/invoices/invoice_{$invoice->id}/{$nameFile}";
         $disk = Constants::DISK_FILES;
 
@@ -547,12 +545,12 @@ class InvoiceController extends Controller
 
         // Obtener el contenido del archivo
         $fileContent = Storage::disk($disk)->get($path);
-        $fileName = $invoice->id.'.json'; // Nombre del archivo para la descarga
+        $fileName = $invoice->id . '.json'; // Nombre del archivo para la descarga
 
         // Devolver el archivo como respuesta descargable
         return response($fileContent, 200, [
             'Content-Type' => 'application/json',
-            'Content-Disposition' => 'attachment; filename="'.$fileName.'"',
+            'Content-Disposition' => 'attachment; filename="' . $fileName . '"',
         ]);
     }
 
@@ -709,8 +707,8 @@ class InvoiceController extends Controller
                 File::makeDirectory($tempPath, 0755, true);
             }
 
-            $zipFileName = 'factura_'.$invoice->id.'.zip';
-            $zipPath = $tempPath.'/'.$zipFileName;
+            $zipFileName = 'factura_' . $invoice->id . '.zip';
+            $zipPath = $tempPath . '/' . $zipFileName;
 
             $zip = new ZipArchive;
             if ($zip->open($zipPath, ZipArchive::CREATE | ZipArchive::OVERWRITE) === true) {
@@ -730,7 +728,7 @@ class InvoiceController extends Controller
 
             return response()->json(['error' => 'Error al crear el ZIP'], 500);
         } catch (\Exception $e) {
-            \Log::error('Error en downloadZip: '.$e->getMessage());
+            \Log::error('Error en downloadZip: ' . $e->getMessage());
 
             return response()->json([
                 'error' => $e->getMessage(),

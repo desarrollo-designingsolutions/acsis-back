@@ -8,7 +8,6 @@ use App\Http\Resources\InvoicePayment\InvoicePaymentFormResource;
 use App\Http\Resources\InvoicePayment\InvoicePaymentPaginateResource;
 use App\Repositories\InvoicePaymentRepository;
 use App\Repositories\InvoiceRepository;
-use App\Services\CacheService;
 use App\Traits\HttpResponseTrait;
 use Illuminate\Http\Request;
 
@@ -19,7 +18,6 @@ class InvoicePaymentController extends Controller
     public function __construct(
         protected InvoiceRepository $invoiceRepository,
         protected InvoicePaymentRepository $invoicePaymentRepository,
-        protected CacheService $cacheService,
     ) {}
 
     public function paginate(Request $request)
@@ -62,7 +60,7 @@ class InvoicePaymentController extends Controller
 
             if ($request->file('file')) {
                 $file = $request->file('file');
-                $ruta = 'companies/company_'.$invoicePayment->company_id.'/InvoicePayments/InvoicePayment_'.$invoicePayment->id.$request->input('file');
+                $ruta = 'companies/company_' . $invoicePayment->company_id . '/InvoicePayments/InvoicePayment_' . $invoicePayment->id . $request->input('file');
 
                 $file = $file->store($ruta, Constants::DISK_FILES);
                 $invoicePayment->file = $file;
@@ -104,7 +102,7 @@ class InvoicePaymentController extends Controller
 
             if ($request->file('file')) {
                 $file = $request->file('file');
-                $ruta = 'companies/company_'.$invoicePayment->company_id.'/InvoicePayments/InvoicePayment_'.$invoicePayment->id.$request->input('file');
+                $ruta = 'companies/company_' . $invoicePayment->company_id . '/InvoicePayments/InvoicePayment_' . $invoicePayment->id . $request->input('file');
 
                 $file = $file->store($ruta, Constants::DISK_FILES);
                 $invoicePayment->file = $file;

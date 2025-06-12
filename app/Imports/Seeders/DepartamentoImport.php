@@ -2,13 +2,13 @@
 
 namespace App\Imports\Seeders;
 
-use App\Models\Upr;
+use App\Models\Departamento;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\Importable;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
 
-class UprImport implements ToCollection, WithChunkReading
+class DepartamentoImport implements ToCollection, WithChunkReading
 {
     use Importable;
 
@@ -42,9 +42,7 @@ class UprImport implements ToCollection, WithChunkReading
 
     public function collection(Collection $rows)
     {
-        $batch = [];
 
-        // Skip the first row if it contains headers
         if ($this->isFirstChunk) {
             $rows = $rows->skip(1);
             $this->isFirstChunk = false;
@@ -60,15 +58,34 @@ class UprImport implements ToCollection, WithChunkReading
                 continue; // Skip rows with missing 'codigo'
             }
 
-            $batch[] = [
+            $data = Departamento::where("codigo", $row[1])->first();
 
-                'codigo' => $row[1] ?? null,
-                'nombre' => $row[2] ?? null,
-                'descripcion' => $row[3] ?? null,
+            if (! $data) {
+                $data = new Departamento;
+            }
 
-                'created_at' => now(),
-                'updated_at' => now(),
-            ];
+            $data->codigo = $row[1];
+            $data->nombre = $row[2];
+            $data->descripcion = $row[3];
+            $data->habilitado = $row[4];
+            $data->aplicacion = $row[5];
+            $data->isStandardGEL = $row[6];
+            $data->isStandardMSPS = $row[7];
+            $data->extra_I = $row[8];
+            $data->extra_II = $row[9];
+            $data->extra_III = $row[10];
+            $data->extra_IV = $row[11];
+            $data->extra_V = $row[12];
+            $data->extra_VI = $row[13];
+            $data->extra_VII = $row[14];
+            $data->extra_VIII = $row[15];
+            $data->extra_IX = $row[16];
+            $data->extra_X = $row[17];
+            $data->valorRegistro = $row[18];
+            $data->usuarioResponsable = $row[19];
+            $data->fecha_Actualizacion = $row[20];
+            $data->isPublicPrivate = $row[21];
+            $data->save();
 
             $this->processedRecords++;
 
@@ -76,18 +93,6 @@ class UprImport implements ToCollection, WithChunkReading
             if ($this->progressBar) {
                 $this->progressBar->advance();
             }
-        }
-
-        if (! empty($batch)) {
-            Upr::upsert(
-                $batch,
-                ['codigo'],
-                [
-                    'nombre',
-                    'descripcion',
-                    'updated_at',
-                ]
-            );
         }
     }
 
