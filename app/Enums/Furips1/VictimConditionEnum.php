@@ -3,6 +3,7 @@
 namespace App\Enums\Furips1;
 
 use App\Attributes\Description;
+use App\Attributes\Value;
 use App\Traits\AttributableEnum;
 
 enum VictimConditionEnum: string
@@ -10,14 +11,18 @@ enum VictimConditionEnum: string
     use AttributableEnum;
 
     #[Description('Conductor')]
-    case VICTIM_CONDITION_001 = '1';
+    #[Value('1')]
+    case VICTIM_CONDITION_001 = 'VICTIM_CONDITION_001';
 
     #[Description('Peatón')]
-    case VICTIM_CONDITION_002 = '2';
+    #[Value('2')]
+    case VICTIM_CONDITION_002 = 'VICTIM_CONDITION_002';
 
     #[Description('Ocupante')]
-    case VICTIM_CONDITION_003 = '3';
+    #[Value('3')]
+    case VICTIM_CONDITION_003 = 'VICTIM_CONDITION_003';
 
     #[Description('Ciclista')]
-    case VICTIM_CONDITION_004 = '4';
+    #[Value('4')]
+    case VICTIM_CONDITION_004 = 'VICTIM_CONDITION_004';
 }
