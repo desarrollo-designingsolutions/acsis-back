@@ -42,9 +42,7 @@ class IpsCodHabilitacionImport implements ToCollection, WithChunkReading
 
     public function collection(Collection $rows)
     {
-        $batch = [];
 
-        // Skip the first row if it contains headers
         if ($this->isFirstChunk) {
             $rows = $rows->skip(1);
             $this->isFirstChunk = false;
@@ -60,31 +58,31 @@ class IpsCodHabilitacionImport implements ToCollection, WithChunkReading
                 continue; // Skip rows with missing 'codigo'
             }
 
-            $batch[] = [
-                'codigo' => $row[1] ?? null,
-                'nombre' => $row[2] ?? null,
-                'descripcion' => $row[3] ?? null,
-                'habilitado' => $row[4] ?? null,
-                'aplicacion' => $row[5] ?? null,
-                'isStandardGEL' => $row[6] ?? null,
-                'isStandardMSPS' => $row[7] ?? null,
-                'tipoIDPrestador' => $row[8] ?? null,
-                'nroIDPrestador' => $row[9] ?? null,
-                'codigoPrestador' => $row[10] ?? null,
-                'codMpioSede' => $row[11] ?? null,
-                'nombreMpioSede' => $row[12] ?? null,
-                'nombreDptoSede' => $row[13] ?? null,
-                'clasePrestador' => $row[14] ?? null,
-                'nomClasePrestador' => $row[15] ?? null,
-                'extra_IX' => $row[16] ?? null,
-                'extra_X' => $row[17] ?? null,
-                'valorRegistro' => $row[18] ?? null,
-                'usuarioResponsable' => $row[19] ?? null,
-                'fecha_actualizacion' => $row[20] ?? null,
-                'isPublicPrivate' => $row[21] ?? null,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ];
+            $data = IpsCodHabilitacion::updateOrCreate(
+                ['codigo' => $row[1]],
+                [
+                    'nombre' => $row[2],
+                    'descripcion' => $row[3],
+                    'habilitado' => $row[4],
+                    'aplicacion' => $row[5],
+                    'isStandardGEL' => $row[6],
+                    'isStandardMSPS' => $row[7],
+                    'tipoIDPrestador' => $row[8],
+                    'nroIDPrestador' => $row[9],
+                    'codigoPrestador' => $row[10],
+                    'codMpioSede' => $row[11],
+                    'nombreMpioSede' => $row[12],
+                    'nombreDptoSede' => $row[13],
+                    'clasePrestador' => $row[14],
+                    'nomClasePrestador' => $row[15],
+                    'extra_IX' => $row[16],
+                    'extra_X' => $row[17],
+                    'valorRegistro' => $row[18],
+                    'usuarioResponsable' => $row[19],
+                    'fecha_actualizacion' => $row[20],
+                    'isPublicPrivate' => $row[21],
+                ]
+            );
 
             $this->processedRecords++;
 
@@ -92,36 +90,6 @@ class IpsCodHabilitacionImport implements ToCollection, WithChunkReading
             if ($this->progressBar) {
                 $this->progressBar->advance();
             }
-        }
-
-        if (! empty($batch)) {
-            IpsCodHabilitacion::upsert(
-                $batch,
-                ['codigo'],
-                [
-                    'nombre',
-                    'descripcion',
-                    'habilitado',
-                    'aplicacion',
-                    'isStandardGEL',
-                    'isStandardMSPS',
-                    'tipoIDPrestador',
-                    'nroIDPrestador',
-                    'codigoPrestador',
-                    'codMpioSede',
-                    'nombreMpioSede',
-                    'nombreDptoSede',
-                    'clasePrestador',
-                    'nomClasePrestador',
-                    'extra_IX',
-                    'extra_X',
-                    'valorRegistro',
-                    'usuarioResponsable',
-                    'fecha_actualizacion',
-                    'isPublicPrivate',
-                    'updated_at',
-                ]
-            );
         }
     }
 

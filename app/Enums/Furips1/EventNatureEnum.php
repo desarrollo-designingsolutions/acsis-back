@@ -3,6 +3,7 @@
 namespace App\Enums\Furips1;
 
 use App\Attributes\Description;
+use App\Attributes\Value;
 use App\Traits\AttributableEnum;
 
 enum EventNatureEnum: string
@@ -10,62 +11,82 @@ enum EventNatureEnum: string
     use AttributableEnum;
 
     #[Description('Accidente de tránsito')]
-    case EVENT_NATURE_001 = '01';
+    #[Value('01')]
+    case EVENT_NATURE_001 = 'EVENT_NATURE_001';
 
     #[Description('Sismo')]
-    case EVENT_NATURE_002 = '02';
+    #[Value('02')]
+    case EVENT_NATURE_002 = 'EVENT_NATURE_002';
 
     #[Description('Maremoto')]
-    case EVENT_NATURE_003 = '03';
+    #[Value('03')]
+    case EVENT_NATURE_003 = 'EVENT_NATURE_003';
 
     #[Description('Erupción volcánica')]
-    case EVENT_NATURE_004 = '04';
+    #[Value('04')]
+    case EVENT_NATURE_004 = 'EVENT_NATURE_004';
 
     #[Description('Deslizamiento de tierra')]
-    case EVENT_NATURE_005 = '05';
+    #[Value('05')]
+    case EVENT_NATURE_005 = 'EVENT_NATURE_005';
 
     #[Description('Inundación')]
-    case EVENT_NATURE_006 = '06';
+    #[Value('06')]
+    case EVENT_NATURE_006 = 'EVENT_NATURE_006';
 
     #[Description('Avalancha')]
-    case EVENT_NATURE_007 = '07';
+    #[Value('07')]
+    case EVENT_NATURE_007 = 'EVENT_NATURE_007';
 
     #[Description('Incendio natural')]
-    case EVENT_NATURE_008 = '08';
+    #[Value('08')]
+    case EVENT_NATURE_008 = 'EVENT_NATURE_008';
 
     #[Description('Explosión terrorista')]
-    case EVENT_NATURE_009 = '09';
+    #[Value('09')]
+    case EVENT_NATURE_009 = 'EVENT_NATURE_009';
 
     #[Description('Incendio terrorista')]
-    case EVENT_NATURE_010 = '10';
+    #[Value('10')]
+    case EVENT_NATURE_010 = 'EVENT_NATURE_010';
 
     #[Description('Combate')]
-    case EVENT_NATURE_011 = '11';
+    #[Value('11')]
+    case EVENT_NATURE_011 = 'EVENT_NATURE_011';
 
     #[Description('Ataques a Municipios')]
-    case EVENT_NATURE_012 = '12';
+    #[Value('12')]
+    case EVENT_NATURE_012 = 'EVENT_NATURE_012';
 
     #[Description('Masacre')]
-    case EVENT_NATURE_013 = '13';
+    #[Value('13')]
+    case EVENT_NATURE_013 = 'EVENT_NATURE_013';
 
     #[Description('Desplazados')]
-    case EVENT_NATURE_014 = '14';
+    #[Value('14')]
+    case EVENT_NATURE_014 = 'EVENT_NATURE_014';
 
     #[Description('Mina antipersonal')]
-    case EVENT_NATURE_015 = '15';
+    #[Value('15')]
+    case EVENT_NATURE_015 = 'EVENT_NATURE_015';
 
     #[Description('Huracán')]
-    case EVENT_NATURE_016 = '16';
+    #[Value('16')]
+    case EVENT_NATURE_016 = 'EVENT_NATURE_016';
 
     #[Description('Otro')]
-    case EVENT_NATURE_017 = '17';
+    #[Value('17')]
+    case EVENT_NATURE_017 = 'EVENT_NATURE_017';
 
     #[Description('Rayo')]
-    case EVENT_NATURE_018 = '25';
+    #[Value('25')]
+    case EVENT_NATURE_018 = 'EVENT_NATURE_018';
 
     #[Description('Vendaval')]
-    case EVENT_NATURE_019 = '26';
+    #[Value('26')]
+    case EVENT_NATURE_019 = 'EVENT_NATURE_019';
 
     #[Description('Tornado')]
-    case EVENT_NATURE_020 = '27';
+    #[Value('27')]
+    case EVENT_NATURE_020 = 'EVENT_NATURE_020';
 }

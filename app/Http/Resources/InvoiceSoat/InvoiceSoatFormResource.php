@@ -2,10 +2,9 @@
 
 namespace App\Http\Resources\InvoiceSoat;
 
+use App\Http\Resources\InsuranceStatus\InsuranceStatusSelectResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use App\Http\Resources\InsuranceStatus\InsuranceStatusSelectResource;
-
 
 class InvoiceSoatFormResource extends JsonResource
 {

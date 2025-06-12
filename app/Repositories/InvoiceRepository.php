@@ -28,7 +28,7 @@ class InvoiceRepository extends BaseRepository
 
         return $this->cacheService->remember($cacheKey, function () use ($request) {
             $query = QueryBuilder::for($this->model->query())
-                ->with(['patient', 'entity', "serviceVendor", "furips1"])
+                ->with(['patient', 'entity', 'serviceVendor', 'furips1'])
                 ->select(['invoices.id', 'invoices.entity_id', 'invoices.type', 'invoices.patient_id', 'invoices.invoice_number', 'invoices.radication_number', 'invoices.value_glosa', 'invoices.value_paid', 'invoices.invoice_date', 'invoices.radication_date', 'invoices.is_active', 'invoices.status', 'invoices.status_xml', 'invoices.path_xml', 'invoices.service_vendor_id'])
                 ->allowedFilters([
 
@@ -201,7 +201,7 @@ class InvoiceRepository extends BaseRepository
             'color' => 'success',
             'title' => $title,
             'value' => $value,
-            'secondary_data' => $invoiceCount . ' facturas',
+            'secondary_data' => $invoiceCount.' facturas',
             'isHover' => false,
             'type' => 1,
             'to' => [],
@@ -231,8 +231,8 @@ class InvoiceRepository extends BaseRepository
         $approvedPercentage = $totalSum > 0 ? ($approvedSum / $totalSum) * 100 : 0;
         $glosaPercentage = $totalSum > 0 ? ($glosaSum / $totalSum) * 100 : 0;
 
-        $value = round($approvedPercentage, 2) . '% / ' . round($glosaPercentage, 2) . '%';
-        $secondary_data = formatNumber($approvedSum) . ' aprobados / ' . formatNumber($glosaSum) . ' glosados';
+        $value = round($approvedPercentage, 2).'% / '.round($glosaPercentage, 2).'%';
+        $secondary_data = formatNumber($approvedSum).' aprobados / '.formatNumber($glosaSum).' glosados';
 
         return [
             'title' => 'Facturación Aprobada vs Glosada',
@@ -270,8 +270,8 @@ class InvoiceRepository extends BaseRepository
         $pendingCount = $pendingQuery->count();
         $pendingSum = $pendingQuery->sum('total');
 
-        $value = $inReviewCount . ' / ' . $pendingCount;
-        $secondary_data = formatNumber($inReviewSum) . '  en revisión / ' . formatNumber($pendingSum) . 'pendientes';
+        $value = $inReviewCount.' / '.$pendingCount;
+        $secondary_data = formatNumber($inReviewSum).'  en revisión / '.formatNumber($pendingSum).'pendientes';
 
         return [
             'title' => 'Facturas en Revisión / Pendientes',

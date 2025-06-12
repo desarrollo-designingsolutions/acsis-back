@@ -58,7 +58,7 @@ class PaisImport implements ToCollection, WithChunkReading
                 continue; // Skip rows with missing 'codigo'
             }
 
-            $data = Pais::where("codigo", $row[1])->first();
+            $data = Pais::where('codigo', $row[1])->first();
 
             if (! $data) {
                 $data = new Pais;

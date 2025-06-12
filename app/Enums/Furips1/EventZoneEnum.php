@@ -3,6 +3,7 @@
 namespace App\Enums\Furips1;
 
 use App\Attributes\Description;
+use App\Attributes\Value;
 use App\Traits\AttributableEnum;
 
 enum EventZoneEnum: string
@@ -10,8 +11,10 @@ enum EventZoneEnum: string
     use AttributableEnum;
 
     #[Description('Urbana')]
-    case EVENT_ZONE_001 = 'U';
+    #[Value('U')]
+    case EVENT_ZONE_001 = 'EVENT_ZONE_001';
 
     #[Description('Rural')]
-    case EVENT_ZONE_002 = 'R';
+    #[Value('R')]
+    case EVENT_ZONE_002 = 'EVENT_ZONE_002';
 }

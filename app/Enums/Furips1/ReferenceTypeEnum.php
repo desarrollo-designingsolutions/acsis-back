@@ -3,6 +3,7 @@
 namespace App\Enums\Furips1;
 
 use App\Attributes\Description;
+use App\Attributes\Value;
 use App\Traits\AttributableEnum;
 
 enum ReferenceTypeEnum: string
@@ -10,8 +11,10 @@ enum ReferenceTypeEnum: string
     use AttributableEnum;
 
     #[Description('Remisión')]
-    case REFERENCE_TYPE_001 = '1';
+    #[Value('1')]
+    case REFERENCE_TYPE_001 = 'REFERENCE_TYPE_001';
 
     #[Description('Orden de servicio')]
-    case REFERENCE_TYPE_002 = '2';
+    #[Value('2')]
+    case REFERENCE_TYPE_002 = 'REFERENCE_TYPE_002';
 }

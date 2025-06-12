@@ -75,7 +75,6 @@ class Furips1StoreRequest extends FormRequest
             $merge['referringHealthProviderCode'] = getValueSelectInfinite($this->referringHealthProviderCode);
         }
 
-
         $this->merge($merge);
     }
 

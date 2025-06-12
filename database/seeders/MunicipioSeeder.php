@@ -22,7 +22,7 @@ class MunicipioSeeder extends Seeder
 
                 // Count total rows for progress bar if processing all records
                 $totalRows = $maxRecords ?? $this->countExcelRows($path);
-                $this->command->info('Procesando hasta ' . ($maxRecords ?? 'todos los') . ' registros...');
+                $this->command->info('Procesando hasta '.($maxRecords ?? 'todos los').' registros...');
 
                 // Initialize progress bar
                 $bar = $this->command->getOutput()->createProgressBar($totalRows);
@@ -40,7 +40,7 @@ class MunicipioSeeder extends Seeder
                 $this->command->info("\nSeeding completed.");
             }
         } catch (\Exception $e) {
-            $this->command->error('Error importing Excel: ' . $e->getMessage());
+            $this->command->error('Error importing Excel: '.$e->getMessage());
         }
     }
 

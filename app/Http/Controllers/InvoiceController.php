@@ -244,7 +244,6 @@ class InvoiceController extends Controller
     {
         return $this->runTransaction(function () use ($request) {
 
-
             $post = $request->except(['entity', 'patient', 'tipoNota', 'serviceVendor', 'soat', 'value_paid', 'total', 'remaining_balance', 'value_glosa']);
             $type = $request->input('type');
 
@@ -291,9 +290,8 @@ class InvoiceController extends Controller
 
             $dataSoat = array_merge($request['soat'], ['company_id' => $request['company_id']]);
 
-
             unset($dataSoat['model']);
-            logMessage("dataSoat");
+            logMessage('dataSoat');
             logMessage($dataSoat);
             // Store POLICY and invoice
             $element = $this->invoiceSoatRepository->store($dataSoat);
@@ -433,7 +431,7 @@ class InvoiceController extends Controller
         $newData['usuarios'] = $users;
 
         // Define file path
-        $nameFile = $invoice->id . '.json';
+        $nameFile = $invoice->id.'.json';
         $path = "companies/company_{$invoice->company_id}/invoices/invoice_{$invoice->id}/{$nameFile}";
         $disk = Constants::DISK_FILES;
 
@@ -503,7 +501,7 @@ class InvoiceController extends Controller
 
     private function storeJsonFile($invoice, array $jsonData): void
     {
-        $nameFile = $invoice->id . '.json';
+        $nameFile = $invoice->id.'.json';
         $path = "companies/company_{$invoice->company_id}/invoices/invoice_{$invoice->id}/{$nameFile}";
         $disk = Constants::DISK_FILES;
 
@@ -545,12 +543,12 @@ class InvoiceController extends Controller
 
         // Obtener el contenido del archivo
         $fileContent = Storage::disk($disk)->get($path);
-        $fileName = $invoice->id . '.json'; // Nombre del archivo para la descarga
+        $fileName = $invoice->id.'.json'; // Nombre del archivo para la descarga
 
         // Devolver el archivo como respuesta descargable
         return response($fileContent, 200, [
             'Content-Type' => 'application/json',
-            'Content-Disposition' => 'attachment; filename="' . $fileName . '"',
+            'Content-Disposition' => 'attachment; filename="'.$fileName.'"',
         ]);
     }
 
@@ -707,8 +705,8 @@ class InvoiceController extends Controller
                 File::makeDirectory($tempPath, 0755, true);
             }
 
-            $zipFileName = 'factura_' . $invoice->id . '.zip';
-            $zipPath = $tempPath . '/' . $zipFileName;
+            $zipFileName = 'factura_'.$invoice->id.'.zip';
+            $zipPath = $tempPath.'/'.$zipFileName;
 
             $zip = new ZipArchive;
             if ($zip->open($zipPath, ZipArchive::CREATE | ZipArchive::OVERWRITE) === true) {
@@ -728,7 +726,7 @@ class InvoiceController extends Controller
 
             return response()->json(['error' => 'Error al crear el ZIP'], 500);
         } catch (\Exception $e) {
-            \Log::error('Error en downloadZip: ' . $e->getMessage());
+            \Log::error('Error en downloadZip: '.$e->getMessage());
 
             return response()->json([
                 'error' => $e->getMessage(),

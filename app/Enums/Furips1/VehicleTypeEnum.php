@@ -3,6 +3,7 @@
 namespace App\Enums\Furips1;
 
 use App\Attributes\Description;
+use App\Attributes\Value;
 use App\Traits\AttributableEnum;
 
 enum VehicleTypeEnum: string
@@ -10,47 +11,62 @@ enum VehicleTypeEnum: string
     use AttributableEnum;
 
     #[Description('Automóvil')]
-    case VEHICLE_TYPE_001 = '1';
+    #[Value('1')]
+    case VEHICLE_TYPE_001 = 'VEHICLE_TYPE_001';
 
     #[Description('Bus')]
-    case VEHICLE_TYPE_002 = '2';
+    #[Value('2')]
+    case VEHICLE_TYPE_002 = 'VEHICLE_TYPE_002';
 
     #[Description('Buseta')]
-    case VEHICLE_TYPE_003 = '3';
+    #[Value('3')]
+    case VEHICLE_TYPE_003 = 'VEHICLE_TYPE_003';
 
     #[Description('Camión')]
-    case VEHICLE_TYPE_004 = '4';
+    #[Value('4')]
+    case VEHICLE_TYPE_004 = 'VEHICLE_TYPE_004';
 
     #[Description('Camioneta')]
-    case VEHICLE_TYPE_005 = '5';
+    #[Value('5')]
+    case VEHICLE_TYPE_005 = 'VEHICLE_TYPE_005';
 
     #[Description('Campero')]
-    case VEHICLE_TYPE_006 = '6';
+    #[Value('6')]
+    case VEHICLE_TYPE_006 = 'VEHICLE_TYPE_006';
 
     #[Description('Microbus')]
-    case VEHICLE_TYPE_007 = '7';
+    #[Value('7')]
+    case VEHICLE_TYPE_007 = 'VEHICLE_TYPE_007';
 
     #[Description('Tractocamión')]
-    case VEHICLE_TYPE_008 = '8';
+    #[Value('8')]
+    case VEHICLE_TYPE_008 = 'VEHICLE_TYPE_008';
 
     #[Description('Motocicleta')]
-    case VEHICLE_TYPE_009 = '10';
+    #[Value('10')]
+    case VEHICLE_TYPE_009 = 'VEHICLE_TYPE_009';
 
     #[Description('Motocarro')]
-    case VEHICLE_TYPE_010 = '14';
+    #[Value('14')]
+    case VEHICLE_TYPE_010 = 'VEHICLE_TYPE_010';
 
     #[Description('Mototriciclo')]
-    case VEHICLE_TYPE_011 = '17';
+    #[Value('17')]
+    case VEHICLE_TYPE_011 = 'VEHICLE_TYPE_011';
 
     #[Description('Cuatrimoto')]
-    case VEHICLE_TYPE_012 = '19';
+    #[Value('19')]
+    case VEHICLE_TYPE_012 = 'VEHICLE_TYPE_012';
 
     #[Description('Moto Extrajera')]
-    case VEHICLE_TYPE_013 = '20';
+    #[Value('20')]
+    case VEHICLE_TYPE_013 = 'VEHICLE_TYPE_013';
 
     #[Description('Vehículo Extranjero')]
-    case VEHICLE_TYPE_014 = '21';
+    #[Value('21')]
+    case VEHICLE_TYPE_014 = 'VEHICLE_TYPE_014';
 
     #[Description('Volqueta')]
-    case VEHICLE_TYPE_015 = '22';
+    #[Value('22')]
+    case VEHICLE_TYPE_015 = 'VEHICLE_TYPE_015';
 }

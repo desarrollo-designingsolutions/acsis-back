@@ -3,6 +3,7 @@
 namespace App\Enums\Furips1;
 
 use App\Attributes\Description;
+use App\Attributes\Value;
 use App\Traits\AttributableEnum;
 
 enum YesNoEnum: string
@@ -10,8 +11,10 @@ enum YesNoEnum: string
     use AttributableEnum;
 
     #[Description('No')]
-    case INSURANCE_LIMIT_CHARGE_001 = '0';
+    #[Value('0')]
+    case YES_NO_001 = 'YES_NO_001';
 
     #[Description('Sí')]
-    case INSURANCE_LIMIT_CHARGE_002 = '1';
+    #[Value('1')]
+    case YES_NO_002 = 'YES_NO_002';
 }

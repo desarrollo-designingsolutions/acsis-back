@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Resources\Departamento;
+namespace App\Http\Resources\Furips2;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class DepartamentoSelectResource extends JsonResource
+class Furips2PaginateResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -14,9 +14,9 @@ class DepartamentoSelectResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+
         return [
-            'value' => $this->id,
-            'title' => $this->codigo.' - '.$this->nombre,
+            'id' => $this->id,
         ];
     }
 }
