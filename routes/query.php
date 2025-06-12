@@ -71,3 +71,4 @@ Route::post('/selectYesNoEnum', [QueryController::class, 'selectYesNoEnum']);
 Route::post('/selectSurgicalComplexityEnum', [QueryController::class, 'selectSurgicalComplexityEnum']);
 Route::post('/selectTransportServiceTypeEnum', [QueryController::class, 'selectTransportServiceTypeEnum']);
 Route::post('/selectPickupZoneEnum', [QueryController::class, 'selectPickupZoneEnum']);
+Route::post('/selectServiceTypeEnum', [QueryController::class, 'selectServiceTypeEnum']);

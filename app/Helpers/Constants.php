@@ -240,6 +240,7 @@ class Constants
         'PT',
         'NI',
     ];
+
     public const CODS_SELECT_FORM_FURIPS1_DRIVERDOCUMENTTYPE = [
         'CC',
         'CE',

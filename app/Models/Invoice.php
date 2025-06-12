@@ -106,6 +106,6 @@ class Invoice extends Model
 
     public function furips1()
     {
-        return $this->hasOne(Furips1::class, 'invoice_id', "id");
+        return $this->hasOne(Furips1::class, 'invoice_id', 'id');
     }
 }

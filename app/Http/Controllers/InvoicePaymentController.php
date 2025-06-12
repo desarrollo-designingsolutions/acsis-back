@@ -60,7 +60,7 @@ class InvoicePaymentController extends Controller
 
             if ($request->file('file')) {
                 $file = $request->file('file');
-                $ruta = 'companies/company_' . $invoicePayment->company_id . '/InvoicePayments/InvoicePayment_' . $invoicePayment->id . $request->input('file');
+                $ruta = 'companies/company_'.$invoicePayment->company_id.'/InvoicePayments/InvoicePayment_'.$invoicePayment->id.$request->input('file');
 
                 $file = $file->store($ruta, Constants::DISK_FILES);
                 $invoicePayment->file = $file;
@@ -102,7 +102,7 @@ class InvoicePaymentController extends Controller
 
             if ($request->file('file')) {
                 $file = $request->file('file');
-                $ruta = 'companies/company_' . $invoicePayment->company_id . '/InvoicePayments/InvoicePayment_' . $invoicePayment->id . $request->input('file');
+                $ruta = 'companies/company_'.$invoicePayment->company_id.'/InvoicePayments/InvoicePayment_'.$invoicePayment->id.$request->input('file');
 
                 $file = $file->store($ruta, Constants::DISK_FILES);
                 $invoicePayment->file = $file;

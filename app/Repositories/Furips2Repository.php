@@ -3,13 +3,13 @@
 namespace App\Repositories;
 
 use App\Helpers\Constants;
-use App\Models\Furips1;
+use App\Models\Furips2;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
-class Furips1Repository extends BaseRepository
+class Furips2Repository extends BaseRepository
 {
-    public function __construct(Furips1 $modelo)
+    public function __construct(Furips2 $modelo)
     {
         parent::__construct($modelo);
     }

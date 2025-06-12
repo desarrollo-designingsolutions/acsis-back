@@ -10,8 +10,8 @@ enum YesNoEnum: string
     use AttributableEnum;
 
     #[Description('No')]
-    case INSURANCE_LIMIT_CHARGE_001 = '0';
+    case YES_NO_001 = '0';
 
     #[Description('Sí')]
-    case INSURANCE_LIMIT_CHARGE_002 = '1';
+    case YES_NO_002 = '1';
 }

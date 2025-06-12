@@ -42,9 +42,7 @@ class IumImport implements ToCollection, WithChunkReading
 
     public function collection(Collection $rows)
     {
-        $batch = [];
 
-        // Skip the first row if it contains headers
         if ($this->isFirstChunk) {
             $rows = $rows->skip(1);
             $this->isFirstChunk = false;
@@ -60,32 +58,31 @@ class IumImport implements ToCollection, WithChunkReading
                 continue; // Skip rows with missing 'codigo'
             }
 
-            $batch[] = [
-                'codigo' => $row[1],
-                'nombre' => $row[2],
-                'descripcion' => $row[3],
-                'habilitado' => $row[4],
-                'aplicacion' => $row[5],
-                'isStandardGEL' => $row[6],
-                'isStandardMSPS' => $row[7],
-                'extra_I' => $row[8],
-                'extra_II' => $row[9],
-                'extra_III' => $row[10],
-                'extra_IV' => $row[1],
-                'extra_V' => $row[12],
-                'extra_VI' => $row[13],
-                'extra_VII' => $row[14],
-                'extra_VIII' => $row[15],
-                'extra_IX' => $row[16],
-                'extra_X' => $row[17],
-                'valorRegistro' => $row[18],
-                'usuarioResponsable' => $row[19],
-                'fecha_Actualizacion' => $row[20],
-                'isPublicPrivate' => $row[21],
-
-                'created_at' => now(),
-                'updated_at' => now(),
-            ];
+            $data = Ium::updateOrCreate(
+                ['codigo' => $row[1]],
+                [
+                    'nombre' => $row[2],
+                    'descripcion' => $row[3],
+                    'habilitado' => $row[4],
+                    'aplicacion' => $row[5],
+                    'isStandardGEL' => $row[6],
+                    'isStandardMSPS' => $row[7],
+                    'extra_I' => $row[8],
+                    'extra_II' => $row[9],
+                    'extra_III' => $row[10],
+                    'extra_IV' => $row[11],
+                    'extra_V' => $row[12],
+                    'extra_VI' => $row[13],
+                    'extra_VII' => $row[14],
+                    'extra_VIII' => $row[15],
+                    'extra_IX' => $row[16],
+                    'extra_X' => $row[17],
+                    'valorRegistro' => $row[18],
+                    'usuarioResponsable' => $row[19],
+                    'fecha_Actualizacion' => $row[20],
+                    'isPublicPrivate' => $row[21],
+                ]
+            );
 
             $this->processedRecords++;
 
@@ -93,36 +90,6 @@ class IumImport implements ToCollection, WithChunkReading
             if ($this->progressBar) {
                 $this->progressBar->advance();
             }
-        }
-
-        if (! empty($batch)) {
-            Ium::upsert(
-                $batch,
-                ['codigo'],
-                [
-                    'nombre',
-                    'descripcion',
-                    'habilitado',
-                    'aplicacion',
-                    'isStandardGEL',
-                    'isStandardMSPS',
-                    'extra_I',
-                    'extra_II',
-                    'extra_III',
-                    'extra_IV',
-                    'extra_V',
-                    'extra_VI',
-                    'extra_VII',
-                    'extra_VIII',
-                    'extra_IX',
-                    'extra_X',
-                    'valorRegistro',
-                    'usuarioResponsable',
-                    'fecha_Actualizacion',
-                    'isPublicPrivate',
-                    'updated_at',
-                ]
-            );
         }
     }
 

@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Helpers\Constants;
 use App\Http\Requests\Furips1\Furips1StoreRequest;
-use App\Http\Resources\Furips1\Furips1PaginateResource;
 use App\Http\Resources\Furips1\Furips1FormResource;
+use App\Http\Resources\Furips1\Furips1PaginateResource;
 use App\Repositories\Furips1Repository;
 use App\Repositories\InvoiceRepository;
 use App\Services\CacheService;
@@ -49,10 +49,10 @@ class Furips1Controller extends Controller
     {
         return $this->execute(function () use ($invoice_id) {
 
-            $invoice = $this->invoiceRepository->find($invoice_id, with: ["typeable:id,insurance_statuse_id", "typeable.insurance_statuse:id,code"], select: ['id', 'type', 'typeable_type', 'typeable_id']);
+            $invoice = $this->invoiceRepository->find($invoice_id, with: ['typeable:id,insurance_statuse_id', 'typeable.insurance_statuse:id,code'], select: ['id', 'type', 'typeable_type', 'typeable_id']);
             $invoice = [
-                "id" => $invoice->id,
-                "insurance_statuse_code" => $invoice->typeable?->insurance_statuse?->code,
+                'id' => $invoice->id,
+                'insurance_statuse_code' => $invoice->typeable?->insurance_statuse?->code,
             ];
 
             $rgoResponseEnum = $this->queryController->selectRgoResponseEnum(request());
@@ -70,7 +70,6 @@ class Furips1Controller extends Controller
             $municipio = $this->queryController->selectInfiniteMunicipio(request());
             $departamento = $this->queryController->selectInfiniteDepartamento(request());
 
-
             $newRequest = new Request(['codigo_in' => Constants::CODS_SELECT_FORM_FURIPS1_OWNERDOCUMENTTYPE]);
             $tipoIdPisis1 = $this->queryController->selectInfiniteTipoIdPisis($newRequest);
 
@@ -78,9 +77,10 @@ class Furips1Controller extends Controller
             $tipoIdPisis2 = $this->queryController->selectInfiniteTipoIdPisis($newRequest);
 
             $tipoIdPisis = [
-                "ownerDocumentType_arrayInfo" => $tipoIdPisis1["tipoIdPisis_arrayInfo"],
-                "driverDocumentType_arrayInfo" => $tipoIdPisis2["tipoIdPisis_arrayInfo"],
+                'ownerDocumentType_arrayInfo' => $tipoIdPisis1['tipoIdPisis_arrayInfo'],
+                'driverDocumentType_arrayInfo' => $tipoIdPisis2['tipoIdPisis_arrayInfo'],
             ];
+
             return [
                 'code' => 200,
                 'invoice' => $invoice,
@@ -111,9 +111,7 @@ class Furips1Controller extends Controller
             $post = $request->except([]);
             $furips1 = $this->furips1Repository->store($post);
 
-            $this->cacheService->clearByPrefix($this->key_redis_project . 'string:invoices_paginate*');
-
-
+            $this->cacheService->clearByPrefix($this->key_redis_project.'string:invoices_paginate*');
 
             return [
                 'code' => 200,
@@ -130,10 +128,10 @@ class Furips1Controller extends Controller
             $furips1 = $this->furips1Repository->find($id);
             $form = new Furips1FormResource($furips1);
 
-            $invoice = $this->invoiceRepository->find($furips1->invoice_id, with: ["typeable:id,insurance_statuse_id", "typeable.insurance_statuse:id,code"], select: ['id', 'type', 'typeable_type', 'typeable_id']);
+            $invoice = $this->invoiceRepository->find($furips1->invoice_id, with: ['typeable:id,insurance_statuse_id', 'typeable.insurance_statuse:id,code'], select: ['id', 'type', 'typeable_type', 'typeable_id']);
             $invoice = [
-                "id" => $invoice->id,
-                "insurance_statuse_code" => $invoice->typeable?->insurance_statuse?->code,
+                'id' => $invoice->id,
+                'insurance_statuse_code' => $invoice->typeable?->insurance_statuse?->code,
             ];
 
             $rgoResponseEnum = $this->queryController->selectRgoResponseEnum(request());
@@ -151,7 +149,6 @@ class Furips1Controller extends Controller
             $municipio = $this->queryController->selectInfiniteMunicipio(request());
             $departamento = $this->queryController->selectInfiniteDepartamento(request());
 
-
             $newRequest = new Request(['codigo_in' => Constants::CODS_SELECT_FORM_FURIPS1_OWNERDOCUMENTTYPE]);
             $tipoIdPisis1 = $this->queryController->selectInfiniteTipoIdPisis($newRequest);
 
@@ -159,9 +156,10 @@ class Furips1Controller extends Controller
             $tipoIdPisis2 = $this->queryController->selectInfiniteTipoIdPisis($newRequest);
 
             $tipoIdPisis = [
-                "ownerDocumentType_arrayInfo" => $tipoIdPisis1["tipoIdPisis_arrayInfo"],
-                "driverDocumentType_arrayInfo" => $tipoIdPisis2["tipoIdPisis_arrayInfo"],
+                'ownerDocumentType_arrayInfo' => $tipoIdPisis1['tipoIdPisis_arrayInfo'],
+                'driverDocumentType_arrayInfo' => $tipoIdPisis2['tipoIdPisis_arrayInfo'],
             ];
+
             return [
                 'code' => 200,
                 'form' => $form,
@@ -187,7 +185,7 @@ class Furips1Controller extends Controller
 
     public function update(Furips1StoreRequest $request, $id)
     {
-        return $this->runTransaction(function () use ($request, $id) {
+        return $this->runTransaction(function () use ($request) {
 
             $post = $request->except([]);
             $furips1 = $this->furips1Repository->store($post);

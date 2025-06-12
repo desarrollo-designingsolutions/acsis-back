@@ -2,16 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\Furips1\RgoResponseEnum;
-use App\Enums\Furips1\VictimConditionEnum;
 use App\Enums\Furips1\EventNatureEnum;
 use App\Enums\Furips1\EventZoneEnum;
-use App\Enums\Furips1\YesNoEnum;
 use App\Enums\Furips1\PickupZoneEnum;
 use App\Enums\Furips1\ReferenceTypeEnum;
+use App\Enums\Furips1\RgoResponseEnum;
 use App\Enums\Furips1\SurgicalComplexityEnum;
 use App\Enums\Furips1\TransportServiceTypeEnum;
 use App\Enums\Furips1\VehicleTypeEnum;
+use App\Enums\Furips1\VictimConditionEnum;
+use App\Enums\Furips1\YesNoEnum;
+use App\Enums\Furips2\ServiceTypeEnum;
 use App\Enums\Invoice\StatusInvoiceEnum;
 use App\Http\Resources\CatalogoCum\CatalogoCumSelectResource;
 use App\Http\Resources\Cie10\Cie10SelectInfiniteResource;
@@ -21,6 +22,7 @@ use App\Http\Resources\CondicionyDestinoUsuarioEgreso\CondicionyDestinoUsuarioEg
 use App\Http\Resources\Country\CountrySelectResource;
 use App\Http\Resources\CupsRips\CupsRipsSelectInfiniteResource;
 use App\Http\Resources\Dci\DciSelectResource;
+use App\Http\Resources\Decreto780de2026\Decreto780de2026SelectResource;
 use App\Http\Resources\Departamento\DepartamentoSelectResource;
 use App\Http\Resources\Entity\EntitySelectResource;
 use App\Http\Resources\Ffm\FfmSelectResource;
@@ -59,6 +61,7 @@ use App\Repositories\CondicionyDestinoUsuarioEgresoRepository;
 use App\Repositories\CountryRepository;
 use App\Repositories\CupsRipsRepository;
 use App\Repositories\DciRepository;
+use App\Repositories\Decreto780de2026Repository;
 use App\Repositories\DepartamentoRepository;
 use App\Repositories\EntityRepository;
 use App\Repositories\FfmRepository;
@@ -142,6 +145,7 @@ class QueryController extends Controller
         protected DciRepository $dciRepository,
         protected IumRepository $iumRepository,
         protected DepartamentoRepository $departamentoRepository,
+        protected Decreto780de2026Repository $decreto780de2026Repository,
     ) {}
 
     public function selectInfiniteCountries(Request $request)
@@ -358,6 +362,7 @@ class QueryController extends Controller
             'municipios_countLinks' => $municipio->lastPage(),
         ];
     }
+
     public function selectInfiniteDepartamento(Request $request)
     {
         $departamento = $this->departamentoRepository->paginate($request->all());
@@ -953,6 +958,46 @@ class QueryController extends Controller
             'code' => 200,
             'pickupZoneEnum_arrayInfo' => $status->values()->toArray(), // Convertir a array y resetear índices
             'pickupZoneEnum_countLinks' => 1,
+        ];
+    }
+
+    public function selectServiceTypeEnum(Request $request)
+    {
+        // Obtener todos los casos del enum
+        $status = ServiceTypeEnum::cases();
+
+        // Mapear los casos a un formato con value y title
+        $status = collect($status)->map(function ($item) {
+            return [
+                'value' => $item,
+                'title' => $item->description(),
+            ];
+        });
+
+        // Filtrar por descripción si se envía un parámetro de búsqueda
+        if ($request->has('searchQueryInfinite') && ! empty($request->input('searchQueryInfinite'))) {
+            $searchTerm = strtolower($request->input('searchQueryInfinite'));
+            $status = $status->filter(function ($item) use ($searchTerm) {
+                return str_contains(strtolower($item['title']), $searchTerm);
+            });
+        }
+
+        return [
+            'code' => 200,
+            'serviceTypeEnum_arrayInfo' => $status->values()->toArray(), // Convertir a array y resetear índices
+            'serviceTypeEnum_countLinks' => 1,
+        ];
+    }
+
+    public function selectInfiniteDecreto780de2026(Request $request)
+    {
+        $decreto780de2026 = $this->decreto780de2026Repository->list($request->all());
+
+        $dataDecreto780de2026 = Decreto780de2026SelectResource::collection($decreto780de2026);
+
+        return [
+            'decreto780de2026_arrayInfo' => $dataDecreto780de2026,
+            'decreto780de2026_countLinks' => $decreto780de2026->lastPage(),
         ];
     }
 }
