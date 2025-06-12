@@ -111,7 +111,7 @@ class Furips1Controller extends Controller
             $post = $request->except([]);
             $furips1 = $this->furips1Repository->store($post);
 
-            $this->cacheService->clearByPrefix($this->key_redis_project.'string:invoices_paginate*');
+            $this->cacheService->clearByPrefix($this->key_redis_project . 'string:invoices_paginate*');
 
             return [
                 'code' => 200,

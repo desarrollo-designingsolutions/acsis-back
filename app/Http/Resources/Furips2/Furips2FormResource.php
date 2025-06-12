@@ -27,12 +27,12 @@ class Furips2FormResource extends JsonResource
 
             'serviceCode_id' => $this->serviceCode_type ? [
                 'value' => $this->serviceCode_id,
-                'title' => $this->serviceCode?->codigo.' - '.$serviceCode_title,
+                'title' => $this->serviceCode?->codigo . ' - ' . $serviceCode_title,
                 'codigo' => $this->serviceCode?->codigo,
             ] : null,
 
             'serviceDescription' => $this->serviceDescription,
-            'serviceDate' => $this->serviceDate,
+            'serviceQuantity' => $this->serviceQuantity,
             'serviceValue' => $this->serviceValue,
             'totalFactoryValue' => $this->totalFactoryValue,
             'totalClaimedValue' => $this->totalClaimedValue,
