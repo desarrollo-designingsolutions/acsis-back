@@ -8,6 +8,7 @@ use App\Http\Resources\Furips1\Furips1PaginateResource;
 use App\Http\Resources\Furips1\Furips1FormResource;
 use App\Repositories\Furips1Repository;
 use App\Repositories\InvoiceRepository;
+use App\Services\CacheService;
 use App\Traits\HttpResponseTrait;
 use Illuminate\Http\Request;
 
@@ -15,11 +16,17 @@ class Furips1Controller extends Controller
 {
     use HttpResponseTrait;
 
+    private $key_redis_project;
+
     public function __construct(
         protected InvoiceRepository $invoiceRepository,
         protected Furips1Repository $furips1Repository,
         protected QueryController $queryController,
-    ) {}
+        protected CacheService $cacheService,
+    ) {
+
+        $this->key_redis_project = env('KEY_REDIS_PROJECT');
+    }
 
     public function paginate(Request $request)
     {
@@ -103,6 +110,10 @@ class Furips1Controller extends Controller
 
             $post = $request->except([]);
             $furips1 = $this->furips1Repository->store($post);
+
+            $this->cacheService->clearByPrefix($this->key_redis_project . 'string:invoices_paginate*');
+
+
 
             return [
                 'code' => 200,
