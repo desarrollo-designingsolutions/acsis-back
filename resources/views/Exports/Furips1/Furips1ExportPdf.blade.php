@@ -145,34 +145,34 @@
 
                 <!-- Fecha Radicación -->
                 <span style="display: inline-block; width: 70px; vertical-align: middle;">Fecha Radicación:</span>
-                @for ($i = 0; $i < 8; $i++)
-                    <input type="text" value="{{ $i }}" maxlength="1"
+                @foreach ($data['radication_date'] as $digit)
+                <input type="text" value="{{ $digit }}" maxlength="1"
                     style="width: 14px; height: 14px; border: 1px solid #000; text-align: center; vertical-align: middle; padding: 0; margin: 0; box-sizing: border-box;">
-                    @endfor
+                @endforeach
 
-                    <!-- RG -->
-                    <span style="display: inline-block; width: 22px; margin-left: 10px; vertical-align: middle;">RG</span>
-                    <input type="text"
-                        style="width: 50px; height: 10px; border: 1px solid #000; vertical-align: middle; box-sizing: border-box;">
+                <!-- RG -->
+                <span style="display: inline-block; width: 22px; margin-left: 10px; vertical-align: middle;">RG</span>
+                <input type="text"
+                    style="width: 50px; height: 10px; border: 1px solid #000; vertical-align: middle; box-sizing: border-box;">
 
-                    <!-- No. Radicado -->
-                    <span style="display: inline-block; width: 129px; margin-left: 10px; vertical-align: middle;">No. Radicado</span>
-                    <input type="text"
-                        style="width: 150px; height: 10px; border: 1px solid #000; vertical-align: middle; box-sizing: border-box;">
+                <!-- No. Radicado -->
+                <span style="display: inline-block; width: 129px; margin-left: 10px; vertical-align: middle;">No. Radicado</span>
+                <input type="text" value="{{$data['radication_number']}}"
+                    style="width: 150px; height: 10px; border: 1px solid #000; vertical-align: middle; box-sizing: border-box;">
             </div>
 
             <!-- Fila 2: Nota y Nro Factura -->
             <div style="margin-bottom: 5px; font-size: 8px;">
 
                 <!-- Nota -->
-                <span style="color: red; display: inline-block; width: 150px; vertical-align: middle;">
-                    (Respuesta a glosa, marcar X en RG)
+                <span style="display: inline-block; width: 150px; vertical-align: middle;">
+                    No. Radicación Anterior <br> (Respuesta a glosa, marcar X en RG)
                 </span>
                 <input type="text" style="width: 150px; height: 10px; border: 1px solid #000; box-sizing: border-box;">
 
                 <!-- Nro Factura -->
                 <span style="display: inline-block; width: 130px; vertical-align: middle; margin-left: 10px;">Nro Factura / Cuenta de Cobro:</span>
-                <input type="text"
+                <input type="text" value="{{$data['tipo_nota_id'] ? $data['note_number'] : $data['invoice_number']}}"
                     style="width: 150px; height: 10px; border: 1px solid #000; vertical-align: middle; box-sizing: border-box;">
             </div>
 
@@ -185,13 +185,13 @@
             </h2>
             <div class="form-group">
                 <label style="width: 100px;">Razón Social</label>
-                <input type="text" style="width: 520px; height: 14px;">
+                <input type="text" value="{{ $data['service_vendor_name'] }}" style="width: 520px; height: 14px;">
             </div>
             <div class="form-group">
                 <label style="width: 100px;">Código Habilitación</label>
-                <input type="text" style="width: 250px; height: 14px;">
+                <input type="text" value="{{ $data['service_vendor_ipsable'] }}" style="width: 250px; height: 14px;">
                 <label style="margin-left: 10px; width: 20px;">Nit</label>
-                <input type="text" style="width: 222px; height: 14px;">
+                <input type="text" value="{{ $data['service_vendor_nit'] }}" style="width: 222px; height: 14px;">
             </div>
         </div>
 
@@ -199,15 +199,15 @@
             <h2>II. DATOS DE LA VÍCTIMA DEL EVENTO CATASTRÓFICO O ACCIDENTE DE TRÁNSITO</h2>
             <div class="form-group">
                 <label style="width: 50px;">1er Apellido</label>
-                <input type="text" style="width: 246px; height: 14px;">
+                <input type="text" value="{{ $data['patient_first_surname'] }}" style="width: 246px; height: 14px;">
                 <label style="width: 50px; margin-left: 10px;">2do Apellido</label>
-                <input type="text" style="width: 246px; height: 14px;">
+                <input type="text" value="{{ $data['patient_second_surname'] }}" style="width: 246px; height: 14px;">
             </div>
             <div class="form-group">
                 <label style="width: 50px;">1er Nombre</label>
-                <input type="text" style="width: 246px; height: 14px;">
+                <input type="text" value="{{ $data['patient_first_name'] }}" style="width: 246px; height: 14px;">
                 <label style="width: 50px; margin-left: 10px;">2do Nombre</label>
-                <input type="text" style="width: 246px; height: 14px;">
+                <input type="text" value="{{ $data['patient_second_name'] }}" style="width: 246px; height: 14px;">
             </div>
             <div class="form-group">
                 <label style="width: 100px;">Tipo de Documento</label>
@@ -216,276 +216,322 @@
                     style="width: 14px; height: 14px; border: 1px solid #000; text-align: center; vertical-align: middle; padding: 0; margin: 0; box-sizing: border-box;">
                     @endfor
                     <label style="width: 100px; margin-left: 90px;">No. Documento</label>
-                    <input type="text" style="width: 150px; height: 14px;">
+                    <input type="text" value="{{ $data['patient_document'] }}" style="width: 150px; height: 14px;">
             </div>
             <div class="form-group">
                 <span style="display: inline-block; width: 97px; vertical-align: middle;">Fecha de Nacimiento</span>
                 @for ($i = 0; $i < 8; $i++)
+                    <div style="
+        display: inline-block;
+        width: 14px;
+        height: 14px;
+        border: 1px solid #000;
+        position: relative;
+        text-align: center;
+        vertical-align: middle;
+        font-size: 10px;
+        line-height: 14px;
+        box-sizing: border-box;
+        margin-right: 1px;
+    ">
+                    <!-- Marca de agua (DDMMAAAA) -->
+                    <span style="color: #ccc; position: absolute; top: 0; left: 0; right: 0; bottom: 0; text-align: center;">
+                        {{ $data['birthMask'][$i] }}
+                    </span>
+
+                    <!-- Dato real encima -->
+                    <span style="position: relative; z-index: 2; color: black;">
+                        {{ $data['patient_birth_date'][$i] ?? '' }}
+                    </span>
+            </div>
+            @endfor
+            <label style="width: 20px; margin-left: 80px;">Sexo</label>
+            @foreach ($data['select_sexo'] as $digit)
+            <div style="
+        display: inline-block;
+        width: 14px;
+        height: 14px;
+        border: 1px solid #000;
+        position: relative;
+        text-align: center;
+        vertical-align: middle;
+        font-size: 10px;
+        line-height: 14px;
+        box-sizing: border-box;
+    ">
+                <!-- Marca de agua (letra M, F, etc.) -->
+                <span style="color: #ccc; position: absolute; left: 0; right: 0; top: 0; bottom: 0; text-align: center; line-height: 14px;">
+                    {{ $digit }}
+                </span>
+
+                <!-- Si se cumple la condición, sobreescribe con X -->
+                @if ($digit == $data['sexo_code'])
+                <span style="position: relative; z-index: 2; color: black;">X</span>
+                @endif
+            </div>
+            @endforeach
+        </div>
+        <div class="form-group">
+            <label style="width: 97px;">Dirección Residencia</label>
+            <input type="text" value="{{ $data['patient_recidence_address'] }}" style="width: 520px; height: 14px;">
+        </div>
+        <div class="form-group">
+            <label style="width: 98px;">Departamento</label>
+            <input type="text" value="{{ $data['patient_department_name'] }}" style="width: 130px; height: 14px;">
+            <label style="width: 30px; margin-left: 70px;">Cod.</label>
+            <input type="text" value="{{ $data['patient_department_code'] }}" style="width: 50px; height: 14px;">
+            <label style="width: 50px; margin-left: 30px;">Teléfono</label>
+            <input type="text" value="{{ $data['patient_phone'] }}" style="width: 125px; height: 14px;">
+        </div>
+        <div class="form-group">
+            <label style="width: 98px;">Municipio</label>
+            <input type="text" value="{{ $data['patient_municipio_name'] }}" style="width: 160px; height: 14px;">
+            <label style="width: 30px; margin-left: 40px;">Cod.</label>
+            <input type="text" value="{{ $data['patient_municipio_code'] }}" style="width: 70px; height: 14px;">
+        </div>
+        <div class="form-group" style="display: flex; align-items: center; font-size: 11px;">
+            <label style="width: 200px;">Condición del Accidentado</label>
+            @foreach ($data['victim_conditions'] as $option)
+            <div style="display: block; align-items: center; margin-left: 8px;">
+                <div style="
+                width: 14px;
+                height: 14px;
+                border: 1px solid #000;
+                text-align: center;
+                font-size: 10px;
+                line-height: 14px;
+                position: relative;
+            ">
+                    @if ($option['value'] == $data['patient_condition'])
+                    aaaaaaaaaaaaaaaaaa
+                    @endif
+                </div>
+                <label style="width: 60px; margin-left: 5px;">{{ $option['label']}}</label>
+            </div>
+            @endforeach
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>III. DATOS DEL SITIO DONDE OCURRIÓ EL EVENTO CATASTRÓFICO O EL ACCIDENTE DE TRÁNSITO</h2>
+        <div class="form-group">
+            <label style="width: 100px;">Naturaleza del evento</label>
+            <label style="width: 50px; margin-left: 20px;">Accidente de tránsito</label>
+            <input type="text" style="width: 14px; height: 14px;">
+        </div>
+        <div class="form-group">
+            <label style="width: 100px;">Naturales:</label>
+            <label style="width: 50px; margin-left: 20px;">Sismo</label>
+            <input type="text" style="width: 14px; height: 14px;">
+            <label style="width: 70px; margin-left: 20px;">Maremoto</label>
+            <input type="text" style="width: 14px; height: 14px; margin-left: 10px;">
+            <label style="width: 70px; margin-left: 20px;">Erupciones Volcánicas</label>
+            <input type="text" style="width: 14px; height: 14px; margin-left: 10px;">
+            <label style="width: 70px; margin-left: 20px;">Huracán</label>
+            <input type="text" style="width: 14px; height: 14px; margin-left: 10px;">
+        </div>
+        <div class="form-group">
+            <label style="width: 100px;"></label>
+            <label style="width: 50px; margin-left: 20px;">Inundaciones</label>
+            <input type="text" style="width: 14px; height: 14px;">
+            <label style="width: 70px; margin-left: 20px;">Avalancha</label>
+            <input type="text" style="width: 14px; height: 14px; margin-left: 10px;">
+            <label style="width: 70px; margin-left: 20px;">Deslizamiento de Tierra</label>
+            <input type="text" style="width: 14px; height: 14px; margin-left: 10px;">
+            <label style="width: 70px; margin-left: 20px;">Incendio Natural</label>
+            <input type="text" style="width: 14px; height: 14px; margin-left: 10px;">
+        </div>
+        <div class="form-group">
+            <label style="width: 100px;"></label>
+            <label style="width: 50px; margin-left: 20px;">Rayo</label>
+            <input type="text" style="width: 14px; height: 14px;">
+            <label style="width: 70px; margin-left: 20px;">Vendaval</label>
+            <input type="text" style="width: 14px; height: 14px; margin-left: 10px;">
+            <label style="width: 70px; margin-left: 20px;">Tornado</label>
+            <input type="text" style="width: 14px; height: 14px; margin-left: 10px;">
+        </div>
+        <div class="form-group">
+            <label style="width: 100px;">Terroristas:</label>
+            <label style="width: 50px; margin-left: 20px;">Explosión</label>
+            <input type="text" style="width: 14px; height: 14px;">
+            <label style="width: 70px; margin-left: 20px;">Masacre</label>
+            <input type="text" style="width: 14px; height: 14px; margin-left: 10px;">
+            <label style="width: 70px; margin-left: 20px;">Mina Antipersonal</label>
+            <input type="text" style="width: 14px; height: 14px; margin-left: 10px;">
+            <label style="width: 70px; margin-left: 20px;">Combate</label>
+            <input type="text" style="width: 14px; height: 14px; margin-left: 10px;">
+        </div>
+        <div class="form-group">
+            <label style="width: 100px;"></label>
+            <label style="width: 50px; margin-left: 20px;">Incendio</label>
+            <input type="text" style="width: 14px; height: 14px;">
+            <label style="width: 70px; margin-left: 20px;">Ataques a Municipios</label>
+            <input type="text" style="width: 14px; height: 14px; margin-left: 10px;">
+        </div>
+        <div class="form-group">
+            <label style="width: 50px;">Otro</label>
+            <input type="text" style="width: 14px; height: 14px;">
+            <span style="display: inline-block; width: 50px; vertical-align: middle; margin-left: 10px;">Cuál?</span>
+            <input type="text" style="width: 475px; height: 14px; border: 1px solid #000; vertical-align: middle; box-sizing: border-box;">
+        </div>
+        <div class="form-group">
+            <label style="width: 137px;">Dirección de la ocurrencia</label>
+            <input type="text" style="width: 475px; height: 14px;">
+        </div>
+        <div class="form-group">
+            <span style="display: inline-block; width: 145px; vertical-align: middle;">Fecha Evento/Accidente</span>
+            @for ($i = 0; $i < 8; $i++)
+                <input type="text" value="{{ $i }}" maxlength="1"
+                style="width: 14px; height: 14px; border: 1px solid #000; text-align: center; vertical-align: middle; padding: 0; margin: 0; box-sizing: border-box;">
+                @endfor
+                <span style="display: inline-block; width: 70px; vertical-align: middle; margin-left: 80px;">Hora</span>
+                @for ($i = 0; $i < 4; $i++)
                     <input type="text" value="{{ $i }}" maxlength="1"
                     style="width: 14px; height: 14px; border: 1px solid #000; text-align: center; vertical-align: middle; padding: 0; margin: 0; box-sizing: border-box;">
                     @endfor
-                    <label style="width: 20px; margin-left: 80px;">Sexo</label>
-                    @for ($i = 0; $i < 2; $i++)
-                        <input type="text" value="{{ $i }}" maxlength="1"
-                        style="width: 14px; height: 14px; border: 1px solid #000; text-align: center; vertical-align: middle; padding: 0; margin: 0; box-sizing: border-box; margin-left: 40px;">
-                        @endfor
-            </div>
-            <div class="form-group">
-                <label style="width: 97px;">Dirección Residencia</label>
-                <input type="text" style="width: 520px; height: 14px;">
-            </div>
-            <div class="form-group">
-                <label style="width: 98px;">Departamento</label>
-                <input type="text" style="width: 130px; height: 14px;">
-                <label style="width: 30px; margin-left: 70px;">Cod.</label>
-                <input type="text" style="width: 50px; height: 14px;">
-                <label style="width: 50px; margin-left: 30px;">Teléfono</label>
-                <input type="text" style="width: 125px; height: 14px;">
-            </div>
-            <div class="form-group">
-                <label style="width: 98px;">Municipio</label>
-                <input type="text" style="width: 160px; height: 14px;">
-                <label style="width: 30px; margin-left: 40px;">Cod.</label>
-                <input type="text" style="width: 70px; height: 14px;">
-            </div>
-            <div class="form-group">
-                <label style="width: 200px;">Condición del Accidentado</label>
-
-                <input type="text" style="width: 14px; height: 14px;">
-                <label style="width: 50px; margin-left: 5px;">Conductor</label>
-
-                <input type="text" style="width: 14px; height: 14px;">
-                <label style="width: 50px; margin-left: 5px;">Peatón</label>
-
-                <input type="text" style="width: 14px; height: 14px;">
-                <label style="width: 50px; margin-left: 5px;">Ocupante</label>
-
-                <input type="text" style="width: 14px; height: 14px;">
-                <label style="width: 50px; margin-left: 5px;">Ciclista</label>
-
-            </div>
         </div>
+        <div class="form-group">
+            <label style="width: 98px;">Departamento</label>
+            <input type="text" style="width: 130px; height: 14px;">
+            <label style="width: 30px; margin-left: 70px;">Cod.</label>
+            <input type="text" style="width: 50px; height: 14px;">
+        </div>
+        <div class="form-group">
+            <label style="width: 98px;">Municipio</label>
+            <input type="text" style="width: 160px; height: 14px;">
+            <label style="width: 30px; margin-left: 40px;">Cod.</label>
+            <input type="text" style="width: 70px; height: 14px;">
+            <label style="width: 30px; margin-left: 30px;">Zona</label>
+            @for ($i = 0; $i < 2; $i++)
+                <input type="text" value="{{ $i }}" maxlength="1"
+                style="width: 14px; height: 14px; border: 1px solid #000; text-align: center; vertical-align: middle; padding: 0; margin: 0; box-sizing: border-box; margin-left: 15px;">
+                @endfor
+        </div>
+        <div class="form-group">
+            <label style="width: 300px;">Descripción Breve del Evento Catastrófico o Accidente de Tránsito</label><br>
+            <label style="width: 250px;">Enuncie las principales características del evento / accidente:</label>
+            <div style="border-bottom: 1px solid #000; height: 16px; width: 100%;"></div>
+            <div style="border-bottom: 1px solid #000; height: 16px; width: 100%; margin-top: 2px;"></div>
+            <div style="border-bottom: 1px solid #000; height: 16px; width: 100%; margin-top: 2px;"></div>
+        </div>
+    </div>
 
-        <div class="section">
-            <h2>III. DATOS DEL SITIO DONDE OCURRIÓ EL EVENTO CATASTRÓFICO O EL ACCIDENTE DE TRÁNSITO</h2>
-            <div class="form-group">
-                <label style="width: 100px;">Naturaleza del evento</label>
-                <label style="width: 50px; margin-left: 20px;">Accidente de tránsito</label>
-                <input type="text" style="width: 14px; height: 14px;">
-            </div>
-            <div class="form-group">
-                <label style="width: 100px;">Naturales:</label>
-                <label style="width: 50px; margin-left: 20px;">Sismo</label>
-                <input type="text" style="width: 14px; height: 14px;">
-                <label style="width: 70px; margin-left: 20px;">Maremoto</label>
-                <input type="text" style="width: 14px; height: 14px; margin-left: 10px;">
-                <label style="width: 70px; margin-left: 20px;">Erupciones Volcánicas</label>
-                <input type="text" style="width: 14px; height: 14px; margin-left: 10px;">
-                <label style="width: 70px; margin-left: 20px;">Huracán</label>
-                <input type="text" style="width: 14px; height: 14px; margin-left: 10px;">
-            </div>
-            <div class="form-group">
-                <label style="width: 100px;"></label>
-                <label style="width: 50px; margin-left: 20px;">Inundaciones</label>
-                <input type="text" style="width: 14px; height: 14px;">
-                <label style="width: 70px; margin-left: 20px;">Avalancha</label>
-                <input type="text" style="width: 14px; height: 14px; margin-left: 10px;">
-                <label style="width: 70px; margin-left: 20px;">Deslizamiento de Tierra</label>
-                <input type="text" style="width: 14px; height: 14px; margin-left: 10px;">
-                <label style="width: 70px; margin-left: 20px;">Incendio Natural</label>
-                <input type="text" style="width: 14px; height: 14px; margin-left: 10px;">
-            </div>
-            <div class="form-group">
-                <label style="width: 100px;"></label>
-                <label style="width: 50px; margin-left: 20px;">Rayo</label>
-                <input type="text" style="width: 14px; height: 14px;">
-                <label style="width: 70px; margin-left: 20px;">Vendaval</label>
-                <input type="text" style="width: 14px; height: 14px; margin-left: 10px;">
-                <label style="width: 70px; margin-left: 20px;">Tornado</label>
-                <input type="text" style="width: 14px; height: 14px; margin-left: 10px;">
-            </div>
-            <div class="form-group">
-                <label style="width: 100px;">Terroristas:</label>
-                <label style="width: 50px; margin-left: 20px;">Explosión</label>
-                <input type="text" style="width: 14px; height: 14px;">
-                <label style="width: 70px; margin-left: 20px;">Masacre</label>
-                <input type="text" style="width: 14px; height: 14px; margin-left: 10px;">
-                <label style="width: 70px; margin-left: 20px;">Mina Antipersonal</label>
-                <input type="text" style="width: 14px; height: 14px; margin-left: 10px;">
-                <label style="width: 70px; margin-left: 20px;">Combate</label>
-                <input type="text" style="width: 14px; height: 14px; margin-left: 10px;">
-            </div>
-            <div class="form-group">
-                <label style="width: 100px;"></label>
-                <label style="width: 50px; margin-left: 20px;">Incendio</label>
-                <input type="text" style="width: 14px; height: 14px;">
-                <label style="width: 70px; margin-left: 20px;">Ataques a Municipios</label>
-                <input type="text" style="width: 14px; height: 14px; margin-left: 10px;">
-            </div>
-            <div class="form-group">
-                <label style="width: 50px;">Otro</label>
-                <input type="text" style="width: 14px; height: 14px;">
-                <span style="display: inline-block; width: 50px; vertical-align: middle; margin-left: 10px;">Cuál?</span>
-                <input type="text" style="width: 475px; height: 14px; border: 1px solid #000; vertical-align: middle; box-sizing: border-box;">
-            </div>
-            <div class="form-group">
-                <label style="width: 137px;">Dirección de la ocurrencia</label>
-                <input type="text" style="width: 475px; height: 14px;">
-            </div>
-            <div class="form-group">
-                <span style="display: inline-block; width: 145px; vertical-align: middle;">Fecha Evento/Accidente</span>
+    <div class="section">
+        <h2>IV. DATOS DEL VEHÍCULO DE ACCIDENTE DE TRÁNSITO</h2>
+        <div class="form-group">
+            <label style="margin-top: 20px; width: 100%;"></label>
+            <label style="width: 50px; margin-left: 40px;">Asegurado</label>
+            <input type="text" style="width: 14px; height: 14px;">
+            <label style="width: 70px; margin-left: 20px;">No Asegurado</label>
+            <input type="text" style="width: 14px; height: 14px;">
+            <label style="width: 70px; margin-left: 20px;">Vehículo fantasma</label>
+            <input type="text" style="width: 14px; height: 14px;">
+            <label style="width: 70px; margin-left: 20px;">Póliza Falsa</label>
+            <input type="text" style="width: 14px; height: 14px;">
+            <label style="width: 70px; margin-left: 20px;">Vehículo en fuga</label>
+            <input type="text" style="width: 14px; height: 14px;">
+        </div>
+        <div class="form-group">
+            <label style="width: 50px;">Marca</label>
+            <input type="text" style="width: 250px; height: 14px;">
+            <label style="width: 30px; margin-left: 70px;">Placa</label>
+            <input type="text" style="width: 70px; height: 14px;">
+        </div>
+        <div class="form-group">
+            <label style="width: 140px;">Tipo de Servicio:</label>
+            <label style="width: 40px; margin-left: 20px;">Particular</label>
+            <input type="text" style="width: 14px; height: 14px;">
+            <label style="width: 40px; margin-left: 20px;">Público</label>
+            <input type="text" style="width: 14px; height: 14px;">
+            <label style="width: 40px; margin-left: 20px;">Oficial</label>
+            <input type="text" style="width: 14px; height: 14px;">
+            <label style="width: 100px; margin-left: 20px;">Vehiculo de emergencia</label>
+            <input type="text" style="width: 14px; height: 14px;">
+        </div>
+        <div class="form-group">
+            <label style="width: 80px;"></label>
+            <label style="width: 160px; margin-left: 20px;">Vehiculo de servicio diplomatico o consular</label>
+            <input type="text" style="width: 14px; height: 14px;">
+            <label style="width: 100px; margin-left: 20px;">Vehiculo de transporte masivo</label>
+            <input type="text" style="width: 14px; height: 14px; margin-left: 10px;">
+            <label style="width: 70px; margin-left: 20px;"> Vehiculo escolar</label>
+            <input type="text" style="width: 14px; height: 14px; margin-left: 10px;">
+        </div>
+        <div class="form-group">
+            <label style="width: 100px;">Código de la aseguradora</label>
+            <input type="text" style="width: 250px; height: 14px;">
+        </div>
+        <div class="form-group">
+            <label style="width: 60px;">No. de la Póliza</label>
+            <input type="text" style="width: 250px; height: 14px;">
+            <label style="width: 100px; margin-left: 110px;">Intervención de autoridad</label>
+            <label style="width: 10px;">Si</label>
+            <input type="text" maxlength="1" style="width: 14px; height: 14px; border: 1px solid #000; text-align: center; vertical-align: middle; padding: 0; margin: 0; box-sizing: border-box;">
+            <label style="width: 10px; margin-left: 20px;">No</label>
+            <input type="text" maxlength="1" style="width: 14px; height: 14px; border: 1px solid #000; text-align: center; vertical-align: middle; padding: 0; margin: 0; box-sizing: border-box;">
+        </div>
+        <div class="form-group">
+            <label style="width: 40px;">Vigencia</label>
+            <label style="width: 30px;">Desde</label>
+            @for ($i = 0; $i < 8; $i++)
+                <input type="text" value="{{ $i }}" maxlength="1"
+                style="width: 14px; height: 14px; border: 1px solid #000; text-align: center; vertical-align: middle; padding: 0; margin: 0; box-sizing: border-box;">
+                @endfor
+                <label style="width: 30px; margin-left: 10px;">Hasta</label>
                 @for ($i = 0; $i < 8; $i++)
                     <input type="text" value="{{ $i }}" maxlength="1"
                     style="width: 14px; height: 14px; border: 1px solid #000; text-align: center; vertical-align: middle; padding: 0; margin: 0; box-sizing: border-box;">
                     @endfor
-                    <span style="display: inline-block; width: 70px; vertical-align: middle; margin-left: 80px;">Hora</span>
-                    @for ($i = 0; $i < 4; $i++)
-                        <input type="text" value="{{ $i }}" maxlength="1"
-                        style="width: 14px; height: 14px; border: 1px solid #000; text-align: center; vertical-align: middle; padding: 0; margin: 0; box-sizing: border-box;">
-                        @endfor
-            </div>
-            <div class="form-group">
-                <label style="width: 98px;">Departamento</label>
-                <input type="text" style="width: 130px; height: 14px;">
-                <label style="width: 30px; margin-left: 70px;">Cod.</label>
-                <input type="text" style="width: 50px; height: 14px;">
-            </div>
-            <div class="form-group">
-                <label style="width: 98px;">Municipio</label>
-                <input type="text" style="width: 160px; height: 14px;">
-                <label style="width: 30px; margin-left: 40px;">Cod.</label>
-                <input type="text" style="width: 70px; height: 14px;">
-                <label style="width: 30px; margin-left: 30px;">Zona</label>
-                @for ($i = 0; $i < 2; $i++)
-                    <input type="text" value="{{ $i }}" maxlength="1"
-                    style="width: 14px; height: 14px; border: 1px solid #000; text-align: center; vertical-align: middle; padding: 0; margin: 0; box-sizing: border-box; margin-left: 15px;">
-                    @endfor
-            </div>
-            <div class="form-group">
-                <label style="width: 300px;">Descripción Breve del Evento Catastrófico o Accidente de Tránsito</label><br>
-                <label style="width: 250px;">Enuncie las principales características del evento / accidente:</label>
-                <div style="border-bottom: 1px solid #000; height: 16px; width: 100%;"></div>
-                <div style="border-bottom: 1px solid #000; height: 16px; width: 100%; margin-top: 2px;"></div>
-                <div style="border-bottom: 1px solid #000; height: 16px; width: 100%; margin-top: 2px;"></div>
-            </div>
+                    <label style="width: 100px; margin-left: 15px;">Cobro Excedente Póliza</label>
+                    <label style="width: 10px;">Si</label>
+                    <input type="text" maxlength="1" style="width: 14px; height: 14px; border: 1px solid #000; text-align: center; vertical-align: middle; padding: 0; margin: 0; box-sizing: border-box;">
+                    <label style="width: 10px; margin-left: 20px;">No</label>
+                    <input type="text" maxlength="1" style="width: 14px; height: 14px; border: 1px solid #000; text-align: center; vertical-align: middle; padding: 0; margin: 0; box-sizing: border-box;">
         </div>
+    </div>
 
-        <div class="section">
-            <h2>IV. DATOS DEL VEHÍCULO DE ACCIDENTE DE TRÁNSITO</h2>
-            <div class="form-group">
-                <label style="margin-top: 20px; width: 100%;"></label>
-                <label style="width: 50px; margin-left: 40px;">Asegurado</label>
-                <input type="text" style="width: 14px; height: 14px;">
-                <label style="width: 70px; margin-left: 20px;">No Asegurado</label>
-                <input type="text" style="width: 14px; height: 14px;">
-                <label style="width: 70px; margin-left: 20px;">Vehículo fantasma</label>
-                <input type="text" style="width: 14px; height: 14px;">
-                <label style="width: 70px; margin-left: 20px;">Póliza Falsa</label>
-                <input type="text" style="width: 14px; height: 14px;">
-                <label style="width: 70px; margin-left: 20px;">Vehículo en fuga</label>
-                <input type="text" style="width: 14px; height: 14px;">
-            </div>
-            <div class="form-group">
-                <label style="width: 50px;">Marca</label>
-                <input type="text" style="width: 250px; height: 14px;">
-                <label style="width: 30px; margin-left: 70px;">Placa</label>
-                <input type="text" style="width: 70px; height: 14px;">
-            </div>
-            <div class="form-group">
-                <label style="width: 140px;">Tipo de Servicio:</label>
-                <label style="width: 40px; margin-left: 20px;">Particular</label>
-                <input type="text" style="width: 14px; height: 14px;">
-                <label style="width: 40px; margin-left: 20px;">Público</label>
-                <input type="text" style="width: 14px; height: 14px;">
-                <label style="width: 40px; margin-left: 20px;">Oficial</label>
-                <input type="text" style="width: 14px; height: 14px;">
-                <label style="width: 100px; margin-left: 20px;">Vehiculo de emergencia</label>
-                <input type="text" style="width: 14px; height: 14px;">
-            </div>
-            <div class="form-group">
-                <label style="width: 80px;"></label>
-                <label style="width: 160px; margin-left: 20px;">Vehiculo de servicio diplomatico o consular</label>
-                <input type="text" style="width: 14px; height: 14px;">
-                <label style="width: 100px; margin-left: 20px;">Vehiculo de transporte masivo</label>
-                <input type="text" style="width: 14px; height: 14px; margin-left: 10px;">
-                <label style="width: 70px; margin-left: 20px;"> Vehiculo escolar</label>
-                <input type="text" style="width: 14px; height: 14px; margin-left: 10px;">
-            </div>
-            <div class="form-group">
-                <label style="width: 100px;">Código de la aseguradora</label>
-                <input type="text" style="width: 250px; height: 14px;">
-            </div>
-            <div class="form-group">
-                <label style="width: 60px;">No. de la Póliza</label>
-                <input type="text" style="width: 250px; height: 14px;">
-                <label style="width: 100px; margin-left: 110px;">Intervención de autoridad</label>
-                <label style="width: 10px;">Si</label>
-                <input type="text" maxlength="1" style="width: 14px; height: 14px; border: 1px solid #000; text-align: center; vertical-align: middle; padding: 0; margin: 0; box-sizing: border-box;">
-                <label style="width: 10px; margin-left: 20px;">No</label>
-                <input type="text" maxlength="1" style="width: 14px; height: 14px; border: 1px solid #000; text-align: center; vertical-align: middle; padding: 0; margin: 0; box-sizing: border-box;">
-            </div>
-            <div class="form-group">
-                <label style="width: 40px;">Vigencia</label>
-                <label style="width: 30px;">Desde</label>
-                @for ($i = 0; $i < 8; $i++)
-                    <input type="text" value="{{ $i }}" maxlength="1"
-                    style="width: 14px; height: 14px; border: 1px solid #000; text-align: center; vertical-align: middle; padding: 0; margin: 0; box-sizing: border-box;">
-                    @endfor
-                    <label style="width: 30px; margin-left: 10px;">Hasta</label>
-                    @for ($i = 0; $i < 8; $i++)
-                        <input type="text" value="{{ $i }}" maxlength="1"
-                        style="width: 14px; height: 14px; border: 1px solid #000; text-align: center; vertical-align: middle; padding: 0; margin: 0; box-sizing: border-box;">
-                        @endfor
-                        <label style="width: 100px; margin-left: 15px;">Cobro Excedente Póliza</label>
-                        <label style="width: 10px;">Si</label>
-                        <input type="text" maxlength="1" style="width: 14px; height: 14px; border: 1px solid #000; text-align: center; vertical-align: middle; padding: 0; margin: 0; box-sizing: border-box;">
-                        <label style="width: 10px; margin-left: 20px;">No</label>
-                        <input type="text" maxlength="1" style="width: 14px; height: 14px; border: 1px solid #000; text-align: center; vertical-align: middle; padding: 0; margin: 0; box-sizing: border-box;">
-            </div>
+    <div class="section">
+        <h2>V. DATOS DEL PROPIETARIO DEL VEHÍCULO </h2>
+        <div class="form-group">
+            <label style="width: 50px;">1er Apellido</label>
+            <input type="text" style="width: 246px; height: 14px;">
+            <label style="width: 50px; margin-left: 10px;">2do Apellido</label>
+            <input type="text" style="width: 246px; height: 14px;">
         </div>
-
-        <div class="section">
-            <h2>V. DATOS DEL PROPIETARIO DEL VEHÍCULO </h2>
-            <div class="form-group">
-                <label style="width: 50px;">1er Apellido</label>
-                <input type="text" style="width: 246px; height: 14px;">
-                <label style="width: 50px; margin-left: 10px;">2do Apellido</label>
-                <input type="text" style="width: 246px; height: 14px;">
-            </div>
-            <div class="form-group">
-                <label style="width: 50px;">1er Nombre</label>
-                <input type="text" style="width: 246px; height: 14px;">
-                <label style="width: 50px; margin-left: 10px;">2do Nombre</label>
-                <input type="text" style="width: 246px; height: 14px;">
-            </div>
-            <div class="form-group">
-                <label style="width: 100px;">Tipo de Documento</label>
-                @for ($i = 0; $i < 7; $i++)
-                    <input type="text" value="{{ $i }}" maxlength="1"
-                    style="width: 14px; height: 14px; border: 1px solid #000; text-align: center; vertical-align: middle; padding: 0; margin: 0; box-sizing: border-box;">
-                    @endfor
-                    <label style="width: 100px; margin-left: 90px;">No. Documento</label>
-                    <input type="text" style="width: 150px; height: 14px;">
-            </div>
-            <div class="form-group">
-                <label style="width: 97px;">Dirección Residencia</label>
-                <input type="text" style="width: 520px; height: 14px;">
-            </div>
-            <div class="form-group">
-                <label style="width: 98px;">Departamento</label>
-                <input type="text" style="width: 130px; height: 14px;">
-                <label style="width: 30px; margin-left: 70px;">Cod.</label>
-                <input type="text" style="width: 50px; height: 14px;">
-                <label style="width: 50px; margin-left: 30px;">Teléfono</label>
-                <input type="text" style="width: 125px; height: 14px;">
-            </div>
-            <div class="form-group">
-                <label style="width: 98px;">Municipio</label>
-                <input type="text" style="width: 160px; height: 14px;">
-                <label style="width: 30px; margin-left: 40px;">Cod.</label>
-                <input type="text" style="width: 70px; height: 14px;">
-            </div>
+        <div class="form-group">
+            <label style="width: 50px;">1er Nombre</label>
+            <input type="text" style="width: 246px; height: 14px;">
+            <label style="width: 50px; margin-left: 10px;">2do Nombre</label>
+            <input type="text" style="width: 246px; height: 14px;">
         </div>
+        <div class="form-group">
+            <label style="width: 100px;">Tipo de Documento</label>
+            @for ($i = 0; $i < 7; $i++)
+                <input type="text" value="{{ $i }}" maxlength="1"
+                style="width: 14px; height: 14px; border: 1px solid #000; text-align: center; vertical-align: middle; padding: 0; margin: 0; box-sizing: border-box;">
+                @endfor
+                <label style="width: 100px; margin-left: 90px;">No. Documento</label>
+                <input type="text" style="width: 150px; height: 14px;">
+        </div>
+        <div class="form-group">
+            <label style="width: 97px;">Dirección Residencia</label>
+            <input type="text" style="width: 520px; height: 14px;">
+        </div>
+        <div class="form-group">
+            <label style="width: 98px;">Departamento</label>
+            <input type="text" style="width: 130px; height: 14px;">
+            <label style="width: 30px; margin-left: 70px;">Cod.</label>
+            <input type="text" style="width: 50px; height: 14px;">
+            <label style="width: 50px; margin-left: 30px;">Teléfono</label>
+            <input type="text" style="width: 125px; height: 14px;">
+        </div>
+        <div class="form-group">
+            <label style="width: 98px;">Municipio</label>
+            <input type="text" style="width: 160px; height: 14px;">
+            <label style="width: 30px; margin-left: 40px;">Cod.</label>
+            <input type="text" style="width: 70px; height: 14px;">
+        </div>
+    </div>
     </div>
 
     <div class="form-container" style="page-break-before: always;">
