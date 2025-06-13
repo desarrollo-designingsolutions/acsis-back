@@ -253,4 +253,35 @@ class Constants
         'PE',
         'PT',
     ];
+
+    public const CODS_PDF_FURIPS1_VICTIMDOCUMENTTYPE = [
+        'CC',
+        'CE',
+        'PA',
+        'DE',
+        'RC',
+        'AS',
+        'MS',
+        'PT',
+        'TI',
+    ];
+
+    public const CODS_PDF_FURIPS1_OWNERDOCUMENTTYPE = [
+        'CC',
+        'CE',
+        'PA',
+        'TI',
+        'RC',
+        'CD',
+    ];
+
+    public const CODS_PDF_FURIPS1_DRIVERDOCUMENTTYPE = [
+        'CC',
+        'CE',
+        'PA',
+        'TI',
+        'RC',
+        'AS',
+        'CD',
+    ];
 }
