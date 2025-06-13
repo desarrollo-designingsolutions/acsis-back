@@ -24,5 +24,5 @@ Route::middleware(['check.permission:menu.invoice'])->group(function () {
 
     Route::delete('/furips1/delete/{id}', [Furips1Controller::class, 'delete']);
 
-    Route::get('/furips1/pdf/{id}', [Furips1Controller::class, 'pdf']);
+    Route::get('/furips1/{invoice_id}/pdf', [Furips1Controller::class, 'pdf']);
 });
