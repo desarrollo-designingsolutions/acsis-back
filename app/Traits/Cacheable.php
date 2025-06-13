@@ -15,6 +15,9 @@ trait Cacheable
         'string:{table}_paginate*',
         'string:{table}_find_{id}*',
         'string:{table}_searchOne*',
+        'string:{table}_get*',
+        'string:{table}_all*',
+        'string:{table}_active*',
     ];
 
     /**
