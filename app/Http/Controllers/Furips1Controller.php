@@ -58,14 +58,13 @@ class Furips1Controller extends Controller
             $rgoResponseEnum = $this->queryController->selectRgoResponseEnum(request());
             $victimConditionEnum = $this->queryController->selectVictimConditionEnum(request());
             $eventNatureEnum = $this->queryController->selectEventNatureEnum(request());
-            $eventZoneEnum = $this->queryController->selectEventZoneEnum(request());
+            $zoneEnum = $this->queryController->selectZoneEnum(request());
             $referenceTypeEnum = $this->queryController->selectReferenceTypeEnum(request());
             $ipsCodHabilitacion = $this->queryController->selectInfiniteIpsCodHabilitacion(request());
             $vehicleTypeEnum = $this->queryController->selectVehicleTypeEnum(request());
             $yesNoEnum = $this->queryController->selectYesNoEnum(request());
             $surgicalComplexityEnum = $this->queryController->selectSurgicalComplexityEnum(request());
             $transportServiceTypeEnum = $this->queryController->selectTransportServiceTypeEnum(request());
-            $pickupZoneEnum = $this->queryController->selectPickupZoneEnum(request());
             $pais = $this->queryController->selectInfinitePais(request());
             $municipio = $this->queryController->selectInfiniteMunicipio(request());
             $departamento = $this->queryController->selectInfiniteDepartamento(request());
@@ -87,7 +86,7 @@ class Furips1Controller extends Controller
                 ...$rgoResponseEnum,
                 ...$victimConditionEnum,
                 ...$eventNatureEnum,
-                ...$eventZoneEnum,
+                ...$zoneEnum,
                 ...$referenceTypeEnum,
                 ...$ipsCodHabilitacion,
                 ...$vehicleTypeEnum,
@@ -95,7 +94,6 @@ class Furips1Controller extends Controller
                 ...$surgicalComplexityEnum,
                 ...$tipoIdPisis,
                 ...$transportServiceTypeEnum,
-                ...$pickupZoneEnum,
                 ...$pais,
                 ...$municipio,
                 ...$departamento,
@@ -137,14 +135,13 @@ class Furips1Controller extends Controller
             $rgoResponseEnum = $this->queryController->selectRgoResponseEnum(request());
             $victimConditionEnum = $this->queryController->selectVictimConditionEnum(request());
             $eventNatureEnum = $this->queryController->selectEventNatureEnum(request());
-            $eventZoneEnum = $this->queryController->selectEventZoneEnum(request());
+            $zoneEnum = $this->queryController->selectZoneEnum(request());
             $referenceTypeEnum = $this->queryController->selectReferenceTypeEnum(request());
             $ipsCodHabilitacion = $this->queryController->selectInfiniteIpsCodHabilitacion(request());
             $vehicleTypeEnum = $this->queryController->selectVehicleTypeEnum(request());
             $yesNoEnum = $this->queryController->selectYesNoEnum(request());
             $surgicalComplexityEnum = $this->queryController->selectSurgicalComplexityEnum(request());
             $transportServiceTypeEnum = $this->queryController->selectTransportServiceTypeEnum(request());
-            $pickupZoneEnum = $this->queryController->selectPickupZoneEnum(request());
             $pais = $this->queryController->selectInfinitePais(request());
             $municipio = $this->queryController->selectInfiniteMunicipio(request());
             $departamento = $this->queryController->selectInfiniteDepartamento(request());
@@ -167,7 +164,7 @@ class Furips1Controller extends Controller
                 ...$rgoResponseEnum,
                 ...$victimConditionEnum,
                 ...$eventNatureEnum,
-                ...$eventZoneEnum,
+                ...$zoneEnum,
                 ...$referenceTypeEnum,
                 ...$ipsCodHabilitacion,
                 ...$vehicleTypeEnum,
@@ -175,7 +172,6 @@ class Furips1Controller extends Controller
                 ...$surgicalComplexityEnum,
                 ...$tipoIdPisis,
                 ...$transportServiceTypeEnum,
-                ...$pickupZoneEnum,
                 ...$pais,
                 ...$municipio,
                 ...$departamento,

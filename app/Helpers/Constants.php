@@ -253,4 +253,14 @@ class Constants
         'PE',
         'PT',
     ];
+
+    public const CODS_SELECT_FORM_FULTRAN_CLAIMANIDTYPE = [
+        'CC',
+        'CE',
+        'PA',
+        'CD',
+        'PE',
+        'PT',
+        'DE',
+    ];
 }

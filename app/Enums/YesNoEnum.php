@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Enums\Furips1;
+namespace App\Enums;
 
 use App\Attributes\Description;
 use App\Attributes\Value;
