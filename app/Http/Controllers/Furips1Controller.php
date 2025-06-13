@@ -49,9 +49,10 @@ class Furips1Controller extends Controller
     {
         return $this->execute(function () use ($invoice_id) {
 
-            $invoice = $this->invoiceRepository->find($invoice_id, with: ['typeable:id,insurance_statuse_id', 'typeable.insurance_statuse:id,code'], select: ['id', 'type', 'typeable_type', 'typeable_id']);
+            $invoice = $this->invoiceRepository->find($invoice_id, with: ['typeable:id,insurance_statuse_id', 'typeable.insurance_statuse:id,code'], select: ['id', 'type', 'typeable_type', 'typeable_id', "invoice_date"]);
             $invoice = [
                 'id' => $invoice->id,
+                'invoice_date' => $invoice->invoice_date,
                 'insurance_statuse_code' => $invoice->typeable?->insurance_statuse?->code,
             ];
 
@@ -126,9 +127,10 @@ class Furips1Controller extends Controller
             $furips1 = $this->furips1Repository->find($id);
             $form = new Furips1FormResource($furips1);
 
-            $invoice = $this->invoiceRepository->find($furips1->invoice_id, with: ['typeable:id,insurance_statuse_id', 'typeable.insurance_statuse:id,code'], select: ['id', 'type', 'typeable_type', 'typeable_id']);
+            $invoice = $this->invoiceRepository->find($furips1->invoice_id, with: ['typeable:id,insurance_statuse_id', 'typeable.insurance_statuse:id,code'], select: ['id', 'type', 'typeable_type', 'typeable_id', "invoice_date"]);
             $invoice = [
                 'id' => $invoice->id,
+                'invoice_date' => $invoice->invoice_date,
                 'insurance_statuse_code' => $invoice->typeable?->insurance_statuse?->code,
             ];
 
