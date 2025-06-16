@@ -1,6 +1,5 @@
 <?php
 
-use App\Enums\Furips1\EventNatureEnum;
 use App\Enums\Furips1\EventZoneEnum;
 use App\Enums\Furips1\PickupZoneEnum;
 use App\Enums\Furips1\VictimConditionEnum;
@@ -36,7 +35,7 @@ Route::get('/pdf1', function () {
 
     // $id = '01971870-edd8-736e-b5b4-191eddc275ab';
     // $invoice = Invoice::find($id);
-    
+
     // $victimConditions = collect(VictimConditionEnum::cases())->map(function ($case) {
     //     return [
     //         'value' => $case,
@@ -63,7 +62,7 @@ Route::get('/pdf1', function () {
     // $owner_documents = Constants::CODS_PDF_FURIPS1_OWNERDOCUMENTTYPE;
 
     // $driver_documents = Constants::CODS_PDF_FURIPS1_DRIVERDOCUMENTTYPE;
-    
+
     // // return $invoice->furips1;
 
     // $data = [

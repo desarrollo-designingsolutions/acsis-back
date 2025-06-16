@@ -15,7 +15,6 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->foreignUuid('invoice_id')->nullable()->constrained();
 
-
             $table->string('previousRecordNumber', 10)->nullable();
             $table->string('rgResponse')->nullable();
             $table->string('firstLastNameClaimant', 20)->nullable();

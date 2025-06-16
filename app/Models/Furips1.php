@@ -89,4 +89,39 @@ class Furips1 extends Model
     {
         return $this->belongsTo(TipoIdPisis::class, 'driverDocumentType_id', 'id');
     }
+
+    public function primaryAdmissionDiagnosisCode(): BelongsTo
+    {
+        return $this->belongsTo(Cie10::class, 'primaryAdmissionDiagnosisCode_id', 'id');
+    }
+
+    public function associatedAdmissionDiagnosisCode1(): BelongsTo
+    {
+        return $this->belongsTo(Cie10::class, 'associatedAdmissionDiagnosisCode1_id', 'id');
+    }
+
+    public function associatedAdmissionDiagnosisCode2(): BelongsTo
+    {
+        return $this->belongsTo(Cie10::class, 'associatedAdmissionDiagnosisCode2_id', 'id');
+    }
+
+    public function primaryDischargeDiagnosisCode(): BelongsTo
+    {
+        return $this->belongsTo(Cie10::class, 'primaryDischargeDiagnosisCode_id', 'id');
+    }
+
+    public function associatedDischargeDiagnosisCode1(): BelongsTo
+    {
+        return $this->belongsTo(Cie10::class, 'associatedDischargeDiagnosisCode1_id', 'id');
+    }
+
+    public function associatedDischargeDiagnosisCode2(): BelongsTo
+    {
+        return $this->belongsTo(Cie10::class, 'associatedDischargeDiagnosisCode2_id', 'id');
+    }
+
+    public function doctorIdType(): BelongsTo
+    {
+        return $this->belongsTo(TipoIdPisis::class, 'doctorIdType_id', 'id');
+    }
 }

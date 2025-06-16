@@ -94,7 +94,7 @@ class FultranController extends Controller
             $post = $request->except([]);
             $fultran = $this->fultranRepository->store($post);
 
-            $this->cacheService->clearByPrefix($this->key_redis_project . 'string:invoices_paginate*');
+            $this->cacheService->clearByPrefix($this->key_redis_project.'string:invoices_paginate*');
 
             return [
                 'code' => 200,

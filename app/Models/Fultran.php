@@ -42,7 +42,6 @@ class Fultran extends Model
         return $this->belongsTo(Departamento::class, 'transferPickupDepartmentCode_id', 'id');
     }
 
-
     public function claimantMunicipalityCode(): BelongsTo
     {
         return $this->belongsTo(Municipio::class, 'claimantMunicipalityCode_id', 'id');

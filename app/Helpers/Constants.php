@@ -294,4 +294,10 @@ class Constants
         'AS',
         'CD',
     ];
+
+    public const CODS_SELECT_FORM_FURIPS1_DOCTORIDTYPE = [
+        'CC',
+        'CF',
+        'PA',
+    ];
 }

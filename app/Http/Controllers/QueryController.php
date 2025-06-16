@@ -3,20 +3,20 @@
 namespace App\Http\Controllers;
 
 use App\Enums\Fultran\EventTypeEnum;
-use App\Enums\Furips1\EventNatureEnum;
-use App\Enums\ZoneEnum;
-use App\Enums\Furips1\ReferenceTypeEnum;
-use App\Enums\Furips1\RgoResponseEnum;
 use App\Enums\Fultran\RgResponseEnum;
 use App\Enums\Fultran\VehicleServiceTypeEnum;
+use App\Enums\Furips1\EventNatureEnum;
+use App\Enums\Furips1\ReferenceTypeEnum;
+use App\Enums\Furips1\RgoResponseEnum;
 use App\Enums\Furips1\SurgicalComplexityEnum;
 use App\Enums\Furips1\TransportServiceTypeEnum;
 use App\Enums\Furips1\VehicleTypeEnum;
 use App\Enums\Furips1\VictimConditionEnum;
-use App\Enums\YesNoEnum;
 use App\Enums\Furips2\ServiceTypeEnum;
 use App\Enums\GenderEnum;
 use App\Enums\Invoice\StatusInvoiceEnum;
+use App\Enums\YesNoEnum;
+use App\Enums\ZoneEnum;
 use App\Http\Resources\CatalogoCum\CatalogoCumSelectResource;
 use App\Http\Resources\Cie10\Cie10SelectInfiniteResource;
 use App\Http\Resources\CodeGlosa\CodeGlosaSelectInfiniteResource;
@@ -935,8 +935,6 @@ class QueryController extends Controller
             'transportServiceTypeEnum_countLinks' => 1,
         ];
     }
-
-
 
     public function selectServiceTypeEnum(Request $request)
     {

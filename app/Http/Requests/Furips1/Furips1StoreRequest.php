@@ -44,35 +44,53 @@ class Furips1StoreRequest extends FormRequest
     {
         $merge = [];
 
-        if ($this->has('driverDocumentType')) {
-            $merge['driverDocumentType'] = getValueSelectInfinite($this->driverDocumentType);
+        if ($this->has('driverDocumentType_id')) {
+            $merge['driverDocumentType_id'] = getValueSelectInfinite($this->driverDocumentType_id);
         }
-        if ($this->has('driverResidenceDepartmentCode')) {
-            $merge['driverResidenceDepartmentCode'] = getValueSelectInfinite($this->driverResidenceDepartmentCode);
+        if ($this->has('driverResidenceDepartmentCode_id')) {
+            $merge['driverResidenceDepartmentCode_id'] = getValueSelectInfinite($this->driverResidenceDepartmentCode_id);
         }
-        if ($this->has('driverResidenceMunicipalityCode')) {
-            $merge['driverResidenceMunicipalityCode'] = getValueSelectInfinite($this->driverResidenceMunicipalityCode);
+        if ($this->has('driverResidenceMunicipalityCode_id')) {
+            $merge['driverResidenceMunicipalityCode_id'] = getValueSelectInfinite($this->driverResidenceMunicipalityCode_id);
         }
-        if ($this->has('eventDepartmentCode')) {
-            $merge['eventDepartmentCode'] = getValueSelectInfinite($this->eventDepartmentCode);
+        if ($this->has('eventDepartmentCode_id')) {
+            $merge['eventDepartmentCode_id'] = getValueSelectInfinite($this->eventDepartmentCode_id);
         }
-        if ($this->has('eventMunicipalityCode')) {
-            $merge['eventMunicipalityCode'] = getValueSelectInfinite($this->eventMunicipalityCode);
+        if ($this->has('eventMunicipalityCode_id')) {
+            $merge['eventMunicipalityCode_id'] = getValueSelectInfinite($this->eventMunicipalityCode_id);
         }
-        if ($this->has('ownerDocumentType')) {
-            $merge['ownerDocumentType'] = getValueSelectInfinite($this->ownerDocumentType);
+        if ($this->has('ownerDocumentType_id')) {
+            $merge['ownerDocumentType_id'] = getValueSelectInfinite($this->ownerDocumentType_id);
         }
-        if ($this->has('ownerResidenceDepartmentCode')) {
-            $merge['ownerResidenceDepartmentCode'] = getValueSelectInfinite($this->ownerResidenceDepartmentCode);
+        if ($this->has('ownerResidenceDepartmentCode_id')) {
+            $merge['ownerResidenceDepartmentCode_id'] = getValueSelectInfinite($this->ownerResidenceDepartmentCode_id);
         }
-        if ($this->has('ownerResidenceMunicipalityCode')) {
-            $merge['ownerResidenceMunicipalityCode'] = getValueSelectInfinite($this->ownerResidenceMunicipalityCode);
+        if ($this->has('ownerResidenceMunicipalityCode_id')) {
+            $merge['ownerResidenceMunicipalityCode_id'] = getValueSelectInfinite($this->ownerResidenceMunicipalityCode_id);
         }
-        if ($this->has('receivingHealthProviderCode')) {
-            $merge['receivingHealthProviderCode'] = getValueSelectInfinite($this->receivingHealthProviderCode);
+        if ($this->has('receivingHealthProviderCode_id')) {
+            $merge['receivingHealthProviderCode_id'] = getValueSelectInfinite($this->receivingHealthProviderCode_id);
         }
-        if ($this->has('referringHealthProviderCode')) {
-            $merge['referringHealthProviderCode'] = getValueSelectInfinite($this->referringHealthProviderCode);
+        if ($this->has('referringHealthProviderCode_id')) {
+            $merge['referringHealthProviderCode_id'] = getValueSelectInfinite($this->referringHealthProviderCode_id);
+        }
+        if ($this->has('primaryAdmissionDiagnosisCode_id')) {
+            $merge['primaryAdmissionDiagnosisCode_id'] = getValueSelectInfinite($this->primaryAdmissionDiagnosisCode_id);
+        }
+        if ($this->has('associatedAdmissionDiagnosisCode1_id')) {
+            $merge['associatedAdmissionDiagnosisCode1_id'] = getValueSelectInfinite($this->associatedAdmissionDiagnosisCode1_id);
+        }
+        if ($this->has('associatedAdmissionDiagnosisCode2_id')) {
+            $merge['associatedAdmissionDiagnosisCode2_id'] = getValueSelectInfinite($this->associatedAdmissionDiagnosisCode2_id);
+        }
+        if ($this->has('primaryDischargeDiagnosisCode_id')) {
+            $merge['primaryDischargeDiagnosisCode_id'] = getValueSelectInfinite($this->primaryDischargeDiagnosisCode_id);
+        }
+        if ($this->has('associatedDischargeDiagnosisCode1_id')) {
+            $merge['associatedDischargeDiagnosisCode1_id'] = getValueSelectInfinite($this->associatedDischargeDiagnosisCode1_id);
+        }
+        if ($this->has('associatedDischargeDiagnosisCode2_id')) {
+            $merge['associatedDischargeDiagnosisCode2_id'] = getValueSelectInfinite($this->associatedDischargeDiagnosisCode2_id);
         }
 
         $this->merge($merge);
