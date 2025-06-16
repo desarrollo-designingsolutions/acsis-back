@@ -349,120 +349,10 @@
         <div class="section">
             <h2>V. CERTIFICADO DE TRASLADO DE VICTIMAS</h2>
             <div class="form-group">
-                <label style="width: 50px;">1er Apellido</label>
-                <input type="text" style="width: 246px; height: 14px;">
-                <label style="width: 50px; margin-left: 10px;">2do Apellido</label>
-                <input type="text" style="width: 246px; height: 14px;">
+                <label style="width: 600px;">La institución prestadora de servicios de salud certifica que la entidad de transporte especial o persona natural efectuó el translado de la victima a esta IPS</label>
             </div>
             <div class="form-group">
-                <label style="width: 50px;">1er Nombre</label>
-                <input type="text" style="width: 246px; height: 14px;">
-                <label style="width: 50px; margin-left: 10px;">2do Nombre</label>
-                <input type="text" style="width: 246px; height: 14px;">
-            </div>
-            <div class="form-group">
-                <label style="width: 100px;">Tipo de Documento</label>
-                @for ($i = 0; $i < 7; $i++)
-                    <input type="text" value="{{ $i }}" maxlength="1"
-                    style="width: 14px; height: 14px; border: 1px solid #000; text-align: center; vertical-align: middle; padding: 0; margin: 0; box-sizing: border-box;">
-                    @endfor
-                    <label style="width: 100px; margin-left: 90px;">No. Documento</label>
-                    <input type="text" style="width: 150px; height: 14px;">
-            </div>
-            <div class="form-group">
-                <label style="width: 97px;">Dirección Residencia</label>
-                <input type="text" style="width: 520px; height: 14px;">
-            </div>
-            <div class="form-group">
-                <label style="width: 98px;">Departamento</label>
-                <input type="text" style="width: 130px; height: 14px;">
-                <label style="width: 30px; margin-left: 70px;">Cod.</label>
-                <input type="text" style="width: 50px; height: 14px;">
-                <label style="width: 50px; margin-left: 30px;">Teléfono</label>
-                <input type="text" style="width: 125px; height: 14px;">
-            </div>
-            <div class="form-group">
-                <label style="width: 98px;">Municipio</label>
-                <input type="text" style="width: 160px; height: 14px;">
-                <label style="width: 30px; margin-left: 40px;">Cod.</label>
-                <input type="text" style="width: 70px; height: 14px;">
-            </div>
-        </div>
-    </div>
-
-    <div class="form-container" style="page-break-before: always;">
-        <div class="header">
-
-            <!-- Imagen alineada a la izquierda absoluta -->
-            <div style="position: absolute; top: 10; left: 10;">
-                <img src="{{ public_path('storage/escudo_colombia.jpg') }}" alt="logo" style="max-width: 100px; max-height: 100px;">
-            </div>
-
-            <!-- Contenido centrado desde margen izquierdo -->
-            <h1 style="margin-left: 10;">REPÚBLICA DE COLOMBIA</h1><br />
-            <h1 style="margin-left: 10;">MINISTERIO DE SALUD Y PROTECCIÓN SOCIAL</h1><br />
-            <p style="margin-left: 40;">
-                FORMULARIO ÚNICO DE RECLAMACIÓN DE LAS INSTITUCIONES PRESTADORAS DE SERVICIOS DE SALUD POR SERVICIOS PRESTADOS A VICTIMAS
-            </p>
-            <p style="margin-left: 10;">PERSONAS JURIDICAS - FURIPS</p>
-        </div>
-
-        <div class="section">
-            <h2>
-                VI. DATOS DEL CONDUCTOR DEL VEHÍCULO INVOLUCRADO EN EL ACCIDENTE DE TRANSITO
-            </h2>
-            <div class="form-group">
-                <label style="width: 50px;">1er Apellido</label>
-                <input type="text" style="width: 246px; height: 14px;">
-                <label style="width: 50px; margin-left: 10px;">2do Apellido</label>
-                <input type="text" style="width: 246px; height: 14px;">
-            </div>
-            <div class="form-group">
-                <label style="width: 50px;">1er Nombre</label>
-                <input type="text" style="width: 246px; height: 14px;">
-                <label style="width: 50px; margin-left: 10px;">2do Nombre</label>
-                <input type="text" style="width: 246px; height: 14px;">
-            </div>
-            <div class="form-group">
-                <label style="width: 100px;">Tipo de Documento</label>
-                @for ($i = 0; $i < 7; $i++)
-                    <input type="text" value="{{ $i }}" maxlength="1"
-                    style="width: 14px; height: 14px; border: 1px solid #000; text-align: center; vertical-align: middle; padding: 0; margin: 0; box-sizing: border-box;">
-                    @endfor
-                    <label style="width: 100px; margin-left: 90px;">No. Documento</label>
-                    <input type="text" style="width: 150px; height: 14px;">
-            </div>
-            <div class="form-group">
-                <label style="width: 97px;">Dirección Residencia</label>
-                <input type="text" style="width: 520px; height: 14px;">
-            </div>
-            <div class="form-group">
-                <label style="width: 98px;">Departamento</label>
-                <input type="text" style="width: 130px; height: 14px;">
-                <label style="width: 30px; margin-left: 70px;">Cod.</label>
-                <input type="text" style="width: 50px; height: 14px;">
-                <label style="width: 50px; margin-left: 30px;">Teléfono</label>
-                <input type="text" style="width: 125px; height: 14px;">
-            </div>
-            <div class="form-group">
-                <label style="width: 98px;">Municipio</label>
-                <input type="text" style="width: 160px; height: 14px;">
-                <label style="width: 30px; margin-left: 40px;">Cod.</label>
-                <input type="text" style="width: 70px; height: 14px;">
-            </div>
-        </div>
-
-        <div class="section">
-            <h2>VII. DATOS DE REMISION</h2>
-            <div class="form-group">
-                <label style="width: 100px; margin-left: 15px;">Tipo Referencia</label>
-                <label style="width: 50px;">Remisión</label>
-                <input type="text" maxlength="1" style="width: 14px; height: 14px; border: 1px solid #000; text-align: center; vertical-align: middle; padding: 0; margin: 0; box-sizing: border-box;">
-                <label style="width: 80px; margin-left: 20px;">Orden de Servicio</label>
-                <input type="text" maxlength="1" style="width: 14px; height: 14px; border: 1px solid #000; text-align: center; vertical-align: middle; padding: 0; margin: 0; box-sizing: border-box;">
-            </div>
-            <div class="form-group">
-                <label style="width: 100px;">Fecha remisión</label>
+                <label style="width: 100px;">El día</label>
                 @for ($i = 0; $i < 8; $i++)
                     <input type="text" value="{{ $i }}" maxlength="1"
                     style="width: 14px; height: 14px; border: 1px solid #000; text-align: center; vertical-align: middle; padding: 0; margin: 0; box-sizing: border-box;">
@@ -474,169 +364,149 @@
                         @endfor
             </div>
             <div class="form-group">
-                <label style="width: 100px;">Prestador que remite</label>
-                <input type="text" style="width: 512px; height: 14px;">
-            </div>
-            <div class="form-group">
-                <label style="width: 100px;">Código de inscripción</label>
-                <input type="text" style="width: 200px; height: 14px;">
-            </div>
-            <div class="form-group">
-                <label style="width: 100px;">Profesional que remite</label>
-                <input type="text" style="width: 260px; height: 14px;">
-                <label style="width: 40px; margin-left: 30px;"> Cargo</label>
+                <label style="width: 150px;">Nombre IPS que atendió la victima</label>
+                <input type="text" style="width: 240px; height: 14px;">
+                <label style="width: 39px; margin-left: 10px;">Nit</label>
                 <input type="text" style="width: 165px; height: 14px;">
             </div>
             <div class="form-group">
-                <label style="width: 100px;">Fecha aceptación</label>
+                <label style="width: 50px;">Dirección</label>
+                <input type="text" style="width: 260px; height: 14px;">
+                <label style="width: 60px; margin-left: 30px;">Código IPS</label>
+                <input type="text" style="width: 202px; height: 14px;">
+            </div>
+            <div class="form-group">
+                <label style="width: 50px;">Departamento</label>
+                <input type="text" style="width: 260px; height: 14px;">
+                <label style="width: 30px; margin-left: 10px;">Código</label>
+                <input type="text" style="width: 50px; height: 14px;">
+                <label style="width: 50px; margin-left: 10px;">Teléfono</label>
+                <input type="text" style="width: 125px; height: 14px;">
+            </div>
+            <div class="form-group">
+                <label style="width: 98px;">Municipio</label>
+                <input type="text" style="width: 160px; height: 14px;">
+                <label style="width: 30px; margin-left: 40px;">Cod.</label>
+                <input type="text" style="width: 70px; height: 14px;">
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>VI. DATOS OBLIGATORIOS SI EL EVENTO ES UN ACCIDENTE DE TRANSITO</h2>
+            <div class="form-group">
+                <label style="width: 100px;">Condición de víctima:</label>
+                <label style="width: 50px; margin-left: 20px;">Conductor</label>
+                <input type="text" style="width: 14px; height: 14px;">
+                <label style="width: 70px; margin-left: 20px;">Peatón</label>
+                <input type="text" style="width: 14px; height: 14px; margin-left: 10px;">
+                <label style="width: 70px; margin-left: 20px;">Ocupante</label>
+                <input type="text" style="width: 14px; height: 14px; margin-left: 10px;">
+                <label style="width: 70px; margin-left: 20px;">Ciclista</label>
+                <input type="text" style="width: 14px; height: 14px; margin-left: 10px;">
+            </div>
+            <div class="form-group">
+                <label style="width: 100px;">Estado de Aseguramiento:</label>
+                <label style="width: 50px; margin-left: 20px;">Asegurado</label>
+                <input type="text" style="width: 14px; height: 14px;">
+                <label style="width: 70px; margin-left: 20px;">No asegurado</label>
+                <input type="text" style="width: 14px; height: 14px; margin-left: 10px;">
+                <label style="width: 70px; margin-left: 20px;">Vehiculo fantasma</label>
+                <input type="text" style="width: 14px; height: 14px; margin-left: 10px;">
+                <label style="width: 70px; margin-left: 20px;">Póliza falsa</label>
+                <input type="text" style="width: 14px; height: 14px; margin-left: 10px;">
+            </div>
+            <div class="form-group">
+                <label style="width: 100px;"></label>
+                <label style="width: 50px; margin-left: 20px;">Vehículo en fuga</label>
+                <input type="text" style="width: 14px; height: 14px;">
+                <label style="width: 70px; margin-left: 20px;">Asegurado D.2497</label>
+                <input type="text" style="width: 14px; height: 14px; margin-left: 10px;">
+            </div>
+            <div class="form-group">
+                <label style="width: 120px;">Placa del vehículo involucrado</label>
+                <input type="text" style="width: 130px; height: 14px;">
+                <label style="width: 100px; margin-left: 10px;">Código de la aseguradora</label>
+                <input type="text" style="width: 50px; height: 14px;">
+                <label style="width: 80px; margin-left: 10px;">Número de la póliza</label>
+                <input type="text" style="width: 70px; height: 14px;">
+            </div>
+            <div class="form-group">
+                <label style="width: 100px;">Tipo de Veículo:</label>
+                <label style="width: 50px; margin-left: 20px;">Automóvil</label>
+                <input type="text" style="width: 14px; height: 14px;">
+                <label style="width: 70px; margin-left: 20px;">Bus</label>
+                <input type="text" style="width: 14px; height: 14px; margin-left: 10px;">
+                <label style="width: 70px; margin-left: 20px;">Buseta</label>
+                <input type="text" style="width: 14px; height: 14px; margin-left: 10px;">
+                <label style="width: 70px; margin-left: 20px;">Camión</label>
+                <input type="text" style="width: 14px; height: 14px; margin-left: 10px;">
+            </div>
+            <div class="form-group">
+                <label style="width: 100px;"></label>
+                <label style="width: 50px; margin-left: 20px;">Camioneta</label>
+                <input type="text" style="width: 14px; height: 14px;">
+                <label style="width: 70px; margin-left: 20px;">Campero</label>
+                <input type="text" style="width: 14px; height: 14px; margin-left: 10px;">
+                <label style="width: 70px; margin-left: 20px;">Microbus</label>
+                <input type="text" style="width: 14px; height: 14px; margin-left: 10px;">
+                <label style="width: 70px; margin-left: 20px;">Tractocamión</label>
+                <input type="text" style="width: 14px; height: 14px; margin-left: 10px;">
+            </div>
+            <div class="form-group">
+                <label style="width: 100px;"></label>
+                <label style="width: 50px; margin-left: 20px;">Motocicleta</label>
+                <input type="text" style="width: 14px; height: 14px;">
+                <label style="width: 70px; margin-left: 20px;">Motocarro</label>
+                <input type="text" style="width: 14px; height: 14px; margin-left: 10px;">
+                <label style="width: 70px; margin-left: 20px;">Moto triciclo</label>
+                <input type="text" style="width: 14px; height: 14px; margin-left: 10px;">
+                <label style="width: 70px; margin-left: 20px;">Cuatrimoto</label>
+                <input type="text" style="width: 14px; height: 14px; margin-left: 10px;">
+            </div>
+            <div class="form-group">
+                <label style="width: 100px;"></label>
+                <label style="width: 50px; margin-left: 20px;">Moto Extranjera</label>
+                <input type="text" style="width: 14px; height: 14px;">
+                <label style="width: 70px; margin-left: 20px;">Vehículo Extranjero</label>
+                <input type="text" style="width: 14px; height: 14px; margin-left: 10px;">
+                <label style="width: 70px; margin-left: 20px;">Volqueta</label>
+                <input type="text" style="width: 14px; height: 14px; margin-left: 10px;">
+            </div>
+            <div class="form-group">
+                <label style="width: 100px;">Fecha de inicio póliza</label>
                 @for ($i = 0; $i < 8; $i++)
                     <input type="text" value="{{ $i }}" maxlength="1"
                     style="width: 14px; height: 14px; border: 1px solid #000; text-align: center; vertical-align: middle; padding: 0; margin: 0; box-sizing: border-box;">
                     @endfor
-                    <span style="display: inline-block; width: 50px; vertical-align: middle; margin-left: 20px;">a las</span>
-                    @for ($i = 0; $i < 4; $i++)
+                    <label style="width: 80px; margin-left: 10px;">Fecha final póliza</label>
+                    @for ($i = 0; $i < 8; $i++)
                         <input type="text" value="{{ $i }}" maxlength="1"
                         style="width: 14px; height: 14px; border: 1px solid #000; text-align: center; vertical-align: middle; padding: 0; margin: 0; box-sizing: border-box;">
                         @endfor
             </div>
             <div class="form-group">
-                <label style="width: 100px;">Prestador que recibe</label>
-                <input type="text" style="width: 512px; height: 14px;">
-            </div>
-            <div class="form-group">
-                <label style="width: 100px;">Código de inscripción</label>
-                <input type="text" style="width: 200px; height: 14px;">
-            </div>
-            <div class="form-group">
-                <label style="width: 100px;">Profesional que recibe</label>
-                <input type="text" style="width: 260px; height: 14px;">
-                <label style="width: 40px; margin-left: 30px;"> Cargo</label>
-                <input type="text" style="width: 165px; height: 14px;">
+                <label style="width: 120px;">Número de radicado SIRAS</label>
+                <input type="text" style="width: 130px; height: 14px;">
             </div>
         </div>
 
         <div class="section">
-            <h2> VIII. AMPARO DE TRANSPORTE Y MOVILIZACION DE LA VICTIMA</h2>
+            <h2>VII. AMPARO RECLAMADO</h2>
             <div class="form-group">
-                <label style="width: 100%;">Diligenciar únicamente para el transporte desde el sitio del evento hasta la primera IPS (Transporte Primario)</label>
-                <label style="width: 100px;">Datos de Vehículo </label>
-                <label style="width: 50px;">Placa No. </label>
+                <label style="width: 100px;">Valor Facturado:</label>
+                <input type="text" style="width: 100px; height: 14px;">
+                <label style="width: 100px; margin-left: 20px;">Valor Reclamado:</label>
                 <input type="text" style="width: 100px; height: 14px;">
             </div>
-
-            <div class="form-group">
-                <label style="width: 100px;">Transporto la víctima desde</label>
-                <input type="text" style="width: 260px; height: 14px;">
-                <label style="width: 40px; margin-left: 30px;">Hasta</label>
-                <input type="text" style="width: 165px; height: 14px;">
-            </div>
-            <div class="form-group">
-                <label style="width: 100px;">Tipo de Transporte</label>
-                <label style="width: 80px;">Ambulancia Básica</label>
-                <input type="text" maxlength="1" style="width: 14px; height: 14px; border: 1px solid #000; text-align: center; vertical-align: middle; padding: 0; margin: 0; box-sizing: border-box;">
-                <label style="width: 80px; margin-left: 20px;">Ambulancia Medicada</label>
-                <input type="text" maxlength="1" style="width: 14px; height: 14px; border: 1px solid #000; text-align: center; vertical-align: middle; padding: 0; margin: 0; box-sizing: border-box;">
-                <label style="width: 110px; margin-left: 40px;">Lugar donde recoge la Victima</label>
-                <label style="width: 30px; margin-left: 30px;">Zona</label>
-                @for ($i = 0; $i < 2; $i++)
-                    <input type="text" value="{{ $i }}" maxlength="1"
-                    style="width: 14px; height: 14px; border: 1px solid #000; text-align: center; vertical-align: middle; padding: 0; margin: 0; box-sizing: border-box; margin-left: 15px;">
-                    @endfor
-            </div>
         </div>
 
         <div class="section">
-            <h2>IX. CERTIFICADO DE LA ATENCIÓN MEDICA DELA VICTIMA COMO PRUEBA DEL ACCIDENTE O EVENTO</h2>
-            <div class="form-group">
-                <label style="width: 100px;">Fecha de ingreso</label>
-                @for ($i = 0; $i < 8; $i++)
-                    <input type="text" value="{{ $i }}" maxlength="1"
-                    style="width: 14px; height: 14px; border: 1px solid #000; text-align: center; vertical-align: middle; padding: 0; margin: 0; box-sizing: border-box;">
-                    @endfor
-                    <span style="display: inline-block; width: 50px; vertical-align: middle; margin-left: 20px;">a las</span>
-                    @for ($i = 0; $i < 4; $i++)
-                        <input type="text" value="{{ $i }}" maxlength="1"
-                        style="width: 14px; height: 14px; border: 1px solid #000; text-align: center; vertical-align: middle; padding: 0; margin: 0; box-sizing: border-box;">
-                        @endfor
-            </div>
-
-            <div class="form-group">
-                <label style="width: 150px;">Código Diagnóstico principal de Ingreso</label>
-                <input type="text" style="width: 116px; height: 14px;">
-                <label style="width: 150px; margin-left: 60px;"> Código Diagnóstico principal de Egreso</label>
-                <input type="text" style="width: 116px; height: 14px;">
-            </div>
-
-            <div class="form-group">
-                <label style="width: 150px;">Otro código Diagnóstico principal de Ingreso</label>
-                <input type="text" style="width: 116px; height: 14px;">
-                <label style="width: 150px; margin-left: 60px;">Otro código Diagnóstico principal de Egreso</label>
-                <input type="text" style="width: 116px; height: 14px;">
-            </div>
-
-            <div class="form-group">
-                <label style="width: 150px;">Otro código Diagnóstico principal de Ingreso</label>
-                <input type="text" style="width: 116px; height: 14px;">
-                <label style="width: 150px; margin-left: 60px;">Otro código Diagnóstico principal de Egreso</label>
-                <input type="text" style="width: 116px; height: 14px;">
-            </div>
-
-            <div class="form-group">
-                <label style="width: 50px;">1er Apellido</label>
-                <input type="text" style="width: 241px; height: 14px;">
-                <label style="width: 50px; margin-left: 10px;">2do Apellido</label>
-                <input type="text" style="width: 241px; height: 14px;">
-            </div>
-            <div class="form-group">
-                <label style="width: 50px;">1er Nombre</label>
-                <input type="text" style="width: 241px; height: 14px;">
-                <label style="width: 50px; margin-left: 10px;">2do Nombre</label>
-                <input type="text" style="width: 241px; height: 14px;">
-            </div>
-
-            <div class="form-group">
-                <label style="width: 130px;">Tipo de Documento</label>
-                @for ($i = 0; $i < 3; $i++)
-                    <input type="text" value="{{ $i }}" maxlength="1"
-                    style="width: 14px; height: 14px; border: 1px solid #000; text-align: center; vertical-align: middle; padding: 0; margin: 0; box-sizing: border-box;">
-                    @endfor
-                    <label style="width: 100px; margin-left: 170px;">No. Documento</label>
-                    <input type="text" style="width: 150px; height: 14px;">
-            </div>
-
-            <div class="form-group">
-                <label style="width: 355px;"></label>
-                <label style="width: 100px;">No. Documento</label>
-                <input type="text" style="width: 150px; height: 14px;">
-            </div>
-        </div>
-
-        <div class="section" style="page-break-before: always;">
-            <h2>X. AMPAROS QUE RECLAMA</h2>
-            <table style="margin-top: 5px;">
-                <tr>
-                    <td></td>
-                    <td style="border: 1px solid #000; font-weight: bold; text-align: center;">Valor total facturado</td>
-                    <td style="border: 1px solid #000; font-weight: bold; text-align: center;">Valor reclamado al FOSYGA</td>
-                </tr>
-                <tr>
-                    <td style="width: 250px; border: 1px solid #000;">Gastos médicos quirúrgicos</td>
-                    <td style="width: 150px; border: 1px solid #000;"></td>
-                    <td style="width: 150px; border: 1px solid #000;"></td>
-                </tr>
-                <tr>
-                    <td style="width: 250px; border: 1px solid #000;">Gastos de transporte y movilización de la víctima</td>
-                    <td style="width: 150px; border: 1px solid #000;"></td>
-                    <td style="width: 150px; border: 1px solid #000;"></td>
-                </tr>
-            </table>
-            <p style="margin-left: 0; margin-top: 5px; font-size: 7px; text-align: justify; width: 655px;">
-                El total facturado y reclamado descrito en este numeral se debe detallar y hacer descripcion de las actividades, procedimientos, medicamentos, insumos, suministros, materiales, dentro del anexo
-                técnico numero 2
-            </p>
-        </div>
-        <div class="section">
-            <h2>XI. DECLARACIONES DE LA INSTITUCION PRESTADORA DE SERVICIOS DE SALUD</h2>
+            <h2>VIII. MANIFESTACION DEL SERVICIO HABILITADO DEL PRESTADOR DE SERVICIOS DE SALUD</h2>
+            <label style="width: 150px;">Manifestación de servicios habilitados</label>
+            <label style="width: 10px; margin-left: 20px;">Si</label>
+            <input type="text" maxlength="1" style="width: 14px; height: 14px; border: 1px solid #000; text-align: center; vertical-align: middle; padding: 0; margin: 0; box-sizing: border-box;">
+            <label style="width: 10px; margin-left: 20px;">No</label>
+            <input type="text" maxlength="1" style="width: 14px; height: 14px; border: 1px solid #000; text-align: center; vertical-align: middle; padding: 0; margin: 0; box-sizing: border-box;">
             <p style="margin-left: 0; margin-top: 5px; font-size: 7px; text-align: justify; width: 655px;">
                 Como representante legal o Gerente de la Institución Prestadora de Servicios de Salud, declaró bajo la gavedad de juramento que toda la información contenidad en este formulario es cierta y
                 podrá se verificada por la Compañía de Seguros, por la Dirección de Administracion de Fondos de la Protección Social o quien haga sus veces, por el Administrador Fiduciario del Fondo de
@@ -647,12 +517,19 @@
                 <p style="display: inline-block; border-bottom: 1px solid #000; height: 16px; width: 200px; padding-left: 10px; margin-left: 20px; vertical-align: top;"></p>
                 <p style="display: inline-block; border-bottom: 1px solid #000; height: 16px; width: 200px; padding-left: 10px; margin-left: 180px; vertical-align: top;"></p>
                 <div style="margin-top: 2px;">
-                    <span style="display: inline-block; width: 100px; margin-left: 100px;">NOMBRE</span>
-                    <span style="display: inline-block; width: 200px; margin-left: 220px;">FIRMA DEL REPRESENTANTE LEGAL O GERENTE</span>
+                    <span style="display: inline-block; width: 190px; margin-left: 30px; text-align: center;">NOMBRE REPRESENTANTE LEGAL O PERSONA RESPONSABLE PARA TRAMITE DE ADMISIONES DE LA IPS</span>
+                    <span style="display: inline-block; width: 200px; margin-left: 195px; text-align: center;">FIRMA DEL REPRESENTANTE LEGAL O PERSONA RESPONSABLE PARA TRAMITE DE ADMISIONES DE LA IPS</span>
+                </div>
+            </div>
+            <div style="margin-left: 0; margin-top: 5px; font-size: 8px;">
+                <p style="display: inline-block; border-bottom: 1px solid #000; height: 16px; width: 200px; padding-left: 10px; margin-left: 20px; vertical-align: top;"></p>
+                <p style="display: inline-block; border-bottom: 1px solid #000; height: 16px; width: 200px; padding-left: 10px; margin-left: 180px; vertical-align: top;"></p>
+                <div style="margin-top: 2px;">
+                    <span style="display: inline-block; width: 190px; margin-left: 30px; text-align: center; vertical-align: top;">TIPO Y NUMERO DE DOCUMENTO</span>
+                    <span style="display: inline-block; width: 200px; margin-left: 195px; text-align: center;">FIRMA DEL REPRESENTANTE LEGAL DE LA EMPRESA TRANSPORTADORA O DE LA PERSONA NATURAL QUE REALIZO EL TRANSPORTE</span>
                 </div>
             </div>
         </div>
-
     </div>
 </body>
 
