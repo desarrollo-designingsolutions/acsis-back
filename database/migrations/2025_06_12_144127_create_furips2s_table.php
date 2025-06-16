@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('serviceCode_type')->nullable();
             $table->string('serviceCode_id')->nullable();
             $table->text('serviceDescription')->nullable();
-            $table->string('serviceDate')->nullable();
+            $table->string('serviceQuantity')->nullable();
             $table->decimal('serviceValue', 15, 2)->nullable();
             $table->decimal('totalFactoryValue', 15, 0)->nullable();
             $table->decimal('totalClaimedValue', 15, 0)->nullable();

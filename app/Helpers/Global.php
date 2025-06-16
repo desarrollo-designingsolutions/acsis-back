@@ -68,7 +68,7 @@ function generatePastelColor($opacity = 1.0)
 function truncate_text($text, $maxLength = 15)
 {
     if (strlen($text) > $maxLength) {
-        return substr($text, 0, $maxLength) . '...';
+        return substr($text, 0, $maxLength).'...';
     }
 
     return $text;
@@ -79,7 +79,7 @@ function formatNumber($number, $currency_symbol = '$ ', $decimal = 2)
     // Asegúrate de que el número es un número flotante
     $formattedNumber = number_format((float) $number, $decimal, ',', '.');
 
-    return $currency_symbol . $formattedNumber;
+    return $currency_symbol.$formattedNumber;
 }
 
 function formattedElement($element)
@@ -160,7 +160,7 @@ function updateInvoiceServicesJson(string $invoice_id, TypeServiceEnum $serviceT
     $invoice = Invoice::select(['id', 'path_json', 'invoice_number', 'company_id'])->find($invoice_id);
 
     // Define file path
-    $nameFile = $invoice->id . '.json';
+    $nameFile = $invoice->id.'.json';
     $path = "companies/company_{$invoice->company_id}/invoices/invoice_{$invoice->id}/{$nameFile}";
     $disk = Constants::DISK_FILES;
 
@@ -218,7 +218,7 @@ function updateInvoiceServicesJson(string $invoice_id, TypeServiceEnum $serviceT
             }
             $jsonData['usuarios'][0]['servicios'][$serviceType->elementJson()] = array_filter(
                 $jsonData['usuarios'][0]['servicios'][$serviceType->elementJson()],
-                fn($service) => $service['consecutivo'] !== $consecutivo
+                fn ($service) => $service['consecutivo'] !== $consecutivo
             );
             // Reindex consecutivos in JSON
             $newServices = [];
@@ -313,7 +313,7 @@ function getModelByTableName($tableName)
 
     foreach (File::allFiles($path) as $file) {
         $relativePath = $file->getRelativePathname();
-        $class = 'App\\Models\\' . str_replace(['/', '.php'], ['\\', ''], $relativePath);
+        $class = 'App\\Models\\'.str_replace(['/', '.php'], ['\\', ''], $relativePath);
 
         if (class_exists($class) && is_subclass_of($class, \Illuminate\Database\Eloquent\Model::class)) {
             if ((new $class)->getTable() === $tableName) {
@@ -332,6 +332,7 @@ function formatDateToArray($date, string $format = 'dmY'): array
     }
 
     $parsed = $date instanceof Carbon ? $date : Carbon::parse($date);
+
     return str_split($parsed->format($format));
 }
 
@@ -341,5 +342,6 @@ function formatTimeToArray($time, string $format = 'Hi'): array
         return array_fill(0, strlen($format), '');
     }
     $parsed = $time instanceof Carbon ? $time : Carbon::parse($time);
+
     return str_split($parsed->format($format));
 }

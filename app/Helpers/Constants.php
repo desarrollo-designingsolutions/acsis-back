@@ -254,6 +254,16 @@ class Constants
         'PT',
     ];
 
+    public const CODS_SELECT_FORM_FULTRAN_CLAIMANIDTYPE = [
+        'CC',
+        'CE',
+        'PA',
+        'CD',
+        'PE',
+        'PT',
+        'DE',
+    ];
+
     public const CODS_PDF_FURIPS1_VICTIMDOCUMENTTYPE = [
         'CC',
         'CE',
@@ -283,5 +293,11 @@ class Constants
         'RC',
         'AS',
         'CD',
+    ];
+
+    public const CODS_SELECT_FORM_FURIPS1_DOCTORIDTYPE = [
+        'CC',
+        'CF',
+        'PA',
     ];
 }

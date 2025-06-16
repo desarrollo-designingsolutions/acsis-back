@@ -1,6 +1,5 @@
 <?php
 
-use App\Enums\Furips1\EventNatureEnum;
 use App\Enums\Furips1\EventZoneEnum;
 use App\Enums\Furips1\PickupZoneEnum;
 use App\Enums\Furips1\VictimConditionEnum;

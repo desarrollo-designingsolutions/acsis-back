@@ -32,7 +32,7 @@ class Furips2FormResource extends JsonResource
             ] : null,
 
             'serviceDescription' => $this->serviceDescription,
-            'serviceDate' => $this->serviceDate,
+            'serviceQuantity' => $this->serviceQuantity,
             'serviceValue' => $this->serviceValue,
             'totalFactoryValue' => $this->totalFactoryValue,
             'totalClaimedValue' => $this->totalClaimedValue,

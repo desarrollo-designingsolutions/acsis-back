@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Furips1;
 
+use App\Http\Resources\Cie10\Cie10SelectInfiniteResource;
 use App\Http\Resources\Departamento\DepartamentoSelectResource;
 use App\Http\Resources\IpsCodHabilitacion\IpsCodHabilitacionSelectInfiniteResource;
 use App\Http\Resources\Municipio\MunicipioSelectResource;
@@ -78,6 +79,8 @@ class Furips1FormResource extends JsonResource
             'victimTransportToEnd' => $this->victimTransportToEnd,
             'transportServiceType' => $this->transportServiceType,
             'victimPickupZone' => $this->victimPickupZone,
+            'doctorIdType_id' => new TipoIdPisisSelectResource($this->doctorIdType),
+            'doctorIdNumber' => $this->doctorIdNumber,
             'doctorFirstLastName' => $this->doctorFirstLastName,
             'doctorSecondLastName' => $this->doctorSecondLastName,
             'doctorFirstName' => $this->doctorFirstName,
@@ -88,6 +91,19 @@ class Furips1FormResource extends JsonResource
             'totalBilledTransport' => $this->totalBilledTransport,
             'totalClaimedTransport' => $this->totalClaimedTransport,
             'enabledServicesConfirmation' => $this->enabledServicesConfirmation,
+            'medicalAdmissionDate' => $this->medicalAdmissionDate,
+            'medicalAdmissionTime' => $this->medicalAdmissionTime,
+            'medicalDischargeDate' => $this->medicalDischargeDate,
+            'medicalDischargeTime' => $this->medicalDischargeTime,
+            'primaryAdmissionDiagnosisCode_id' => new Cie10SelectInfiniteResource($this->primaryAdmissionDiagnosisCode),
+            'associatedAdmissionDiagnosisCode1_id' => new Cie10SelectInfiniteResource($this->associatedAdmissionDiagnosisCode1),
+            'associatedAdmissionDiagnosisCode2_id' => new Cie10SelectInfiniteResource($this->associatedAdmissionDiagnosisCode2),
+            'primaryDischargeDiagnosisCode_id' => new Cie10SelectInfiniteResource($this->primaryDischargeDiagnosisCode),
+            'associatedDischargeDiagnosisCode1_id' => new Cie10SelectInfiniteResource($this->associatedDischargeDiagnosisCode1),
+            'associatedDischargeDiagnosisCode2_id' => new Cie10SelectInfiniteResource($this->associatedDischargeDiagnosisCode2),
+            'authorityIntervention' => $this->authorityIntervention,
+            'policyExcessCharge' => $this->policyExcessCharge,
+            'referralRecipientCharge' => $this->referralRecipientCharge,
 
         ];
     }

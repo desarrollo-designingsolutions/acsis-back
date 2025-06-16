@@ -29,5 +29,6 @@ class RoutesApi
         'routes/glosaAnswer.php',
         'routes/furips1.php',
         'routes/furips2.php',
+        'routes/fultran.php',
     ];
 }

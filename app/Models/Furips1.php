@@ -3,15 +3,14 @@
 namespace App\Models;
 
 use App\Enums\Furips1\EventNatureEnum;
-use App\Enums\Furips1\EventZoneEnum;
-use App\Enums\Furips1\PickupZoneEnum;
 use App\Enums\Furips1\ReferenceTypeEnum;
 use App\Enums\Furips1\RgoResponseEnum;
 use App\Enums\Furips1\SurgicalComplexityEnum;
 use App\Enums\Furips1\TransportServiceTypeEnum;
 use App\Enums\Furips1\VehicleTypeEnum;
 use App\Enums\Furips1\VictimConditionEnum;
-use App\Enums\Furips1\YesNoEnum;
+use App\Enums\YesNoEnum;
+use App\Enums\ZoneEnum;
 use App\Traits\Cacheable;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -24,7 +23,7 @@ class Furips1 extends Model
 
     protected $casts = [
         'eventNature' => EventNatureEnum::class,
-        'eventZone' => EventZoneEnum::class,
+        'eventZone' => ZoneEnum::class,
         'insurerCapExhaustionCharge' => YesNoEnum::class,
         'referenceType' => ReferenceTypeEnum::class,
         'rgoResponse' => RgoResponseEnum::class,
@@ -32,7 +31,7 @@ class Furips1 extends Model
         'transportServiceType' => TransportServiceTypeEnum::class,
         'vehicleType' => VehicleTypeEnum::class,
         'victimCondition' => VictimConditionEnum::class,
-        'victimPickupZone' => PickupZoneEnum::class,
+        'victimPickupZone' => ZoneEnum::class,
         'enabledServicesConfirmation' => YesNoEnum::class,
     ];
 
@@ -89,5 +88,40 @@ class Furips1 extends Model
     public function driverDocumentType(): BelongsTo
     {
         return $this->belongsTo(TipoIdPisis::class, 'driverDocumentType_id', 'id');
+    }
+
+    public function primaryAdmissionDiagnosisCode(): BelongsTo
+    {
+        return $this->belongsTo(Cie10::class, 'primaryAdmissionDiagnosisCode_id', 'id');
+    }
+
+    public function associatedAdmissionDiagnosisCode1(): BelongsTo
+    {
+        return $this->belongsTo(Cie10::class, 'associatedAdmissionDiagnosisCode1_id', 'id');
+    }
+
+    public function associatedAdmissionDiagnosisCode2(): BelongsTo
+    {
+        return $this->belongsTo(Cie10::class, 'associatedAdmissionDiagnosisCode2_id', 'id');
+    }
+
+    public function primaryDischargeDiagnosisCode(): BelongsTo
+    {
+        return $this->belongsTo(Cie10::class, 'primaryDischargeDiagnosisCode_id', 'id');
+    }
+
+    public function associatedDischargeDiagnosisCode1(): BelongsTo
+    {
+        return $this->belongsTo(Cie10::class, 'associatedDischargeDiagnosisCode1_id', 'id');
+    }
+
+    public function associatedDischargeDiagnosisCode2(): BelongsTo
+    {
+        return $this->belongsTo(Cie10::class, 'associatedDischargeDiagnosisCode2_id', 'id');
+    }
+
+    public function doctorIdType(): BelongsTo
+    {
+        return $this->belongsTo(TipoIdPisis::class, 'doctorIdType_id', 'id');
     }
 }

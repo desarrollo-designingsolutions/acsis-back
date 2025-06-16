@@ -283,7 +283,7 @@ class BaseRepository
         }
         // dd('pasí');
 
-        $nombre = $nombre . '.pdf';
+        $nombre = $nombre.'.pdf';
         if ($is_stream) {
             return $pdf->stream($nombre);
         } else {
@@ -299,7 +299,7 @@ class BaseRepository
      */
     public function clearNull($array)
     {
-        return array_map(fn($value) => in_array($value, ['null', 'undefined']) ? null : $value, $array);
+        return array_map(fn ($value) => in_array($value, ['null', 'undefined']) ? null : $value, $array);
     }
 
     // ---- Configuración ----
