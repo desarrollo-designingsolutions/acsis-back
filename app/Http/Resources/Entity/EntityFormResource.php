@@ -22,6 +22,7 @@ class EntityFormResource extends JsonResource
             'phone' => $this->phone,
             'email' => $this->email,
             'type_entity_id' => $this->type_entity_id,
+            'insuranceCode' => $this->insuranceCode,
         ];
     }
 }

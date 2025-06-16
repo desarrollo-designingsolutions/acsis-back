@@ -297,7 +297,9 @@ class Constants
 
     public const CODS_SELECT_FORM_FURIPS1_DOCTORIDTYPE = [
         'CC',
-        'CF',
+        'CE',
         'PA',
+        'PE',
+        'PT',
     ];
 }
