@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\ZoneEnum;
 use App\Helpers\Constants;
 use App\Http\Requests\Fultran\FultranStoreRequest;
 use App\Http\Resources\Fultran\FultranFormResource;
 use App\Http\Resources\Fultran\FultranPaginateResource;
 use App\Repositories\FultranRepository;
 use App\Repositories\InvoiceRepository;
+use App\Repositories\SexoRepository;
 use App\Services\CacheService;
 use App\Traits\HttpResponseTrait;
 use Illuminate\Http\Request;
@@ -23,6 +25,7 @@ class FultranController extends Controller
         protected FultranRepository $fultranRepository,
         protected QueryController $queryController,
         protected CacheService $cacheService,
+        protected SexoRepository $sexoRepository,
     ) {
         $this->key_redis_project = env('KEY_REDIS_PROJECT');
     }
@@ -94,7 +97,7 @@ class FultranController extends Controller
             $post = $request->except([]);
             $fultran = $this->fultranRepository->store($post);
 
-            $this->cacheService->clearByPrefix($this->key_redis_project.'string:invoices_paginate*');
+            $this->cacheService->clearByPrefix($this->key_redis_project . 'string:invoices_paginate*');
 
             return [
                 'code' => 200,
@@ -184,5 +187,100 @@ class FultranController extends Controller
                 'message' => $msg,
             ];
         }, 200);
+    }
+
+    public function pdf($invoice_id)
+    {
+        return $this->execute(function () use ($invoice_id) {
+
+            $invoice = $this->invoiceRepository->find($invoice_id);
+
+            $select = $this->sexoRepository->get()->select('codigo');
+            $select_sexo = $select->pluck('codigo')->toArray();
+
+            $eventZones = collect(ZoneEnum::cases())->map(function ($case) {
+                return [
+                    'value' => $case,
+                    'label' => $case->Value(),
+                ];
+            })->toArray();
+
+            $claimanid_documents = Constants::CODS_SELECT_FORM_FULTRAN_CLAIMANIDTYPE;
+
+            $victim_documents = Constants::CODS_PDF_FURIPS1_VICTIMDOCUMENTTYPE;
+
+            $data = [
+                'radication_date' => formatDateToArray($invoice->radication_date),
+                'radication_number_previous' => $invoice->furips1?->victimPhone,
+                'radication_number' => $invoice->radication_number,
+                'tipo_nota_id' => $invoice->tipo_nota_id,
+                'note_number' => $invoice->note_number,
+                'invoice_number' => $invoice->invoice_number,
+                'firstLastNameClaimant' => $invoice->fultran?->firstLastNameClaimant,
+                'secondLastNameClaimant' => $invoice->fultran?->secondLastNameClaimant,
+                'firstNameClaimant' => $invoice->fultran?->firstNameClaimant,
+                'secondNameClaimant' => $invoice->fultran?->secondNameClaimant,
+                'claimanid_documents' => $claimanid_documents,
+                'claimanid_document' => $invoice->fultran?->claimantIdType?->codigo,
+                'claimantIdNumber' => $invoice->fultran?->claimantIdNumber,
+                'vehicleServiceType' => $invoice->fultran?->vehicleServiceType,
+                'vehiclePlate' => $invoice->fultran?->vehiclePlate,
+                'claimantDepartment_name' => $invoice->fultran?->claimantDepartmentCode?->nombre,
+                'claimantDepartment_code' => $invoice->fultran?->claimantDepartmentCode?->codigo,
+                'claimantPhone' => $invoice->fultran?->claimantPhone,
+                'claimantMunicipality_name' => $invoice->fultran?->claimantMunicipalityCode?->nombre,
+                'claimantMunicipality_code' => $invoice->fultran?->claimantMunicipalityCode?->codigo,
+                'patient_first_surname' => $invoice->patient?->first_surname,
+                'patient_second_surname' => $invoice->patient?->second_surname,
+                'patient_first_name' => $invoice->patient?->first_name,
+                'patient_second_name' => $invoice->patient?->second_name,
+                'victim_documents' => $victim_documents,
+                'victim_document' => $invoice->patient?->tipo_id_pisi?->codigo,
+                'patient_document' => $invoice->patient?->document,
+                'patient_birth_date' => formatDateToArray($invoice->patient?->birth_date),
+                'select_sexo' => $select_sexo,
+                'sexo_code' => $invoice->patient?->sexo?->codigo,
+                'eventType' => $invoice->fultran?->eventType,
+                'pickupAddress' => $invoice->fultran?->pickupAddress,
+                'pickupDepartment_name' => $invoice->fultran?->pickupDepartmentCode?->nombre,
+                'pickupDepartment_code' => $invoice->fultran?->pickupDepartmentCode?->codigo,
+                'pickupZone' => $invoice->fultran?->pickupZone,
+                'pickupMunicipality_name' => $invoice->fultran?->pickupMunicipalityCode?->nombre,
+                'pickupMunicipality_code' => $invoice->fultran?->pickupMunicipalityCode?->codigo,
+                'eventZones' => $eventZones,
+                'transferDate' => formatDateToArray($invoice->fultran?->transferDate),
+                'transferTime' => formatTimeToArray($invoice->fultran?->transferTime),
+                'transferPickupDepartment_name' => $invoice->fultran?->transferPickupDepartmentCode?->nombre,
+                'transferPickupDepartment_code' => $invoice->fultran?->transferPickupDepartmentCode?->codigo,
+                'transferPickupMunicipality_name' => $invoice->fultran?->transferPickupMunicipalityCode?->nombre,
+                'transferPickupMunicipality_code' => $invoice->fultran?->transferPickupMunicipalityCode?->codigo,
+                'victimCondition' => $invoice->fultran?->victimCondition,
+                'involvedVehiclePlate' => $invoice->fultran?->involvedVehiclePlate,
+                'insurerCode' => $invoice->fultran?->insurerCode,
+                'involvedVehicleType' => $invoice->fultran?->involvedVehicleType,
+                'sirasRecordNumber' => $invoice->fultran?->sirasRecordNumber,
+                'billedValue' => $invoice->fultran?->billedValue,
+                'claimedValue' => $invoice->fultran?->claimedValue,
+                'serviceEnabledIndication' => $invoice->fultran?->serviceEnabledIndication,
+
+                'policy_number' => $invoice?->typeable?->policy_number,
+                'policy_start_date' => formatDateToArray($invoice?->typeable?->start_date),
+                'policy_end_date' => formatDateToArray($invoice?->typeable?->end_date),
+            ];
+
+            $pdf = $this->invoiceRepository
+                ->pdf('Exports.FurTran.FurTranExportPdf', $data, is_stream: true);
+
+            if (empty($pdf)) {
+                throw new \Exception('Error al generar el PDF');
+            }
+
+            $path = base64_encode($pdf);
+
+            return [
+                'code' => 200,
+                'path' => $path,
+            ];
+        });
     }
 }

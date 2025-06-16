@@ -85,6 +85,7 @@
             border: 1px solid #000;
             border-radius: 0;
             box-sizing: border-box;
+            text-align: center;
         }
 
         .form-group input[type="checkbox"] {
@@ -145,7 +146,7 @@
                 <!-- Fecha Entrega -->
                 <span style="display: inline-block; width: 70px; vertical-align: middle;">Fecha Entrega:</span>
                 @for ($i = 0; $i < 8; $i++)
-                    <input type="text" value="{{ $i }}" maxlength="1"
+                    <input type="text" maxlength="1"
                     style="width: 14px; height: 14px; border: 1px solid #000; text-align: center; vertical-align: middle; padding: 0; margin: 0; box-sizing: border-box;">
                     @endfor
 
@@ -192,345 +193,422 @@
             </div>
             <div class="form-group">
                 <label style="width: 50px;">1er Apellido</label>
-                <input type="text" style="width: 246px; height: 14px;">
+                <input type="text" value="{{ $data['firstLastNameClaimant'] }}" style="width: 246px; height: 14px;">
                 <label style="width: 50px; margin-left: 10px;">2do Apellido</label>
-                <input type="text" style="width: 246px; height: 14px;">
+                <input type="text" value="{{ $data['secondLastNameClaimant'] }}" style="width: 246px; height: 14px;">
             </div>
             <div class="form-group">
                 <label style="width: 50px;">1er Nombre</label>
-                <input type="text" style="width: 246px; height: 14px;">
+                <input type="text" value="{{ $data['firstNameClaimant'] }}" style="width: 246px; height: 14px;">
                 <label style="width: 50px; margin-left: 10px;">2do Nombre</label>
-                <input type="text" style="width: 246px; height: 14px;">
+                <input type="text" value="{{ $data['secondNameClaimant'] }}" style="width: 246px; height: 14px;">
             </div>
             <div class="form-group">
-                <label style="width: 100px;">Tipo de Documento</label>
-                @for ($i = 0; $i < 7; $i++)
-                    <input type="text" value="{{ $i }}" maxlength="1"
-                    style="width: 14px; height: 14px; border: 1px solid #000; text-align: center; vertical-align: middle; padding: 0; margin: 0; box-sizing: border-box;">
-                    @endfor
+                <div class="form-group">
+                    <label style="width: 100px;">Tipo de Documento</label>
+                    @foreach ($data['claimanid_documents'] as $digit)
+                    <div style="
+            display: inline-block;
+            width: 14px;
+            height: 14px;
+            border: 1px solid #000;
+            position: relative;
+            text-align: center;
+            vertical-align: middle;
+            font-size: 10px;
+            line-height: 14px;
+            box-sizing: border-box;
+        ">
+                        <!-- Marca de agua (letra M, F, etc.) -->
+                        <span style="color: #ccc; position: absolute; left: 0; right: 0; top: 0; bottom: 0; text-align: center; line-height: 14px;">
+                            {{ $digit }}
+                        </span>
+
+                        <!-- Si se cumple la condición, sobreescribe con X -->
+                        @if ($digit == $data['claimanid_document'])
+                        <span style="position: relative; z-index: 2; color: black;">X</span>
+                        @endif
+                    </div>
+                    @endforeach
                     <label style="width: 100px; margin-left: 90px;">No. Documento</label>
-                    <input type="text" style="width: 150px; height: 14px;">
-            </div>
-            <div class="form-group">
-                <label style="width: 100px;">Tipo de Vehículo o de Servicio de ambulancia:</label>
-                <label style="width: 50px; margin-left: 20px;">Ambulancia Básica</label>
-                <input type="text" style="width: 14px; height: 14px;">
-                <label style="width: 70px; margin-left: 20px;">Ambulancia Medicada</label>
-                <input type="text" style="width: 14px; height: 14px; margin-left: 10px;">
-                <label style="width: 70px; margin-left: 20px;">De emergencia</label>
-                <input type="text" style="width: 14px; height: 14px; margin-left: 10px;">
-                <label style="width: 70px; margin-left: 20px;">Particular</label>
-                <input type="text" style="width: 14px; height: 14px; margin-left: 10px;">
-            </div>
-            <div class="form-group">
-                <label style="width: 100px;"></label>
-                <label style="width: 50px; margin-left: 20px;">Público</label>
-                <input type="text" style="width: 14px; height: 14px;">
-                <label style="width: 70px; margin-left: 20px;">Oficial</label>
-                <input type="text" style="width: 14px; height: 14px; margin-left: 10px;">
-                <label style="width: 70px; margin-left: 20px;">Vehículo de servicio diplomatico o consular</label>
-                <input type="text" style="width: 14px; height: 14px; margin-left: 10px;">
-                <label style="width: 70px; margin-left: 20px;">Vehículo de transporte masivo</label>
-                <input type="text" style="width: 14px; height: 14px; margin-left: 10px;">
-            </div>
-            <div class="form-group">
-                <label style="width: 120px;"></label>
-                <label style="width: 50px;">Vehículo escolar</label>
-                <input type="text" style="width: 14px; height: 14px;">
-                <label style="width: 78px; margin-left: 20px;">Otro</label>
-                <input type="text" style="width: 14px; height: 14px;">
+                    <input type="text" value="{{ $data['claimantIdNumber'] }}" style="width: 150px; height: 14px;">
+                </div>
+                <div class="form-group">
+                    <label style="width: 100px;">Tipo de Vehículo o de Servicio de ambulancia:</label>
+                    <label style="width: 50px; margin-left: 20px;">Ambulancia básica</label>
+                    <input type="text" value="{{ $data['vehicleServiceType'] === "VEHICLE_SERVICE_TYPE_001" ? 'X' : '' }}" style="width: 14px; height: 14px;">
+                    <label style="width: 70px; margin-left: 20px;">Ambulancia medicalizada</label>
+                    <input type="text" value="{{ $data['vehicleServiceType'] === "VEHICLE_SERVICE_TYPE_002" ? 'X' : '' }}" style="width: 14px; height: 14px; margin-left: 10px;">
+                    <label style="width: 70px; margin-left: 20px;">Particular</label>
+                    <input type="text" value="{{ $data['vehicleServiceType'] === "VEHICLE_SERVICE_TYPE_003" ? 'X' : '' }}" style="width: 14px; height: 14px; margin-left: 10px;">
+                    <label style="width: 70px; margin-left: 20px;">Público</label>
+                    <input type="text" value="{{ $data['vehicleServiceType'] === "VEHICLE_SERVICE_TYPE_004" ? 'X' : '' }}" style="width: 14px; height: 14px; margin-left: 10px;">
+                </div>
+                <div class="form-group">
+                    <label style="width: 100px;"></label>
+                    <label style="width: 50px; margin-left: 20px;">Oficial</label>
+                    <input type="text" value="{{ $data['vehicleServiceType'] === "VEHICLE_SERVICE_TYPE_005" ? 'X' : '' }}" style="width: 14px; height: 14px;">
+                    <label style="width: 70px; margin-left: 20px;">De emergencia</label>
+                    <input type="text" value="{{ $data['vehicleServiceType'] === "VEHICLE_SERVICE_TYPE_006" ? 'X' : '' }}" style="width: 14px; height: 14px; margin-left: 10px;">
+                    <label style="width: 70px; margin-left: 20px;">Diplomático o consular</label>
+                    <input type="text" value="{{ $data['vehicleServiceType'] === "VEHICLE_SERVICE_TYPE_007" ? 'X' : '' }}" style="width: 14px; height: 14px; margin-left: 10px;">
+                    <label style="width: 70px; margin-left: 20px;">Transporte masivo</label>
+                    <input type="text" value="{{ $data['vehicleServiceType'] === "VEHICLE_SERVICE_TYPE_008" ? 'X' : '' }}" style="width: 14px; height: 14px; margin-left: 10px;">
+                </div>
+                <div class="form-group">
+                    <label style="width: 120px;"></label>
+                    <label style="width: 50px;">Escolar</label>
+                    <input type="text" value="{{ $data['vehicleServiceType'] === "VEHICLE_SERVICE_TYPE_009" ? 'X' : '' }}" style="width: 14px; height: 14px;">
+                </div>
+
+                <div class="form-group">
+                    <label style="width: 50px; margin-left: 5px;">Placa No. </label>
+                    <input type="text" value="{{ $data['vehiclePlate'] }}" style="width: 100px; height: 14px;">
+                </div>
+
+                <div class="form-group">
+                    <label style="width: 98px;">Departamento</label>
+                    <input type="text" value="{{ $data['claimantDepartment_name'] }}" style="width: 130px; height: 14px;">
+                    <label style="width: 30px; margin-left: 70px;">Cod.</label>
+                    <input type="text" value="{{ $data['claimantDepartment_code'] }}" style="width: 50px; height: 14px;">
+                    <label style="width: 50px; margin-left: 30px;">Teléfono</label>
+                    <input type="text" value="{{ $data['claimantPhone'] }}" style="width: 125px; height: 14px;">
+                </div>
+
+                <div class="form-group">
+                    <label style="width: 98px;">Municipio</label>
+                    <input type="text" value="{{ $data['claimantMunicipality_name'] }}" style="width: 160px; height: 14px;">
+                    <label style="width: 30px; margin-left: 40px;">Cod.</label>
+                    <input type="text" value="{{ $data['claimantMunicipality_code'] }}" style="width: 70px; height: 14px;">
+                </div>
             </div>
 
-            <div class="form-group">
-                <span style="display: inline-block; width: 50px; vertical-align: middle;">Cuál?</span>
-                <input type="text" style="width: 375px; height: 14px; border: 1px solid #000; vertical-align: middle; box-sizing: border-box;">
-                <label style="width: 50px; margin-left: 5px;">Placa No. </label>
-                <input type="text" style="width: 100px; height: 14px;">
-            </div>
+            <div class="section">
+                <h2>II. DATOS DE LA VICTIMA TRANSLADADA</h2>
+                <div class="form-group">
+                    <label style="width: 100px;">Tipo de Documento</label>
+                    @foreach ($data['victim_documents'] as $digit)
+                    <div style="
+            display: inline-block;
+            width: 14px;
+            height: 14px;
+            border: 1px solid #000;
+            position: relative;
+            text-align: center;
+            vertical-align: middle;
+            font-size: 10px;
+            line-height: 14px;
+            box-sizing: border-box;
+        ">
+                        <!-- Marca de agua (letra M, F, etc.) -->
+                        <span style="color: #ccc; position: absolute; left: 0; right: 0; top: 0; bottom: 0; text-align: center; line-height: 14px;">
+                            {{ $digit }}
+                        </span>
 
-            <div class="form-group">
-                <label style="width: 98px;">Departamento</label>
-                <input type="text" style="width: 130px; height: 14px;">
-                <label style="width: 30px; margin-left: 70px;">Cod.</label>
-                <input type="text" style="width: 50px; height: 14px;">
-                <label style="width: 50px; margin-left: 30px;">Teléfono</label>
-                <input type="text" style="width: 125px; height: 14px;">
-            </div>
-
-            <div class="form-group">
-                <label style="width: 98px;">Municipio</label>
-                <input type="text" style="width: 160px; height: 14px;">
-                <label style="width: 30px; margin-left: 40px;">Cod.</label>
-                <input type="text" style="width: 70px; height: 14px;">
-            </div>
-        </div>
-
-        <div class="section">
-            <h2>II. DATOS DE LA VICTIMA TRANSLADADA</h2>
-            <div class="form-group">
-                <label style="width: 100px;">Tipo de Documento</label>
-                @for ($i = 0; $i < 7; $i++)
-                    <input type="text" value="{{ $i }}" maxlength="1"
-                    style="width: 14px; height: 14px; border: 1px solid #000; text-align: center; vertical-align: middle; padding: 0; margin: 0; box-sizing: border-box;">
-                    @endfor
-            </div>
-            <div class="form-group">
-                <table style="margin-top: 5px;">
-                    <tr>
-                        <td style="border: 1px solid #000; font-weight: bold; text-align: center;">No. Doc</td>
-                        <td style="border: 1px solid #000; font-weight: bold; text-align: center;">No. Documento</td>
-                        <td style="border: 1px solid #000; font-weight: bold; text-align: center;">Primer Nombre</td>
-                        <td style="border: 1px solid #000; font-weight: bold; text-align: center;">Segundo Nombre</td>
-                        <td style="border: 1px solid #000; font-weight: bold; text-align: center;">Primer Apellido</td>
-                        <td style="border: 1px solid #000; font-weight: bold; text-align: center;">Segundo Apellido</td>
-                    </tr>
-                    <tr>
-                        <td style="width: 50px; height: 10px; border: 1px solid #000;"></td>
-                        <td style="width: 110px; height: 10px; border: 1px solid #000;"></td>
-                        <td style="width: 110px; height: 10px; border: 1px solid #000;"></td>
-                        <td style="width: 110px; height: 10px; border: 1px solid #000;"></td>
-                        <td style="width: 110px; height: 10px; border: 1px solid #000;"></td>
-                        <td style="width: 110px; height: 10px; border: 1px solid #000;"></td>
-                    </tr>
-                </table>
-            </div>
-            <div class="form-group">
-                <span style="display: inline-block; width: 97px; vertical-align: middle;">Fecha de Nacimiento</span>
-                @for ($i = 0; $i < 8; $i++)
-                    <input type="text" value="{{ $i }}" maxlength="1"
-                    style="width: 14px; height: 14px; border: 1px solid #000; text-align: center; vertical-align: middle; padding: 0; margin: 0; box-sizing: border-box;">
-                    @endfor
+                        <!-- Si se cumple la condición, sobreescribe con X -->
+                        @if ($digit == $data['victim_document'])
+                        <span style="position: relative; z-index: 2; color: black;">X</span>
+                        @endif
+                    </div>
+                    @endforeach
+                </div>
+                <div class="form-group">
+                    <table style="margin-top: 5px;">
+                        <tr>
+                            <td style="border: 1px solid #000; font-weight: bold; text-align: center;">No. Doc</td>
+                            <td style="border: 1px solid #000; font-weight: bold; text-align: center;">No. Documento</td>
+                            <td style="border: 1px solid #000; font-weight: bold; text-align: center;">Primer Nombre</td>
+                            <td style="border: 1px solid #000; font-weight: bold; text-align: center;">Segundo Nombre</td>
+                            <td style="border: 1px solid #000; font-weight: bold; text-align: center;">Primer Apellido</td>
+                            <td style="border: 1px solid #000; font-weight: bold; text-align: center;">Segundo Apellido</td>
+                        </tr>
+                        <tr>
+                            <td style="width: 50px; height: 10px; border: 1px solid #000;">{{ $data['victim_document'] }}</td>
+                            <td style="width: 110px; height: 10px; border: 1px solid #000;">{{ $data['patient_document'] }}</td>
+                            <td style="width: 110px; height: 10px; border: 1px solid #000;">{{ $data['patient_first_name'] }}</td>
+                            <td style="width: 110px; height: 10px; border: 1px solid #000;">{{ $data['patient_second_name'] }}</td>
+                            <td style="width: 110px; height: 10px; border: 1px solid #000;">{{ $data['patient_first_surname'] }}</td>
+                            <td style="width: 110px; height: 10px; border: 1px solid #000;">{{ $data['patient_second_surname'] }}</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="form-group">
+                    <span style="display: inline-block; width: 105px; vertical-align: middle;">Fecha De Nacimiento:</span>
+                    @foreach ($data['patient_birth_date'] as $digit)
+                    <input type="text" value="{{ $digit }}" maxlength="1"
+                        style="width: 14px; height: 14px; border: 1px solid #000; text-align: center; vertical-align: middle; padding: 0; margin: 0; box-sizing: border-box;">
+                    @endforeach
                     <label style="width: 20px; margin-left: 80px;">Sexo</label>
-                    @for ($i = 0; $i < 2; $i++)
-                        <input type="text" value="{{ $i }}" maxlength="1"
-                        style="width: 14px; height: 14px; border: 1px solid #000; text-align: center; vertical-align: middle; padding: 0; margin: 0; box-sizing: border-box; margin-left: 40px;">
-                        @endfor
-            </div>
-        </div>
+                    @foreach ($data['select_sexo'] as $digit)
+                    <div style="
+            display: inline-block;
+            width: 14px;
+            height: 14px;
+            border: 1px solid #000;
+            position: relative;
+            text-align: center;
+            vertical-align: middle;
+            font-size: 10px;
+            line-height: 14px;
+            box-sizing: border-box;
+        ">
+                        <!-- Marca de agua (letra M, F, etc.) -->
+                        <span style="color: #ccc; position: absolute; left: 0; right: 0; top: 0; bottom: 0; text-align: center; line-height: 14px;">
+                            {{ $digit }}
+                        </span>
 
-        <div class="section">
-            <h2>III. IDENTIFICACION DEL TIPO DE EVENTO</h2>
-            <div class="form-group">
-                <label style="width: 100%;">Tipo de evento:</label>
-                <label style="width: 100px; margin-left: 40px;">1.Accidente de tránsito:</label>
-                <input type="text" style="width: 14px; height: 14px;">
-                <label style="width: 100px; margin-left: 20px;">2.Evento catastrófico de origen Natural:</label>
-                <input type="text" style="width: 14px; height: 14px;">
-                <label style="width: 100px; margin-left: 20px;">3.Evento terrorista:</label>
-                <input type="text" style="width: 14px; height: 14px;">
+                        <!-- Si se cumple la condición, sobreescribe con X -->
+                        @if ($digit == $data['sexo_code'])
+                        <span style="position: relative; z-index: 2; color: black;">X</span>
+                        @endif
+                    </div>
+                    @endforeach
+                </div>
             </div>
-        </div>
 
-        <div class="section">
-            <h2>IV. LUGAR EN EL QUE SE RECOGE LA VICTIMA</h2>
-            <div class="form-group">
-                <label style="width: 97px;">Dirección Residencia</label>
-                <input type="text" style="width: 520px; height: 14px;">
+            <div class="section">
+                <h2>III. IDENTIFICACION DEL TIPO DE EVENTO</h2>
+                <div class="form-group">
+                    <label style="width: 100%;">Tipo de evento:</label>
+                    <label style="width: 100px; margin-left: 40px;">1.Accidente de tránsito:</label>
+                    <input type="text" style="width: 14px; height: 14px;" value="{{ $data['eventType'] === "EVENT_TYPE_001" ? 'X' : '' }}">
+                    <label style="width: 100px; margin-left: 20px;">2.Evento catastrófico de origen Natural:</label>
+                    <input type="text" style="width: 14px; height: 14px;" value="{{ $data['eventType'] === "EVENT_TYPE_002" ? 'X' : '' }}">
+                    <label style="width: 100px; margin-left: 20px;">3.Evento terrorista:</label>
+                    <input type="text" style="width: 14px; height: 14px;" value="{{ $data['eventType'] === "EVENT_TYPE_003" ? 'X' : '' }}">
+                </div>
             </div>
-            <div class="form-group">
-                <label style="width: 98px;">Departamento</label>
-                <input type="text" style="width: 130px; height: 14px;">
-                <label style="width: 30px; margin-left: 70px;">Cod.</label>
-                <input type="text" style="width: 50px; height: 14px;">
-                <label style="width: 30px; margin-left: 30px;">Zona</label>
-                @for ($i = 0; $i < 2; $i++)
-                    <input type="text" value="{{ $i }}" maxlength="1"
-                    style="width: 14px; height: 14px; border: 1px solid #000; text-align: center; vertical-align: middle; padding: 0; margin: 0; box-sizing: border-box; margin-left: 15px;">
-                    @endfor
-            </div>
-            <div class="form-group">
-                <label style="width: 98px;">Municipio</label>
-                <input type="text" style="width: 160px; height: 14px;">
-                <label style="width: 30px; margin-left: 40px;">Cod.</label>
-                <input type="text" style="width: 70px; height: 14px;">
-            </div>
-        </div>
 
-        <div class="section">
-            <h2>V. CERTIFICADO DE TRASLADO DE VICTIMAS</h2>
-            <div class="form-group">
-                <label style="width: 600px;">La institución prestadora de servicios de salud certifica que la entidad de transporte especial o persona natural efectuó el translado de la victima a esta IPS</label>
+            <div class="section">
+                <h2>IV. LUGAR EN EL QUE SE RECOGE LA VICTIMA</h2>
+                <div class="form-group">
+                    <label style="width: 97px;">Dirección Residencia</label>
+                    <input type="text" value="{{ $data['pickupAddress'] }}" style="width: 520px; height: 14px;">
+                </div>
+                <div class="form-group">
+                    <label style="width: 98px;">Departamento</label>
+                    <input type="text" value="{{ $data['pickupDepartment_name'] }}" style="width: 130px; height: 14px;">
+                    <label style="width: 30px; margin-left: 70px;">Cod.</label>
+                    <input type="text" value="{{ $data['pickupDepartment_code'] }}" style="width: 50px; height: 14px;">
+                    <label style="width: 30px; margin-left: 30px;">Zona</label>
+                    @foreach ($data['eventZones'] as $option)
+                    <div style="
+            display: inline-block;
+            width: 14px;
+            height: 14px;
+            border: 1px solid #000;
+            position: relative;
+            text-align: center;
+            vertical-align: middle;
+            font-size: 10px;
+            line-height: 14px;
+            box-sizing: border-box;
+        ">
+                        <!-- Marca de agua (letra M, F, etc.) -->
+                        <span style="color: #ccc; position: absolute; left: 0; right: 0; top: 0; bottom: 0; text-align: center; line-height: 14px;">
+                            {{ $option['label'] }}
+                        </span>
+
+                        <!-- Si se cumple la condición, sobreescribe con X -->
+                        @if ($option['value'] == $data['pickupZone'])
+                        <span style="position: relative; z-index: 2; color: black;">X</span>
+                        @endif
+                    </div>
+                    @endforeach
+                </div>
+                <div class="form-group">
+                    <label style="width: 98px;">Municipio</label>
+                    <input type="text" value="{{ $data['pickupMunicipality_name'] }}" style="width: 160px; height: 14px;">
+                    <label style="width: 30px; margin-left: 40px;">Cod.</label>
+                    <input type="text" value="{{ $data['pickupMunicipality_code'] }}" style="width: 70px; height: 14px;">
+                </div>
             </div>
-            <div class="form-group">
-                <label style="width: 100px;">El día</label>
-                @for ($i = 0; $i < 8; $i++)
-                    <input type="text" value="{{ $i }}" maxlength="1"
-                    style="width: 14px; height: 14px; border: 1px solid #000; text-align: center; vertical-align: middle; padding: 0; margin: 0; box-sizing: border-box;">
-                    @endfor
+
+            <div class="section">
+                <h2>V. CERTIFICADO DE TRASLADO DE VICTIMAS</h2>
+                <div class="form-group">
+                    <label style="width: 600px;">La institución prestadora de servicios de salud certifica que la entidad de transporte especial o persona natural efectuó el translado de la victima a esta IPS</label>
+                </div>
+                <div class="form-group">
+                    <label style="width: 100px;">El día</label>
+                    @foreach ($data['transferDate'] as $digit)
+                    <input type="text" value="{{ $digit }}" maxlength="1"
+                        style="width: 14px; height: 14px; border: 1px solid #000; text-align: center; vertical-align: middle; padding: 0; margin: 0; box-sizing: border-box;">
+                    @endforeach
                     <span style="display: inline-block; width: 50px; vertical-align: middle; margin-left: 20px;">a las</span>
-                    @for ($i = 0; $i < 4; $i++)
-                        <input type="text" value="{{ $i }}" maxlength="1"
+                    @foreach ($data['transferTime'] as $digit)
+                    <input type="text" value="{{ $digit }}" maxlength="1"
                         style="width: 14px; height: 14px; border: 1px solid #000; text-align: center; vertical-align: middle; padding: 0; margin: 0; box-sizing: border-box;">
-                        @endfor
+                    @endforeach
+                </div>
+                <div class="form-group">
+                    <label style="width: 130px;">Nombre IPS que atendió la victima</label>
+                    <input type="text" style="width: 240px; height: 14px;">
+                    <label style="width: 39px; margin-left: 10px;">Nit</label>
+                    <input type="text" style="width: 165px; height: 14px;">
+                </div>
+                <div class="form-group">
+                    <label style="width: 50px;">Dirección</label>
+                    <input type="text" style="width: 260px; height: 14px;">
+                    <label style="width: 60px; margin-left: 30px;">Código IPS</label>
+                    <input type="text" style="width: 202px; height: 14px;">
+                </div>
+                <div class="form-group">
+                    <label style="width: 50px;">Departamento</label>
+                    <input type="text" value="{{ $data['transferPickupDepartment_name'] }}" style="width: 260px; height: 14px;">
+                    <label style="width: 30px; margin-left: 10px;">Código</label>
+                    <input type="text" value="{{ $data['transferPickupDepartment_code'] }}" style="width: 50px; height: 14px;">
+                    <label style="width: 50px; margin-left: 10px;">Teléfono</label>
+                    <input type="text" style="width: 115px; height: 14px;">
+                </div>
+                <div class="form-group">
+                    <label style="width: 50px;">Municipio</label>
+                    <input type="text" value="{{ $data['transferPickupMunicipality_name'] }}" style="width: 160px; height: 14px;">
+                    <label style="width: 30px; margin-left: 80px;">Cod.</label>
+                    <input type="text" value="{{ $data['transferPickupMunicipality_code'] }}" style="width: 70px; height: 14px;">
+                </div>
             </div>
-            <div class="form-group">
-                <label style="width: 150px;">Nombre IPS que atendió la victima</label>
-                <input type="text" style="width: 240px; height: 14px;">
-                <label style="width: 39px; margin-left: 10px;">Nit</label>
-                <input type="text" style="width: 165px; height: 14px;">
-            </div>
-            <div class="form-group">
-                <label style="width: 50px;">Dirección</label>
-                <input type="text" style="width: 260px; height: 14px;">
-                <label style="width: 60px; margin-left: 30px;">Código IPS</label>
-                <input type="text" style="width: 202px; height: 14px;">
-            </div>
-            <div class="form-group">
-                <label style="width: 50px;">Departamento</label>
-                <input type="text" style="width: 260px; height: 14px;">
-                <label style="width: 30px; margin-left: 10px;">Código</label>
-                <input type="text" style="width: 50px; height: 14px;">
-                <label style="width: 50px; margin-left: 10px;">Teléfono</label>
-                <input type="text" style="width: 125px; height: 14px;">
-            </div>
-            <div class="form-group">
-                <label style="width: 98px;">Municipio</label>
-                <input type="text" style="width: 160px; height: 14px;">
-                <label style="width: 30px; margin-left: 40px;">Cod.</label>
-                <input type="text" style="width: 70px; height: 14px;">
-            </div>
-        </div>
 
-        <div class="section">
-            <h2>VI. DATOS OBLIGATORIOS SI EL EVENTO ES UN ACCIDENTE DE TRANSITO</h2>
-            <div class="form-group">
-                <label style="width: 100px;">Condición de víctima:</label>
-                <label style="width: 50px; margin-left: 20px;">Conductor</label>
-                <input type="text" style="width: 14px; height: 14px;">
-                <label style="width: 70px; margin-left: 20px;">Peatón</label>
-                <input type="text" style="width: 14px; height: 14px; margin-left: 10px;">
-                <label style="width: 70px; margin-left: 20px;">Ocupante</label>
-                <input type="text" style="width: 14px; height: 14px; margin-left: 10px;">
-                <label style="width: 70px; margin-left: 20px;">Ciclista</label>
-                <input type="text" style="width: 14px; height: 14px; margin-left: 10px;">
-            </div>
-            <div class="form-group">
-                <label style="width: 100px;">Estado de Aseguramiento:</label>
-                <label style="width: 50px; margin-left: 20px;">Asegurado</label>
-                <input type="text" style="width: 14px; height: 14px;">
-                <label style="width: 70px; margin-left: 20px;">No asegurado</label>
-                <input type="text" style="width: 14px; height: 14px; margin-left: 10px;">
-                <label style="width: 70px; margin-left: 20px;">Vehiculo fantasma</label>
-                <input type="text" style="width: 14px; height: 14px; margin-left: 10px;">
-                <label style="width: 70px; margin-left: 20px;">Póliza falsa</label>
-                <input type="text" style="width: 14px; height: 14px; margin-left: 10px;">
-            </div>
-            <div class="form-group">
-                <label style="width: 100px;"></label>
-                <label style="width: 50px; margin-left: 20px;">Vehículo en fuga</label>
-                <input type="text" style="width: 14px; height: 14px;">
-                <label style="width: 70px; margin-left: 20px;">Asegurado D.2497</label>
-                <input type="text" style="width: 14px; height: 14px; margin-left: 10px;">
-            </div>
-            <div class="form-group">
-                <label style="width: 120px;">Placa del vehículo involucrado</label>
-                <input type="text" style="width: 130px; height: 14px;">
-                <label style="width: 100px; margin-left: 10px;">Código de la aseguradora</label>
-                <input type="text" style="width: 50px; height: 14px;">
-                <label style="width: 80px; margin-left: 10px;">Número de la póliza</label>
-                <input type="text" style="width: 70px; height: 14px;">
-            </div>
-            <div class="form-group">
-                <label style="width: 100px;">Tipo de Veículo:</label>
-                <label style="width: 50px; margin-left: 20px;">Automóvil</label>
-                <input type="text" style="width: 14px; height: 14px;">
-                <label style="width: 70px; margin-left: 20px;">Bus</label>
-                <input type="text" style="width: 14px; height: 14px; margin-left: 10px;">
-                <label style="width: 70px; margin-left: 20px;">Buseta</label>
-                <input type="text" style="width: 14px; height: 14px; margin-left: 10px;">
-                <label style="width: 70px; margin-left: 20px;">Camión</label>
-                <input type="text" style="width: 14px; height: 14px; margin-left: 10px;">
-            </div>
-            <div class="form-group">
-                <label style="width: 100px;"></label>
-                <label style="width: 50px; margin-left: 20px;">Camioneta</label>
-                <input type="text" style="width: 14px; height: 14px;">
-                <label style="width: 70px; margin-left: 20px;">Campero</label>
-                <input type="text" style="width: 14px; height: 14px; margin-left: 10px;">
-                <label style="width: 70px; margin-left: 20px;">Microbus</label>
-                <input type="text" style="width: 14px; height: 14px; margin-left: 10px;">
-                <label style="width: 70px; margin-left: 20px;">Tractocamión</label>
-                <input type="text" style="width: 14px; height: 14px; margin-left: 10px;">
-            </div>
-            <div class="form-group">
-                <label style="width: 100px;"></label>
-                <label style="width: 50px; margin-left: 20px;">Motocicleta</label>
-                <input type="text" style="width: 14px; height: 14px;">
-                <label style="width: 70px; margin-left: 20px;">Motocarro</label>
-                <input type="text" style="width: 14px; height: 14px; margin-left: 10px;">
-                <label style="width: 70px; margin-left: 20px;">Moto triciclo</label>
-                <input type="text" style="width: 14px; height: 14px; margin-left: 10px;">
-                <label style="width: 70px; margin-left: 20px;">Cuatrimoto</label>
-                <input type="text" style="width: 14px; height: 14px; margin-left: 10px;">
-            </div>
-            <div class="form-group">
-                <label style="width: 100px;"></label>
-                <label style="width: 50px; margin-left: 20px;">Moto Extranjera</label>
-                <input type="text" style="width: 14px; height: 14px;">
-                <label style="width: 70px; margin-left: 20px;">Vehículo Extranjero</label>
-                <input type="text" style="width: 14px; height: 14px; margin-left: 10px;">
-                <label style="width: 70px; margin-left: 20px;">Volqueta</label>
-                <input type="text" style="width: 14px; height: 14px; margin-left: 10px;">
-            </div>
-            <div class="form-group">
-                <label style="width: 100px;">Fecha de inicio póliza</label>
-                @for ($i = 0; $i < 8; $i++)
-                    <input type="text" value="{{ $i }}" maxlength="1"
-                    style="width: 14px; height: 14px; border: 1px solid #000; text-align: center; vertical-align: middle; padding: 0; margin: 0; box-sizing: border-box;">
-                    @endfor
+            <div class="section">
+                <h2>VI. DATOS OBLIGATORIOS SI EL EVENTO ES UN ACCIDENTE DE TRANSITO</h2>
+                <div class="form-group">
+                    <label style="width: 100px;">Condición de víctima:</label>
+                    <label style="width: 50px; margin-left: 20px;">Conductor</label>
+                    <input type="text" style="width: 14px; height: 14px;" value="{{ $data['victimCondition'] === "VICTIM_CONDITION_001" ? 'X' : '' }}">
+                    <label style="width: 70px; margin-left: 20px;">Peatón</label>
+                    <input type="text" style="width: 14px; height: 14px; margin-left: 10px;" value="{{ $data['victimCondition'] === "VICTIM_CONDITION_002" ? 'X' : '' }}">
+                    <label style="width: 70px; margin-left: 20px;">Ocupante</label>
+                    <input type="text" style="width: 14px; height: 14px; margin-left: 10px;" value="{{ $data['victimCondition'] === "VICTIM_CONDITION_003" ? 'X' : '' }}">
+                    <label style="width: 70px; margin-left: 20px;">Ciclista</label>
+                    <input type="text" style="width: 14px; height: 14px; margin-left: 10px;" value="{{ $data['victimCondition'] === "VICTIM_CONDITION_004" ? 'X' : '' }}">
+                </div>
+                <div class="form-group">
+                    <label style="width: 100px;">Estado de Aseguramiento:</label>
+                    <label style="width: 50px; margin-left: 20px;">Asegurado</label>
+                    <input type="text" style="width: 14px; height: 14px;">
+                    <label style="width: 70px; margin-left: 20px;">No asegurado</label>
+                    <input type="text" style="width: 14px; height: 14px; margin-left: 10px;">
+                    <label style="width: 70px; margin-left: 20px;">Vehiculo fantasma</label>
+                    <input type="text" style="width: 14px; height: 14px; margin-left: 10px;">
+                    <label style="width: 70px; margin-left: 20px;">Póliza falsa</label>
+                    <input type="text" style="width: 14px; height: 14px; margin-left: 10px;">
+                </div>
+                <div class="form-group">
+                    <label style="width: 100px;"></label>
+                    <label style="width: 50px; margin-left: 20px;">Vehículo en fuga</label>
+                    <input type="text" style="width: 14px; height: 14px;">
+                    <label style="width: 70px; margin-left: 20px;">Asegurado D.2497</label>
+                    <input type="text" style="width: 14px; height: 14px; margin-left: 10px;">
+                </div>
+                <div class="form-group">
+                    <label style="width: 120px;">Placa del vehículo involucrado</label>
+                    <input type="text" style="width: 130px; height: 14px;" value="{{ $data['involvedVehiclePlate'] }}">
+                    <label style="width: 100px; margin-left: 10px;">Código de la aseguradora</label>
+                    <input type="text" style="width: 50px; height: 14px;" value={{ $data['insurerCode'] }}>
+                    <label style="width: 80px; margin-left: 10px;">Número de la póliza</label>
+                    <input type="text" style="width: 70px; height: 14px;" value="{{ $data['policy_number'] }}">
+                </div>
+                <div class="form-group">
+                    <label style="width: 100px;">Tipo de Veículo:</label>
+                    <label style="width: 50px; margin-left: 20px;">Automóvil</label>
+                    <input type="text" value="{{ $data['involvedVehicleType'] === "VEHICLE_TYPE_001" ? 'X' : '' }}" style="width: 14px; height: 14px;">
+                    <label style="width: 70px; margin-left: 20px;">Bus</label>
+                    <input type="text" value="{{ $data['involvedVehicleType'] === "VEHICLE_TYPE_002" ? 'X' : '' }}" style="width: 14px; height: 14px; margin-left: 10px;">
+                    <label style="width: 70px; margin-left: 20px;">Buseta</label>
+                    <input type="text" value="{{ $data['involvedVehicleType'] === "VEHICLE_TYPE_003" ? 'X' : '' }}" style="width: 14px; height: 14px; margin-left: 10px;">
+                    <label style="width: 70px; margin-left: 20px;">Camión</label>
+                    <input type="text" value="{{ $data['involvedVehicleType'] === "VEHICLE_TYPE_004" ? 'X' : '' }}" style="width: 14px; height: 14px; margin-left: 10px;">
+                </div>
+                <div class="form-group">
+                    <label style="width: 100px;"></label>
+                    <label style="width: 50px; margin-left: 20px;">Camioneta</label>
+                    <input type="text" value="{{ $data['involvedVehicleType'] === "VEHICLE_TYPE_005" ? 'X' : '' }}" style="width: 14px; height: 14px;">
+                    <label style="width: 70px; margin-left: 20px;">Campero</label>
+                    <input type="text" value="{{ $data['involvedVehicleType'] === "VEHICLE_TYPE_006" ? 'X' : '' }}" style="width: 14px; height: 14px; margin-left: 10px;">
+                    <label style="width: 70px; margin-left: 20px;">Microbus</label>
+                    <input type="text" value="{{ $data['involvedVehicleType'] === "VEHICLE_TYPE_007" ? 'X' : '' }}" style="width: 14px; height: 14px; margin-left: 10px;">
+                    <label style="width: 70px; margin-left: 20px;">Tractocamión</label>
+                    <input type="text" value="{{ $data['involvedVehicleType'] === "VEHICLE_TYPE_008" ? 'X' : '' }}" style="width: 14px; height: 14px; margin-left: 10px;">
+                </div>
+                <div class="form-group">
+                    <label style="width: 100px;"></label>
+                    <label style="width: 50px; margin-left: 20px;">Motocicleta</label>
+                    <input type="text" value="{{ $data['involvedVehicleType'] === "VEHICLE_TYPE_009" ? 'X' : '' }}" style="width: 14px; height: 14px;">
+                    <label style="width: 70px; margin-left: 20px;">Motocarro</label>
+                    <input type="text" value="{{ $data['involvedVehicleType'] === "VEHICLE_TYPE_010" ? 'X' : '' }}" style="width: 14px; height: 14px; margin-left: 10px;">
+                    <label style="width: 70px; margin-left: 20px;">Moto triciclo</label>
+                    <input type="text" value="{{ $data['involvedVehicleType'] === "VEHICLE_TYPE_011" ? 'X' : '' }}" style="width: 14px; height: 14px; margin-left: 10px;">
+                    <label style="width: 70px; margin-left: 20px;">Cuatrimoto</label>
+                    <input type="text" value="{{ $data['involvedVehicleType'] === "VEHICLE_TYPE_012" ? 'X' : '' }}" style="width: 14px; height: 14px; margin-left: 10px;">
+                </div>
+                <div class="form-group">
+                    <label style="width: 100px;"></label>
+                    <label style="width: 50px; margin-left: 20px;">Moto Extranjera</label>
+                    <input type="text" value="{{ $data['involvedVehicleType'] === "VEHICLE_TYPE_013" ? 'X' : '' }}" style="width: 14px; height: 14px;">
+                    <label style="width: 70px; margin-left: 20px;">Vehículo Extranjero</label>
+                    <input type="text" value="{{ $data['involvedVehicleType'] === "VEHICLE_TYPE_014" ? 'X' : '' }}" style="width: 14px; height: 14px; margin-left: 10px;">
+                    <label style="width: 70px; margin-left: 20px;">Volqueta</label>
+                    <input type="text" value="{{ $data['involvedVehicleType'] === "VEHICLE_TYPE_015" ? 'X' : '' }}" style="width: 14px; height: 14px; margin-left: 10px;">
+                </div>
+                <div class="form-group">
+                    <label style="width: 100px;">Fecha de inicio póliza</label>
+                    @foreach ($data['policy_start_date'] as $digit)
+                    <input type="text" value="{{ $digit }}" maxlength="1"
+                        style="width: 14px; height: 14px; border: 1px solid #000; text-align: center; vertical-align: middle; padding: 0; margin: 0; box-sizing: border-box;">
+                    @endforeach
                     <label style="width: 80px; margin-left: 10px;">Fecha final póliza</label>
-                    @for ($i = 0; $i < 8; $i++)
-                        <input type="text" value="{{ $i }}" maxlength="1"
+                    @foreach ($data['policy_end_date'] as $digit)
+                    <input type="text" value="{{ $digit }}" maxlength="1"
                         style="width: 14px; height: 14px; border: 1px solid #000; text-align: center; vertical-align: middle; padding: 0; margin: 0; box-sizing: border-box;">
-                        @endfor
-            </div>
-            <div class="form-group">
-                <label style="width: 120px;">Número de radicado SIRAS</label>
-                <input type="text" style="width: 130px; height: 14px;">
-            </div>
-        </div>
-
-        <div class="section">
-            <h2>VII. AMPARO RECLAMADO</h2>
-            <div class="form-group">
-                <label style="width: 100px;">Valor Facturado:</label>
-                <input type="text" style="width: 100px; height: 14px;">
-                <label style="width: 100px; margin-left: 20px;">Valor Reclamado:</label>
-                <input type="text" style="width: 100px; height: 14px;">
-            </div>
-        </div>
-
-        <div class="section">
-            <h2>VIII. MANIFESTACION DEL SERVICIO HABILITADO DEL PRESTADOR DE SERVICIOS DE SALUD</h2>
-            <label style="width: 150px;">Manifestación de servicios habilitados</label>
-            <label style="width: 10px; margin-left: 20px;">Si</label>
-            <input type="text" maxlength="1" style="width: 14px; height: 14px; border: 1px solid #000; text-align: center; vertical-align: middle; padding: 0; margin: 0; box-sizing: border-box;">
-            <label style="width: 10px; margin-left: 20px;">No</label>
-            <input type="text" maxlength="1" style="width: 14px; height: 14px; border: 1px solid #000; text-align: center; vertical-align: middle; padding: 0; margin: 0; box-sizing: border-box;">
-            <p style="margin-left: 0; margin-top: 5px; font-size: 7px; text-align: justify; width: 655px;">
-                Como representante legal o Gerente de la Institución Prestadora de Servicios de Salud, declaró bajo la gavedad de juramento que toda la información contenidad en este formulario es cierta y
-                podrá se verificada por la Compañía de Seguros, por la Dirección de Administracion de Fondos de la Protección Social o quien haga sus veces, por el Administrador Fiduciario del Fondo de
-                Solidaridad y Garantía Fosyga, por la Superintendencia Nacional de Salud o la Contraloria General de la República de no ser así, acepto todas las consecuencias legales que produzca esta
-                situación. Adicionalmente, manifiesto que la reclamación no ha sido presentada con anterioridad ni se ha recibido pago alguno por las sumas reclamadas.
-            </p>
-            <div style="margin-left: 0; margin-top: 5px; font-size: 8px;">
-                <p style="display: inline-block; border-bottom: 1px solid #000; height: 16px; width: 200px; padding-left: 10px; margin-left: 20px; vertical-align: top;"></p>
-                <p style="display: inline-block; border-bottom: 1px solid #000; height: 16px; width: 200px; padding-left: 10px; margin-left: 180px; vertical-align: top;"></p>
-                <div style="margin-top: 2px;">
-                    <span style="display: inline-block; width: 190px; margin-left: 30px; text-align: center;">NOMBRE REPRESENTANTE LEGAL O PERSONA RESPONSABLE PARA TRAMITE DE ADMISIONES DE LA IPS</span>
-                    <span style="display: inline-block; width: 200px; margin-left: 195px; text-align: center;">FIRMA DEL REPRESENTANTE LEGAL O PERSONA RESPONSABLE PARA TRAMITE DE ADMISIONES DE LA IPS</span>
+                    @endforeach
+                </div>
+                <div class="form-group">
+                    <label style="width: 120px;">Número de radicado SIRAS</label>
+                    <input type="text" style="width: 130px; height: 14px;" value="{{ $data['sirasRecordNumber'] }}">
                 </div>
             </div>
-            <div style="margin-left: 0; margin-top: 5px; font-size: 8px;">
-                <p style="display: inline-block; border-bottom: 1px solid #000; height: 16px; width: 200px; padding-left: 10px; margin-left: 20px; vertical-align: top;"></p>
-                <p style="display: inline-block; border-bottom: 1px solid #000; height: 16px; width: 200px; padding-left: 10px; margin-left: 180px; vertical-align: top;"></p>
-                <div style="margin-top: 2px;">
-                    <span style="display: inline-block; width: 190px; margin-left: 30px; text-align: center; vertical-align: top;">TIPO Y NUMERO DE DOCUMENTO</span>
-                    <span style="display: inline-block; width: 200px; margin-left: 195px; text-align: center;">FIRMA DEL REPRESENTANTE LEGAL DE LA EMPRESA TRANSPORTADORA O DE LA PERSONA NATURAL QUE REALIZO EL TRANSPORTE</span>
+
+            <div class="section">
+                <h2>VII. AMPARO RECLAMADO</h2>
+                <div class="form-group">
+                    <label style="width: 100px;">Valor Facturado:</label>
+                    <input type="text" value="{{ $data['billedValue'] }}" style="width: 100px; height: 14px;">
+                    <label style="width: 100px; margin-left: 20px;">Valor Reclamado:</label>
+                    <input type="text" value="{{ $data['claimedValue'] }}" style="width: 100px; height: 14px;">
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>VIII. MANIFESTACION DEL SERVICIO HABILITADO DEL PRESTADOR DE SERVICIOS DE SALUD</h2>
+                <label style="width: 150px;">Manifestación de servicios habilitados</label>
+                <label style="width: 10px; margin-left: 20px;">Si</label>
+                <input type="text" value="{{ $data['serviceEnabledIndication'] === "YES_NO_001" ? 'X' : '' }}" maxlength="1" style="width: 14px; height: 14px; border: 1px solid #000; text-align: center; vertical-align: middle; padding: 0; margin: 0; box-sizing: border-box;">
+                <label style="width: 10px; margin-left: 20px;">No</label>
+                <input type="text" value="{{ $data['serviceEnabledIndication'] === "YES_NO_002" ? 'X' : '' }}" maxlength="1" style="width: 14px; height: 14px; border: 1px solid #000; text-align: center; vertical-align: middle; padding: 0; margin: 0; box-sizing: border-box;">
+                <p style="margin-left: 0; margin-top: 5px; font-size: 7px; text-align: justify; width: 655px;">
+                    Como representante legal o Gerente de la Institución Prestadora de Servicios de Salud, declaró bajo la gavedad de juramento que toda la información contenidad en este formulario es cierta y
+                    podrá se verificada por la Compañía de Seguros, por la Dirección de Administracion de Fondos de la Protección Social o quien haga sus veces, por el Administrador Fiduciario del Fondo de
+                    Solidaridad y Garantía Fosyga, por la Superintendencia Nacional de Salud o la Contraloria General de la República de no ser así, acepto todas las consecuencias legales que produzca esta
+                    situación. Adicionalmente, manifiesto que la reclamación no ha sido presentada con anterioridad ni se ha recibido pago alguno por las sumas reclamadas.
+                </p>
+                <div style="margin-left: 0; margin-top: 5px; font-size: 8px;">
+                    <p style="display: inline-block; border-bottom: 1px solid #000; height: 16px; width: 200px; padding-left: 10px; margin-left: 20px; vertical-align: top;"></p>
+                    <p style="display: inline-block; border-bottom: 1px solid #000; height: 16px; width: 200px; padding-left: 10px; margin-left: 180px; vertical-align: top;"></p>
+                    <div style="margin-top: 2px;">
+                        <span style="display: inline-block; width: 190px; margin-left: 30px; text-align: center;">NOMBRE REPRESENTANTE LEGAL O PERSONA RESPONSABLE PARA TRAMITE DE ADMISIONES DE LA IPS</span>
+                        <span style="display: inline-block; width: 200px; margin-left: 195px; text-align: center;">FIRMA DEL REPRESENTANTE LEGAL O PERSONA RESPONSABLE PARA TRAMITE DE ADMISIONES DE LA IPS</span>
+                    </div>
+                </div>
+                <div style="margin-left: 0; margin-top: 5px; font-size: 8px;">
+                    <p style="display: inline-block; border-bottom: 1px solid #000; height: 16px; width: 200px; padding-left: 10px; margin-left: 20px; vertical-align: top;"></p>
+                    <p style="display: inline-block; border-bottom: 1px solid #000; height: 16px; width: 200px; padding-left: 10px; margin-left: 180px; vertical-align: top;"></p>
+                    <div style="margin-top: 2px;">
+                        <span style="display: inline-block; width: 190px; margin-left: 30px; text-align: center; vertical-align: top;">TIPO Y NUMERO DE DOCUMENTO</span>
+                        <span style="display: inline-block; width: 200px; margin-left: 195px; text-align: center;">FIRMA DEL REPRESENTANTE LEGAL DE LA EMPRESA TRANSPORTADORA O DE LA PERSONA NATURAL QUE REALIZO EL TRANSPORTE</span>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 </body>
 
 </html>

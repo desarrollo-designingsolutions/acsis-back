@@ -23,4 +23,6 @@ Route::middleware(['check.permission:menu.invoice'])->group(function () {
     Route::post('/fultran/update/{id}', [FultranController::class, 'update']);
 
     Route::delete('/fultran/delete/{id}', [FultranController::class, 'delete']);
+
+    Route::get('/fultran/{invoice_id}/pdf', [FultranController::class, 'pdf']);
 });

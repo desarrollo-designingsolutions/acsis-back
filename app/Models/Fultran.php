@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\Fultran\RgResponseEnum;
+use App\Enums\ZoneEnum;
 use App\Traits\Cacheable;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -15,6 +16,7 @@ class Fultran extends Model
 
     protected $casts = [
         'rgResponse' => RgResponseEnum::class,
+        'pickupZone' => ZoneEnum::class,
     ];
 
     public function invoice(): BelongsTo
