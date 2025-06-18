@@ -739,9 +739,9 @@
             <div class="form-group">
                 <label style="width: 100px;">Tipo de Transporte</label>
                 <label style="width: 80px;">Ambulancia Básica</label>
-                <input type="text" value="{{ $data['transportServiceType']->value === "TRANSPORT_SERVICE_TYPE_001" ? 'X' : '' }}" maxlength="1" style="width: 14px; height: 14px; border: 1px solid #000; text-align: center; vertical-align: middle; padding: 0; margin: 0; box-sizing: border-box;">
+                <input type="text" value="{{ isset($data['transportServiceType']) ? $data['transportServiceType']->value === "TRANSPORT_SERVICE_TYPE_001" ? 'X' : '' : '' }}" maxlength="1" style="width: 14px; height: 14px; border: 1px solid #000; text-align: center; vertical-align: middle; padding: 0; margin: 0; box-sizing: border-box;">
                 <label style="width: 80px; margin-left: 20px;">Ambulancia Medicada</label>
-                <input type="text" value="{{ $data['transportServiceType']->value === "TRANSPORT_SERVICE_TYPE_002" ? 'X' : '' }}" maxlength="1" style="width: 14px; height: 14px; border: 1px solid #000; text-align: center; vertical-align: middle; padding: 0; margin: 0; box-sizing: border-box;">
+                <input type="text" value="{{isset($data['transportServiceType']) ?  $data['transportServiceType']->value === "TRANSPORT_SERVICE_TYPE_002" ? 'X' : '' :'' }}" maxlength="1" style="width: 14px; height: 14px; border: 1px solid #000; text-align: center; vertical-align: middle; padding: 0; margin: 0; box-sizing: border-box;">
                 <label style="width: 110px; margin-left: 40px;">Lugar donde recoge la Victima</label>
                 <label style="width: 30px; margin-left: 30px;">Zona</label>
                 @foreach ($data['pickupZones'] as $option)
