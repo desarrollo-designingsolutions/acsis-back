@@ -7,6 +7,9 @@ use Opis\JsonSchema\Validator;
 
 class JsonStructureValidation
 {
+
+    private const TYPE_VALIDATION = "Estructura";
+
     public static function initValidation($path_json)
     {
         // Leer el contenido del JSON
@@ -17,7 +20,7 @@ class JsonStructureValidation
         if (json_last_error() !== JSON_ERROR_NONE) {
             return [
                 'isValid' => false,
-                'message' => 'El archivo no contiene un JSON válido: '.json_last_error_msg(),
+                'message' => 'El archivo no contiene un JSON válido: ' . json_last_error_msg(),
                 'errors' => [],
             ];
         }
@@ -39,7 +42,7 @@ class JsonStructureValidation
         if (json_last_error() !== JSON_ERROR_NONE) {
             return [
                 'isValid' => false,
-                'message' => 'El esquema JSON no es válido: '.json_last_error_msg(),
+                'message' => 'El esquema JSON no es válido: ' . json_last_error_msg(),
                 'errors' => [],
             ];
         }
@@ -65,14 +68,19 @@ class JsonStructureValidation
         $errors = $errorFormatter->format($result->error());
         $formattedErrors = [];
 
+
         // Procesar cada error
         foreach ($errors as $path => $messages) {
             foreach ($messages as $message) {
-                // \Log::info('Mensaje de error crudo', ['path' => $path, 'message' => $message]);
+                \Log::info('Mensaje de error crudo', ['path' => $path, 'message' => $message]);
                 $errorList = self::simplifyErrorMessage($message, $path, $data);
+
+                // logMessage($errorList);
+
                 foreach ($errorList as $error) {
                     if (! empty($error['message'])) {
                         $formattedErrors[] = [
+                            'type' => self::TYPE_VALIDATION,
                             'level' => $error['level'],
                             'key' => $error['key'],
                             'data' => $error['data'],
@@ -110,8 +118,8 @@ class JsonStructureValidation
      */
     private static function simplifyErrorMessage($message, $path = '', $data = null)
     {
-        $level = self::determineErrorLevel($path);
         $cleanPath = self::cleanJsonPath($path);
+        $level = $cleanPath; //self::determineErrorLevel($path);
         $errors = [];
 
         // Extraer el índice del usuario de la ruta, si está presente
@@ -124,10 +132,11 @@ class JsonStructureValidation
             $missingFields = isset($matches[1]) ? array_map('trim', explode(',', $matches[1])) : ['desconocido'];
             foreach ($missingFields as $key) {
                 $value = ''; // Campo faltante, valor vacío
-                $mensaje = "En el nivel de $level falta el campo requerido '$key'".
-                    ($cleanPath ? " (en $cleanPath)" : '').
+                $mensaje = "En el nivel de $level falta el campo requerido '$key'" .
+                    ($cleanPath ? " (en $cleanPath)" : '') .
                     ($userIndex !== null ? " (Usuario $userIndex)" : '');
                 $errors[] = [
+                    'type' => self::TYPE_VALIDATION,
                     'level' => $level,
                     'key' => $key,
                     'data' => $value,
@@ -147,13 +156,15 @@ class JsonStructureValidation
 
             // Filtrar para obtener solo los campos realmente no permitidos
             $invalidFields = array_diff($allFields, $definedProperties);
+            // logMessage($invalidFields);
 
             foreach ($invalidFields as $field) {
                 $value = self::getValueFromPath($data, $field);
-                $mensaje = "Campo no permitido en $level: '$field'".
-                    ($cleanPath ? " (en $cleanPath)" : '').
+                $mensaje = "Campo no permitido en $level: '$field'" .
+                    ($cleanPath ? " (en $cleanPath)" : '') .
                     ($userIndex !== null ? " (Usuario $userIndex)" : '');
                 $errors[] = [
+                    'type' => self::TYPE_VALIDATION,
                     'level' => $level,
                     'key' => $field,
                     'data' => $value,
@@ -166,11 +177,12 @@ class JsonStructureValidation
         elseif (strpos($message, 'must be') !== false) {
             $key = self::extractKeyFromPath($path);
             $value = self::getValueFromPath($data, $path);
-            $mensaje = 'Tipo de dato incorrecto'.
-                ($cleanPath ? " en $cleanPath" : '').
-                ': '.$message.
+            $mensaje = 'Tipo de dato incorrecto' .
+                ($cleanPath ? " en $cleanPath" : '') .
+                ': ' . $message .
                 ($userIndex !== null ? " (Usuario $userIndex)" : '');
             $errors[] = [
+                'type' => self::TYPE_VALIDATION,
                 'level' => $level,
                 'key' => $key,
                 'data' => $value,
@@ -181,9 +193,10 @@ class JsonStructureValidation
         else {
             $key = self::extractKeyFromPath($path);
             $value = self::getValueFromPath($data, $path);
-            $mensaje = "Error en $level: $message".($cleanPath ? " (en $cleanPath)" : '').
+            $mensaje = "Error en $level: $message" . ($cleanPath ? " (en $cleanPath)" : '') .
                 ($userIndex !== null ? " (Usuario $userIndex)" : '');
             $errors[] = [
+                'type' => self::TYPE_VALIDATION,
                 'level' => $level,
                 'key' => $key,
                 'data' => $value,
@@ -207,12 +220,16 @@ class JsonStructureValidation
 
     private static function getAllowedPropertiesForPath($path)
     {
-        // Implementa lógica para obtener las propiedades permitidas según la ruta
-        // Esto depende de tu estructura de esquema específica
-        // Ejemplo simplificado:
+        // Normalize path
+        $path = ltrim($path, '#');
+
+        // Root level
         if ($path === '' || $path === '/') {
             return ['numDocumentoIdObligado', 'numFactura', 'tipoNota', 'numNota', 'usuarios'];
-        } elseif (preg_match('#^/usuarios/\d+$#', $path)) {
+        }
+
+        // User level (/usuarios/0)
+        if (preg_match('#^/usuarios/\d+$#', $path)) {
             return [
                 'codSexo',
                 'consecutivo',
@@ -227,7 +244,10 @@ class JsonStructureValidation
                 'codZonaTerritorialResidencia',
                 'servicios',
             ];
-        } elseif (preg_match('#^/usuarios/\d+/servicios$#', $path)) {
+        }
+
+        // Services level (/usuarios/0/servicios)
+        if (preg_match('#^/usuarios/\d+/servicios$#', $path)) {
             return [
                 'consultas',
                 'procedimientos',
@@ -237,7 +257,61 @@ class JsonStructureValidation
                 'medicamentos',
                 'otrosServicios',
             ];
-        } elseif (preg_match('#^/usuarios/\d+/servicios/consultas$#', $path)) {
+        }
+
+        // Individual procedure level (/usuarios/0/servicios/procedimientos/0)
+        if (preg_match('#^/usuarios/\d+/servicios/procedimientos/\d+$#', $path)) {
+            \Log::info('Matched procedimientos item path', ['path' => $path]);
+            return [
+                'codPrestador',
+                'fechaInicioAtencion',
+                'idMIPRES',
+                'numAutorizacion',
+                'codProcedimiento',
+                'viaIngresoServicioSalud',
+                'modalidadGrupoServicioTecSal',
+                'grupoServicios',
+                'codServicio',
+                'finalidadTecnologiaSalud',
+                'tipoDocumentoIdentificacion',
+                'numDocumentoIdentificacion',
+                'codDiagnosticoPrincipal',
+                'codDiagnosticoRelacionado',
+                'codComplicacion',
+                'valorPagoModerador',
+                'numFEVPagoModerador',
+                'consecutivo',
+                'vrServicio',
+                'conceptoRecaudo',
+            ];
+        }
+
+        // Individual hospitalization level (/usuarios/0/servicios/hospitalizacion/0)
+        if (preg_match('#^/usuarios/\d+/servicios/hospitalizacion/\d+$#', $path)) {
+            return [
+                'codPrestador',
+                'viaIngresoServicioSalud',
+                'fechaInicioAtencion',
+                'numAutorizacion',
+                'causaMotivoAtencion',
+                'codDiagnosticoPrincipal',
+                'codDiagnosticoPrincipalE',
+                'codDiagnosticoRelacionadoE1',
+                'codDiagnosticoRelacionadoE2',
+                'codDiagnosticoRelacionadoE3',
+                'codComplicacion',
+                'condicionDestinoUsuarioEgreso',
+                'codDiagnosticoCausaMuerte',
+                'fechaEgreso',
+                'consecutivo',
+                'numDocumentoIdentificacion',
+                'tipoDocumentoIdentificacion',
+                'numFEVPagoModerador',
+            ];
+        }
+
+        // Other service types (unchanged from your code)
+        if (preg_match('#^/usuarios/\d+/servicios/consultas$#', $path)) {
             return [
                 'codPrestador',
                 'fechaInicioAtencion',
@@ -261,29 +335,6 @@ class JsonStructureValidation
                 'vrServicio',
                 'conceptoRecaudo',
             ];
-        } elseif (preg_match('#^/usuarios/\d+/servicios/procedimientos$#', $path)) {
-            return [
-                'codPrestador',
-                'fechaInicioAtencion',
-                'idMIPRES',
-                'numAutorizacion',
-                'codProcedimiento',
-                'viaIngresoServicioSalud',
-                'modalidadGrupoServicioTecSal',
-                'grupoServicios',
-                'codServicio',
-                'finalidadTecnologiaSalud',
-                'tipoDocumentoIdentificacion',
-                'numDocumentoIdentificacion',
-                'codDiagnosticoPrincipal',
-                'codDiagnosticoRelacionado',
-                'codComplicacion',
-                'valorPagoModerador',
-                'numFEVPagoModerador',
-                'consecutivo',
-                'vrServicio',
-                'conceptoRecaudo',
-            ];
         } elseif (preg_match('#^/usuarios/\d+/servicios/urgencias$#', $path)) {
             return [
                 'codPrestador',
@@ -301,27 +352,6 @@ class JsonStructureValidation
                 'numFEVPagoModerador',
                 'numDocumentoIdentificacion',
                 'tipoDocumentoIdentificacion',
-            ];
-        } elseif (preg_match('#^/usuarios/\d+/servicios/hospitalizacion$#', $path)) {
-            return [
-                'viaIngresoServicioSalud',
-                'fechaInicioAtencion',
-                'numAutorizacion',
-                'causaMotivoAtencion',
-                'codDiagnosticoPrincipal',
-                'codDiagnosticoPrincipalE',
-                'codDiagnosticoRelacionadoE1',
-                'codDiagnosticoRelacionadoE2',
-                'codDiagnosticoRelacionadoE3',
-                'codComplicacion_id',
-                'condicionDestinoUsuarioEgreso',
-                'codDiagnosticoMuerte',
-                'fechaEgreso',
-                'consecutivo',
-                'codPrestador',
-                'numDocumentoIdentificacion',
-                'tipoDocumentoIdentificacion',
-                'numFEVPagoModerador',
             ];
         } elseif (preg_match('#^/usuarios/\d+/servicios/recienNacidos$#', $path)) {
             return [
@@ -388,7 +418,8 @@ class JsonStructureValidation
             ];
         }
 
-        // Agrega más condiciones según sea necesario para otros niveles del esquema
+        // Log unmatched paths for debugging
+        \Log::info('Unmatched path in getAllowedPropertiesForPath', ['path' => $path]);
         return [];
     }
 
@@ -472,28 +503,32 @@ class JsonStructureValidation
         // Normalizar la ruta eliminando el prefijo '#'
         $path = ltrim($path, '#');
 
-        if (strpos($path, '/usuarios') !== false) {
-            return 'usuario';
-        } elseif (strpos($path, '/consultas') !== false) {
-            return 'consulta';
-        } elseif (strpos($path, '/procedimientos') !== false) {
+        // Check more specific paths first, allowing additional segments
+        if (preg_match('#^/usuarios/\d+/servicios/procedimientos(/\d+)?(/.*)?$#', $path)) {
             return 'procedimiento';
-        } elseif (strpos($path, '/urgencias') !== false) {
+        } elseif (preg_match('#^/usuarios/\d+/servicios/consultas(/\d+)?(/.*)?$#', $path)) {
+            return 'consulta';
+        } elseif (preg_match('#^/usuarios/\d+/servicios/urgencias(/\d+)?(/.*)?$#', $path)) {
             return 'urgencia';
-        } elseif (strpos($path, '/hospitalizacion') !== false) {
+        } elseif (preg_match('#^/usuarios/\d+/servicios/hospitalizacion(/\d+)?(/.*)?$#', $path)) {
+            \Log::info('Matched hospitalizacion path', ['path' => $path]);
             return 'hospitalización';
-        } elseif (strpos($path, '/recienNacidos') !== false) {
+        } elseif (preg_match('#^/usuarios/\d+/servicios/recienNacidos(/\d+)?(/.*)?$#', $path)) {
             return 'recién nacido';
-        } elseif (strpos($path, '/medicamentos') !== false) {
+        } elseif (preg_match('#^/usuarios/\d+/servicios/medicamentos(/\d+)?(/.*)?$#', $path)) {
             return 'medicamento';
-        } elseif (strpos($path, '/otrosServicios') !== false) {
+        } elseif (preg_match('#^/usuarios/\d+/servicios/otrosServicios(/\d+)?(/.*)?$#', $path)) {
             return 'otro servicio';
-        } elseif (strpos($path, '/servicios') !== false) {
+        } elseif (preg_match('#^/usuarios/\d+/servicios$#', $path)) {
             return 'servicio';
+        } elseif (preg_match('#^/usuarios(/\d+)?$#', $path)) {
+            return 'usuario';
         } elseif (empty($path) || $path === '/' || $path === '') {
             return 'factura';
         }
 
+        // Log unmatched paths for debugging
+        \Log::info('Unmatched path in determineErrorLevel', ['path' => $path]);
         return $path;
     }
 
@@ -512,26 +547,27 @@ class JsonStructureValidation
         }
 
         $mappings = [
-            '/usuarios' => 'Usuario',
-            '/servicios' => 'Servicios',
-            '/consultas' => 'Consultas',
-            '/procedimientos' => 'Procedimientos',
-            '/urgencias' => 'Urgencias',
-            '/hospitalizacion' => 'Hospitalización',
-            '/recienNacidos' => 'Recién Nacidos',
-            '/medicamentos' => 'Medicamentos',
-            '/otrosServicios' => 'Otros Servicios',
+            '/usuarios' => 'usuarios',
+            '/servicios' => 'servicios',
+            '/consultas' => 'consultas',
+            '/procedimientos' => 'procedimientos',
+            '/urgencias' => 'urgencias',
+            '/hospitalizacion' => 'hospitalizacion',
+            '/recienNacidos' => 'recienNacidos',
+            '/medicamentos' => 'medicamentos',
+            '/otrosServicios' => 'otrosServicios',
         ];
 
         // Reemplazar nombres de niveles
-        $cleanPath = str_replace(array_keys($mappings), array_values($mappings), $path);
+        // $cleanPath = str_replace(array_keys($mappings), array_values($mappings), $path);
+        $cleanPath = $path;
 
         // Mantener los índices numéricos para indicar posición (por ejemplo, Usuario[0])
         $cleanPath = preg_replace('/\/(\d+)/', '[$1]', $cleanPath);
 
-        // Reemplazar barras por " > " para mayor legibilidad
-        $cleanPath = str_replace('/', ' > ', $cleanPath);
+        // Reemplazar barras por "." para mayor legibilidad
+        $cleanPath = str_replace('/', '.', $cleanPath);
 
-        return trim($cleanPath, ' > ');
+        return trim($cleanPath, '.');
     }
 }

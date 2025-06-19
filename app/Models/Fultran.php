@@ -2,7 +2,13 @@
 
 namespace App\Models;
 
+use App\Enums\Fultran\EventTypeEnum;
 use App\Enums\Fultran\RgResponseEnum;
+use App\Enums\Fultran\VehicleServiceTypeEnum;
+use App\Enums\Furips1\VehicleTypeEnum;
+use App\Enums\Furips1\VictimConditionEnum;
+use App\Enums\GenderEnum;
+use App\Enums\YesNoEnum;
 use App\Enums\ZoneEnum;
 use App\Traits\Cacheable;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
@@ -17,6 +23,12 @@ class Fultran extends Model
     protected $casts = [
         'rgResponse' => RgResponseEnum::class,
         'pickupZone' => ZoneEnum::class,
+        'vehicleServiceType' => VehicleServiceTypeEnum::class,
+        'eventType' => EventTypeEnum::class,
+        'victimGender' => GenderEnum::class,
+        'victimCondition' => VictimConditionEnum::class,
+        'involvedVehicleType' => VehicleTypeEnum::class,
+        'serviceEnabledIndication' => YesNoEnum::class,
     ];
 
     public function invoice(): BelongsTo

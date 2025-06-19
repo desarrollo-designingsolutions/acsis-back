@@ -212,7 +212,7 @@ class Furips2Controller extends Controller
         $data = [
             'invoice_number' => $furips2->invoice?->invoice_number,
             'consecutiveNumberClaim' => $furips2->consecutiveNumberClaim,
-            'serviceType' => $furips2->serviceType->Value(),
+            'serviceType' => $furips2->serviceType?->Value(),
             'serviceCode_id' => $furips2->serviceCode?->codigo,
             'serviceDescription' => $furips2->serviceDescription,
             'serviceQuantity' => $furips2->serviceQuantity,
