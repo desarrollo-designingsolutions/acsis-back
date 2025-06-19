@@ -2,14 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\Constants;
 use App\Http\Requests\Furips2\Furips2StoreRequest;
 use App\Http\Resources\Furips2\Furips2FormResource;
 use App\Http\Resources\Furips2\Furips2PaginateResource;
+use App\Http\Resources\Furips2\Furips2TxtResource;
 use App\Repositories\Furips2Repository;
 use App\Repositories\InvoiceRepository;
 use App\Services\CacheService;
 use App\Traits\HttpResponseTrait;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class Furips2Controller extends Controller
 {
@@ -102,7 +105,7 @@ class Furips2Controller extends Controller
             $post = $request->except([]);
             $furips2 = $this->furips2Repository->store($post);
 
-            $this->cacheService->clearByPrefix($this->key_redis_project.'string:invoices_paginate*');
+            $this->cacheService->clearByPrefix($this->key_redis_project . 'string:invoices_paginate*');
 
             return [
                 'code' => 200,
@@ -200,5 +203,36 @@ class Furips2Controller extends Controller
                 'message' => $msg,
             ];
         }, 200);
+    }
+
+    public function downloadTxt($id)
+    {
+        $furips2 = $this->furips2Repository->find($id);
+
+        $data = [
+            'invoice_number' => $furips2->invoice?->invoice_number,
+            'consecutiveNumberClaim' => $furips2->consecutiveNumberClaim,
+            'serviceType' => $furips2->serviceType->Value(),
+            'serviceCode_id' => $furips2->serviceCode?->codigo,
+            'serviceDescription' => $furips2->serviceDescription,
+            'serviceQuantity' => $furips2->serviceQuantity,
+            'serviceValue' => $furips2->serviceValue,
+            'totalFactoryValue' => $furips2->totalFactoryValue,
+            'totalClaimedValue' => $furips2->totalClaimedValue,
+        ];
+
+        // Generate comma-separated text content
+        $textContent = implode(',', array_map(function ($value) {
+            return $value ?? '';
+        }, $data)) . "\n";
+
+        // Define file name
+        $fileName = 'furips2_' . $id . '.txt';
+
+        // Return response with text file for download
+        return response($textContent, 200, [
+            'Content-Type' => 'text/plain',
+            'Content-Disposition' => 'attachment; filename="' . $fileName . '"',
+        ]);
     }
 }

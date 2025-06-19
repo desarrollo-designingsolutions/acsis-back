@@ -14,7 +14,7 @@ class Furips2 extends Model
     use Cacheable, HasFactory, HasUuids;
 
     protected $casts = [
-        'service_type' => ServiceTypeEnum::class,
+        'serviceType' => ServiceTypeEnum::class,
     ];
 
     public function invoice(): BelongsTo
