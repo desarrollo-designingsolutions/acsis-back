@@ -85,6 +85,7 @@
             border: 1px solid #000;
             border-radius: 0;
             box-sizing: border-box;
+            text-align: center;
         }
 
         .form-group input[type="checkbox"] {
@@ -239,7 +240,7 @@
                 <input type="text" value="{{ $data['patient_document'] }}" style="width: 150px; height: 14px;">
             </div>
             <div class="form-group">
-                <span style="display: inline-block; width: 105px; vertical-align: middle;">Fecha Radicación:</span>
+                <span style="display: inline-block; width: 105px; vertical-align: middle;">Fecha De Nacimiento:</span>
                 @foreach ($data['patient_birth_date'] as $digit)
                 <input type="text" value="{{ $digit }}" maxlength="1"
                     style="width: 14px; height: 14px; border: 1px solid #000; text-align: center; vertical-align: middle; padding: 0; margin: 0; box-sizing: border-box;">
@@ -487,9 +488,9 @@
                 <input type="text" value="{{ $data['policy_number'] }}" style="width: 250px; height: 14px;">
                 <label style="width: 100px; margin-left: 110px;">Intervención de autoridad</label>
                 <label style="width: 10px;">Si</label>
-                <input type="text" maxlength="1" style="width: 14px; height: 14px; border: 1px solid #000; text-align: center; vertical-align: middle; padding: 0; margin: 0; box-sizing: border-box;">
+                <input type="text" value="{{ $data['authorityIntervention_code'] === "YES_NO_001" ? 'X' : '' }}" maxlength="1" style="width: 14px; height: 14px; border: 1px solid #000; text-align: center; vertical-align: middle; padding: 0; margin: 0; box-sizing: border-box;">
                 <label style="width: 10px; margin-left: 20px;">No</label>
-                <input type="text" maxlength="1" style="width: 14px; height: 14px; border: 1px solid #000; text-align: center; vertical-align: middle; padding: 0; margin: 0; box-sizing: border-box;">
+                <input type="text" value="{{ $data['authorityIntervention_code'] === "YES_NO_002" ? 'X' : '' }}" maxlength="1" style="width: 14px; height: 14px; border: 1px solid #000; text-align: center; vertical-align: middle; padding: 0; margin: 0; box-sizing: border-box;">
             </div>
             <div class="form-group">
                 <label style="width: 40px;">Vigencia</label>
@@ -505,9 +506,9 @@
                 @endforeach
                 <label style="width: 100px; margin-left: 15px;">Cobro Excedente Póliza</label>
                 <label style="width: 10px;">Si</label>
-                <input type="text" maxlength="1" style="width: 14px; height: 14px; border: 1px solid #000; text-align: center; vertical-align: middle; padding: 0; margin: 0; box-sizing: border-box;">
+                <input type="text" value="{{ $data['policyExcessCharge'] === "YES_NO_001" ? 'X' : '' }}" maxlength="1" style="width: 14px; height: 14px; border: 1px solid #000; text-align: center; vertical-align: middle; padding: 0; margin: 0; box-sizing: border-box;">
                 <label style="width: 10px; margin-left: 20px;">No</label>
-                <input type="text" maxlength="1" style="width: 14px; height: 14px; border: 1px solid #000; text-align: center; vertical-align: middle; padding: 0; margin: 0; box-sizing: border-box;">
+                <input type="text" value="{{ $data['policyExcessCharge'] === "YES_NO_002" ? 'X' : '' }}" maxlength="1" style="width: 14px; height: 14px; border: 1px solid #000; text-align: center; vertical-align: middle; padding: 0; margin: 0; box-sizing: border-box;">
             </div>
         </div>
 
@@ -716,7 +717,7 @@
                 <label style="width: 100px;">Profesional que recibe</label>
                 <input type="text" value="{{ $data['receivingProfessional'] }}" style="width: 260px; height: 14px;">
                 <label style="width: 40px; margin-left: 30px;"> Cargo</label>
-                <input type="text" style="width: 165px; height: 14px;">
+                <input type="text" value="{{ $data['referralRecipientCharge'] }}" style="width: 165px; height: 14px;">
             </div>
         </div>
 
@@ -738,9 +739,9 @@
             <div class="form-group">
                 <label style="width: 100px;">Tipo de Transporte</label>
                 <label style="width: 80px;">Ambulancia Básica</label>
-                <input type="text" value="{{ $data['transportServiceType']->value === "TRANSPORT_SERVICE_TYPE_001" ? 'X' : '' }}" maxlength="1" style="width: 14px; height: 14px; border: 1px solid #000; text-align: center; vertical-align: middle; padding: 0; margin: 0; box-sizing: border-box;">
+                <input type="text" value="{{ isset($data['transportServiceType']) ? $data['transportServiceType']->value === "TRANSPORT_SERVICE_TYPE_001" ? 'X' : '' : '' }}" maxlength="1" style="width: 14px; height: 14px; border: 1px solid #000; text-align: center; vertical-align: middle; padding: 0; margin: 0; box-sizing: border-box;">
                 <label style="width: 80px; margin-left: 20px;">Ambulancia Medicada</label>
-                <input type="text" value="{{ $data['transportServiceType']->value === "TRANSPORT_SERVICE_TYPE_002" ? 'X' : '' }}" maxlength="1" style="width: 14px; height: 14px; border: 1px solid #000; text-align: center; vertical-align: middle; padding: 0; margin: 0; box-sizing: border-box;">
+                <input type="text" value="{{isset($data['transportServiceType']) ?  $data['transportServiceType']->value === "TRANSPORT_SERVICE_TYPE_002" ? 'X' : '' :'' }}" maxlength="1" style="width: 14px; height: 14px; border: 1px solid #000; text-align: center; vertical-align: middle; padding: 0; margin: 0; box-sizing: border-box;">
                 <label style="width: 110px; margin-left: 40px;">Lugar donde recoge la Victima</label>
                 <label style="width: 30px; margin-left: 30px;">Zona</label>
                 @foreach ($data['pickupZones'] as $option)
@@ -774,36 +775,48 @@
             <h2>IX. CERTIFICADO DE LA ATENCIÓN MEDICA DELA VICTIMA COMO PRUEBA DEL ACCIDENTE O EVENTO</h2>
             <div class="form-group">
                 <label style="width: 100px;">Fecha de ingreso</label>
-                @for ($i = 0; $i < 8; $i++)
-                    <input type="text" value="{{ $i }}" maxlength="1"
+                @foreach ($data['medicalAdmissionDate'] as $digit)
+                <input type="text" value="{{ $digit }}" maxlength="1"
                     style="width: 14px; height: 14px; border: 1px solid #000; text-align: center; vertical-align: middle; padding: 0; margin: 0; box-sizing: border-box;">
-                    @endfor
-                    <span style="display: inline-block; width: 50px; vertical-align: middle; margin-left: 20px;">a las</span>
-                    @for ($i = 0; $i < 4; $i++)
-                        <input type="text" value="{{ $i }}" maxlength="1"
-                        style="width: 14px; height: 14px; border: 1px solid #000; text-align: center; vertical-align: middle; padding: 0; margin: 0; box-sizing: border-box;">
-                        @endfor
+                @endforeach
+                <span style="display: inline-block; width: 50px; vertical-align: middle; margin-left: 20px;">a las</span>
+                @foreach ($data['medicalAdmissionTime'] as $digit)
+                <input type="text" value="{{ $digit }}" maxlength="1"
+                    style="width: 14px; height: 14px; border: 1px solid #000; text-align: center; vertical-align: middle; padding: 0; margin: 0; box-sizing: border-box;">
+                @endforeach
+            </div>
+            <div class="form-group">
+                <label style="width: 100px;">Fecha de egreso</label>
+                @foreach ($data['medicalDischargeDate'] as $digit)
+                <input type="text" value="{{ $digit }}" maxlength="1"
+                    style="width: 14px; height: 14px; border: 1px solid #000; text-align: center; vertical-align: middle; padding: 0; margin: 0; box-sizing: border-box;">
+                @endforeach
+                <span style="display: inline-block; width: 50px; vertical-align: middle; margin-left: 20px;">a las</span>
+                @foreach ($data['medicalDischargeTime'] as $digit)
+                <input type="text" value="{{ $digit }}" maxlength="1"
+                    style="width: 14px; height: 14px; border: 1px solid #000; text-align: center; vertical-align: middle; padding: 0; margin: 0; box-sizing: border-box;">
+                @endforeach
             </div>
 
             <div class="form-group">
                 <label style="width: 150px;">Código Diagnóstico principal de Ingreso</label>
-                <input type="text" style="width: 116px; height: 14px;">
+                <input type="text" value="{{ $data['primaryAdmissionDiagnosis_code'] }}" style="width: 116px; height: 14px;">
                 <label style="width: 150px; margin-left: 60px;"> Código Diagnóstico principal de Egreso</label>
-                <input type="text" style="width: 116px; height: 14px;">
+                <input type="text" value="{{ $data['associatedAdmissionDiagnosisCode1_code'] }}" style="width: 116px; height: 14px;">
             </div>
 
             <div class="form-group">
                 <label style="width: 150px;">Otro código Diagnóstico principal de Ingreso</label>
-                <input type="text" style="width: 116px; height: 14px;">
+                <input type="text" value="{{ $data['associatedAdmissionDiagnosisCode2_code'] }}" style="width: 116px; height: 14px;">
                 <label style="width: 150px; margin-left: 60px;">Otro código Diagnóstico principal de Egreso</label>
-                <input type="text" style="width: 116px; height: 14px;">
+                <input type="text" value="{{ $data['primaryDischargeDiagnosisCode_code'] }}" style="width: 116px; height: 14px;">
             </div>
 
             <div class="form-group">
                 <label style="width: 150px;">Otro código Diagnóstico principal de Ingreso</label>
-                <input type="text" style="width: 116px; height: 14px;">
+                <input type="text" value="{{ $data['associatedDischargeDiagnosisCode1_code'] }}" style="width: 116px; height: 14px;">
                 <label style="width: 150px; margin-left: 60px;">Otro código Diagnóstico principal de Egreso</label>
-                <input type="text" style="width: 116px; height: 14px;">
+                <input type="text" value="{{ $data['associatedDischargeDiagnosisCode2_code'] }}" style="width: 116px; height: 14px;">
             </div>
 
             <div class="form-group">
