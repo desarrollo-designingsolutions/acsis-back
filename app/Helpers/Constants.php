@@ -302,4 +302,18 @@ class Constants
         'PE',
         'PT',
     ];
+
+    public const CODS_TXT_FORM_FURIPS1_UCI = [
+        '108A01',
+        '109A01',
+        '109A02',
+        '109A03',
+        '110A01',
+        '110A02',
+        '111A01',
+        '125A01',
+        'S12101',
+        'S12102',
+        'S12103',
+    ];
 }

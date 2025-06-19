@@ -3,11 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Enums\Furips1\VictimConditionEnum;
+use App\Enums\Service\TypeServiceEnum;
 use App\Enums\ZoneEnum;
 use App\Helpers\Constants;
 use App\Http\Requests\Furips1\Furips1StoreRequest;
 use App\Http\Resources\Furips1\Furips1FormResource;
 use App\Http\Resources\Furips1\Furips1PaginateResource;
+use App\Models\Hospitalization;
+use App\Models\Service;
 use App\Repositories\Furips1Repository;
 use App\Repositories\InvoiceRepository;
 use App\Repositories\SexoRepository;
@@ -118,7 +121,7 @@ class Furips1Controller extends Controller
             $post = $request->except([]);
             $furips1 = $this->furips1Repository->store($post);
 
-            $this->cacheService->clearByPrefix($this->key_redis_project.'string:invoices_paginate*');
+            $this->cacheService->clearByPrefix($this->key_redis_project . 'string:invoices_paginate*');
 
             return [
                 'code' => 200,
@@ -358,7 +361,7 @@ class Furips1Controller extends Controller
                 'policy_number' => $invoice?->typeable?->policy_number,
                 'incident_start_date' => formatDateToArray($invoice?->typeable?->start_date),
                 'incident_end_date' => formatDateToArray($invoice?->typeable?->end_date),
-                
+
                 'medicalAdmissionDate' => formatDateToArray($invoice?->furips1?->medicalAdmissionDate),
                 'medicalAdmissionTime' => formatTimeToArray($invoice?->furips1?->medicalAdmissionTime),
                 'medicalDischargeDate' => formatDateToArray($invoice?->furips1?->medicalDischargeDate),
@@ -389,5 +392,154 @@ class Furips1Controller extends Controller
                 'path' => $path,
             ];
         });
+    }
+
+    public function downloadTxt($id)
+    {
+        $furips1 = $this->furips1Repository->find($id);
+
+        $serviceTypes = [
+            TypeServiceEnum::SERVICE_TYPE_003->value,
+            TypeServiceEnum::SERVICE_TYPE_004->value,
+            TypeServiceEnum::SERVICE_TYPE_005->value,
+        ];
+
+        $services = Service::where('invoice_id', $furips1->invoice?->id)
+            ->whereIn('type', $serviceTypes)
+            ->first();
+
+        $serviceTypes = [
+            TypeServiceEnum::SERVICE_TYPE_002->value,
+        ];
+
+        $procedure = Service::where('invoice_id', $furips1->invoice?->id)
+            ->whereIn('type', $serviceTypes)
+            ->first();
+
+        // return $procedure->serviceable->codProcedimiento->codigo;
+
+        $newRequest = new Request(['codigo_in' => Constants::CODS_TXT_FORM_FURIPS1_UCI]);
+        $cupsRips_arrayInfo = $this->queryController->selectInfiniteCupsRips($newRequest);
+
+        $data = [
+            'previousFilingNumber' => $furips1->previousFilingNumber,
+            'rgoResponse' => $furips1->rgoResponse->value(),
+            'invoice_number' => $furips1->invoice?->invoice_number,
+            'consecutiveClaimNumber' => $furips1->consecutiveClaimNumber,
+            'service_vendor_code' => $furips1->invoice?->serviceVendor?->nit,
+            'patient_first_surname' => $furips1->invoice?->patient?->first_surname,
+            'patient_second_surname' => $furips1->invoice?->patient?->second_surname,
+            'patient_first_name' => $furips1->invoice?->patient?->first_name,
+            'patient_second_name' => $furips1->invoice?->patient?->second_name,
+            'patient_type_document' => $furips1->invoice?->patient?->tipo_id_pisi?->codigo,
+            'patient_document' => $furips1->invoice?->patient?->document,
+            'patient_birth_date' => $furips1->invoice?->patient?->birth_date,
+            'codDiagnosticoCausaMuerte' => $services?->serviceable?->codDiagnosticoCausaMuerte,
+            'patient_sexo' => $furips1->invoice?->patient?->sexo?->codigo,
+            'victimResidenceAddress' => $furips1->victimResidenceAddress,
+            'patient_pais_residency_code' => $furips1->invoice?->patient?->pais_residency?->codigo,
+            'patient_municipio_residency_code' => $furips1->invoice?->patient?->municipio_residency?->codigo,
+            'patient_phone' => $furips1->victimPhone,
+            'victimCondition' => $furips1->victimCondition->value(),
+            'eventNature' => $furips1->eventNature->value(),
+            'otherEventDescription' => $furips1->otherEventDescription,
+            'eventOccurrenceAddress' => $furips1->eventOccurrenceAddress,
+            'eventOccurrenceDate' => $furips1->eventOccurrenceDate,
+            'eventOccurrenceTime' => $furips1->eventOccurrenceTime,
+            'eventDepartmentCode' => $furips1->eventDepartmentCode?->codigo,
+            'eventMunicipalityCode' => $furips1->eventMunicipalityCode?->codigo,
+            'eventZone' => $furips1->eventZone->value(),
+            'insurance_statuse' => $furips1->invoice?->typeable->insurance_statuse->code,
+            'vehicleBrand' => $furips1->vehicleBrand,
+            'vehiclePlate' => $furips1->vehiclePlate,
+            'vehicleType' => $furips1->vehicleType->value(),
+            'entity_code' => $furips1->invoice?->entity?->nit,
+            'soat_policy_number' => $furips1->invoice?->typeable->policy_number,
+            'soat_start_date' => $furips1->invoice?->typeable->start_date,
+            'soat_end_date' => $furips1->invoice?->typeable->end_date,
+            'sirasFilingNumber' => $furips1->sirasFilingNumber,
+            'insurerCapExhaustionCharge' => $furips1->insurerCapExhaustionCharge->value(),
+            '38' => $procedure->serviceable->codProcedimiento->codigo,
+            'surgicalProcedureComplexity' => $furips1->surgicalProcedureComplexity->value(),
+            '40' => $procedure->serviceable->codProcedimiento->codigo,
+            '41' => $procedure->serviceable->codProcedimiento->codigo,
+            '42' => collect($cupsRips_arrayInfo)->pluck('codigo')->contains($procedure->serviceable->codProcedimiento->codigo)
+                ? 1
+                : 0,
+            '43' => '',
+            'ownerDocumentType' => $furips1->ownerDocumentType?->codigo,
+            'ownerDocumentNumber' => $furips1->ownerDocumentNumber,
+            'ownerFirstLastName' => $furips1->ownerFirstLastName,
+            'ownerSecondLastName' => $furips1->ownerSecondLastName,
+            'ownerFirstName' => $furips1->ownerFirstName,
+            'ownerSecondName' => $furips1->ownerSecondName,
+            'ownerResidenceAddress' => $furips1->ownerResidenceAddress,
+            'ownerResidencePhone' => $furips1->ownerResidencePhone,
+            'ownerResidenceDepartmentCode' => $furips1->ownerResidenceDepartmentCode?->codigo,
+            'ownerResidenceMunicipalityCode' => $furips1->ownerResidenceMunicipalityCode?->codigo,
+            'driverFirstLastName' => $furips1->driverFirstLastName,
+            'driverSecondLastName' => $furips1->driverSecondLastName,
+            'driverFirstName' => $furips1->driverFirstName,
+            'driverSecondName' => $furips1->driverSecondName,
+            'driverDocumentType' => $furips1->driverDocumentType?->codigo,
+            'driverDocumentNumber' => $furips1->driverDocumentNumber,
+            'driverResidenceAddress' => $furips1->driverResidenceAddress,
+            'driverResidenceDepartmentCode' => $furips1->driverResidenceDepartmentCode?->codigo,
+            'driverResidenceMunicipalityCode' => $furips1->driverResidenceMunicipalityCode?->codigo,
+            'driverResidencePhone' => $furips1->driverResidencePhone,
+            'referenceType' => $furips1->referenceType->value(),
+            'referralDate' => $furips1->referralDate,
+            'departureTime' => $furips1->departureTime,
+            'referringHealthProviderCode' => $furips1->referringHealthProviderCode?->codigo,
+            'referringProfessional' => $furips1->referringProfessional,
+            'referringPersonPosition' => $furips1->referringPersonPosition,
+            'admissionDate' => $furips1->admissionDate,
+            'admissionTime' => $furips1->admissionTime,
+            'receivingHealthProviderCode' => $furips1->receivingHealthProviderCode?->codigo,
+            'receivingProfessional' => $furips1->receivingProfessional,
+            'interinstitutionalTransferAmbulancePlate' => $furips1->interinstitutionalTransferAmbulancePlate,
+            'primaryTransferAmbulancePlate' => $furips1->primaryTransferAmbulancePlate,
+            'victimTransportFromEventSite' => $furips1->victimTransportFromEventSite,
+            'victimTransportToEnd' => $furips1->victimTransportToEnd,
+            'transportServiceType' => $furips1->transportServiceType->value(),
+            'victimPickupZone' => $furips1->victimPickupZone->value(),
+            'medicalAdmissionDate' => $furips1->medicalAdmissionDate,
+            'medicalAdmissionTime' => $furips1->medicalAdmissionTime,
+            'medicalDischargeDate' => $furips1->medicalDischargeDate,
+            'medicalDischargeTime' => $furips1->medicalDischargeTime,
+            'primaryAdmissionDiagnosisCode' => $furips1->primaryAdmissionDiagnosisCode?->codigo,
+            'associatedAdmissionDiagnosisCode1' => $furips1->associatedAdmissionDiagnosisCode1?->codigo,
+            'associatedAdmissionDiagnosisCode2' => $furips1->associatedAdmissionDiagnosisCode2?->codigo,
+            'primaryDischargeDiagnosisCode' => $furips1->primaryDischargeDiagnosisCode?->codigo,
+            'associatedDischargeDiagnosisCode1' => $furips1->associatedDischargeDiagnosisCode1?->codigo,
+            'associatedDischargeDiagnosisCode2' => $furips1->associatedDischargeDiagnosisCode2?->codigo,
+            'doctorFirstLastName' => $furips1->doctorFirstLastName,
+            'doctorSecondLastName' => $furips1->doctorSecondLastName,
+            'doctorFirstName' => $furips1->doctorFirstName,
+            'doctorSecondName' => $furips1->doctorSecondName,
+            'doctorIdType' => $furips1->doctorIdType?->codigo,
+            'doctorIdNumber' => $furips1->doctorIdNumber,
+            'doctorRegistrationNumber' => $furips1->doctorRegistrationNumber,
+            'totalBilledMedicalSurgical' => $furips1->totalBilledMedicalSurgical,
+            'totalClaimedMedicalSurgical' => $furips1->totalClaimedMedicalSurgical,
+            'totalBilledTransport' => $furips1->totalBilledTransport,
+            'totalClaimedTransport' => $furips1->totalClaimedTransport,
+            'enabledServicesConfirmation' => $furips1->enabledServicesConfirmation?->value(),
+
+        ];
+
+        // Generate comma-separated text content
+        $textContent = implode(',', array_map(function ($value) {
+            return $value ?? '';
+        }, $data)) . "\n";
+
+        // Define file name
+        $fileName = 'furips1_' . $id . '.txt';
+
+        // Return response with text file for download
+        return response($textContent, 200, [
+            'Content-Type' => 'text/plain',
+            'Content-Disposition' => 'attachment; filename="' . $fileName . '"',
+        ]);
     }
 }
