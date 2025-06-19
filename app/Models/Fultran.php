@@ -56,4 +56,9 @@ class Fultran extends Model
     {
         return $this->belongsTo(Municipio::class, 'transferPickupMunicipalityCode_id', 'id');
     }
+
+    public function ipsReceptionHabilitationCode(): BelongsTo
+    {
+        return $this->belongsTo(IpsCodHabilitacion::class, 'ipsReceptionHabilitationCode_id', 'id');
+    }
 }

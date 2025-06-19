@@ -3,6 +3,7 @@
 namespace App\Http\Resources\Fultran;
 
 use App\Http\Resources\Departamento\DepartamentoSelectResource;
+use App\Http\Resources\IpsCodHabilitacion\IpsCodHabilitacionSelectInfiniteResource;
 use App\Http\Resources\Municipio\MunicipioSelectResource;
 use App\Http\Resources\TipoIdPisis\TipoIdPisisSelectResource;
 use Illuminate\Http\Request;
@@ -53,6 +54,11 @@ class FultranFormResource extends JsonResource
             'billedValue' => $this->billedValue,
             'claimedValue' => $this->claimedValue,
             'serviceEnabledIndication' => $this->serviceEnabledIndication,
+            'ipsName' => $this->ipsName,
+            'ipsNit' => $this->ipsNit,
+            'ipsAddress' => $this->ipsAddress,
+            'ipsPhone' => $this->ipsPhone,
+            'ipsReceptionHabilitationCode_id' => new IpsCodHabilitacionSelectInfiniteResource($this->ipsReceptionHabilitationCode),
         ];
     }
 }

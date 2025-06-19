@@ -64,6 +64,7 @@ class FultranController extends Controller
             $yesNoEnum = $this->queryController->selectYesNoEnum(request());
             $municipio = $this->queryController->selectInfiniteMunicipio(request());
             $departamento = $this->queryController->selectInfiniteDepartamento(request());
+            $ipsCodHabilitacion = $this->queryController->selectInfiniteIpsCodHabilitacion(request());
 
             $newRequest = new Request(['codigo_in' => Constants::CODS_SELECT_FORM_FULTRAN_CLAIMANIDTYPE]);
             $tipoIdPisis = $this->queryController->selectInfiniteTipoIdPisis($newRequest);
@@ -82,6 +83,7 @@ class FultranController extends Controller
                 ...$tipoIdPisis,
                 ...$municipio,
                 ...$departamento,
+                ...$ipsCodHabilitacion,
             ];
         });
     }
@@ -94,7 +96,7 @@ class FultranController extends Controller
             $post = $request->except([]);
             $fultran = $this->fultranRepository->store($post);
 
-            $this->cacheService->clearByPrefix($this->key_redis_project.'string:invoices_paginate*');
+            $this->cacheService->clearByPrefix($this->key_redis_project . 'string:invoices_paginate*');
 
             return [
                 'code' => 200,
@@ -127,6 +129,7 @@ class FultranController extends Controller
             $yesNoEnum = $this->queryController->selectYesNoEnum(request());
             $municipio = $this->queryController->selectInfiniteMunicipio(request());
             $departamento = $this->queryController->selectInfiniteDepartamento(request());
+            $ipsCodHabilitacion = $this->queryController->selectInfiniteIpsCodHabilitacion(request());
 
             $newRequest = new Request(['codigo_in' => Constants::CODS_SELECT_FORM_FULTRAN_CLAIMANIDTYPE]);
             $tipoIdPisis = $this->queryController->selectInfiniteTipoIdPisis($newRequest);
@@ -147,6 +150,7 @@ class FultranController extends Controller
                 ...$tipoIdPisis,
                 ...$municipio,
                 ...$departamento,
+                ...$ipsCodHabilitacion,
             ];
         });
     }

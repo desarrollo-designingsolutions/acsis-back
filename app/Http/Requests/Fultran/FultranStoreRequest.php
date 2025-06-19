@@ -65,6 +65,9 @@ class FultranStoreRequest extends FormRequest
         if ($this->has('transferPickupMunicipalityCode_id')) {
             $merge['transferPickupMunicipalityCode_id'] = getValueSelectInfinite($this->transferPickupMunicipalityCode_id);
         }
+        if ($this->has('ipsReceptionHabilitationCode_id')) {
+            $merge['ipsReceptionHabilitationCode_id'] = getValueSelectInfinite($this->ipsReceptionHabilitationCode_id);
+        }
 
         $this->merge($merge);
     }
