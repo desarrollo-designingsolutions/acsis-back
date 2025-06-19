@@ -262,8 +262,8 @@ class JsonDataValidation
 
                 $this->errors[] = [
                     'type' => self::TYPE_VALIDATION,
-                    'level' => "{$fieldPath}",
-                    'key' => '',
+                    'level' => "/",
+                    'key' => $fieldPath,
                     'data' => $value,
                     'message' => "Campo {$fieldPath}: No se encontró el campo en el JSON.",
                 ];
