@@ -751,7 +751,7 @@ class InvoiceController extends Controller
 
             // Paso 1: Validar la estructura del JSON
             $file = $request->file('archiveJson');
-            // $structureResponse = JsonStructureValidation::initValidation($file->getRealPath());
+            $structureResponse = JsonStructureValidation::initValidation($file->getRealPath());
 
             // if (!$structureResponse['isValid']) {
             //     return [
@@ -765,6 +765,10 @@ class InvoiceController extends Controller
             // Paso 2: Validar los datos del JSON contra la base de datos
             $jsonData = json_decode(file_get_contents($file->getRealPath()), true);
             $dataResponse = $this->jsonDataValidation->validate($jsonData);
+
+
+            $dataResponse["errors"] = [...$dataResponse["errors"], ...$structureResponse["errors"]];
+
 
             if (! $dataResponse['isValid']) {
                 return [

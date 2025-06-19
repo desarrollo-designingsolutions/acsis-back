@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Log;
 
 class JsonDataValidation
 {
+    private const TYPE_VALIDATION = "Información";
+
     protected $errors = [];
 
     protected $validatedData = [];
@@ -65,6 +67,7 @@ class JsonDataValidation
             if (count($middleParts) !== 2 || $middleParts[0] !== 'servicios') {
 
                 $this->errors[] = [
+                    'type' => self::TYPE_VALIDATION,
                     'level' => 'Archivo de validación',
                     'key' => '',
                     'data' => '',
@@ -80,9 +83,10 @@ class JsonDataValidation
             if (! is_array($parentValues)) {
 
                 $this->errors[] = [
+                    'type' => self::TYPE_VALIDATION,
                     'level' => $parentPath,
                     'key' => $fieldPath,
-                    'data' => $value,
+                    'data' => "",
                     'message' => "Campo {$fieldPath}: Se esperaba un array en {$parentPath}.",
                 ];
 
@@ -96,9 +100,10 @@ class JsonDataValidation
 
                 if (! is_array($serviceItems)) {
                     $this->errors[] = [
+                        'type' => self::TYPE_VALIDATION,
                         'level' => "{$parentPath}[{$userIndex}].{$middlePath}",
                         'key' => $serviceType,
-                        'data' => $value,
+                        'data' => "",
                         'message' => "Campo {$parentPath}[{$userIndex}].{$middlePath}: Se esperaba un array en {$serviceType}.",
                     ];
                     Arr::set($this->validatedData, "{$parentPath}.{$userIndex}.{$middleParts[0]}.{$serviceType}", null);
@@ -113,6 +118,7 @@ class JsonDataValidation
                     if ($value === null) {
 
                         $this->errors[] = [
+                            'type' => self::TYPE_VALIDATION,
                             'level' => "{$parentPath}[{$userIndex}].{$middlePath}[{$itemIndex}].{$childField}",
                             'key' => $childField,
                             'data' => $value,
@@ -135,6 +141,7 @@ class JsonDataValidation
                                 : $rule['error_message'];
 
                             $this->errors[] = [
+                                'type' => self::TYPE_VALIDATION,
                                 'level' => "{$parentPath}[{$userIndex}].{$middlePath}[{$itemIndex}].{$childField}",
                                 'key' => "{$childField}",
                                 'data' => $value,
@@ -153,6 +160,7 @@ class JsonDataValidation
                                 : $rule['error_message'];
 
                             $this->errors[] = [
+                                'type' => self::TYPE_VALIDATION,
                                 'level' => "{$parentPath}[{$userIndex}].{$middlePath}[{$itemIndex}].{$childField}",
                                 'key' => "{$childField}",
                                 'data' => $value,
@@ -173,9 +181,10 @@ class JsonDataValidation
             if (! is_array($parentValues)) {
 
                 $this->errors[] = [
+                    'type' => self::TYPE_VALIDATION,
                     'level' => $parentPath,
                     'key' => $fieldPath,
-                    'data' => $value,
+                    'data' => "",
                     'message' => "Campo {$fieldPath}: Se esperaba un array en {$parentPath}.",
                 ];
 
@@ -191,6 +200,7 @@ class JsonDataValidation
                 if ($value === null) {
 
                     $this->errors[] = [
+                        'type' => self::TYPE_VALIDATION,
                         'level' => "{$parentPath}[{$index}].{$childField}",
                         'key' => $childField,
                         'data' => $value,
@@ -213,6 +223,7 @@ class JsonDataValidation
                             : $rule['error_message'];
 
                         $this->errors[] = [
+                            'type' => self::TYPE_VALIDATION,
                             'level' => "{$parentPath}[{$index}].{$childField}",
                             'key' => $childField,
                             'data' => $value,
@@ -231,6 +242,7 @@ class JsonDataValidation
                             : $rule['error_message'];
 
                         $this->errors[] = [
+                            'type' => self::TYPE_VALIDATION,
                             'level' => "{$parentPath}[{$index}].{$childField}",
                             'key' => $childField,
                             'data' => $value,
@@ -249,6 +261,7 @@ class JsonDataValidation
             if ($value === null) {
 
                 $this->errors[] = [
+                    'type' => self::TYPE_VALIDATION,
                     'level' => "{$fieldPath}",
                     'key' => '',
                     'data' => $value,
@@ -271,6 +284,7 @@ class JsonDataValidation
                         : $rule['error_message'];
 
                     $this->errors[] = [
+                        'type' => self::TYPE_VALIDATION,
                         'level' => '/',
                         'key' => "{$fieldPath}",
                         'data' => $value,
@@ -289,6 +303,7 @@ class JsonDataValidation
                         : $rule['error_message'];
 
                     $this->errors[] = [
+                        'type' => self::TYPE_VALIDATION,
                         'level' => '/',
                         'key' => "{$fieldPath}",
                         'data' => $value,
