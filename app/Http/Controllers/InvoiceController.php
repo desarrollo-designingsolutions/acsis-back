@@ -9,13 +9,20 @@ use App\Events\InvoiceRowUpdatedNow;
 use App\Exports\Invoice\InvoiceExcelErrorsValidationXmlExport;
 use App\Exports\Invoice\InvoiceExcelExport;
 use App\Helpers\Constants;
+use App\Helpers\Invoice\JsonStructureValidation;
 use App\Http\Requests\Invoice\InvoiceStoreRequest;
 use App\Http\Requests\Invoice\InvoiceUploadJsonRequest;
 use App\Http\Resources\Invoice\InvoiceFormResource;
 use App\Http\Resources\Invoice\InvoiceListResource;
 use App\Http\Resources\InvoiceSoat\InvoiceSoatFormResource;
 use App\Models\Invoice;
+use App\Models\Municipio;
+use App\Models\Pais;
+use App\Models\RipsTipoUsuarioVersion2;
 use App\Models\Service;
+use App\Models\Sexo;
+use App\Models\TipoIdPisis;
+use App\Models\ZonaVersion2;
 use App\Repositories\Cie10Repository;
 use App\Repositories\ConceptoRecaudoRepository;
 use App\Repositories\CondicionyDestinoUsuarioEgresoRepository;
@@ -51,6 +58,7 @@ use App\Repositories\UmmRepository;
 use App\Repositories\UrgencyRepository;
 use App\Repositories\ViaIngresoUsuarioRepository;
 use App\Repositories\ZonaVersion2Repository;
+use App\Services\CacheService;
 use App\Services\JsonValidation\JsonDataValidation;
 use App\Traits\HttpResponseTrait;
 use Illuminate\Http\Request;
@@ -106,6 +114,8 @@ class InvoiceController extends Controller
         protected HospitalizationRepository $hospitalizationRepository,
         protected NewlyBornRepository $newlyBornRepository,
         protected ServiceRepository $serviceRepository,
+
+        protected CacheService $cacheService
 
     ) {
         $this->key_redis_project = env('KEY_REDIS_PROJECT');
@@ -291,8 +301,6 @@ class InvoiceController extends Controller
             $dataSoat = array_merge($request['soat'], ['company_id' => $request['company_id']]);
 
             unset($dataSoat['model']);
-            logMessage('dataSoat');
-            logMessage($dataSoat);
             // Store POLICY and invoice
             $element = $this->invoiceSoatRepository->store($dataSoat);
             $element['model'] = TypeInvoiceEnum::INVOICE_TYPE_002->model();
@@ -431,7 +439,7 @@ class InvoiceController extends Controller
         $newData['usuarios'] = $users;
 
         // Define file path
-        $nameFile = $invoice->id.'.json';
+        $nameFile = $invoice->id . '.json';
         $path = "companies/company_{$invoice->company_id}/invoices/invoice_{$invoice->id}/{$nameFile}";
         $disk = Constants::DISK_FILES;
 
@@ -501,7 +509,7 @@ class InvoiceController extends Controller
 
     private function storeJsonFile($invoice, array $jsonData): void
     {
-        $nameFile = $invoice->id.'.json';
+        $nameFile = $invoice->id . '.json';
         $path = "companies/company_{$invoice->company_id}/invoices/invoice_{$invoice->id}/{$nameFile}";
         $disk = Constants::DISK_FILES;
 
@@ -543,12 +551,12 @@ class InvoiceController extends Controller
 
         // Obtener el contenido del archivo
         $fileContent = Storage::disk($disk)->get($path);
-        $fileName = $invoice->id.'.json'; // Nombre del archivo para la descarga
+        $fileName = $invoice->id . '.json'; // Nombre del archivo para la descarga
 
         // Devolver el archivo como respuesta descargable
         return response($fileContent, 200, [
             'Content-Type' => 'application/json',
-            'Content-Disposition' => 'attachment; filename="'.$fileName.'"',
+            'Content-Disposition' => 'attachment; filename="' . $fileName . '"',
         ]);
     }
 
@@ -705,8 +713,8 @@ class InvoiceController extends Controller
                 File::makeDirectory($tempPath, 0755, true);
             }
 
-            $zipFileName = 'factura_'.$invoice->id.'.zip';
-            $zipPath = $tempPath.'/'.$zipFileName;
+            $zipFileName = 'factura_' . $invoice->id . '.zip';
+            $zipPath = $tempPath . '/' . $zipFileName;
 
             $zip = new ZipArchive;
             if ($zip->open($zipPath, ZipArchive::CREATE | ZipArchive::OVERWRITE) === true) {
@@ -726,7 +734,7 @@ class InvoiceController extends Controller
 
             return response()->json(['error' => 'Error al crear el ZIP'], 500);
         } catch (\Exception $e) {
-            \Log::error('Error en downloadZip: '.$e->getMessage());
+            \Log::error('Error en downloadZip: ' . $e->getMessage());
 
             return response()->json([
                 'error' => $e->getMessage(),
@@ -819,6 +827,63 @@ class InvoiceController extends Controller
         $post['tipo_nota_id'] = $json['tipoNota_data']['id'] ?? null;
         $post['note_number'] = $json['numNota'];
         $post['patient_id'] = $json['usuarios'][0]['numDocumentoIdentificacion_data']['id'] ?? null;
+
+
+        if (empty($post['patient_id'])) {
+
+            $tipoDocumentoIdentificacion = TipoIdPisis::select(["id"])->where("codigo", $json['usuarios'][0]['tipoDocumentoIdentificacion'])->first();
+            if ($tipoDocumentoIdentificacion) {
+                $tipoDocumentoIdentificacion = $tipoDocumentoIdentificacion->id;
+            }
+
+            $tipoUsuario = RipsTipoUsuarioVersion2::select(["id"])->where("codigo", $json['usuarios'][0]['tipoUsuario'])->first();
+            if ($tipoUsuario) {
+                $tipoUsuario = $tipoUsuario->id;
+            }
+            $codSexo = Sexo::select(["id"])->where("codigo", $json['usuarios'][0]['codSexo'])->first();
+            if ($codSexo) {
+                $codSexo = $codSexo->id;
+            }
+            $codPaisResidencia = Pais::select(["id"])->where("codigo", $json['usuarios'][0]['codPaisResidencia'])->first();
+            if ($codPaisResidencia) {
+                $codPaisResidencia = $codPaisResidencia->id;
+            }
+            $codMunicipioResidencia = Municipio::select(["id"])->where("codigo", $json['usuarios'][0]['codMunicipioResidencia'])->first();
+            if ($codMunicipioResidencia) {
+                $codMunicipioResidencia = $codMunicipioResidencia->id;
+            }
+            $codZonaTerritorialResidencia = ZonaVersion2::select(["id"])->where("codigo", $json['usuarios'][0]['codZonaTerritorialResidencia'])->first();
+            if ($codZonaTerritorialResidencia) {
+                $codZonaTerritorialResidencia = $codZonaTerritorialResidencia->id;
+            }
+            $codPaisOrigen = Pais::select(["id"])->where("codigo", $json['usuarios'][0]['codPaisOrigen'])->first();
+            if ($codPaisOrigen) {
+                $codPaisOrigen = $codPaisOrigen->id;
+            }
+
+            $patient = [
+                "company_id" => $company_id,
+                "tipo_id_pisi_id" => $tipoDocumentoIdentificacion,
+                "document" => $json['usuarios'][0]['numDocumentoIdentificacion'],
+                "rips_tipo_usuario_version2_id" => $tipoUsuario,
+                "birth_date" => $json['usuarios'][0]['fechaNacimiento'],
+                "sexo_id" => $codSexo,
+                "pais_residency_id" => $codPaisResidencia,
+                "municipio_residency_id" => $codMunicipioResidencia,
+                "zona_version2_id" => $codZonaTerritorialResidencia,
+                "incapacity" => $json['usuarios'][0]['incapacidad'] == "SI" ? 1 : 0,
+                "pais_origin_id" => $codPaisOrigen,
+            ];
+
+            $patient = $this->patientRepository->store($patient);
+
+
+            $this->cacheService->clearByPrefix($this->key_redis_project . 'string:patients*');
+
+
+            $post['patient_id'] = $patient->id;
+        }
+
 
         $invoice = $this->invoiceRepository->store($post);
 

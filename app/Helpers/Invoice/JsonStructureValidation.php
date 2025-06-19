@@ -17,7 +17,7 @@ class JsonStructureValidation
         if (json_last_error() !== JSON_ERROR_NONE) {
             return [
                 'isValid' => false,
-                'message' => 'El archivo no contiene un JSON válido: '.json_last_error_msg(),
+                'message' => 'El archivo no contiene un JSON válido: ' . json_last_error_msg(),
                 'errors' => [],
             ];
         }
@@ -39,7 +39,7 @@ class JsonStructureValidation
         if (json_last_error() !== JSON_ERROR_NONE) {
             return [
                 'isValid' => false,
-                'message' => 'El esquema JSON no es válido: '.json_last_error_msg(),
+                'message' => 'El esquema JSON no es válido: ' . json_last_error_msg(),
                 'errors' => [],
             ];
         }
@@ -65,11 +65,15 @@ class JsonStructureValidation
         $errors = $errorFormatter->format($result->error());
         $formattedErrors = [];
 
+
         // Procesar cada error
         foreach ($errors as $path => $messages) {
             foreach ($messages as $message) {
-                // \Log::info('Mensaje de error crudo', ['path' => $path, 'message' => $message]);
+                \Log::info('Mensaje de error crudo', ['path' => $path, 'message' => $message]);
                 $errorList = self::simplifyErrorMessage($message, $path, $data);
+
+                // logMessage($errorList);
+
                 foreach ($errorList as $error) {
                     if (! empty($error['message'])) {
                         $formattedErrors[] = [
@@ -124,8 +128,8 @@ class JsonStructureValidation
             $missingFields = isset($matches[1]) ? array_map('trim', explode(',', $matches[1])) : ['desconocido'];
             foreach ($missingFields as $key) {
                 $value = ''; // Campo faltante, valor vacío
-                $mensaje = "En el nivel de $level falta el campo requerido '$key'".
-                    ($cleanPath ? " (en $cleanPath)" : '').
+                $mensaje = "En el nivel de $level falta el campo requerido '$key'" .
+                    ($cleanPath ? " (en $cleanPath)" : '') .
                     ($userIndex !== null ? " (Usuario $userIndex)" : '');
                 $errors[] = [
                     'level' => $level,
@@ -147,11 +151,12 @@ class JsonStructureValidation
 
             // Filtrar para obtener solo los campos realmente no permitidos
             $invalidFields = array_diff($allFields, $definedProperties);
+            // logMessage($invalidFields);
 
             foreach ($invalidFields as $field) {
                 $value = self::getValueFromPath($data, $field);
-                $mensaje = "Campo no permitido en $level: '$field'".
-                    ($cleanPath ? " (en $cleanPath)" : '').
+                $mensaje = "Campo no permitido en $level: '$field'" .
+                    ($cleanPath ? " (en $cleanPath)" : '') .
                     ($userIndex !== null ? " (Usuario $userIndex)" : '');
                 $errors[] = [
                     'level' => $level,
@@ -166,9 +171,9 @@ class JsonStructureValidation
         elseif (strpos($message, 'must be') !== false) {
             $key = self::extractKeyFromPath($path);
             $value = self::getValueFromPath($data, $path);
-            $mensaje = 'Tipo de dato incorrecto'.
-                ($cleanPath ? " en $cleanPath" : '').
-                ': '.$message.
+            $mensaje = 'Tipo de dato incorrecto' .
+                ($cleanPath ? " en $cleanPath" : '') .
+                ': ' . $message .
                 ($userIndex !== null ? " (Usuario $userIndex)" : '');
             $errors[] = [
                 'level' => $level,
@@ -181,7 +186,7 @@ class JsonStructureValidation
         else {
             $key = self::extractKeyFromPath($path);
             $value = self::getValueFromPath($data, $path);
-            $mensaje = "Error en $level: $message".($cleanPath ? " (en $cleanPath)" : '').
+            $mensaje = "Error en $level: $message" . ($cleanPath ? " (en $cleanPath)" : '') .
                 ($userIndex !== null ? " (Usuario $userIndex)" : '');
             $errors[] = [
                 'level' => $level,
@@ -262,6 +267,7 @@ class JsonStructureValidation
                 'conceptoRecaudo',
             ];
         } elseif (preg_match('#^/usuarios/\d+/servicios/procedimientos$#', $path)) {
+            logMessage("aaaaaaa");
             return [
                 'codPrestador',
                 'fechaInicioAtencion',

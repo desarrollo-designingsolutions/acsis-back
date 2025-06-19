@@ -39,7 +39,7 @@ class JsonDataValidation
                 'validatedData' => $this->validatedData,
             ];
         } catch (\Exception $e) {
-            Log::error('Error en la validación de datos del JSON: '.$e->getMessage(), ['jsonData' => $jsonData]);
+            Log::error('Error en la validación de datos del JSON: ' . $e->getMessage(), ['jsonData' => $jsonData]);
 
             return [
                 'isValid' => false,
@@ -82,7 +82,7 @@ class JsonDataValidation
                 $this->errors[] = [
                     'level' => $parentPath,
                     'key' => $fieldPath,
-                    'data' => null,
+                    'data' => $value,
                     'message' => "Campo {$fieldPath}: Se esperaba un array en {$parentPath}.",
                 ];
 
@@ -98,7 +98,7 @@ class JsonDataValidation
                     $this->errors[] = [
                         'level' => "{$parentPath}[{$userIndex}].{$middlePath}",
                         'key' => $serviceType,
-                        'data' => null,
+                        'data' => $value,
                         'message' => "Campo {$parentPath}[{$userIndex}].{$middlePath}: Se esperaba un array en {$serviceType}.",
                     ];
                     Arr::set($this->validatedData, "{$parentPath}.{$userIndex}.{$middleParts[0]}.{$serviceType}", null);
@@ -115,7 +115,7 @@ class JsonDataValidation
                         $this->errors[] = [
                             'level' => "{$parentPath}[{$userIndex}].{$middlePath}[{$itemIndex}].{$childField}",
                             'key' => $childField,
-                            'data' => null,
+                            'data' => $value,
                             'message' => "Campo {$parentPath}[{$userIndex}].{$middlePath}[{$itemIndex}].{$childField}: No se encontró el campo en el JSON.",
                         ];
 
@@ -137,7 +137,7 @@ class JsonDataValidation
                             $this->errors[] = [
                                 'level' => "{$parentPath}[{$userIndex}].{$middlePath}[{$itemIndex}].{$childField}",
                                 'key' => "{$childField}",
-                                'data' => null,
+                                'data' => $value,
                                 'message' => "Campo {$parentPath}[{$userIndex}].{$middlePath}[{$itemIndex}].{$childField}: {$errorMessage}",
                             ];
 
@@ -155,7 +155,7 @@ class JsonDataValidation
                             $this->errors[] = [
                                 'level' => "{$parentPath}[{$userIndex}].{$middlePath}[{$itemIndex}].{$childField}",
                                 'key' => "{$childField}",
-                                'data' => null,
+                                'data' => $value,
                                 'message' => "Campo {$parentPath}[{$userIndex}].{$middlePath}[{$itemIndex}].{$childField}: {$errorMessage}",
                             ];
 
@@ -175,7 +175,7 @@ class JsonDataValidation
                 $this->errors[] = [
                     'level' => $parentPath,
                     'key' => $fieldPath,
-                    'data' => null,
+                    'data' => $value,
                     'message' => "Campo {$fieldPath}: Se esperaba un array en {$parentPath}.",
                 ];
 
@@ -193,7 +193,7 @@ class JsonDataValidation
                     $this->errors[] = [
                         'level' => "{$parentPath}[{$index}].{$childField}",
                         'key' => $childField,
-                        'data' => null,
+                        'data' => $value,
                         'message' => "Campo {$parentPath}[{$index}].{$childField}: No se encontró el campo en el JSON.",
                     ];
 
@@ -215,7 +215,7 @@ class JsonDataValidation
                         $this->errors[] = [
                             'level' => "{$parentPath}[{$index}].{$childField}",
                             'key' => $childField,
-                            'data' => null,
+                            'data' => $value,
                             'message' => "Campo {$parentPath}[{$index}].{$childField}: {$errorMessage}",
                         ];
 
@@ -233,7 +233,7 @@ class JsonDataValidation
                         $this->errors[] = [
                             'level' => "{$parentPath}[{$index}].{$childField}",
                             'key' => $childField,
-                            'data' => null,
+                            'data' => $value,
                             'message' => "Campo {$parentPath}[{$index}].{$childField}: {$errorMessage}",
                         ];
 
@@ -251,7 +251,7 @@ class JsonDataValidation
                 $this->errors[] = [
                     'level' => "{$fieldPath}",
                     'key' => '',
-                    'data' => null,
+                    'data' => $value,
                     'message' => "Campo {$fieldPath}: No se encontró el campo en el JSON.",
                 ];
 
@@ -273,7 +273,7 @@ class JsonDataValidation
                     $this->errors[] = [
                         'level' => '/',
                         'key' => "{$fieldPath}",
-                        'data' => null,
+                        'data' => $value,
                         'message' => "Campo {$fieldPath}: {$errorMessage}",
                     ];
 
@@ -291,7 +291,7 @@ class JsonDataValidation
                     $this->errors[] = [
                         'level' => '/',
                         'key' => "{$fieldPath}",
-                        'data' => null,
+                        'data' => $value,
                         'message' => "Campo {$fieldPath}: {$errorMessage}",
                     ];
 

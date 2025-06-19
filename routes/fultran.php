@@ -25,4 +25,6 @@ Route::middleware(['check.permission:menu.invoice'])->group(function () {
     Route::delete('/fultran/delete/{id}', [FultranController::class, 'delete']);
 
     Route::get('/fultran/{invoice_id}/pdf', [FultranController::class, 'pdf']);
+
+    Route::get('/fultran/downloadTxt/{id}', [FultranController::class, 'downloadTxt']);
 });

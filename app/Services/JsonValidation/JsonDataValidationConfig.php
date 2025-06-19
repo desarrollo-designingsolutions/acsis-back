@@ -49,7 +49,7 @@ class JsonDataValidationConfig
             ],
             'usuarios.*.fechaNacimiento' => [
                 'type' => 'date',
-                'error_message' => fn ($rule, $value) => "El fechaNacimiento '{$value}' debe ser una fecha válida.",
+                'error_message' => fn($rule, $value) => "El fechaNacimiento '{$value}' debe ser una fecha válida.",
             ],
             'usuarios.*.codSexo' => [
                 'type' => 'exists',
@@ -82,7 +82,7 @@ class JsonDataValidationConfig
             'usuarios.*.incapacidad' => [
                 'type' => 'in',
                 'values' => ['SI', 'NO'],
-                'error_message' => fn ($rule) => 'El incapacidad debe ser uno de: '.implode(', ', $rule['values']).'.',
+                'error_message' => fn($rule) => 'El incapacidad debe ser uno de: ' . implode(', ', $rule['values']) . '.',
             ],
             'usuarios.*.codPaisOrigen' => [
                 'type' => 'exists',
@@ -108,7 +108,7 @@ class JsonDataValidationConfig
             ],
             'usuarios.*.servicios.consultas.*.fechaInicioAtencion' => [
                 'type' => 'date',
-                'error_message' => fn ($rule, $value) => "El fechaInicioAtencion '{$value}' debe ser una fecha válida.",
+                'error_message' => fn($rule, $value) => "El fechaInicioAtencion '{$value}' debe ser una fecha válida.",
             ],
             'usuarios.*.servicios.consultas.*.codConsulta' => [
                 'type' => 'exists',
@@ -226,7 +226,7 @@ class JsonDataValidationConfig
             ],
             'usuarios.*.servicios.procedimientos.*.fechaInicioAtencion' => [
                 'type' => 'date',
-                'error_message' => fn ($rule, $value) => "El fechaInicioAtencion '{$value}' debe ser una fecha válida.",
+                'error_message' => fn($rule, $value) => "El fechaInicioAtencion '{$value}' debe ser una fecha válida.",
             ],
             'usuarios.*.servicios.procedimientos.*.codProcedimiento' => [
                 'type' => 'exists',
@@ -330,7 +330,7 @@ class JsonDataValidationConfig
             ],
             'usuarios.*.servicios.medicamentos.*.fechaDispensAdmon' => [
                 'type' => 'date',
-                'error_message' => fn ($rule, $value) => "El fechaDispensAdmon '{$value}' debe ser una fecha válida.",
+                'error_message' => fn($rule, $value) => "El fechaDispensAdmon '{$value}' debe ser una fecha válida.",
             ],
             'usuarios.*.servicios.medicamentos.*.codDiagnosticoPrincipal' => [
                 'type' => 'exists',
@@ -416,7 +416,7 @@ class JsonDataValidationConfig
             ],
             'usuarios.*.servicios.otrosServicios.*.fechaSuministroTecnologia' => [
                 'type' => 'date',
-                'error_message' => fn ($rule, $value) => "El fechaSuministroTecnologia '{$value}' debe ser una fecha válida.",
+                'error_message' => fn($rule, $value) => "El fechaSuministroTecnologia '{$value}' debe ser una fecha válida.",
             ],
             'usuarios.*.servicios.otrosServicios.*.tipoOS' => [
                 'type' => 'exists',
@@ -479,7 +479,7 @@ class JsonDataValidationConfig
             ],
             'usuarios.*.servicios.urgencias.*.fechaInicioAtencion' => [
                 'type' => 'date',
-                'error_message' => fn ($rule, $value) => "El fechaInicioAtencion '{$value}' debe ser una fecha válida.",
+                'error_message' => fn($rule, $value) => "El fechaInicioAtencion '{$value}' debe ser una fecha válida.",
             ],
             'usuarios.*.servicios.urgencias.*.causaMotivoAtencion' => [
                 'type' => 'exists',
@@ -532,7 +532,7 @@ class JsonDataValidationConfig
             ],
             'usuarios.*.servicios.urgencias.*.fechaEgreso' => [
                 'type' => 'date',
-                'error_message' => fn ($rule, $value) => "El fechaEgreso '{$value}' debe ser una fecha válida.",
+                'error_message' => fn($rule, $value) => "El fechaEgreso '{$value}' debe ser una fecha válida.",
             ],
             'usuarios.*.servicios.urgencias.*.consecutivo' => [
                 'type' => 'numeric',
@@ -557,7 +557,7 @@ class JsonDataValidationConfig
             ],
             'usuarios.*.servicios.hospitalizacion.*.fechaInicioAtencion' => [
                 'type' => 'date',
-                'error_message' => fn ($rule, $value) => "El fechaInicioAtencion '{$value}' debe ser una fecha válida.",
+                'error_message' => fn($rule, $value) => "El fechaInicioAtencion '{$value}' debe ser una fecha válida.",
             ],
             'usuarios.*.servicios.hospitalizacion.*.causaMotivoAtencion' => [
                 'type' => 'exists',
@@ -628,7 +628,7 @@ class JsonDataValidationConfig
 
             'usuarios.*.servicios.hospitalizacion.*.fechaEgreso' => [
                 'type' => 'date',
-                'error_message' => fn ($rule, $value) => "El fechaEgreso '{$value}' debe ser una fecha válida.",
+                'error_message' => fn($rule, $value) => "El fechaEgreso '{$value}' debe ser una fecha válida.",
             ],
             'usuarios.*.servicios.hospitalizacion.*.consecutivo' => [
                 'type' => 'numeric',
@@ -655,7 +655,7 @@ class JsonDataValidationConfig
 
             'usuarios.*.servicios.recienNacidos.*.fechaNacimiento' => [
                 'type' => 'date',
-                'error_message' => fn ($rule, $value) => "El fechaNacimiento '{$value}' debe ser una fecha válida.",
+                'error_message' => fn($rule, $value) => "El fechaNacimiento '{$value}' debe ser una fecha válida.",
             ],
 
             'usuarios.*.servicios.recienNacidos.*.edadGestacional' => [
@@ -706,7 +706,7 @@ class JsonDataValidationConfig
 
             'usuarios.*.servicios.recienNacidos.*.fechaEgreso' => [
                 'type' => 'date',
-                'error_message' => fn ($rule, $value) => "El fechaEgreso '{$value}' debe ser una fecha válida.",
+                'error_message' => fn($rule, $value) => "El fechaEgreso '{$value}' debe ser una fecha válida.",
             ],
             'usuarios.*.servicios.recienNacidos.*.consecutivo' => [
                 'type' => 'numeric',

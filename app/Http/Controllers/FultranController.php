@@ -287,4 +287,74 @@ class FultranController extends Controller
             ];
         });
     }
+
+
+    public function downloadTxt($id)
+    {
+        $fultran = $this->fultranRepository->find($id);
+
+        $data = [
+            '1' => $fultran->previousRecordNumber,
+            '2' => $fultran->rgResponse?->Value(),
+            '3' => $fultran->invoice?->invoice_number,
+            '4' => $fultran->invoice?->serviceVendor?->ipsable?->codigo,
+            '5' => $fultran->firstLastNameClaimant,
+            '6' => $fultran->secondLastNameClaimant,
+            '7' => $fultran->firstNameClaimant,
+            '8' => $fultran->secondNameClaimant,
+            '9' => $fultran->claimantIdType?->codigo,
+            '10' => $fultran->claimantIdNumber,
+            '11' => $fultran->vehicleServiceType?->Value(),
+            '12' => $fultran->vehiclePlate,
+            '13' => $fultran->claimantAddress,
+            '14' => $fultran->claimantPhone,
+            '15' => $fultran->claimantDepartmentCode?->codigo,
+            '16' => $fultran->claimantMunicipalityCode?->codigo,
+            '17' => $fultran->invoice?->patient?->typeDocument?->codigo,
+            '18' => $fultran->invoice?->patient?->document,
+            '19' => $fultran->invoice?->patient?->first_name,
+            '20' => $fultran->invoice?->patient?->second_name,
+            '21' => $fultran->invoice?->patient?->first_surname,
+            '22' => $fultran->invoice?->patient?->second_surname,
+            '23' => $fultran->invoice?->patient?->birth_date,
+            '24' => $fultran->victimGender?->Value(),
+            '25' => $fultran->eventType?->Value(),
+            '26' => $fultran->pickupAddress,
+            '27' => $fultran->pickupDepartmentCode?->codigo,
+            '28' => $fultran->pickupMunicipalityCode?->codigo,
+            '29' => $fultran->pickupZone?->Value(),
+            '30' => $fultran->transferDate,
+            '31' => $fultran->transferTime,
+            '32' => $fultran->ipsReceptionHabilitationCode?->codigo,
+            '33' => $fultran->transferPickupDepartmentCode?->codigo,
+            '34' => $fultran->transferPickupMunicipalityCode?->codigo,
+            '35' => $fultran->victimCondition?->Value(),
+            '36' => $fultran->invoice?->typeable?->insurance_statuse?->code,
+            '37' => $fultran->involvedVehicleType?->Value(),
+            '38' => $fultran->involvedVehiclePlate,
+            '39' => $fultran->insurerCode,
+            '40' => $fultran->invoice?->typeable?->policy_number,
+            '41' => $fultran->invoice?->typeable?->start_date,
+            '42' => $fultran->invoice?->typeable?->end_date,
+            '43' => $fultran->sirasRecordNumber,
+            '44' => $fultran->billedValue,
+            '45' => $fultran->claimedValue,
+            '46' => $fultran->serviceEnabledIndication?->Value(),
+        ];
+        return $fultran->invoice?->typeable?->policy_number;
+
+        // Generate comma-separated text content
+        $textContent = implode(',', array_map(function ($value) {
+            return $value ?? '';
+        }, $data)) . "\n";
+
+        // Define file name
+        $fileName = 'fultran_' . $id . '.txt';
+
+        // Return response with text file for download
+        return response($textContent, 200, [
+            'Content-Type' => 'text/plain',
+            'Content-Disposition' => 'attachment; filename="' . $fileName . '"',
+        ]);
+    }
 }
