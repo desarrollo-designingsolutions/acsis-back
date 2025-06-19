@@ -266,10 +266,16 @@ class FultranController extends Controller
                 'billedValue' => $invoice->fultran?->billedValue,
                 'claimedValue' => $invoice->fultran?->claimedValue,
                 'serviceEnabledIndication' => $invoice->fultran?->serviceEnabledIndication,
-
+                
                 'policy_number' => $invoice?->typeable?->policy_number,
                 'policy_start_date' => formatDateToArray($invoice?->typeable?->start_date),
                 'policy_end_date' => formatDateToArray($invoice?->typeable?->end_date),
+
+                'ipsName' => $invoice->fultran?->ipsName,
+                'ipsNit' => $invoice->fultran?->ipsNit,
+                'ipsAddress' => $invoice->fultran?->ipsAddress,
+                'ipsReceptionHabilitation_code' => $invoice->fultran?->ipsReceptionHabilitationCode?->codigo,
+                'ipsPhone' => $invoice->fultran?->ipsPhone,
             ];
 
             $pdf = $this->invoiceRepository

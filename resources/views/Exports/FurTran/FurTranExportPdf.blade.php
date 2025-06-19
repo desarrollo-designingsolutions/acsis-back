@@ -443,15 +443,15 @@
                 </div>
                 <div class="form-group">
                     <label style="width: 130px;">Nombre IPS que atendió la victima</label>
-                    <input type="text" style="width: 240px; height: 14px;">
+                    <input type="text" value="{{ $data['ipsName'] }}" style="width: 240px; height: 14px;">
                     <label style="width: 39px; margin-left: 10px;">Nit</label>
-                    <input type="text" style="width: 165px; height: 14px;">
+                    <input type="text" value="{{ $data['ipsNit'] }}" style="width: 165px; height: 14px;">
                 </div>
                 <div class="form-group">
                     <label style="width: 50px;">Dirección</label>
-                    <input type="text" style="width: 260px; height: 14px;">
+                    <input type="text" value="{{ $data['ipsAddress'] }}" style="width: 260px; height: 14px;">
                     <label style="width: 60px; margin-left: 30px;">Código IPS</label>
-                    <input type="text" style="width: 202px; height: 14px;">
+                    <input type="text" value="{{ $data['ipsReceptionHabilitation_code'] }}" style="width: 202px; height: 14px;">
                 </div>
                 <div class="form-group">
                     <label style="width: 50px;">Departamento</label>
@@ -459,7 +459,7 @@
                     <label style="width: 30px; margin-left: 10px;">Código</label>
                     <input type="text" value="{{ $data['transferPickupDepartment_code'] }}" style="width: 50px; height: 14px;">
                     <label style="width: 50px; margin-left: 10px;">Teléfono</label>
-                    <input type="text" style="width: 115px; height: 14px;">
+                    <input type="text" value="{{ $data['ipsPhone'] }}" style="width: 115px; height: 14px;">
                 </div>
                 <div class="form-group">
                     <label style="width: 50px;">Municipio</label>
