@@ -3,6 +3,7 @@
 namespace App\Http\Resources\Furips1;
 
 use App\Http\Resources\Cie10\Cie10SelectInfiniteResource;
+use App\Http\Resources\CupsRips\CupsRipsSelectInfiniteResource;
 use App\Http\Resources\Departamento\DepartamentoSelectResource;
 use App\Http\Resources\IpsCodHabilitacion\IpsCodHabilitacionSelectInfiniteResource;
 use App\Http\Resources\Municipio\MunicipioSelectResource;
@@ -104,6 +105,12 @@ class Furips1FormResource extends JsonResource
             'authorityIntervention' => $this->authorityIntervention,
             'policyExcessCharge' => $this->policyExcessCharge,
             'referralRecipientCharge' => $this->referralRecipientCharge,
+            
+            'mainHospitalizationCupsCode_id' => new CupsRipsSelectInfiniteResource($this->mainHospitalizationCupsCode),
+            'mainSurgicalProcedureCupsCode_id' => new CupsRipsSelectInfiniteResource($this->mainSurgicalProcedureCupsCode),
+            'secondarySurgicalProcedureCupsCode_id' => new CupsRipsSelectInfiniteResource($this->secondarySurgicalProcedureCupsCode),
+            'uciServiceProvided' => $this->uciServiceProvided,
+            'claimedUciDays' => $this->claimedUciDays,
 
         ];
     }

@@ -33,6 +33,7 @@ class Furips1 extends Model
         'victimCondition' => VictimConditionEnum::class,
         'victimPickupZone' => ZoneEnum::class,
         'enabledServicesConfirmation' => YesNoEnum::class,
+        'uciServiceProvided' => YesNoEnum::class,
     ];
 
     public function invoice(): BelongsTo
@@ -119,9 +120,24 @@ class Furips1 extends Model
     {
         return $this->belongsTo(Cie10::class, 'associatedDischargeDiagnosisCode2_id', 'id');
     }
-
+    
     public function doctorIdType(): BelongsTo
     {
         return $this->belongsTo(TipoIdPisis::class, 'doctorIdType_id', 'id');
     }
+    
+        public function mainHospitalizationCupsCode(): BelongsTo
+        {
+            return $this->belongsTo(CupsRips::class, 'mainHospitalizationCupsCode_id', 'id');
+        }
+    
+        public function mainSurgicalProcedureCupsCode(): BelongsTo
+        {
+            return $this->belongsTo(CupsRips::class, 'mainSurgicalProcedureCupsCode_id', 'id');
+        }
+    
+        public function secondarySurgicalProcedureCupsCode(): BelongsTo
+        {
+            return $this->belongsTo(CupsRips::class, 'secondarySurgicalProcedureCupsCode_id', 'id');
+        }
 }

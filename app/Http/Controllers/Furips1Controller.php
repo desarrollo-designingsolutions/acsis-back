@@ -76,6 +76,7 @@ class Furips1Controller extends Controller
             $pais = $this->queryController->selectInfinitePais(request());
             $municipio = $this->queryController->selectInfiniteMunicipio(request());
             $departamento = $this->queryController->selectInfiniteDepartamento(request());
+            $cupsRips = $this->queryController->selectInfiniteCupsRips(request());
 
             $newRequest = new Request(['codigo_in' => Constants::CODS_SELECT_FORM_FURIPS1_OWNERDOCUMENTTYPE]);
             $tipoIdPisis1 = $this->queryController->selectInfiniteTipoIdPisis($newRequest);
@@ -109,6 +110,7 @@ class Furips1Controller extends Controller
                 ...$pais,
                 ...$municipio,
                 ...$departamento,
+                ...$cupsRips,
             ];
         });
     }
@@ -159,6 +161,7 @@ class Furips1Controller extends Controller
             $municipio = $this->queryController->selectInfiniteMunicipio(request());
             $departamento = $this->queryController->selectInfiniteDepartamento(request());
             $cie10s = $this->queryController->selectInfiniteCie10(request());
+            $cupsRips = $this->queryController->selectInfiniteCupsRips(request());
 
             $newRequest = new Request(['codigo_in' => Constants::CODS_SELECT_FORM_FURIPS1_OWNERDOCUMENTTYPE]);
             $tipoIdPisis1 = $this->queryController->selectInfiniteTipoIdPisis($newRequest);
@@ -194,6 +197,7 @@ class Furips1Controller extends Controller
                 ...$municipio,
                 ...$departamento,
                 ...$cie10s,
+                ...$cupsRips,
             ];
         });
     }
@@ -459,14 +463,12 @@ class Furips1Controller extends Controller
             'soat_end_date' => $furips1->invoice?->typeable->end_date,
             'sirasFilingNumber' => $furips1->sirasFilingNumber,
             'insurerCapExhaustionCharge' => $furips1->insurerCapExhaustionCharge->value(),
-            '38' => $procedure->serviceable->codProcedimiento->codigo,
+            'mainHospitalizationCupsCode_id' => $furips1->mainHospitalizationCupsCode?->codigo,
             'surgicalProcedureComplexity' => $furips1->surgicalProcedureComplexity->value(),
-            '40' => $procedure->serviceable->codProcedimiento->codigo,
-            '41' => $procedure->serviceable->codProcedimiento->codigo,
-            '42' => collect($cupsRips_arrayInfo)->pluck('codigo')->contains($procedure->serviceable->codProcedimiento->codigo)
-                ? 1
-                : 0,
-            '43' => '',
+            'mainSurgicalProcedureCupsCode_id' => $furips1->mainSurgicalProcedureCupsCode?->codigo,
+            'secondarySurgicalProcedureCupsCode_id' => $furips1->secondarySurgicalProcedureCupsCode?->codigo,
+            'uciServiceProvided' => $furips1->uciServiceProvided->value(),
+            'claimedUciDays' => $furips1->claimedUciDays,
             'ownerDocumentType' => $furips1->ownerDocumentType?->codigo,
             'ownerDocumentNumber' => $furips1->ownerDocumentNumber,
             'ownerFirstLastName' => $furips1->ownerFirstLastName,

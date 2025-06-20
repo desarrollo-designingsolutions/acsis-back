@@ -92,6 +92,15 @@ class Furips1StoreRequest extends FormRequest
         if ($this->has('associatedDischargeDiagnosisCode2_id')) {
             $merge['associatedDischargeDiagnosisCode2_id'] = getValueSelectInfinite($this->associatedDischargeDiagnosisCode2_id);
         }
+        if ($this->has('mainHospitalizationCupsCode_id')) {
+            $merge['mainHospitalizationCupsCode_id'] = getValueSelectInfinite($this->mainHospitalizationCupsCode_id);
+        }
+        if ($this->has('mainSurgicalProcedureCupsCode_id')) {
+            $merge['mainSurgicalProcedureCupsCode_id'] = getValueSelectInfinite($this->mainSurgicalProcedureCupsCode_id);
+        }
+        if ($this->has('secondarySurgicalProcedureCupsCode_id')) {
+            $merge['secondarySurgicalProcedureCupsCode_id'] = getValueSelectInfinite($this->secondarySurgicalProcedureCupsCode_id);
+        }
 
         $this->merge($merge);
     }
