@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\Fultran\EventTypeEnum;
-use App\Enums\Fultran\RgResponseEnum;
-use App\Enums\Fultran\VehicleServiceTypeEnum;
+use App\Enums\Furtran\EventTypeEnum;
+use App\Enums\Furtran\RgResponseEnum;
+use App\Enums\Furtran\VehicleServiceTypeEnum;
 use App\Enums\Furips1\EventNatureEnum;
 use App\Enums\Furips1\ReferenceTypeEnum;
 use App\Enums\Furips1\RgoResponseEnum;

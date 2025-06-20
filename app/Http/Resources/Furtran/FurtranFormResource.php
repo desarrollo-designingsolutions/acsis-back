@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Resources\Fultran;
+namespace App\Http\Resources\Furtran;
 
 use App\Http\Resources\Departamento\DepartamentoSelectResource;
 use App\Http\Resources\IpsCodHabilitacion\IpsCodHabilitacionSelectInfiniteResource;
@@ -9,7 +9,7 @@ use App\Http\Resources\TipoIdPisis\TipoIdPisisSelectResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class FultranFormResource extends JsonResource
+class FurtranFormResource extends JsonResource
 {
     /**
      * Transform the resource into an array.

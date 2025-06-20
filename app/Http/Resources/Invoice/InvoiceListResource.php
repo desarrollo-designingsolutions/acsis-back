@@ -39,7 +39,7 @@ class InvoiceListResource extends JsonResource
 
             'furips1_id' => $this->furips1?->id,
             'furips2_id' => $this->furips2?->id,
-            'fultran_id' => $this->fultran?->id,
+            'furtran_id' => $this->furtran?->id,
 
         ];
     }

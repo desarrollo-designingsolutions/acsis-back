@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Enums\Fultran;
+namespace App\Enums\Furtran;
 
 use App\Attributes\Description;
 use App\Attributes\Value;

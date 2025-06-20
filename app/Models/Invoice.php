@@ -114,8 +114,8 @@ class Invoice extends Model
         return $this->hasOne(Furips2::class, 'invoice_id', 'id');
     }
 
-    public function fultran()
+    public function furtran()
     {
-        return $this->hasOne(Fultran::class, 'invoice_id', 'id');
+        return $this->hasOne(Furtran::class, 'invoice_id', 'id');
     }
 }

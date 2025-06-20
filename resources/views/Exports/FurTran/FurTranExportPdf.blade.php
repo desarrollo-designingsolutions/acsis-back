@@ -236,29 +236,29 @@
                 <div class="form-group">
                     <label style="width: 100px;">Tipo de Vehículo o de Servicio de ambulancia:</label>
                     <label style="width: 50px; margin-left: 20px;">Ambulancia básica</label>
-                    <input type="text" value="{{ $data['vehicleServiceType'] === "VEHICLE_SERVICE_TYPE_001" ? 'X' : '' }}" style="width: 14px; height: 14px;">
+                    <input type="text" value="{{ $data['vehicleServiceType']?->value === "VEHICLE_SERVICE_TYPE_001" ? 'X' : '' }}" style="width: 14px; height: 14px;">
                     <label style="width: 70px; margin-left: 20px;">Ambulancia medicalizada</label>
-                    <input type="text" value="{{ $data['vehicleServiceType'] === "VEHICLE_SERVICE_TYPE_002" ? 'X' : '' }}" style="width: 14px; height: 14px; margin-left: 10px;">
+                    <input type="text" value="{{ $data['vehicleServiceType']?->value === "VEHICLE_SERVICE_TYPE_002" ? 'X' : '' }}" style="width: 14px; height: 14px; margin-left: 10px;">
                     <label style="width: 70px; margin-left: 20px;">Particular</label>
-                    <input type="text" value="{{ $data['vehicleServiceType'] === "VEHICLE_SERVICE_TYPE_003" ? 'X' : '' }}" style="width: 14px; height: 14px; margin-left: 10px;">
+                    <input type="text" value="{{ $data['vehicleServiceType']?->value === "VEHICLE_SERVICE_TYPE_003" ? 'X' : '' }}" style="width: 14px; height: 14px; margin-left: 10px;">
                     <label style="width: 70px; margin-left: 20px;">Público</label>
-                    <input type="text" value="{{ $data['vehicleServiceType'] === "VEHICLE_SERVICE_TYPE_004" ? 'X' : '' }}" style="width: 14px; height: 14px; margin-left: 10px;">
+                    <input type="text" value="{{ $data['vehicleServiceType']?->value === "VEHICLE_SERVICE_TYPE_004" ? 'X' : '' }}" style="width: 14px; height: 14px; margin-left: 10px;">
                 </div>
                 <div class="form-group">
                     <label style="width: 100px;"></label>
                     <label style="width: 50px; margin-left: 20px;">Oficial</label>
-                    <input type="text" value="{{ $data['vehicleServiceType'] === "VEHICLE_SERVICE_TYPE_005" ? 'X' : '' }}" style="width: 14px; height: 14px;">
+                    <input type="text" value="{{ $data['vehicleServiceType']?->value === "VEHICLE_SERVICE_TYPE_005" ? 'X' : '' }}" style="width: 14px; height: 14px;">
                     <label style="width: 70px; margin-left: 20px;">De emergencia</label>
-                    <input type="text" value="{{ $data['vehicleServiceType'] === "VEHICLE_SERVICE_TYPE_006" ? 'X' : '' }}" style="width: 14px; height: 14px; margin-left: 10px;">
+                    <input type="text" value="{{ $data['vehicleServiceType']?->value === "VEHICLE_SERVICE_TYPE_006" ? 'X' : '' }}" style="width: 14px; height: 14px; margin-left: 10px;">
                     <label style="width: 70px; margin-left: 20px;">Diplomático o consular</label>
-                    <input type="text" value="{{ $data['vehicleServiceType'] === "VEHICLE_SERVICE_TYPE_007" ? 'X' : '' }}" style="width: 14px; height: 14px; margin-left: 10px;">
+                    <input type="text" value="{{ $data['vehicleServiceType']?->value === "VEHICLE_SERVICE_TYPE_007" ? 'X' : '' }}" style="width: 14px; height: 14px; margin-left: 10px;">
                     <label style="width: 70px; margin-left: 20px;">Transporte masivo</label>
-                    <input type="text" value="{{ $data['vehicleServiceType'] === "VEHICLE_SERVICE_TYPE_008" ? 'X' : '' }}" style="width: 14px; height: 14px; margin-left: 10px;">
+                    <input type="text" value="{{ $data['vehicleServiceType']?->value === "VEHICLE_SERVICE_TYPE_008" ? 'X' : '' }}" style="width: 14px; height: 14px; margin-left: 10px;">
                 </div>
                 <div class="form-group">
                     <label style="width: 120px;"></label>
                     <label style="width: 50px;">Escolar</label>
-                    <input type="text" value="{{ $data['vehicleServiceType'] === "VEHICLE_SERVICE_TYPE_009" ? 'X' : '' }}" style="width: 14px; height: 14px;">
+                    <input type="text" value="{{ $data['vehicleServiceType']?->value === "VEHICLE_SERVICE_TYPE_009" ? 'X' : '' }}" style="width: 14px; height: 14px;">
                 </div>
 
                 <div class="form-group">
@@ -371,11 +371,11 @@
                 <div class="form-group">
                     <label style="width: 100%;">Tipo de evento:</label>
                     <label style="width: 100px; margin-left: 40px;">1.Accidente de tránsito:</label>
-                    <input type="text" style="width: 14px; height: 14px;" value="{{ $data['eventType'] === "EVENT_TYPE_001" ? 'X' : '' }}">
+                    <input type="text" style="width: 14px; height: 14px;" value="{{ $data['eventType']?->value === "EVENT_TYPE_001" ? 'X' : '' }}">
                     <label style="width: 100px; margin-left: 20px;">2.Evento catastrófico de origen Natural:</label>
-                    <input type="text" style="width: 14px; height: 14px;" value="{{ $data['eventType'] === "EVENT_TYPE_002" ? 'X' : '' }}">
+                    <input type="text" style="width: 14px; height: 14px;" value="{{ $data['eventType']?->value === "EVENT_TYPE_002" ? 'X' : '' }}">
                     <label style="width: 100px; margin-left: 20px;">3.Evento terrorista:</label>
-                    <input type="text" style="width: 14px; height: 14px;" value="{{ $data['eventType'] === "EVENT_TYPE_003" ? 'X' : '' }}">
+                    <input type="text" style="width: 14px; height: 14px;" value="{{ $data['eventType']?->value === "EVENT_TYPE_003" ? 'X' : '' }}">
                 </div>
             </div>
 
@@ -474,31 +474,31 @@
                 <div class="form-group">
                     <label style="width: 100px;">Condición de víctima:</label>
                     <label style="width: 50px; margin-left: 20px;">Conductor</label>
-                    <input type="text" style="width: 14px; height: 14px;" value="{{ $data['victimCondition'] === "VICTIM_CONDITION_001" ? 'X' : '' }}">
+                    <input type="text" style="width: 14px; height: 14px;" value="{{ $data['victimCondition']?->value === "VICTIM_CONDITION_001" ? 'X' : '' }}">
                     <label style="width: 70px; margin-left: 20px;">Peatón</label>
-                    <input type="text" style="width: 14px; height: 14px; margin-left: 10px;" value="{{ $data['victimCondition'] === "VICTIM_CONDITION_002" ? 'X' : '' }}">
+                    <input type="text" style="width: 14px; height: 14px; margin-left: 10px;" value="{{ $data['victimCondition']?->value === "VICTIM_CONDITION_002" ? 'X' : '' }}">
                     <label style="width: 70px; margin-left: 20px;">Ocupante</label>
-                    <input type="text" style="width: 14px; height: 14px; margin-left: 10px;" value="{{ $data['victimCondition'] === "VICTIM_CONDITION_003" ? 'X' : '' }}">
+                    <input type="text" style="width: 14px; height: 14px; margin-left: 10px;" value="{{ $data['victimCondition']?->value === "VICTIM_CONDITION_003" ? 'X' : '' }}">
                     <label style="width: 70px; margin-left: 20px;">Ciclista</label>
-                    <input type="text" style="width: 14px; height: 14px; margin-left: 10px;" value="{{ $data['victimCondition'] === "VICTIM_CONDITION_004" ? 'X' : '' }}">
+                    <input type="text" style="width: 14px; height: 14px; margin-left: 10px;" value="{{ $data['victimCondition']?->value === "VICTIM_CONDITION_004" ? 'X' : '' }}">
                 </div>
                 <div class="form-group">
                     <label style="width: 100px;">Estado de Aseguramiento:</label>
                     <label style="width: 50px; margin-left: 20px;">Asegurado</label>
-                    <input type="text" style="width: 14px; height: 14px;">
+                    <input type="text" value="{{ $data['insurance_status'] === "1" ? 'X' : '' }}" style="width: 14px; height: 14px;">
                     <label style="width: 70px; margin-left: 20px;">No asegurado</label>
-                    <input type="text" style="width: 14px; height: 14px; margin-left: 10px;">
+                    <input type="text" value="{{ $data['insurance_status'] === "2" ? 'X' : '' }}" style="width: 14px; height: 14px; margin-left: 10px;">
                     <label style="width: 70px; margin-left: 20px;">Vehiculo fantasma</label>
-                    <input type="text" style="width: 14px; height: 14px; margin-left: 10px;">
+                    <input type="text" value="{{ $data['insurance_status'] === "3" ? 'X' : '' }}" style="width: 14px; height: 14px; margin-left: 10px;">
                     <label style="width: 70px; margin-left: 20px;">Póliza falsa</label>
-                    <input type="text" style="width: 14px; height: 14px; margin-left: 10px;">
+                    <input type="text" value="{{ $data['insurance_status'] === "4" ? 'X' : '' }}" style="width: 14px; height: 14px; margin-left: 10px;">
                 </div>
                 <div class="form-group">
                     <label style="width: 100px;"></label>
                     <label style="width: 50px; margin-left: 20px;">Vehículo en fuga</label>
-                    <input type="text" style="width: 14px; height: 14px;">
+                    <input type="text" value="{{ $data['insurance_status'] === "5" ? 'X' : '' }}" style="width: 14px; height: 14px;">
                     <label style="width: 70px; margin-left: 20px;">Asegurado D.2497</label>
-                    <input type="text" style="width: 14px; height: 14px; margin-left: 10px;">
+                    <input type="text" value="{{ $data['insurance_status'] === "6" ? 'X' : '' }}" style="width: 14px; height: 14px; margin-left: 10px;">
                 </div>
                 <div class="form-group">
                     <label style="width: 120px;">Placa del vehículo involucrado</label>
@@ -511,44 +511,44 @@
                 <div class="form-group">
                     <label style="width: 100px;">Tipo de Veículo:</label>
                     <label style="width: 50px; margin-left: 20px;">Automóvil</label>
-                    <input type="text" value="{{ $data['involvedVehicleType'] === "VEHICLE_TYPE_001" ? 'X' : '' }}" style="width: 14px; height: 14px;">
+                    <input type="text" value="{{ $data['involvedVehicleType']?->value === "VEHICLE_TYPE_001" ? 'X' : '' }}" style="width: 14px; height: 14px;">
                     <label style="width: 70px; margin-left: 20px;">Bus</label>
-                    <input type="text" value="{{ $data['involvedVehicleType'] === "VEHICLE_TYPE_002" ? 'X' : '' }}" style="width: 14px; height: 14px; margin-left: 10px;">
+                    <input type="text" value="{{ $data['involvedVehicleType']?->value === "VEHICLE_TYPE_002" ? 'X' : '' }}" style="width: 14px; height: 14px; margin-left: 10px;">
                     <label style="width: 70px; margin-left: 20px;">Buseta</label>
-                    <input type="text" value="{{ $data['involvedVehicleType'] === "VEHICLE_TYPE_003" ? 'X' : '' }}" style="width: 14px; height: 14px; margin-left: 10px;">
+                    <input type="text" value="{{ $data['involvedVehicleType']?->value === "VEHICLE_TYPE_003" ? 'X' : '' }}" style="width: 14px; height: 14px; margin-left: 10px;">
                     <label style="width: 70px; margin-left: 20px;">Camión</label>
-                    <input type="text" value="{{ $data['involvedVehicleType'] === "VEHICLE_TYPE_004" ? 'X' : '' }}" style="width: 14px; height: 14px; margin-left: 10px;">
+                    <input type="text" value="{{ $data['involvedVehicleType']?->value === "VEHICLE_TYPE_004" ? 'X' : '' }}" style="width: 14px; height: 14px; margin-left: 10px;">
                 </div>
                 <div class="form-group">
                     <label style="width: 100px;"></label>
                     <label style="width: 50px; margin-left: 20px;">Camioneta</label>
-                    <input type="text" value="{{ $data['involvedVehicleType'] === "VEHICLE_TYPE_005" ? 'X' : '' }}" style="width: 14px; height: 14px;">
+                    <input type="text" value="{{ $data['involvedVehicleType']?->value === "VEHICLE_TYPE_005" ? 'X' : '' }}" style="width: 14px; height: 14px;">
                     <label style="width: 70px; margin-left: 20px;">Campero</label>
-                    <input type="text" value="{{ $data['involvedVehicleType'] === "VEHICLE_TYPE_006" ? 'X' : '' }}" style="width: 14px; height: 14px; margin-left: 10px;">
+                    <input type="text" value="{{ $data['involvedVehicleType']?->value === "VEHICLE_TYPE_006" ? 'X' : '' }}" style="width: 14px; height: 14px; margin-left: 10px;">
                     <label style="width: 70px; margin-left: 20px;">Microbus</label>
-                    <input type="text" value="{{ $data['involvedVehicleType'] === "VEHICLE_TYPE_007" ? 'X' : '' }}" style="width: 14px; height: 14px; margin-left: 10px;">
+                    <input type="text" value="{{ $data['involvedVehicleType']?->value === "VEHICLE_TYPE_007" ? 'X' : '' }}" style="width: 14px; height: 14px; margin-left: 10px;">
                     <label style="width: 70px; margin-left: 20px;">Tractocamión</label>
-                    <input type="text" value="{{ $data['involvedVehicleType'] === "VEHICLE_TYPE_008" ? 'X' : '' }}" style="width: 14px; height: 14px; margin-left: 10px;">
+                    <input type="text" value="{{ $data['involvedVehicleType']?->value === "VEHICLE_TYPE_008" ? 'X' : '' }}" style="width: 14px; height: 14px; margin-left: 10px;">
                 </div>
                 <div class="form-group">
                     <label style="width: 100px;"></label>
                     <label style="width: 50px; margin-left: 20px;">Motocicleta</label>
-                    <input type="text" value="{{ $data['involvedVehicleType'] === "VEHICLE_TYPE_009" ? 'X' : '' }}" style="width: 14px; height: 14px;">
+                    <input type="text" value="{{ $data['involvedVehicleType']?->value === "VEHICLE_TYPE_009" ? 'X' : '' }}" style="width: 14px; height: 14px;">
                     <label style="width: 70px; margin-left: 20px;">Motocarro</label>
-                    <input type="text" value="{{ $data['involvedVehicleType'] === "VEHICLE_TYPE_010" ? 'X' : '' }}" style="width: 14px; height: 14px; margin-left: 10px;">
+                    <input type="text" value="{{ $data['involvedVehicleType']?->value === "VEHICLE_TYPE_010" ? 'X' : '' }}" style="width: 14px; height: 14px; margin-left: 10px;">
                     <label style="width: 70px; margin-left: 20px;">Moto triciclo</label>
-                    <input type="text" value="{{ $data['involvedVehicleType'] === "VEHICLE_TYPE_011" ? 'X' : '' }}" style="width: 14px; height: 14px; margin-left: 10px;">
+                    <input type="text" value="{{ $data['involvedVehicleType']?->value === "VEHICLE_TYPE_011" ? 'X' : '' }}" style="width: 14px; height: 14px; margin-left: 10px;">
                     <label style="width: 70px; margin-left: 20px;">Cuatrimoto</label>
-                    <input type="text" value="{{ $data['involvedVehicleType'] === "VEHICLE_TYPE_012" ? 'X' : '' }}" style="width: 14px; height: 14px; margin-left: 10px;">
+                    <input type="text" value="{{ $data['involvedVehicleType']?->value === "VEHICLE_TYPE_012" ? 'X' : '' }}" style="width: 14px; height: 14px; margin-left: 10px;">
                 </div>
                 <div class="form-group">
                     <label style="width: 100px;"></label>
                     <label style="width: 50px; margin-left: 20px;">Moto Extranjera</label>
-                    <input type="text" value="{{ $data['involvedVehicleType'] === "VEHICLE_TYPE_013" ? 'X' : '' }}" style="width: 14px; height: 14px;">
+                    <input type="text" value="{{ $data['involvedVehicleType']?->value === "VEHICLE_TYPE_013" ? 'X' : '' }}" style="width: 14px; height: 14px;">
                     <label style="width: 70px; margin-left: 20px;">Vehículo Extranjero</label>
-                    <input type="text" value="{{ $data['involvedVehicleType'] === "VEHICLE_TYPE_014" ? 'X' : '' }}" style="width: 14px; height: 14px; margin-left: 10px;">
+                    <input type="text" value="{{ $data['involvedVehicleType']?->value === "VEHICLE_TYPE_014" ? 'X' : '' }}" style="width: 14px; height: 14px; margin-left: 10px;">
                     <label style="width: 70px; margin-left: 20px;">Volqueta</label>
-                    <input type="text" value="{{ $data['involvedVehicleType'] === "VEHICLE_TYPE_015" ? 'X' : '' }}" style="width: 14px; height: 14px; margin-left: 10px;">
+                    <input type="text" value="{{ $data['involvedVehicleType']?->value === "VEHICLE_TYPE_015" ? 'X' : '' }}" style="width: 14px; height: 14px; margin-left: 10px;">
                 </div>
                 <div class="form-group">
                     <label style="width: 100px;">Fecha de inicio póliza</label>
@@ -582,9 +582,9 @@
                 <h2>VIII. MANIFESTACION DEL SERVICIO HABILITADO DEL PRESTADOR DE SERVICIOS DE SALUD</h2>
                 <label style="width: 150px;">Manifestación de servicios habilitados</label>
                 <label style="width: 10px; margin-left: 20px;">Si</label>
-                <input type="text" value="{{ $data['serviceEnabledIndication'] === "YES_NO_001" ? 'X' : '' }}" maxlength="1" style="width: 14px; height: 14px; border: 1px solid #000; text-align: center; vertical-align: middle; padding: 0; margin: 0; box-sizing: border-box;">
+                <input type="text" value="{{ $data['serviceEnabledIndication']?->value === "YES_NO_001" ? 'X' : '' }}" maxlength="1" style="width: 14px; height: 14px; border: 1px solid #000; text-align: center; vertical-align: middle; padding: 0; margin: 0; box-sizing: border-box;">
                 <label style="width: 10px; margin-left: 20px;">No</label>
-                <input type="text" value="{{ $data['serviceEnabledIndication'] === "YES_NO_002" ? 'X' : '' }}" maxlength="1" style="width: 14px; height: 14px; border: 1px solid #000; text-align: center; vertical-align: middle; padding: 0; margin: 0; box-sizing: border-box;">
+                <input type="text" value="{{ $data['serviceEnabledIndication']?->value === "YES_NO_002" ? 'X' : '' }}" maxlength="1" style="width: 14px; height: 14px; border: 1px solid #000; text-align: center; vertical-align: middle; padding: 0; margin: 0; box-sizing: border-box;">
                 <p style="margin-left: 0; margin-top: 5px; font-size: 7px; text-align: justify; width: 655px;">
                     Como representante legal o Gerente de la Institución Prestadora de Servicios de Salud, declaró bajo la gavedad de juramento que toda la información contenidad en este formulario es cierta y
                     podrá se verificada por la Compañía de Seguros, por la Dirección de Administracion de Fondos de la Protección Social o quien haga sus veces, por el Administrador Fiduciario del Fondo de

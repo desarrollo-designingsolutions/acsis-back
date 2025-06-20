@@ -254,7 +254,7 @@ class Constants
         'PT',
     ];
 
-    public const CODS_SELECT_FORM_FULTRAN_CLAIMANIDTYPE = [
+    public const CODS_SELECT_FORM_FURTRAN_CLAIMANIDTYPE = [
         'CC',
         'CE',
         'PA',

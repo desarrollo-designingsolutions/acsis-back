@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
-use App\Enums\Fultran\EventTypeEnum;
-use App\Enums\Fultran\RgResponseEnum;
-use App\Enums\Fultran\VehicleServiceTypeEnum;
+use App\Enums\Furtran\EventTypeEnum;
+use App\Enums\Furtran\RgResponseEnum;
+use App\Enums\Furtran\VehicleServiceTypeEnum;
 use App\Enums\Furips1\VehicleTypeEnum;
 use App\Enums\Furips1\VictimConditionEnum;
 use App\Enums\GenderEnum;
@@ -16,7 +16,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Fultran extends Model
+class Furtran extends Model
 {
     use Cacheable, HasFactory, HasUuids;
 

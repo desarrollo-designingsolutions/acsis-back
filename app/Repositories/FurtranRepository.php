@@ -3,13 +3,13 @@
 namespace App\Repositories;
 
 use App\Helpers\Constants;
-use App\Models\Fultran;
+use App\Models\Furtran;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
-class FultranRepository extends BaseRepository
+class FurtranRepository extends BaseRepository
 {
-    public function __construct(Fultran $modelo)
+    public function __construct(Furtran $modelo)
     {
         parent::__construct($modelo);
     }

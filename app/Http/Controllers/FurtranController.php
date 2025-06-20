@@ -4,17 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Enums\ZoneEnum;
 use App\Helpers\Constants;
-use App\Http\Requests\Fultran\FultranStoreRequest;
-use App\Http\Resources\Fultran\FultranFormResource;
-use App\Http\Resources\Fultran\FultranPaginateResource;
-use App\Repositories\FultranRepository;
+use App\Http\Requests\Furtran\FurtranStoreRequest;
+use App\Http\Resources\Furtran\FurtranFormResource;
+use App\Http\Resources\Furtran\FurtranPaginateResource;
+use App\Repositories\FurtranRepository;
 use App\Repositories\InvoiceRepository;
 use App\Repositories\SexoRepository;
 use App\Services\CacheService;
 use App\Traits\HttpResponseTrait;
 use Illuminate\Http\Request;
 
-class FultranController extends Controller
+class FurtranController extends Controller
 {
     use HttpResponseTrait;
 
@@ -22,7 +22,7 @@ class FultranController extends Controller
 
     public function __construct(
         protected InvoiceRepository $invoiceRepository,
-        protected FultranRepository $fultranRepository,
+        protected FurtranRepository $furtranRepository,
         protected QueryController $queryController,
         protected CacheService $cacheService,
         protected SexoRepository $sexoRepository,
@@ -33,8 +33,8 @@ class FultranController extends Controller
     public function paginate(Request $request)
     {
         return $this->execute(function () use ($request) {
-            $data = $this->fultranRepository->paginate($request->all());
-            $tableData = FultranPaginateResource::collection($data);
+            $data = $this->furtranRepository->paginate($request->all());
+            $tableData = FurtranPaginateResource::collection($data);
 
             return [
                 'code' => 200,
@@ -69,7 +69,7 @@ class FultranController extends Controller
             $departamento = $this->queryController->selectInfiniteDepartamento(request());
             $ipsCodHabilitacion = $this->queryController->selectInfiniteIpsCodHabilitacion(request());
 
-            $newRequest = new Request(['codigo_in' => Constants::CODS_SELECT_FORM_FULTRAN_CLAIMANIDTYPE]);
+            $newRequest = new Request(['codigo_in' => Constants::CODS_SELECT_FORM_FURTRAN_CLAIMANIDTYPE]);
             $tipoIdPisis = $this->queryController->selectInfiniteTipoIdPisis($newRequest);
 
             return [
@@ -91,20 +91,20 @@ class FultranController extends Controller
         });
     }
 
-    public function store(FultranStoreRequest $request)
+    public function store(FurtranStoreRequest $request)
     {
 
         return $this->runTransaction(function () use ($request) {
 
             $post = $request->except([]);
-            $fultran = $this->fultranRepository->store($post);
+            $furtran = $this->furtranRepository->store($post);
 
             $this->cacheService->clearByPrefix($this->key_redis_project . 'string:invoices_paginate*');
 
             return [
                 'code' => 200,
-                'message' => 'Fultran agregado correctamente',
-                'fultran' => $fultran,
+                'message' => 'Furtran agregado correctamente',
+                'furtran' => $furtran,
             ];
         });
     }
@@ -113,10 +113,10 @@ class FultranController extends Controller
     {
         return $this->execute(function () use ($id) {
 
-            $fultran = $this->fultranRepository->find($id);
-            $form = new FultranFormResource($fultran);
+            $furtran = $this->furtranRepository->find($id);
+            $form = new FurtranFormResource($furtran);
 
-            $invoice = $this->invoiceRepository->find($fultran->invoice_id, with: ['typeable:id,insurance_statuse_id', 'typeable.insurance_statuse:id,code'], select: ['id', 'type', 'typeable_type', 'typeable_id']);
+            $invoice = $this->invoiceRepository->find($furtran->invoice_id, with: ['typeable:id,insurance_statuse_id', 'typeable.insurance_statuse:id,code'], select: ['id', 'type', 'typeable_type', 'typeable_id']);
             $invoice = [
                 'id' => $invoice->id,
                 'insurance_statuse_code' => $invoice->typeable?->insurance_statuse?->code,
@@ -134,7 +134,7 @@ class FultranController extends Controller
             $departamento = $this->queryController->selectInfiniteDepartamento(request());
             $ipsCodHabilitacion = $this->queryController->selectInfiniteIpsCodHabilitacion(request());
 
-            $newRequest = new Request(['codigo_in' => Constants::CODS_SELECT_FORM_FULTRAN_CLAIMANIDTYPE]);
+            $newRequest = new Request(['codigo_in' => Constants::CODS_SELECT_FORM_FURTRAN_CLAIMANIDTYPE]);
             $tipoIdPisis = $this->queryController->selectInfiniteTipoIdPisis($newRequest);
 
             return [
@@ -158,16 +158,16 @@ class FultranController extends Controller
         });
     }
 
-    public function update(FultranStoreRequest $request, $id)
+    public function update(FurtranStoreRequest $request, $id)
     {
         return $this->runTransaction(function () use ($request) {
 
             $post = $request->except([]);
-            $fultran = $this->fultranRepository->store($post);
+            $furtran = $this->furtranRepository->store($post);
 
             return [
                 'code' => 200,
-                'message' => 'Fultran modificada correctamente',
+                'message' => 'Furtran modificada correctamente',
 
             ];
         });
@@ -176,10 +176,10 @@ class FultranController extends Controller
     public function delete($id)
     {
         return $this->runTransaction(function () use ($id) {
-            $fultran = $this->fultranRepository->find($id);
-            if ($fultran) {
+            $furtran = $this->furtranRepository->find($id);
+            if ($furtran) {
 
-                $fultran->delete();
+                $furtran->delete();
 
                 $msg = 'Registro eliminado correctamente';
             } else {
@@ -209,7 +209,7 @@ class FultranController extends Controller
                 ];
             })->toArray();
 
-            $claimanid_documents = Constants::CODS_SELECT_FORM_FULTRAN_CLAIMANIDTYPE;
+            $claimanid_documents = Constants::CODS_SELECT_FORM_FURTRAN_CLAIMANIDTYPE;
 
             $victim_documents = Constants::CODS_PDF_FURIPS1_VICTIMDOCUMENTTYPE;
 
@@ -220,20 +220,20 @@ class FultranController extends Controller
                 'tipo_nota_id' => $invoice->tipo_nota_id,
                 'note_number' => $invoice->note_number,
                 'invoice_number' => $invoice->invoice_number,
-                'firstLastNameClaimant' => $invoice->fultran?->firstLastNameClaimant,
-                'secondLastNameClaimant' => $invoice->fultran?->secondLastNameClaimant,
-                'firstNameClaimant' => $invoice->fultran?->firstNameClaimant,
-                'secondNameClaimant' => $invoice->fultran?->secondNameClaimant,
+                'firstLastNameClaimant' => $invoice->furtran?->firstLastNameClaimant,
+                'secondLastNameClaimant' => $invoice->furtran?->secondLastNameClaimant,
+                'firstNameClaimant' => $invoice->furtran?->firstNameClaimant,
+                'secondNameClaimant' => $invoice->furtran?->secondNameClaimant,
                 'claimanid_documents' => $claimanid_documents,
-                'claimanid_document' => $invoice->fultran?->claimantIdType?->codigo,
-                'claimantIdNumber' => $invoice->fultran?->claimantIdNumber,
-                'vehicleServiceType' => $invoice->fultran?->vehicleServiceType,
-                'vehiclePlate' => $invoice->fultran?->vehiclePlate,
-                'claimantDepartment_name' => $invoice->fultran?->claimantDepartmentCode?->nombre,
-                'claimantDepartment_code' => $invoice->fultran?->claimantDepartmentCode?->codigo,
-                'claimantPhone' => $invoice->fultran?->claimantPhone,
-                'claimantMunicipality_name' => $invoice->fultran?->claimantMunicipalityCode?->nombre,
-                'claimantMunicipality_code' => $invoice->fultran?->claimantMunicipalityCode?->codigo,
+                'claimanid_document' => $invoice->furtran?->claimantIdType?->codigo,
+                'claimantIdNumber' => $invoice->furtran?->claimantIdNumber,
+                'vehicleServiceType' => $invoice->furtran?->vehicleServiceType,
+                'vehiclePlate' => $invoice->furtran?->vehiclePlate,
+                'claimantDepartment_name' => $invoice->furtran?->claimantDepartmentCode?->nombre,
+                'claimantDepartment_code' => $invoice->furtran?->claimantDepartmentCode?->codigo,
+                'claimantPhone' => $invoice->furtran?->claimantPhone,
+                'claimantMunicipality_name' => $invoice->furtran?->claimantMunicipalityCode?->nombre,
+                'claimantMunicipality_code' => $invoice->furtran?->claimantMunicipalityCode?->codigo,
                 'patient_first_surname' => $invoice->patient?->first_surname,
                 'patient_second_surname' => $invoice->patient?->second_surname,
                 'patient_first_name' => $invoice->patient?->first_name,
@@ -244,38 +244,40 @@ class FultranController extends Controller
                 'patient_birth_date' => formatDateToArray($invoice->patient?->birth_date),
                 'select_sexo' => $select_sexo,
                 'sexo_code' => $invoice->patient?->sexo?->codigo,
-                'eventType' => $invoice->fultran?->eventType,
-                'pickupAddress' => $invoice->fultran?->pickupAddress,
-                'pickupDepartment_name' => $invoice->fultran?->pickupDepartmentCode?->nombre,
-                'pickupDepartment_code' => $invoice->fultran?->pickupDepartmentCode?->codigo,
-                'pickupZone' => $invoice->fultran?->pickupZone,
-                'pickupMunicipality_name' => $invoice->fultran?->pickupMunicipalityCode?->nombre,
-                'pickupMunicipality_code' => $invoice->fultran?->pickupMunicipalityCode?->codigo,
+                'eventType' => $invoice->furtran?->eventType,
+                'pickupAddress' => $invoice->furtran?->pickupAddress,
+                'pickupDepartment_name' => $invoice->furtran?->pickupDepartmentCode?->nombre,
+                'pickupDepartment_code' => $invoice->furtran?->pickupDepartmentCode?->codigo,
+                'pickupZone' => $invoice->furtran?->pickupZone,
+                'pickupMunicipality_name' => $invoice->furtran?->pickupMunicipalityCode?->nombre,
+                'pickupMunicipality_code' => $invoice->furtran?->pickupMunicipalityCode?->codigo,
                 'eventZones' => $eventZones,
-                'transferDate' => formatDateToArray($invoice->fultran?->transferDate),
-                'transferTime' => formatTimeToArray($invoice->fultran?->transferTime),
-                'transferPickupDepartment_name' => $invoice->fultran?->transferPickupDepartmentCode?->nombre,
-                'transferPickupDepartment_code' => $invoice->fultran?->transferPickupDepartmentCode?->codigo,
-                'transferPickupMunicipality_name' => $invoice->fultran?->transferPickupMunicipalityCode?->nombre,
-                'transferPickupMunicipality_code' => $invoice->fultran?->transferPickupMunicipalityCode?->codigo,
-                'victimCondition' => $invoice->fultran?->victimCondition,
-                'involvedVehiclePlate' => $invoice->fultran?->involvedVehiclePlate,
-                'insurerCode' => $invoice->fultran?->insurerCode,
-                'involvedVehicleType' => $invoice->fultran?->involvedVehicleType,
-                'sirasRecordNumber' => $invoice->fultran?->sirasRecordNumber,
-                'billedValue' => $invoice->fultran?->billedValue,
-                'claimedValue' => $invoice->fultran?->claimedValue,
-                'serviceEnabledIndication' => $invoice->fultran?->serviceEnabledIndication,
-                
+                'transferDate' => formatDateToArray($invoice->furtran?->transferDate),
+                'transferTime' => formatTimeToArray($invoice->furtran?->transferTime),
+                'transferPickupDepartment_name' => $invoice->furtran?->transferPickupDepartmentCode?->nombre,
+                'transferPickupDepartment_code' => $invoice->furtran?->transferPickupDepartmentCode?->codigo,
+                'transferPickupMunicipality_name' => $invoice->furtran?->transferPickupMunicipalityCode?->nombre,
+                'transferPickupMunicipality_code' => $invoice->furtran?->transferPickupMunicipalityCode?->codigo,
+                'victimCondition' => $invoice->furtran?->victimCondition,
+                'involvedVehiclePlate' => $invoice->furtran?->involvedVehiclePlate,
+                'insurerCode' => $invoice->furtran?->insurerCode,
+                'involvedVehicleType' => $invoice->furtran?->involvedVehicleType,
+                'sirasRecordNumber' => $invoice->furtran?->sirasRecordNumber,
+                'billedValue' => $invoice->furtran?->billedValue,
+                'claimedValue' => $invoice->furtran?->claimedValue,
+                'serviceEnabledIndication' => $invoice->furtran?->serviceEnabledIndication,
+
                 'policy_number' => $invoice?->typeable?->policy_number,
                 'policy_start_date' => formatDateToArray($invoice?->typeable?->start_date),
                 'policy_end_date' => formatDateToArray($invoice?->typeable?->end_date),
 
-                'ipsName' => $invoice->fultran?->ipsName,
-                'ipsNit' => $invoice->fultran?->ipsNit,
-                'ipsAddress' => $invoice->fultran?->ipsAddress,
-                'ipsReceptionHabilitation_code' => $invoice->fultran?->ipsReceptionHabilitationCode?->codigo,
-                'ipsPhone' => $invoice->fultran?->ipsPhone,
+                'ipsName' => $invoice->furtran?->ipsName,
+                'ipsNit' => $invoice->furtran?->ipsNit,
+                'ipsAddress' => $invoice->furtran?->ipsAddress,
+                'ipsReceptionHabilitation_code' => $invoice->furtran?->ipsReceptionHabilitationCode?->codigo,
+                'ipsPhone' => $invoice->furtran?->ipsPhone,
+
+                'insurance_status' => $invoice?->typeable?->insurance_statuse?->code,
             ];
 
             $pdf = $this->invoiceRepository
@@ -297,57 +299,56 @@ class FultranController extends Controller
 
     public function downloadTxt($id)
     {
-        $fultran = $this->fultranRepository->find($id);
+        $furtran = $this->furtranRepository->find($id);
 
         $data = [
-            '1' => $fultran->previousRecordNumber,
-            '2' => $fultran->rgResponse?->Value(),
-            '3' => $fultran->invoice?->invoice_number,
-            '4' => $fultran->invoice?->serviceVendor?->ipsable?->codigo,
-            '5' => $fultran->firstLastNameClaimant,
-            '6' => $fultran->secondLastNameClaimant,
-            '7' => $fultran->firstNameClaimant,
-            '8' => $fultran->secondNameClaimant,
-            '9' => $fultran->claimantIdType?->codigo,
-            '10' => $fultran->claimantIdNumber,
-            '11' => $fultran->vehicleServiceType?->Value(),
-            '12' => $fultran->vehiclePlate,
-            '13' => $fultran->claimantAddress,
-            '14' => $fultran->claimantPhone,
-            '15' => $fultran->claimantDepartmentCode?->codigo,
-            '16' => $fultran->claimantMunicipalityCode?->codigo,
-            '17' => $fultran->invoice?->patient?->typeDocument?->codigo,
-            '18' => $fultran->invoice?->patient?->document,
-            '19' => $fultran->invoice?->patient?->first_name,
-            '20' => $fultran->invoice?->patient?->second_name,
-            '21' => $fultran->invoice?->patient?->first_surname,
-            '22' => $fultran->invoice?->patient?->second_surname,
-            '23' => $fultran->invoice?->patient?->birth_date,
-            '24' => $fultran->victimGender?->Value(),
-            '25' => $fultran->eventType?->Value(),
-            '26' => $fultran->pickupAddress,
-            '27' => $fultran->pickupDepartmentCode?->codigo,
-            '28' => $fultran->pickupMunicipalityCode?->codigo,
-            '29' => $fultran->pickupZone?->Value(),
-            '30' => $fultran->transferDate,
-            '31' => $fultran->transferTime,
-            '32' => $fultran->ipsReceptionHabilitationCode?->codigo,
-            '33' => $fultran->transferPickupDepartmentCode?->codigo,
-            '34' => $fultran->transferPickupMunicipalityCode?->codigo,
-            '35' => $fultran->victimCondition?->Value(),
-            '36' => $fultran->invoice?->typeable?->insurance_statuse?->code,
-            '37' => $fultran->involvedVehicleType?->Value(),
-            '38' => $fultran->involvedVehiclePlate,
-            '39' => $fultran->insurerCode,
-            '40' => $fultran->invoice?->typeable?->policy_number,
-            '41' => $fultran->invoice?->typeable?->start_date,
-            '42' => $fultran->invoice?->typeable?->end_date,
-            '43' => $fultran->sirasRecordNumber,
-            '44' => $fultran->billedValue,
-            '45' => $fultran->claimedValue,
-            '46' => $fultran->serviceEnabledIndication?->Value(),
+            '1' => $furtran->previousRecordNumber,
+            '2' => $furtran->rgResponse?->Value(),
+            '3' => $furtran->invoice?->invoice_number,
+            '4' => $furtran->invoice?->serviceVendor?->ipsable?->codigo,
+            '5' => $furtran->firstLastNameClaimant,
+            '6' => $furtran->secondLastNameClaimant,
+            '7' => $furtran->firstNameClaimant,
+            '8' => $furtran->secondNameClaimant,
+            '9' => $furtran->claimantIdType?->codigo,
+            '10' => $furtran->claimantIdNumber,
+            '11' => $furtran->vehicleServiceType?->Value(),
+            '12' => $furtran->vehiclePlate,
+            '13' => $furtran->claimantAddress,
+            '14' => $furtran->claimantPhone,
+            '15' => $furtran->claimantDepartmentCode?->codigo,
+            '16' => $furtran->claimantMunicipalityCode?->codigo,
+            '17' => $furtran->invoice?->patient?->typeDocument?->codigo,
+            '18' => $furtran->invoice?->patient?->document,
+            '19' => $furtran->invoice?->patient?->first_name,
+            '20' => $furtran->invoice?->patient?->second_name,
+            '21' => $furtran->invoice?->patient?->first_surname,
+            '22' => $furtran->invoice?->patient?->second_surname,
+            '23' => $furtran->invoice?->patient?->birth_date,
+            '24' => $furtran->victimGender?->Value(),
+            '25' => $furtran->eventType?->Value(),
+            '26' => $furtran->pickupAddress,
+            '27' => $furtran->pickupDepartmentCode?->codigo,
+            '28' => $furtran->pickupMunicipalityCode?->codigo,
+            '29' => $furtran->pickupZone?->Value(),
+            '30' => $furtran->transferDate,
+            '31' => $furtran->transferTime,
+            '32' => $furtran->ipsReceptionHabilitationCode?->codigo,
+            '33' => $furtran->transferPickupDepartmentCode?->codigo,
+            '34' => $furtran->transferPickupMunicipalityCode?->codigo,
+            '35' => $furtran->victimCondition?->Value(),
+            '36' => $furtran->invoice?->typeable?->insurance_statuse?->code,
+            '37' => $furtran->involvedVehicleType?->Value(),
+            '38' => $furtran->involvedVehiclePlate,
+            '39' => $furtran->insurerCode,
+            '40' => $furtran->invoice?->typeable?->policy_number,
+            '41' => $furtran->invoice?->typeable?->start_date,
+            '42' => $furtran->invoice?->typeable?->end_date,
+            '43' => $furtran->sirasRecordNumber,
+            '44' => $furtran->billedValue,
+            '45' => $furtran->claimedValue,
+            '46' => $furtran->serviceEnabledIndication?->Value(),
         ];
-        // return $fultran->invoice?->typeable?->policy_number;
 
         // Generate comma-separated text content
         $textContent = implode(',', array_map(function ($value) {
@@ -355,7 +356,7 @@ class FultranController extends Controller
         }, $data)) . "\n";
 
         // Define file name
-        $fileName = 'fultran_' . $id . '.txt';
+        $fileName = 'furtran_' . $id . '.txt';
 
         // Return response with text file for download
         return response($textContent, 200, [

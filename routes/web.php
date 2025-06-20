@@ -1,6 +1,6 @@
 <?php
 
-use App\Enums\Fultran\VehicleServiceTypeEnum;
+use App\Enums\Furtran\VehicleServiceTypeEnum;
 use App\Enums\Furips1\EventZoneEnum;
 use App\Enums\Furips1\PickupZoneEnum;
 use App\Enums\Furips1\VictimConditionEnum;
@@ -38,7 +38,7 @@ Route::get('/cache-clear', [CacheController::class, 'clearAllCache']);
 //     $id = '01971870-edd8-736e-b5b4-191eddc275ab';
 //     $invoice = Invoice::find($id);
 
-//     // return $invoice->fultran;
+//     // return $invoice->furtran;
 
 //     $eventZones = collect(ZoneEnum::cases())->map(function ($case) {
 //         return [
@@ -47,7 +47,7 @@ Route::get('/cache-clear', [CacheController::class, 'clearAllCache']);
 //         ];
 //     })->toArray();
 
-//     $claimanid_documents = Constants::CODS_SELECT_FORM_FULTRAN_CLAIMANIDTYPE;
+//     $claimanid_documents = Constants::CODS_SELECT_FORM_FURTRAN_CLAIMANIDTYPE;
 
 //     $victim_documents = Constants::CODS_PDF_FURIPS1_VICTIMDOCUMENTTYPE;
 
@@ -61,20 +61,20 @@ Route::get('/cache-clear', [CacheController::class, 'clearAllCache']);
 //         'tipo_nota_id' => $invoice->tipo_nota_id,
 //         'note_number' => $invoice->note_number,
 //         'invoice_number' => $invoice->invoice_number,
-//         'firstLastNameClaimant' => $invoice->fultran?->firstLastNameClaimant,
-//         'secondLastNameClaimant' => $invoice->fultran?->secondLastNameClaimant,
-//         'firstNameClaimant' => $invoice->fultran?->firstNameClaimant,
-//         'secondNameClaimant' => $invoice->fultran?->secondNameClaimant,
+//         'firstLastNameClaimant' => $invoice->furtran?->firstLastNameClaimant,
+//         'secondLastNameClaimant' => $invoice->furtran?->secondLastNameClaimant,
+//         'firstNameClaimant' => $invoice->furtran?->firstNameClaimant,
+//         'secondNameClaimant' => $invoice->furtran?->secondNameClaimant,
 //         'claimanid_documents' => $claimanid_documents,
-//         'claimanid_document' => $invoice->fultran?->claimantIdType?->codigo,
-//         'claimantIdNumber' => $invoice->fultran?->claimantIdNumber,
-//         'vehicleServiceType' => $invoice->fultran?->vehicleServiceType,
-//         'vehiclePlate' => $invoice->fultran?->vehiclePlate,
-//         'claimantDepartment_name' => $invoice->fultran?->claimantDepartmentCode?->nombre,
-//         'claimantDepartment_code' => $invoice->fultran?->claimantDepartmentCode?->codigo,
-//         'claimantPhone' => $invoice->fultran?->claimantPhone,
-//         'claimantMunicipality_name' => $invoice->fultran?->claimantMunicipalityCode?->nombre,
-//         'claimantMunicipality_code' => $invoice->fultran?->claimantMunicipalityCode?->codigo,
+//         'claimanid_document' => $invoice->furtran?->claimantIdType?->codigo,
+//         'claimantIdNumber' => $invoice->furtran?->claimantIdNumber,
+//         'vehicleServiceType' => $invoice->furtran?->vehicleServiceType,
+//         'vehiclePlate' => $invoice->furtran?->vehiclePlate,
+//         'claimantDepartment_name' => $invoice->furtran?->claimantDepartmentCode?->nombre,
+//         'claimantDepartment_code' => $invoice->furtran?->claimantDepartmentCode?->codigo,
+//         'claimantPhone' => $invoice->furtran?->claimantPhone,
+//         'claimantMunicipality_name' => $invoice->furtran?->claimantMunicipalityCode?->nombre,
+//         'claimantMunicipality_code' => $invoice->furtran?->claimantMunicipalityCode?->codigo,
 //         'patient_first_surname' => $invoice->patient?->first_surname,
 //         'patient_second_surname' => $invoice->patient?->second_surname,
 //         'patient_first_name' => $invoice->patient?->first_name,
@@ -85,28 +85,28 @@ Route::get('/cache-clear', [CacheController::class, 'clearAllCache']);
 //         'patient_birth_date' => formatDateToArray($invoice->patient?->birth_date),
 //         'select_sexo' => $select_sexo,
 //         'sexo_code' => $invoice->patient?->sexo?->codigo,
-//         'eventType' => $invoice->fultran?->eventType,
-//         'pickupAddress' => $invoice->fultran?->pickupAddress,
-//         'pickupDepartment_name' => $invoice->fultran?->pickupDepartmentCode?->nombre,
-//         'pickupDepartment_code' => $invoice->fultran?->pickupDepartmentCode?->codigo,
-//         'pickupZone' => $invoice->fultran?->pickupZone,
-//         'pickupMunicipality_name' => $invoice->fultran?->pickupMunicipalityCode?->nombre,
-//         'pickupMunicipality_code' => $invoice->fultran?->pickupMunicipalityCode?->codigo,
+//         'eventType' => $invoice->furtran?->eventType,
+//         'pickupAddress' => $invoice->furtran?->pickupAddress,
+//         'pickupDepartment_name' => $invoice->furtran?->pickupDepartmentCode?->nombre,
+//         'pickupDepartment_code' => $invoice->furtran?->pickupDepartmentCode?->codigo,
+//         'pickupZone' => $invoice->furtran?->pickupZone,
+//         'pickupMunicipality_name' => $invoice->furtran?->pickupMunicipalityCode?->nombre,
+//         'pickupMunicipality_code' => $invoice->furtran?->pickupMunicipalityCode?->codigo,
 //         'eventZones' => $eventZones,
-//         'transferDate' => formatDateToArray($invoice->fultran?->transferDate),
-//         'transferTime' => formatTimeToArray($invoice->fultran?->transferTime),
-//         'transferPickupDepartment_name' => $invoice->fultran?->transferPickupDepartmentCode?->nombre,
-//         'transferPickupDepartment_code' => $invoice->fultran?->transferPickupDepartmentCode?->codigo,
-//         'transferPickupMunicipality_name' => $invoice->fultran?->transferPickupMunicipalityCode?->nombre,
-//         'transferPickupMunicipality_code' => $invoice->fultran?->transferPickupMunicipalityCode?->codigo,
-//         'victimCondition' => $invoice->fultran?->victimCondition,
-//         'involvedVehiclePlate' => $invoice->fultran?->involvedVehiclePlate,
-//         'insurerCode' => $invoice->fultran?->insurerCode,
-//         'involvedVehicleType' => $invoice->fultran?->involvedVehicleType,
-//         'sirasRecordNumber' => $invoice->fultran?->sirasRecordNumber,
-//         'billedValue' => $invoice->fultran?->billedValue,
-//         'claimedValue' => $invoice->fultran?->claimedValue,
-//         'serviceEnabledIndication' => $invoice->fultran?->serviceEnabledIndication,
+//         'transferDate' => formatDateToArray($invoice->furtran?->transferDate),
+//         'transferTime' => formatTimeToArray($invoice->furtran?->transferTime),
+//         'transferPickupDepartment_name' => $invoice->furtran?->transferPickupDepartmentCode?->nombre,
+//         'transferPickupDepartment_code' => $invoice->furtran?->transferPickupDepartmentCode?->codigo,
+//         'transferPickupMunicipality_name' => $invoice->furtran?->transferPickupMunicipalityCode?->nombre,
+//         'transferPickupMunicipality_code' => $invoice->furtran?->transferPickupMunicipalityCode?->codigo,
+//         'victimCondition' => $invoice->furtran?->victimCondition,
+//         'involvedVehiclePlate' => $invoice->furtran?->involvedVehiclePlate,
+//         'insurerCode' => $invoice->furtran?->insurerCode,
+//         'involvedVehicleType' => $invoice->furtran?->involvedVehicleType,
+//         'sirasRecordNumber' => $invoice->furtran?->sirasRecordNumber,
+//         'billedValue' => $invoice->furtran?->billedValue,
+//         'claimedValue' => $invoice->furtran?->claimedValue,
+//         'serviceEnabledIndication' => $invoice->furtran?->serviceEnabledIndication,
 //     ];
 //     // return $data;
 

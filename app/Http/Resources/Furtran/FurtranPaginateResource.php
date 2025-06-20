@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Resources\Fultran;
+namespace App\Http\Resources\Furtran;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class FultranPaginateResource extends JsonResource
+class FurtranPaginateResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
