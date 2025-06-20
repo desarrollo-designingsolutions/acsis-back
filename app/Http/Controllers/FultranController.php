@@ -347,7 +347,7 @@ class FultranController extends Controller
             '45' => $fultran->claimedValue,
             '46' => $fultran->serviceEnabledIndication?->Value(),
         ];
-        return $fultran->invoice?->typeable?->policy_number;
+        // return $fultran->invoice?->typeable?->policy_number;
 
         // Generate comma-separated text content
         $textContent = implode(',', array_map(function ($value) {
