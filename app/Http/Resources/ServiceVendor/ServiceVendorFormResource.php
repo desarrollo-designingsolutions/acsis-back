@@ -42,10 +42,6 @@ class ServiceVendorFormResource extends JsonResource
             return 'No asignado';
         }
 
-        if ($this->ipsable->nroIDPrestador) {
-            return $this->ipsable->nroIDPrestador;
-        }
-
-        return $this->ipsable->nit.' - '.$this->ipsable->nombre;
+        return $this->ipsable->codigo . ' - ' . $this->ipsable->nombre;
     }
 }

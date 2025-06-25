@@ -584,7 +584,7 @@ class InvoiceController extends Controller
 
                 // Determinar el estado y la ruta del archivo XML
                 if ($infoValidation['totalErrorMessages'] == 0) {
-                    $finalName = "{$invoice->serviceVendor->nit}_{$invoice->invoice_number}_FILEXML.xml";
+                    $finalName = "{$invoice->id}_FILEXML.xml";
                     $finalPath = "companies/company_{$company_id}/invoices/{$invoice->type->value}/invoice_{$invoice->id}/{$invoice->invoice_number}/xml";
 
                     $path = $file->storeAs($finalPath, $finalName, Constants::DISK_FILES);
@@ -773,8 +773,7 @@ class InvoiceController extends Controller
 
             // Paso 2: Validar los datos del JSON contra la base de datos
             $jsonData = json_decode(file_get_contents($file->getRealPath()), true);
-            $dataResponse = $this->jsonDataValidation->validate($jsonData);
-
+            $dataResponse = $this->jsonDataValidation->validate($jsonData, $company_id);
 
             $dataResponse["errors"] = [...$dataResponse["errors"], ...$structureResponse["errors"]];
 
@@ -1027,8 +1026,8 @@ class InvoiceController extends Controller
                     'type' => TypeServiceEnum::SERVICE_TYPE_002,
                     'serviceable_type' => TypeServiceEnum::SERVICE_TYPE_002->model(),
                     'serviceable_id' => $procedure->id,
-                    'codigo_servicio' => $procedure->codProcedimiento->codigo,
-                    'nombre_servicio' => $procedure->codProcedimiento->nombre,
+                    'codigo_servicio' => $procedure->codProcedimiento?->codigo,
+                    'nombre_servicio' => $procedure->codProcedimiento?->nombre,
                     'quantity' => 1,
                     'unit_value' => $value['vrServicio'],
                     'total_value' => $value['vrServicio'],

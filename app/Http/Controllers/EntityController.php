@@ -103,7 +103,12 @@ class EntityController extends Controller
         return $this->runTransaction(function () use ($id) {
             $entity = $this->entityRepository->find($id);
             if ($entity) {
-
+                // Verificar si hay registros relacionados
+                if ($entity->invoices()->exists()) {
+                    throw new \Exception(json_encode([
+                        'message' => 'No se puede eliminar el registro, porque tiene relación de datos en otros módulos',
+                    ]));
+                }
                 $entity->delete();
                 $msg = 'Registro eliminado correctamente';
             } else {
@@ -126,7 +131,7 @@ class EntityController extends Controller
 
             return [
                 'code' => 200,
-                'message' => 'Entidad '.$msg.' con éxito',
+                'message' => 'Entidad ' . $msg . ' con éxito',
             ];
         });
     }
