@@ -23,35 +23,36 @@ class PatientRepository extends BaseRepository
 
         return $this->cacheService->remember($cacheKey, function () use ($request) {
             $query = QueryBuilder::for($this->model->query())
-                ->select(['id', 'document', 'first_name', 'second_name', 'first_surname', 'second_surname'])
-                ->allowedFilters([
-                    AllowedFilter::callback('inputGeneral', function ($query, $value) {
-                        $query->where(function ($subQuery) use ($value) {
-                            $subQuery->orWhere('document', 'like', "%$value%");
-                            $subQuery->orWhereRaw("CONCAT(first_name, ' ', second_name, ' ', first_surname, ' ', second_surname) LIKE ?", ["%{$value}%"]);
-                        });
-                    }),
-                ])
-                ->allowedSorts([
-                    'document',
-                    AllowedSort::custom('full_name', new DynamicConcatSort("first_name, ' ', second_name, ' ', first_surname, ' ', second_surname")),
-                ])->where(function ($query) use ($request) {
-
-                    if (isset($request['searchQueryInfinite']) && ! empty($request['searchQueryInfinite'])) {
-                        $query->orWhere('document', 'like', '%'.$request['searchQueryInfinite'].'%');
-                        $query->orWhereRaw("CONCAT(first_name, ' ', second_name, ' ', first_surname, ' ', second_surname) LIKE ?", '%'.$request['searchQueryInfinite'].'%');
-                    }
-
-                    if (! empty($request['company_id'])) {
-                        $query->where('company_id', $request['company_id']);
-                    }
+        ->select(['id', 'document', 'first_name', 'second_name', 'first_surname', 'second_surname'])
+        ->allowedFilters([
+            AllowedFilter::callback('inputGeneral', function ($query, $value) {
+                $query->where(function ($subQuery) use ($value) {
+                    $subQuery->orWhere('document', 'like', "%$value%"); 
+                    $subQuery->orWhereRaw("CONCAT_WS(' ', first_name, second_name, first_surname, second_surname) LIKE ?", ["%{$value}%"]);
                 });
-
-            if (empty($request['typeData'])) {
-                $query = $query->paginate(request()->perPage ?? Constants::ITEMS_PER_PAGE);
-            } else {
-                $query = $query->get();
+            }),
+        ])
+        ->allowedSorts([
+            'document',
+            AllowedSort::custom('full_name', new DynamicConcatSort("first_name, ' ', second_name, ' ', first_surname, ' ', second_surname")),
+        ])
+        ->where(function ($query) use ($request) {
+            if (isset($request['searchQueryInfinite']) && !empty($request['searchQueryInfinite'])) {
+                $searchValue = $request['searchQueryInfinite'];
+                $query->orWhere('document', 'like', "%$searchValue%"); 
+                $subQuery->orWhereRaw("CONCAT_WS(' ', first_name, second_name, first_surname, second_surname) LIKE ?", ["%{$value}%"]);
             }
+
+            if (!empty($request['company_id'])) {
+                $query->where('company_id', $request['company_id']);
+            }
+        });
+
+    if (empty($request['typeData'])) {
+        $query = $query->paginate($request->perPage ?? Constants::ITEMS_PER_PAGE);
+    } else {
+        $query = $query->get();
+    }
 
             return $query;
         }, Constants::REDIS_TTL);
