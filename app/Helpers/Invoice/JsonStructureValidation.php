@@ -61,7 +61,6 @@ class JsonStructureValidation
             ];
         }
 
-        // \Log::info('Mensaje error', ['error' => $result->error()]);
 
         // Recolectar errores
         $errorFormatter = new ErrorFormatter;
@@ -72,11 +71,7 @@ class JsonStructureValidation
         // Procesar cada error
         foreach ($errors as $path => $messages) {
             foreach ($messages as $message) {
-                \Log::info('Mensaje de error crudo', ['path' => $path, 'message' => $message]);
                 $errorList = self::simplifyErrorMessage($message, $path, $data);
-
-                // logMessage($errorList);
-
                 foreach ($errorList as $error) {
                     if (! empty($error['message'])) {
                         $formattedErrors[] = [
@@ -156,7 +151,6 @@ class JsonStructureValidation
 
             // Filtrar para obtener solo los campos realmente no permitidos
             $invalidFields = array_diff($allFields, $definedProperties);
-            // logMessage($invalidFields);
 
             foreach ($invalidFields as $field) {
                 $value = self::getValueFromPath($data, $field);
@@ -261,7 +255,6 @@ class JsonStructureValidation
 
         // Individual procedure level (/usuarios/0/servicios/procedimientos/0)
         if (preg_match('#^/usuarios/\d+/servicios/procedimientos/\d+$#', $path)) {
-            \Log::info('Matched procedimientos item path', ['path' => $path]);
             return [
                 'codPrestador',
                 'fechaInicioAtencion',
@@ -419,7 +412,6 @@ class JsonStructureValidation
         }
 
         // Log unmatched paths for debugging
-        \Log::info('Unmatched path in getAllowedPropertiesForPath', ['path' => $path]);
         return [];
     }
 
@@ -511,7 +503,6 @@ class JsonStructureValidation
         } elseif (preg_match('#^/usuarios/\d+/servicios/urgencias(/\d+)?(/.*)?$#', $path)) {
             return 'urgencia';
         } elseif (preg_match('#^/usuarios/\d+/servicios/hospitalizacion(/\d+)?(/.*)?$#', $path)) {
-            \Log::info('Matched hospitalizacion path', ['path' => $path]);
             return 'hospitalización';
         } elseif (preg_match('#^/usuarios/\d+/servicios/recienNacidos(/\d+)?(/.*)?$#', $path)) {
             return 'recién nacido';
@@ -526,9 +517,6 @@ class JsonStructureValidation
         } elseif (empty($path) || $path === '/' || $path === '') {
             return 'factura';
         }
-
-        // Log unmatched paths for debugging
-        \Log::info('Unmatched path in determineErrorLevel', ['path' => $path]);
         return $path;
     }
 

@@ -56,7 +56,7 @@ class ProcessMassUpload implements ShouldQueue
         $moved = Storage::disk($disk)->move($this->tempPath, $this->finalPath);
 
         if (! $moved) {
-            logMessage("Error: No se pudo mover el archivo de {$this->tempPath} a {$this->finalPath}");
+            // logMessage("Error: No se pudo mover el archivo de {$this->tempPath} a {$this->finalPath}");
             throw new \Exception('No se pudo mover el archivo');
         }
 
