@@ -25,4 +25,9 @@ class Entity extends Model
     {
         return $this->belongsTo(TypeEntity::class, 'type_entity_id');
     }
+
+    public function invoices()
+    {
+        return $this->hasMany(Invoice::class, "entity_id");
+    }
 }

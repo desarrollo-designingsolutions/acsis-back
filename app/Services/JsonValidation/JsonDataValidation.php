@@ -17,13 +17,16 @@ class JsonDataValidation
 
     protected $validatedData = [];
 
+    protected $company_id = '';
+
     public function __construct(protected CacheService $cacheService)
     {
         // Aquí podrías inicializar cualquier otro servicio necesario
     }
 
-    public function validate(array $jsonData): array
+    public function validate(array $jsonData, string $company_id): array
     {
+        $this->company_id = $company_id;
         try {
             $this->errors = [];
             $this->validatedData = $jsonData; // Inicializar con el JSON original
@@ -348,7 +351,7 @@ class JsonDataValidation
         $cacheKey = $this->cacheService->generateKey("{$table}_existsInDatabase", $params, 'string');
 
         return $this->cacheService->remember($cacheKey, function () use ($table, $column, $value, $select) {
-            $record = DB::table($table)->where($column, $value)->select($select)->first();
+            $record = DB::table($table)->where($column, $value)->where($this->company_id)->whereNull("delete_at")->select($select)->first();
 
             return $record ? (array) $record : false;
         }, Constants::REDIS_TTL);

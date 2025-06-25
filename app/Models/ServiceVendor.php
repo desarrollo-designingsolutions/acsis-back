@@ -41,4 +41,10 @@ class ServiceVendor extends Model
     {
         return $this->morphTo(__FUNCTION__, 'ipsable_type', 'ipsable_id');
     }
+
+
+    public function invoices()
+    {
+        return $this->hasMany(Invoice::class, "service_vendor_id");
+    }
 }
