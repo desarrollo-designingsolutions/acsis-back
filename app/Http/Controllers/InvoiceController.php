@@ -15,6 +15,7 @@ use App\Http\Requests\Invoice\InvoiceUploadJsonRequest;
 use App\Http\Resources\Invoice\InvoiceFormResource;
 use App\Http\Resources\Invoice\InvoiceListResource;
 use App\Http\Resources\InvoiceSoat\InvoiceSoatFormResource;
+use App\Models\Entity;
 use App\Models\Invoice;
 use App\Models\Municipio;
 use App\Models\Pais;
@@ -590,6 +591,14 @@ class InvoiceController extends Controller
                     $invoice->path_xml = $path;
                     $invoice->status_xml = StatusXmlInvoiceEnum::INVOICE_STATUS_XML_003;
                     $invoice->validationXml = null;
+
+                    if (empty($invoice->entity_id)) {
+                        $entity = Entity::where("nit", $infoValidation['info']['entity']['nit'])->first();
+                        $invoice->entity_id = $entity ? $entity->id : null;
+                    }
+                    if (empty($invoice->invoice_date)) {
+                        $invoice->invoice_date = $infoValidation['info']['invoice']['invoice_date'];
+                    }
                 } else {
                     $invoice->status_xml = StatusXmlInvoiceEnum::INVOICE_STATUS_XML_002;
                     $invoice->validationXml = json_encode($infoValidation['errorMessages']);
