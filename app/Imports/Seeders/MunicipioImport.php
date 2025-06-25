@@ -85,7 +85,6 @@ class MunicipioImport implements ToCollection, WithChunkReading
                 'created_at' => now(),
                 'updated_at' => now(),
             ];
-            // logMessage(count($batch));
 
             $this->processedRecords++;
 
