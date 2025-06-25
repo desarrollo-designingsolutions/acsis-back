@@ -56,7 +56,6 @@ class ProcessMassUpload implements ShouldQueue
         $moved = Storage::disk($disk)->move($this->tempPath, $this->finalPath);
 
         if (! $moved) {
-            // logMessage("Error: No se pudo mover el archivo de {$this->tempPath} a {$this->finalPath}");
             throw new \Exception('No se pudo mover el archivo');
         }
 
@@ -71,8 +70,6 @@ class ProcessMassUpload implements ShouldQueue
 
         // Calcular progreso global basado en archivos procesados
         $progress = ($this->fileNumber / $this->totalFiles) * 100;
-
-        // logMessage("Progreso de carga: {$progress}% para el archivo {$this->fileName}");
 
         FileUploadProgress::dispatch(
             $this->uploadId,
