@@ -23,7 +23,6 @@ class PatientRepository extends BaseRepository
 
         return $this->cacheService->remember($cacheKey, function () use ($request) {
             $query = QueryBuilder::for($this->model->query())
-        ->select(['id', 'document', 'first_name', 'second_name', 'first_surname', 'second_surname'])
         ->allowedFilters([
             AllowedFilter::callback('inputGeneral', function ($query, $value) {
                 $query->where(function ($subQuery) use ($value) {
