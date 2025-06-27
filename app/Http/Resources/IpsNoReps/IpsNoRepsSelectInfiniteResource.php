@@ -16,7 +16,7 @@ class IpsNoRepsSelectInfiniteResource extends JsonResource
     {
         return [
             'value' => $this->id,
-            'title' => $this->nit.' / '.$this->nombre,
+            'title' => $this->codigo . ' / ' . $this->nombre,
             'codigo' => $this->codigo,
             'nit' => $this->nit,
         ];

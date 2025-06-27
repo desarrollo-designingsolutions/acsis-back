@@ -17,13 +17,16 @@ class JsonDataValidation
 
     protected $validatedData = [];
 
+    protected $company_id = '';
+
     public function __construct(protected CacheService $cacheService)
     {
         // Aquí podrías inicializar cualquier otro servicio necesario
     }
 
-    public function validate(array $jsonData): array
+    public function validate(array $jsonData, string $company_id): array
     {
+        $this->company_id = $company_id;
         try {
             $this->errors = [];
             $this->validatedData = $jsonData; // Inicializar con el JSON original
@@ -134,7 +137,7 @@ class JsonDataValidation
                     }
 
                     if ($rule['type'] === 'exists') {
-                        $result = $this->existsInDatabase($value, $rule['table'], $rule['column'], $rule['select'] ?? ['id']);
+                        $result = $this->existsInDatabase($value, $rule['table'], $rule['column'], $rule['select'] ?? ['id'], $rule["withCompanyId"]);
                         if ($result === false) {
                             $errorMessage = is_callable($rule['error_message'])
                                 ? $rule['error_message']($rule, $value)
@@ -216,7 +219,7 @@ class JsonDataValidation
                 }
 
                 if ($rule['type'] === 'exists') {
-                    $result = $this->existsInDatabase($value, $rule['table'], $rule['column'], $rule['select'] ?? ['id']);
+                    $result = $this->existsInDatabase($value, $rule['table'], $rule['column'], $rule['select'] ?? ['id'], $rule["withCompanyId"]);
                     if ($result === false) {
                         $errorMessage = is_callable($rule['error_message'])
                             ? $rule['error_message']($rule, $value)
@@ -277,7 +280,7 @@ class JsonDataValidation
             }
 
             if ($rule['type'] === 'exists') {
-                $result = $this->existsInDatabase($value, $rule['table'], $rule['column'], $rule['select'] ?? ['id']);
+                $result = $this->existsInDatabase($value, $rule['table'], $rule['column'], $rule['select'] ?? ['id'], $rule["withCompanyId"]);
                 if ($result === false) {
                     $errorMessage = is_callable($rule['error_message'])
                         ? $rule['error_message']($rule, $value)
@@ -320,7 +323,7 @@ class JsonDataValidation
     {
         switch ($rule['type']) {
             case 'exists':
-                return $this->existsInDatabase($value, $rule['table'], $rule['column'], $rule['select'] ?? ['id']) !== false;
+                return $this->existsInDatabase($value, $rule['table'], $rule['column'], $rule['select'] ?? ['id'], $rule["withCompanyId"]) !== false;
             case 'in':
                 return $this->validateIn($value, $rule['values']);
             case 'regex':
@@ -336,19 +339,25 @@ class JsonDataValidation
         }
     }
 
-    protected function existsInDatabase($value, string $table, string $column, array $select = ['id'])
+    protected function existsInDatabase($value, string $table, string $column, array $select = ['id'], $withCompanyId)
     {
         $params = [
             'value' => $value,
             'table' => $table,
             'column' => $column,
             'select' => $select,
+            'withCompanyId' => $withCompanyId,
         ];
 
         $cacheKey = $this->cacheService->generateKey("{$table}_existsInDatabase", $params, 'string');
 
-        return $this->cacheService->remember($cacheKey, function () use ($table, $column, $value, $select) {
-            $record = DB::table($table)->where($column, $value)->select($select)->first();
+        return $this->cacheService->remember($cacheKey, function () use ($table, $column, $value, $select, $withCompanyId) {
+            if ($withCompanyId) {
+                $query = DB::table($table)->where($column, $value)->where("company_id", $this->company_id)->whereNull("deleted_at");
+            } else {
+                $query = DB::table($table)->where($column, $value)->whereNull("deleted_at");
+            }
+            $record = $query->select($select)->first();
 
             return $record ? (array) $record : false;
         }, Constants::REDIS_TTL);

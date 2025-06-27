@@ -151,6 +151,7 @@ class PatientController extends Controller
             $request['typeData'] = 'all';
 
             $patient = $this->patientRepository->paginate($request->all());
+             $patient->load(["tipo_id_pisi", "rips_tipo_usuario_version2", "sexo", "pais_residency", "municipio_residency", "zona_version2", "pais_origin"]);
 
             $excel = Excel::raw(new PatientExcelExport($patient), \Maatwebsite\Excel\Excel::XLSX);
 

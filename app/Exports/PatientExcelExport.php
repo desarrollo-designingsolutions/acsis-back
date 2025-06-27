@@ -25,8 +25,20 @@ class PatientExcelExport implements FromView, ShouldAutoSize, WithEvents
         $data = collect($this->data)->map(function ($value) {
             return [
                 'id' => $value->id,
+                'tipo_id_pisi_nombre' => $value->tipo_id_pisi?->nombre,
                 'document' => $value->document,
-                'full_name' => $value->full_name,
+                'rips_tipo_usuario_version2_nombre' => $value->rips_tipo_usuario_version2?->nombre,
+                'birth_date' => $value->birth_date,
+                'sexo_nombre' => $value->sexo?->nombre,
+                'pais_residency_nombre' => $value->pais_residency?->nombre,
+                'municipio_residency_nombre' => $value->municipio_residency?->nombre,
+                'zona_version2_nombre' => $value->zona_version2?->nombre,
+                'incapacity' => $value->incapacity ? 'Sí' : 'No',
+                'pais_origin_nombre' => $value->pais_origin?->nombre,
+                'first_name' => $value->first_name,
+                'second_name' => $value->second_name,
+                'first_surname' => $value->first_surname,
+                'second_surname' => $value->second_surname,
             ];
         });
 

@@ -35,6 +35,7 @@ class UserRepository extends BaseRepository
                         $query->where(function ($q) use ($value) {
                             $q->orWhere('name', 'like', "%$value%");
                             $q->orWhere('surname', 'like', "%$value%");
+                            $q->orWhereRaw("CONCAT_WS(' ', name, surname) LIKE ?", ["%{$value}%"]);
                             $q->orWhere('email', 'like', "%$value%");
                             $q->orWhereHas('role', function ($subQuery) use ($value) {
                                 $subQuery->where('description', 'like', "%$value%");

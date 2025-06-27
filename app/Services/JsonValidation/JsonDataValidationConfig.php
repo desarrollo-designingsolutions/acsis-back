@@ -11,6 +11,7 @@ class JsonDataValidationConfig
             'tipoNota' => [
                 'type' => 'exists',
                 'table' => 'tipo_notas',
+                'withCompanyId' => false,
                 'column' => 'codigo',
                 'select' => ['id', 'codigo', 'nombre'],
                 'error_message' => 'El tipoNota no existe en la tabla tipo_notas.',
@@ -18,6 +19,7 @@ class JsonDataValidationConfig
             'numDocumentoIdObligado' => [
                 'type' => 'exists',
                 'table' => 'service_vendors',
+                'withCompanyId' => true,
                 'column' => 'nit',
                 'select' => ['id', 'nit', 'name'],
                 'error_message' => 'El numDocumentoIdObligado no existe en la tabla service_vendors.',
@@ -29,6 +31,7 @@ class JsonDataValidationConfig
             'usuarios.*.tipoDocumentoIdentificacion' => [
                 'type' => 'exists',
                 'table' => 'tipo_id_pisis',
+                'withCompanyId' => false,
                 'column' => 'codigo',
                 'select' => ['id', 'codigo', 'nombre'],
                 'error_message' => 'El tipoDocumentoIdentificacion no existe en la tabla tipo_id_pisis.',
@@ -36,6 +39,7 @@ class JsonDataValidationConfig
             'usuarios.*.numDocumentoIdentificacion' => [
                 'type' => 'exists',
                 'table' => 'patients',
+                'withCompanyId' => true,
                 'column' => 'document',
                 'select' => ['id', 'document', 'first_name', 'second_name', 'first_surname', 'second_surname'],
                 'error_message' => 'El numDocumentoIdentificacion no existe en la tabla patients.',
@@ -43,6 +47,7 @@ class JsonDataValidationConfig
             'usuarios.*.tipoUsuario' => [
                 'type' => 'exists',
                 'table' => 'rips_tipo_usuario_version2s',
+                'withCompanyId' => false,
                 'column' => 'codigo',
                 'select' => ['id', 'codigo', 'nombre'],
                 'error_message' => 'El tipoUsuario no existe en la tabla rips_tipo_usuario_version2s.',
@@ -54,6 +59,7 @@ class JsonDataValidationConfig
             'usuarios.*.codSexo' => [
                 'type' => 'exists',
                 'table' => 'sexos',
+                'withCompanyId' => false,
                 'column' => 'codigo',
                 'select' => ['id', 'codigo', 'nombre'],
                 'error_message' => 'El codSexo no existe en la tabla sexos.',
@@ -61,6 +67,7 @@ class JsonDataValidationConfig
             'usuarios.*.codPaisResidencia' => [
                 'type' => 'exists',
                 'table' => 'pais',
+                'withCompanyId' => false,
                 'column' => 'codigo',
                 'select' => ['id', 'codigo', 'nombre'],
                 'error_message' => 'El codPaisResidencia no existe en la tabla pais.',
@@ -68,6 +75,7 @@ class JsonDataValidationConfig
             'usuarios.*.codMunicipioResidencia' => [
                 'type' => 'exists',
                 'table' => 'municipios',
+                'withCompanyId' => false,
                 'column' => 'codigo',
                 'select' => ['id', 'codigo', 'nombre'],
                 'error_message' => 'El codMunicipioResidencia no existe en la tabla municipios.',
@@ -75,6 +83,7 @@ class JsonDataValidationConfig
             'usuarios.*.codZonaTerritorialResidencia' => [
                 'type' => 'exists',
                 'table' => 'zona_version2s',
+                'withCompanyId' => false,
                 'column' => 'codigo',
                 'select' => ['id', 'codigo', 'nombre'],
                 'error_message' => 'El codZonaTerritorialResidencia no existe en la tabla zona_version2s.',
@@ -87,6 +96,7 @@ class JsonDataValidationConfig
             'usuarios.*.codPaisOrigen' => [
                 'type' => 'exists',
                 'table' => 'pais',
+                'withCompanyId' => false,
                 'column' => 'codigo',
                 'select' => ['id', 'codigo', 'nombre'],
                 'error_message' => 'El codPaisOrigen no existe en la tabla pais.',
@@ -102,6 +112,7 @@ class JsonDataValidationConfig
             'usuarios.*.servicios.consultas.*.codPrestador' => [
                 'type' => 'exists',
                 'table' => 'ips_cod_habilitacions',
+                'withCompanyId' => false,
                 'column' => 'codigo',
                 'select' => ['id', 'codigo', 'nombre'],
                 'error_message' => 'El codPrestador no existe en la tabla ips_cod_habilitacions.',
@@ -113,6 +124,7 @@ class JsonDataValidationConfig
             'usuarios.*.servicios.consultas.*.codConsulta' => [
                 'type' => 'exists',
                 'table' => 'cups_rips',
+                'withCompanyId' => false,
                 'column' => 'codigo',
                 'select' => ['id', 'codigo', 'nombre'],
                 'error_message' => 'El codConsulta no existe en la tabla cups_rips.',
@@ -120,6 +132,7 @@ class JsonDataValidationConfig
             'usuarios.*.servicios.consultas.*.modalidadGrupoServicioTecSal' => [
                 'type' => 'exists',
                 'table' => 'modalidad_atencions',
+                'withCompanyId' => false,
                 'column' => 'codigo',
                 'select' => ['id', 'codigo', 'nombre'],
                 'error_message' => 'El modalidadGrupoServicioTecSal no existe en la tabla modalidad_atencions.',
@@ -127,6 +140,7 @@ class JsonDataValidationConfig
             'usuarios.*.servicios.consultas.*.grupoServicios' => [
                 'type' => 'exists',
                 'table' => 'grupo_servicios',
+                'withCompanyId' => false,
                 'column' => 'codigo',
                 'select' => ['id', 'codigo', 'nombre'],
                 'error_message' => 'El grupoServicios no existe en la tabla grupo_servicios.',
@@ -134,6 +148,7 @@ class JsonDataValidationConfig
             'usuarios.*.servicios.consultas.*.codServicio' => [
                 'type' => 'exists',
                 'table' => 'servicios',
+                'withCompanyId' => false,
                 'column' => 'codigo',
                 'select' => ['id', 'codigo', 'nombre'],
                 'error_message' => 'El codServicio no existe en la tabla servicios.',
@@ -141,6 +156,7 @@ class JsonDataValidationConfig
             'usuarios.*.servicios.consultas.*.finalidadTecnologiaSalud' => [
                 'type' => 'exists',
                 'table' => 'rips_finalidad_consulta_version2s',
+                'withCompanyId' => false,
                 'column' => 'codigo',
                 'select' => ['id', 'codigo', 'nombre'],
                 'error_message' => 'El finalidadTecnologiaSalud no existe en la tabla rips_finalidad_consulta_version2s.',
@@ -148,6 +164,7 @@ class JsonDataValidationConfig
             'usuarios.*.servicios.consultas.*.causaMotivoAtencion' => [
                 'type' => 'exists',
                 'table' => 'rips_causa_externa_version2s',
+                'withCompanyId' => false,
                 'column' => 'codigo',
                 'select' => ['id', 'codigo', 'nombre'],
                 'error_message' => 'El causaMotivoAtencion no existe en la tabla rips_causa_externa_version2s.',
@@ -155,6 +172,7 @@ class JsonDataValidationConfig
             'usuarios.*.servicios.consultas.*.codDiagnosticoPrincipal' => [
                 'type' => 'exists',
                 'table' => 'cie10s',
+                'withCompanyId' => false,
                 'column' => 'codigo',
                 'select' => ['id', 'codigo', 'nombre'],
                 'error_message' => 'El codDiagnosticoPrincipal no existe en la tabla cie10s.',
@@ -162,6 +180,7 @@ class JsonDataValidationConfig
             'usuarios.*.servicios.consultas.*.codDiagnosticoRelacionado1' => [
                 'type' => 'exists',
                 'table' => 'cie10s',
+                'withCompanyId' => false,
                 'column' => 'codigo',
                 'select' => ['id', 'codigo', 'nombre'],
                 'error_message' => 'El codDiagnosticoRelacionado1 no existe en la tabla cie10s.',
@@ -169,6 +188,7 @@ class JsonDataValidationConfig
             'usuarios.*.servicios.consultas.*.codDiagnosticoRelacionado2' => [
                 'type' => 'exists',
                 'table' => 'cie10s',
+                'withCompanyId' => false,
                 'column' => 'codigo',
                 'select' => ['id', 'codigo', 'nombre'],
                 'error_message' => 'El codDiagnosticoRelacionado2 no existe en la tabla cie10s.',
@@ -176,6 +196,7 @@ class JsonDataValidationConfig
             'usuarios.*.servicios.consultas.*.codDiagnosticoRelacionado3' => [
                 'type' => 'exists',
                 'table' => 'cie10s',
+                'withCompanyId' => false,
                 'column' => 'codigo',
                 'select' => ['id', 'codigo', 'nombre'],
                 'error_message' => 'El codDiagnosticoRelacionado3 no existe en la tabla cie10s.',
@@ -183,6 +204,7 @@ class JsonDataValidationConfig
             'usuarios.*.servicios.consultas.*.tipoDiagnosticoPrincipal' => [
                 'type' => 'exists',
                 'table' => 'rips_tipo_diagnostico_principal_version2s',
+                'withCompanyId' => false,
                 'column' => 'codigo',
                 'select' => ['id', 'codigo', 'nombre'],
                 'error_message' => 'El tipoDiagnosticoPrincipal no existe en la tabla rips_tipo_diagnostico_principal_version2s.',
@@ -190,6 +212,7 @@ class JsonDataValidationConfig
             'usuarios.*.servicios.consultas.*.tipoDocumentoIdentificacion' => [
                 'type' => 'exists',
                 'table' => 'tipo_id_pisis',
+                'withCompanyId' => false,
                 'column' => 'codigo',
                 'select' => ['id', 'codigo', 'nombre'],
                 'error_message' => 'El tipoDocumentoIdentificacion no existe en la tabla tipo_id_pisis.',
@@ -201,6 +224,7 @@ class JsonDataValidationConfig
             'usuarios.*.servicios.consultas.*.conceptoRecaudo' => [
                 'type' => 'exists',
                 'table' => 'concepto_recaudos',
+                'withCompanyId' => false,
                 'column' => 'codigo',
                 'select' => ['id', 'codigo', 'nombre'],
                 'error_message' => 'El conceptoRecaudo no existe en la tabla concepto_recaudos.',
@@ -220,6 +244,7 @@ class JsonDataValidationConfig
             'usuarios.*.servicios.procedimientos.*.codPrestador' => [
                 'type' => 'exists',
                 'table' => 'ips_cod_habilitacions',
+                'withCompanyId' => false,
                 'column' => 'codigo',
                 'select' => ['id', 'codigo', 'nombre'],
                 'error_message' => 'El codPrestador no existe en la tabla ips_cod_habilitacions.',
@@ -231,6 +256,7 @@ class JsonDataValidationConfig
             'usuarios.*.servicios.procedimientos.*.codProcedimiento' => [
                 'type' => 'exists',
                 'table' => 'cups_rips',
+                'withCompanyId' => false,
                 'column' => 'codigo',
                 'select' => ['id', 'codigo', 'nombre'],
                 'error_message' => 'El codProcedimiento no existe en la tabla cups_rips.',
@@ -238,6 +264,7 @@ class JsonDataValidationConfig
             'usuarios.*.servicios.procedimientos.*.viaIngresoServicioSalud' => [
                 'type' => 'exists',
                 'table' => 'via_ingreso_usuarios',
+                'withCompanyId' => false,
                 'column' => 'codigo',
                 'select' => ['id', 'codigo', 'nombre'],
                 'error_message' => 'El viaIngresoServicioSalud no existe en la tabla via_ingreso_usuarios.',
@@ -245,6 +272,7 @@ class JsonDataValidationConfig
             'usuarios.*.servicios.procedimientos.*.modalidadGrupoServicioTecSal' => [
                 'type' => 'exists',
                 'table' => 'modalidad_atencions',
+                'withCompanyId' => false,
                 'column' => 'codigo',
                 'select' => ['id', 'codigo', 'nombre'],
                 'error_message' => 'El modalidadGrupoServicioTecSal no existe en la tabla modalidad_atencions.',
@@ -252,6 +280,7 @@ class JsonDataValidationConfig
             'usuarios.*.servicios.procedimientos.*.grupoServicios' => [
                 'type' => 'exists',
                 'table' => 'grupo_servicios',
+                'withCompanyId' => false,
                 'column' => 'codigo',
                 'select' => ['id', 'codigo', 'nombre'],
                 'error_message' => 'El grupoServicios no existe en la tabla grupo_servicios.',
@@ -259,6 +288,7 @@ class JsonDataValidationConfig
             'usuarios.*.servicios.procedimientos.*.codServicio' => [
                 'type' => 'exists',
                 'table' => 'servicios',
+                'withCompanyId' => false,
                 'column' => 'codigo',
                 'select' => ['id', 'codigo', 'nombre'],
                 'error_message' => 'El codServicio no existe en la tabla servicios.',
@@ -266,6 +296,7 @@ class JsonDataValidationConfig
             'usuarios.*.servicios.procedimientos.*.finalidadTecnologiaSalud' => [
                 'type' => 'exists',
                 'table' => 'rips_finalidad_consulta_version2s',
+                'withCompanyId' => false,
                 'column' => 'codigo',
                 'select' => ['id', 'codigo', 'nombre'],
                 'error_message' => 'El finalidadTecnologiaSalud no existe en la tabla rips_finalidad_consulta_version2s.',
@@ -273,6 +304,7 @@ class JsonDataValidationConfig
             'usuarios.*.servicios.procedimientos.*.tipoDocumentoIdentificacion' => [
                 'type' => 'exists',
                 'table' => 'tipo_id_pisis',
+                'withCompanyId' => false,
                 'column' => 'codigo',
                 'select' => ['id', 'codigo', 'nombre'],
                 'error_message' => 'El tipoDocumentoIdentificacion no existe en la tabla tipo_id_pisis.',
@@ -280,6 +312,7 @@ class JsonDataValidationConfig
             'usuarios.*.servicios.procedimientos.*.codDiagnosticoPrincipal' => [
                 'type' => 'exists',
                 'table' => 'cie10s',
+                'withCompanyId' => false,
                 'column' => 'codigo',
                 'select' => ['id', 'codigo', 'nombre'],
                 'error_message' => 'El codDiagnosticoPrincipal no existe en la tabla cie10s.',
@@ -287,6 +320,7 @@ class JsonDataValidationConfig
             'usuarios.*.servicios.procedimientos.*.codDiagnosticoRelacionado' => [
                 'type' => 'exists',
                 'table' => 'cie10s',
+                'withCompanyId' => false,
                 'column' => 'codigo',
                 'select' => ['id', 'codigo', 'nombre'],
                 'error_message' => 'El codDiagnosticoRelacionado no existe en la tabla cie10s.',
@@ -294,6 +328,7 @@ class JsonDataValidationConfig
             'usuarios.*.servicios.procedimientos.*.codComplicacion' => [
                 'type' => 'exists',
                 'table' => 'cie10s',
+                'withCompanyId' => false,
                 'column' => 'codigo',
                 'select' => ['id', 'codigo', 'nombre'],
                 'error_message' => 'El codComplicacion no existe en la tabla cie10s.',
@@ -305,6 +340,7 @@ class JsonDataValidationConfig
             'usuarios.*.servicios.procedimientos.*.conceptoRecaudo' => [
                 'type' => 'exists',
                 'table' => 'concepto_recaudos',
+                'withCompanyId' => false,
                 'column' => 'codigo',
                 'select' => ['id', 'codigo', 'nombre'],
                 'error_message' => 'El conceptoRecaudo no existe en la tabla concepto_recaudos.',
@@ -324,6 +360,7 @@ class JsonDataValidationConfig
             'usuarios.*.servicios.medicamentos.*.codPrestador' => [
                 'type' => 'exists',
                 'table' => 'ips_cod_habilitacions',
+                'withCompanyId' => false,
                 'column' => 'codigo',
                 'select' => ['id', 'codigo', 'nombre'],
                 'error_message' => 'El codPrestador no existe en la tabla ips_cod_habilitacions.',
@@ -335,6 +372,7 @@ class JsonDataValidationConfig
             'usuarios.*.servicios.medicamentos.*.codDiagnosticoPrincipal' => [
                 'type' => 'exists',
                 'table' => 'cie10s',
+                'withCompanyId' => false,
                 'column' => 'codigo',
                 'select' => ['id', 'codigo', 'nombre'],
                 'error_message' => 'El codDiagnosticoPrincipal no existe en la tabla cie10s.',
@@ -342,6 +380,7 @@ class JsonDataValidationConfig
             'usuarios.*.servicios.medicamentos.*.codDiagnosticoRelacionado' => [
                 'type' => 'exists',
                 'table' => 'cie10s',
+                'withCompanyId' => false,
                 'column' => 'codigo',
                 'select' => ['id', 'codigo', 'nombre'],
                 'error_message' => 'El codDiagnosticoRelacionado no existe en la tabla cie10s.',
@@ -349,6 +388,7 @@ class JsonDataValidationConfig
             'usuarios.*.servicios.medicamentos.*.tipoMedicamento' => [
                 'type' => 'exists',
                 'table' => 'tipo_medicamento_pos_version2s',
+                'withCompanyId' => false,
                 'column' => 'codigo',
                 'select' => ['id', 'codigo', 'nombre'],
                 'error_message' => 'El tipoMedicamento no existe en la tabla tipo_medicamento_pos_version2s.',
@@ -376,6 +416,7 @@ class JsonDataValidationConfig
             'usuarios.*.servicios.medicamentos.*.tipoDocumentoIdentificacion' => [
                 'type' => 'exists',
                 'table' => 'tipo_id_pisis',
+                'withCompanyId' => false,
                 'column' => 'codigo',
                 'select' => ['id', 'codigo', 'nombre'],
                 'error_message' => 'El tipoDocumentoIdentificacion no existe en la tabla tipo_id_pisis.',
@@ -391,6 +432,7 @@ class JsonDataValidationConfig
             'usuarios.*.servicios.medicamentos.*.conceptoRecaudo' => [
                 'type' => 'exists',
                 'table' => 'concepto_recaudos',
+                'withCompanyId' => false,
                 'column' => 'codigo',
                 'select' => ['id', 'codigo', 'nombre'],
                 'error_message' => 'El conceptoRecaudo no existe en la tabla concepto_recaudos.',
@@ -410,6 +452,7 @@ class JsonDataValidationConfig
             'usuarios.*.servicios.otrosServicios.*.codPrestador' => [
                 'type' => 'exists',
                 'table' => 'ips_cod_habilitacions',
+                'withCompanyId' => false,
                 'column' => 'codigo',
                 'select' => ['id', 'codigo', 'nombre'],
                 'error_message' => 'El codPrestador no existe en la tabla ips_cod_habilitacions.',
@@ -421,6 +464,7 @@ class JsonDataValidationConfig
             'usuarios.*.servicios.otrosServicios.*.tipoOS' => [
                 'type' => 'exists',
                 'table' => 'tipo_otros_servicios',
+                'withCompanyId' => false,
                 'column' => 'codigo',
                 'select' => ['id', 'codigo', 'nombre'],
                 'error_message' => 'El tipoOS no existe en la tabla tipo_otros_servicios.',
@@ -428,6 +472,7 @@ class JsonDataValidationConfig
             'usuarios.*.servicios.otrosServicios.*.codTecnologiaSalud' => [
                 'type' => 'exists',
                 'table' => 'cups_rips',
+                'withCompanyId' => false,
                 'column' => 'codigo',
                 'select' => ['id', 'codigo', 'nombre'],
                 'error_message' => 'El codTecnologiaSalud no existe en la tabla cups_rips.',
@@ -439,6 +484,7 @@ class JsonDataValidationConfig
             'usuarios.*.servicios.otrosServicios.*.tipoDocumentoIdentificacion' => [
                 'type' => 'exists',
                 'table' => 'tipo_id_pisis',
+                'withCompanyId' => false,
                 'column' => 'codigo',
                 'select' => ['id', 'codigo', 'nombre'],
                 'error_message' => 'El tipoDocumentoIdentificacion no existe en la tabla tipo_id_pisis.',
@@ -454,6 +500,7 @@ class JsonDataValidationConfig
             'usuarios.*.servicios.otrosServicios.*.conceptoRecaudo' => [
                 'type' => 'exists',
                 'table' => 'concepto_recaudos',
+                'withCompanyId' => false,
                 'column' => 'codigo',
                 'select' => ['id', 'codigo', 'nombre'],
                 'error_message' => 'El conceptoRecaudo no existe en la tabla concepto_recaudos.',
@@ -473,6 +520,7 @@ class JsonDataValidationConfig
             'usuarios.*.servicios.urgencias.*.codPrestador' => [
                 'type' => 'exists',
                 'table' => 'ips_cod_habilitacions',
+                'withCompanyId' => false,
                 'column' => 'codigo',
                 'select' => ['id', 'codigo', 'nombre'],
                 'error_message' => 'El codPrestador no existe en la tabla ips_cod_habilitacions.',
@@ -484,6 +532,7 @@ class JsonDataValidationConfig
             'usuarios.*.servicios.urgencias.*.causaMotivoAtencion' => [
                 'type' => 'exists',
                 'table' => 'rips_causa_externa_version2s',
+                'withCompanyId' => false,
                 'column' => 'codigo',
                 'select' => ['id', 'codigo', 'nombre'],
                 'error_message' => 'El causaMotivoAtencion no existe en la tabla rips_causa_externa_version2s.',
@@ -491,6 +540,7 @@ class JsonDataValidationConfig
             'usuarios.*.servicios.urgencias.*.codDiagnosticoPrincipal' => [
                 'type' => 'exists',
                 'table' => 'cie10s',
+                'withCompanyId' => false,
                 'column' => 'codigo',
                 'select' => ['id', 'codigo', 'nombre'],
                 'error_message' => 'El codDiagnosticoPrincipal no existe en la tabla cie10s.',
@@ -498,6 +548,7 @@ class JsonDataValidationConfig
             'usuarios.*.servicios.urgencias.*.codDiagnosticoPrincipalE' => [
                 'type' => 'exists',
                 'table' => 'cie10s',
+                'withCompanyId' => false,
                 'column' => 'codigo',
                 'select' => ['id', 'codigo', 'nombre'],
                 'error_message' => 'El codDiagnosticoPrincipalE no existe en la tabla cie10s.',
@@ -505,6 +556,7 @@ class JsonDataValidationConfig
             'usuarios.*.servicios.urgencias.*.codDiagnosticoRelacionadoE1' => [
                 'type' => 'exists',
                 'table' => 'cie10s',
+                'withCompanyId' => false,
                 'column' => 'codigo',
                 'select' => ['id', 'codigo', 'nombre'],
                 'error_message' => 'El codDiagnosticoRelacionadoE1 no existe en la tabla cie10s.',
@@ -512,6 +564,7 @@ class JsonDataValidationConfig
             'usuarios.*.servicios.urgencias.*.codDiagnosticoRelacionadoE2' => [
                 'type' => 'exists',
                 'table' => 'cie10s',
+                'withCompanyId' => false,
                 'column' => 'codigo',
                 'select' => ['id', 'codigo', 'nombre'],
                 'error_message' => 'El codDiagnosticoRelacionadoE2 no existe en la tabla cie10s.',
@@ -519,6 +572,7 @@ class JsonDataValidationConfig
             'usuarios.*.servicios.urgencias.*.codDiagnosticoRelacionadoE3' => [
                 'type' => 'exists',
                 'table' => 'cie10s',
+                'withCompanyId' => false,
                 'column' => 'codigo',
                 'select' => ['id', 'codigo', 'nombre'],
                 'error_message' => 'El codDiagnosticoRelacionadoE3 no existe en la tabla cie10s.',
@@ -526,6 +580,7 @@ class JsonDataValidationConfig
             'usuarios.*.servicios.urgencias.*.codDiagnosticoCausaMuerte' => [
                 'type' => 'exists',
                 'table' => 'cie10s',
+                'withCompanyId' => false,
                 'column' => 'codigo',
                 'select' => ['id', 'codigo', 'nombre'],
                 'error_message' => 'El codDiagnosticoCausaMuerte no existe en la tabla cie10s.',
@@ -544,6 +599,7 @@ class JsonDataValidationConfig
             'usuarios.*.servicios.hospitalizacion.*.codPrestador' => [
                 'type' => 'exists',
                 'table' => 'ips_cod_habilitacions',
+                'withCompanyId' => false,
                 'column' => 'codigo',
                 'select' => ['id', 'codigo', 'nombre'],
                 'error_message' => 'El codPrestador no existe en la tabla ips_cod_habilitacions.',
@@ -551,6 +607,7 @@ class JsonDataValidationConfig
             'usuarios.*.servicios.hospitalizacion.*.viaIngresoServicioSalud' => [
                 'type' => 'exists',
                 'table' => 'via_ingreso_usuarios',
+                'withCompanyId' => false,
                 'column' => 'codigo',
                 'select' => ['id', 'codigo', 'nombre'],
                 'error_message' => 'El viaIngresoServicioSalud no existe en la tabla via_ingreso_usuarios.',
@@ -562,6 +619,7 @@ class JsonDataValidationConfig
             'usuarios.*.servicios.hospitalizacion.*.causaMotivoAtencion' => [
                 'type' => 'exists',
                 'table' => 'rips_causa_externa_version2s',
+                'withCompanyId' => false,
                 'column' => 'codigo',
                 'select' => ['id', 'codigo', 'nombre'],
                 'error_message' => 'El causaMotivoAtencion no existe en la tabla rips_causa_externa_version2s.',
@@ -570,6 +628,7 @@ class JsonDataValidationConfig
             'usuarios.*.servicios.hospitalizacion.*.codDiagnosticoPrincipal' => [
                 'type' => 'exists',
                 'table' => 'cie10s',
+                'withCompanyId' => false,
                 'column' => 'codigo',
                 'select' => ['id', 'codigo', 'nombre'],
                 'error_message' => 'El codDiagnosticoPrincipal no existe en la tabla cie10s.',
@@ -578,6 +637,7 @@ class JsonDataValidationConfig
             'usuarios.*.servicios.hospitalizacion.*.codDiagnosticoPrincipalE' => [
                 'type' => 'exists',
                 'table' => 'cie10s',
+                'withCompanyId' => false,
                 'column' => 'codigo',
                 'select' => ['id', 'codigo', 'nombre'],
                 'error_message' => 'El codDiagnosticoPrincipalE no existe en la tabla cie10s.',
@@ -585,6 +645,7 @@ class JsonDataValidationConfig
             'usuarios.*.servicios.hospitalizacion.*.codDiagnosticoRelacionadoE1' => [
                 'type' => 'exists',
                 'table' => 'cie10s',
+                'withCompanyId' => false,
                 'column' => 'codigo',
                 'select' => ['id', 'codigo', 'nombre'],
                 'error_message' => 'El codDiagnosticoRelacionadoE1 no existe en la tabla cie10s.',
@@ -592,6 +653,7 @@ class JsonDataValidationConfig
             'usuarios.*.servicios.hospitalizacion.*.codDiagnosticoRelacionadoE2' => [
                 'type' => 'exists',
                 'table' => 'cie10s',
+                'withCompanyId' => false,
                 'column' => 'codigo',
                 'select' => ['id', 'codigo', 'nombre'],
                 'error_message' => 'El codDiagnosticoRelacionadoE2 no existe en la tabla cie10s.',
@@ -599,6 +661,7 @@ class JsonDataValidationConfig
             'usuarios.*.servicios.hospitalizacion.*.codDiagnosticoRelacionadoE3' => [
                 'type' => 'exists',
                 'table' => 'cie10s',
+                'withCompanyId' => false,
                 'column' => 'codigo',
                 'select' => ['id', 'codigo', 'nombre'],
                 'error_message' => 'El codDiagnosticoRelacionadoE3 no existe en la tabla cie10s.',
@@ -607,6 +670,7 @@ class JsonDataValidationConfig
             'usuarios.*.servicios.hospitalizacion.*.codComplicacion' => [
                 'type' => 'exists',
                 'table' => 'cie10s',
+                'withCompanyId' => false,
                 'column' => 'codigo',
                 'select' => ['id', 'codigo', 'nombre'],
                 'error_message' => 'El codComplicacion no existe en la tabla cie10s.',
@@ -614,6 +678,7 @@ class JsonDataValidationConfig
             'usuarios.*.servicios.hospitalizacion.*.condicionDestinoUsuarioEgreso' => [
                 'type' => 'exists',
                 'table' => 'condiciony_destino_usuario_egresos',
+                'withCompanyId' => false,
                 'column' => 'codigo',
                 'select' => ['id', 'codigo', 'nombre'],
                 'error_message' => 'El condicionDestinoUsuarioEgreso no existe en la tabla condiciony_destino_usuario_egresos.',
@@ -621,6 +686,7 @@ class JsonDataValidationConfig
             'usuarios.*.servicios.hospitalizacion.*.codDiagnosticoCausaMuerte' => [
                 'type' => 'exists',
                 'table' => 'cie10s',
+                'withCompanyId' => false,
                 'column' => 'codigo',
                 'select' => ['id', 'codigo', 'nombre'],
                 'error_message' => 'El codDiagnosticoCausaMuerte no existe en la tabla cie10s.',
@@ -640,6 +706,7 @@ class JsonDataValidationConfig
             'usuarios.*.servicios.recienNacidos.*.codPrestador' => [
                 'type' => 'exists',
                 'table' => 'ips_cod_habilitacions',
+                'withCompanyId' => false,
                 'column' => 'codigo',
                 'select' => ['id', 'codigo', 'nombre'],
                 'error_message' => 'El codPrestador no existe en la tabla ips_cod_habilitacions.',
@@ -648,6 +715,7 @@ class JsonDataValidationConfig
             'usuarios.*.servicios.recienNacidos.*.tipoDocumentoIdentificacion' => [
                 'type' => 'exists',
                 'table' => 'tipo_id_pisis',
+                'withCompanyId' => false,
                 'column' => 'codigo',
                 'select' => ['id', 'codigo', 'nombre'],
                 'error_message' => 'El tipoDocumentoIdentificacion no existe en la tabla tipo_id_pisis.',
@@ -670,6 +738,7 @@ class JsonDataValidationConfig
             'usuarios.*.servicios.recienNacidos.*.codSexoBiologico' => [
                 'type' => 'exists',
                 'table' => 'sexos',
+                'withCompanyId' => false,
                 'column' => 'codigo',
                 'select' => ['id', 'codigo', 'nombre'],
                 'error_message' => 'El codSexoBiologico no existe en la tabla sexos.',
@@ -683,6 +752,7 @@ class JsonDataValidationConfig
             'usuarios.*.servicios.recienNacidos.*.codDiagnosticoPrincipal' => [
                 'type' => 'exists',
                 'table' => 'cie10s',
+                'withCompanyId' => false,
                 'column' => 'codigo',
                 'select' => ['id', 'codigo', 'nombre'],
                 'error_message' => 'El codDiagnosticoPrincipal no existe en la tabla cie10s.',
@@ -691,6 +761,7 @@ class JsonDataValidationConfig
             'usuarios.*.servicios.recienNacidos.*.condicionDestinoUsuarioEgreso' => [
                 'type' => 'exists',
                 'table' => 'condiciony_destino_usuario_egresos',
+                'withCompanyId' => false,
                 'column' => 'codigo',
                 'select' => ['id', 'codigo', 'nombre'],
                 'error_message' => 'El condicionDestinoUsuarioEgreso no existe en la tabla condiciony_destino_usuario_egresos.',
@@ -699,6 +770,7 @@ class JsonDataValidationConfig
             'usuarios.*.servicios.recienNacidos.*.codDiagnosticoCausaMuerte' => [
                 'type' => 'exists',
                 'table' => 'cie10s',
+                'withCompanyId' => false,
                 'column' => 'codigo',
                 'select' => ['id', 'codigo', 'nombre'],
                 'error_message' => 'El codDiagnosticoCausaMuerte no existe en la tabla cie10s.',

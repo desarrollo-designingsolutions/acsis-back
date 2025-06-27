@@ -26,9 +26,26 @@ function validateDataFilesXml($archivo, $data)
     $numFac = $attachedDocument['cbc:ID'];
     $arrayExito[] = RVC004($data['jsonContents'], $numFac, $errorMessages);
 
+
+
+    //Informacion de la factura
+    $invoice = [
+        "invoice_date" => $attachedDocument['cbc:IssueDate']
+    ];
+
+    $entity = [
+        "nit" => $attachedDocument['cac:ReceiverParty']['cac:PartyTaxScheme']['cbc:CompanyID'],
+        "corporate_name" => $attachedDocument['cac:ReceiverParty']['cac:PartyTaxScheme']['cbc:RegistrationName'],
+    ];
+
+
     return [
         'errorMessages' => $errorMessages,
         'totalErrorMessages' => count($errorMessages),
+        'info' => [
+            'invoice' => $invoice,
+            'entity' => $entity,
+        ],
     ];
 }
 

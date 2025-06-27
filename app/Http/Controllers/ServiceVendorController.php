@@ -151,11 +151,11 @@ class ServiceVendorController extends Controller
             $serviceVendor = $this->serviceVendorRepository->find($id);
             if ($serviceVendor) {
                 // Verificar si hay registros relacionados
-                // if ($serviceVendor->users()->exists()) {
-                //     throw new \Exception(json_encode([
-                //         'message' => 'No se puede eliminar la compañía, porque tiene relación de datos en otros módulos',
-                //     ]));
-                // }
+                if ($serviceVendor->invoices()->exists()) {
+                    throw new \Exception(json_encode([
+                        'message' => 'No se puede eliminar el registro, porque tiene relación de datos en otros módulos',
+                    ]));
+                }
 
                 $serviceVendor->delete();
                 $msg = 'Registro eliminado correctamente';
@@ -179,7 +179,7 @@ class ServiceVendorController extends Controller
 
             return [
                 'code' => 200,
-                'message' => 'Proveedor '.$msg.' con éxito',
+                'message' => 'Proveedor ' . $msg . ' con éxito',
             ];
         });
     }

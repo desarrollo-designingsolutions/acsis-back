@@ -15,6 +15,7 @@ use App\Http\Requests\Invoice\InvoiceUploadJsonRequest;
 use App\Http\Resources\Invoice\InvoiceFormResource;
 use App\Http\Resources\Invoice\InvoiceListResource;
 use App\Http\Resources\InvoiceSoat\InvoiceSoatFormResource;
+use App\Models\Entity;
 use App\Models\Invoice;
 use App\Models\Municipio;
 use App\Models\Pais;
@@ -583,13 +584,21 @@ class InvoiceController extends Controller
 
                 // Determinar el estado y la ruta del archivo XML
                 if ($infoValidation['totalErrorMessages'] == 0) {
-                    $finalName = "{$invoice->serviceVendor->nit}_{$invoice->invoice_number}_FILEXML.xml";
+                    $finalName = "{$invoice->id}_FILEXML.xml";
                     $finalPath = "companies/company_{$company_id}/invoices/{$invoice->type->value}/invoice_{$invoice->id}/{$invoice->invoice_number}/xml";
 
                     $path = $file->storeAs($finalPath, $finalName, Constants::DISK_FILES);
                     $invoice->path_xml = $path;
                     $invoice->status_xml = StatusXmlInvoiceEnum::INVOICE_STATUS_XML_003;
                     $invoice->validationXml = null;
+
+                    if (empty($invoice->entity_id)) {
+                        $entity = Entity::where("nit", $infoValidation['info']['entity']['nit'])->first();
+                        $invoice->entity_id = $entity ? $entity->id : null;
+                    }
+                    if (empty($invoice->invoice_date)) {
+                        $invoice->invoice_date = $infoValidation['info']['invoice']['invoice_date'];
+                    }
                 } else {
                     $invoice->status_xml = StatusXmlInvoiceEnum::INVOICE_STATUS_XML_002;
                     $invoice->validationXml = json_encode($infoValidation['errorMessages']);
@@ -764,8 +773,7 @@ class InvoiceController extends Controller
 
             // Paso 2: Validar los datos del JSON contra la base de datos
             $jsonData = json_decode(file_get_contents($file->getRealPath()), true);
-            $dataResponse = $this->jsonDataValidation->validate($jsonData);
-
+            $dataResponse = $this->jsonDataValidation->validate($jsonData, $company_id);
 
             $dataResponse["errors"] = [...$dataResponse["errors"], ...$structureResponse["errors"]];
 
@@ -1018,8 +1026,8 @@ class InvoiceController extends Controller
                     'type' => TypeServiceEnum::SERVICE_TYPE_002,
                     'serviceable_type' => TypeServiceEnum::SERVICE_TYPE_002->model(),
                     'serviceable_id' => $procedure->id,
-                    'codigo_servicio' => $procedure->codProcedimiento->codigo,
-                    'nombre_servicio' => $procedure->codProcedimiento->nombre,
+                    'codigo_servicio' => $procedure->codProcedimiento?->codigo,
+                    'nombre_servicio' => $procedure->codProcedimiento?->nombre,
                     'quantity' => 1,
                     'unit_value' => $value['vrServicio'],
                     'total_value' => $value['vrServicio'],
