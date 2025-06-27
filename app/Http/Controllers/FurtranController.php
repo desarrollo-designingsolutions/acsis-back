@@ -55,6 +55,7 @@ class FurtranController extends Controller
             $invoice = [
                 'id' => $invoice->id,
                 'insurance_statuse_code' => $invoice->typeable?->insurance_statuse?->code,
+                'cod_habilitacion' => $invoice?->serviceVendor?->ipsable?->codigo,
             ];
 
             $rgResponseEnum = $this->queryController->selectRgResponseEnum(request());
@@ -120,6 +121,7 @@ class FurtranController extends Controller
             $invoice = [
                 'id' => $invoice->id,
                 'insurance_statuse_code' => $invoice->typeable?->insurance_statuse?->code,
+                'cod_habilitacion' => $invoice?->serviceVendor?->ipsable?->codigo,
             ];
 
             $rgResponseEnum = $this->queryController->selectRgResponseEnum(request());

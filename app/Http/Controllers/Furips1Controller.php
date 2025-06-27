@@ -61,6 +61,7 @@ class Furips1Controller extends Controller
                 'id' => $invoice->id,
                 'invoice_date' => $invoice->invoice_date,
                 'insurance_statuse_code' => $invoice->typeable?->insurance_statuse?->code,
+                'cod_habilitacion' => $invoice?->serviceVendor?->ipsable?->codigo,
             ];
 
             $rgoResponseEnum = $this->queryController->selectRgoResponseEnum(request());
@@ -145,6 +146,7 @@ class Furips1Controller extends Controller
                 'id' => $invoice->id,
                 'invoice_date' => $invoice->invoice_date,
                 'insurance_statuse_code' => $invoice->typeable?->insurance_statuse?->code,
+                'cod_habilitacion' => $invoice?->serviceVendor?->ipsable?->codigo,
             ];
 
             $rgoResponseEnum = $this->queryController->selectRgoResponseEnum(request());
@@ -529,14 +531,13 @@ class Furips1Controller extends Controller
             'enabledServicesConfirmation' => $furips1->enabledServicesConfirmation?->value(),
 
         ];
-
         // Generate comma-separated text content
         $textContent = implode(',', array_map(function ($value) {
             return $value ?? '';
         }, $data)) . "\n";
 
         // Define file name
-        $fileName = 'furips1_' . $id . '.txt';
+        $fileName = 'FURIPS' . $id . '.txt';
 
         // Return response with text file for download
         return response($textContent, 200, [
