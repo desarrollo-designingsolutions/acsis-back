@@ -23,35 +23,35 @@ class PatientRepository extends BaseRepository
 
         return $this->cacheService->remember($cacheKey, function () use ($request) {
             $query = QueryBuilder::for($this->model->query())
-        ->allowedFilters([
-            AllowedFilter::callback('inputGeneral', function ($query, $value) {
-                $query->where(function ($subQuery) use ($value) {
-                    $subQuery->orWhere('document', 'like', "%$value%"); 
-                    $subQuery->orWhereRaw("CONCAT_WS(' ', first_name, second_name, first_surname, second_surname) LIKE ?", ["%{$value}%"]);
+                ->allowedFilters([
+                    AllowedFilter::callback('inputGeneral', function ($query, $value) {
+                        $query->where(function ($subQuery) use ($value) {
+                            $subQuery->orWhere('document', 'like', "%$value%");
+                            $subQuery->orWhereRaw("CONCAT_WS(' ', first_name, second_name, first_surname, second_surname) LIKE ?", ["%{$value}%"]);
+                        });
+                    }),
+                ])
+                ->allowedSorts([
+                    'document',
+                    AllowedSort::custom('full_name', new DynamicConcatSort("first_name, ' ', second_name, ' ', first_surname, ' ', second_surname")),
+                ])
+                ->where(function ($query) use ($request) {
+                    if (isset($request['searchQueryInfinite']) && !empty($request['searchQueryInfinite'])) {
+                        $searchValue = $request['searchQueryInfinite'];
+                        $query->orWhere('document', 'like', "%$searchValue%");
+                        $query->orWhereRaw("CONCAT_WS(' ', first_name, second_name, first_surname, second_surname) LIKE ?", ["%{$searchValue}%"]);
+                    }
+
+                    if (!empty($request['company_id'])) {
+                        $query->where('company_id', $request['company_id']);
+                    }
                 });
-            }),
-        ])
-        ->allowedSorts([
-            'document',
-            AllowedSort::custom('full_name', new DynamicConcatSort("first_name, ' ', second_name, ' ', first_surname, ' ', second_surname")),
-        ])
-        ->where(function ($query) use ($request) {
-            if (isset($request['searchQueryInfinite']) && !empty($request['searchQueryInfinite'])) {
-                $searchValue = $request['searchQueryInfinite'];
-                $query->orWhere('document', 'like', "%$searchValue%"); 
-                $subQuery->orWhereRaw("CONCAT_WS(' ', first_name, second_name, first_surname, second_surname) LIKE ?", ["%{$value}%"]);
-            }
 
-            if (!empty($request['company_id'])) {
-                $query->where('company_id', $request['company_id']);
+            if (empty($request['typeData'])) {
+                $query = $query->paginate(request()->perPage ?? Constants::ITEMS_PER_PAGE);
+            } else {
+                $query = $query->get();
             }
-        });
-
-    if (empty($request['typeData'])) {
-        $query = $query->paginate($request->perPage ?? Constants::ITEMS_PER_PAGE);
-    } else {
-        $query = $query->get();
-    }
 
             return $query;
         }, Constants::REDIS_TTL);
@@ -93,11 +93,11 @@ class PatientRepository extends BaseRepository
         $query->where(function ($query) use ($request) {
             if (! empty($request['string'])) {
                 $value = strval($request['string']);
-                $query->orWhere('document', 'like', '%'.$value.'%');
-                $query->orWhere('first_name', 'like', '%'.$value.'%');
-                $query->orWhere('second_name', 'like', '%'.$value.'%');
-                $query->orWhere('first_surname', 'like', '%'.$value.'%');
-                $query->orWhere('second_surname', 'like', '%'.$value.'%');
+                $query->orWhere('document', 'like', '%' . $value . '%');
+                $query->orWhere('first_name', 'like', '%' . $value . '%');
+                $query->orWhere('second_name', 'like', '%' . $value . '%');
+                $query->orWhere('first_surname', 'like', '%' . $value . '%');
+                $query->orWhere('second_surname', 'like', '%' . $value . '%');
             }
         });
         // Aplica el límite si está definido
@@ -108,7 +108,7 @@ class PatientRepository extends BaseRepository
         $data = $query->get()->map(function ($value) use ($with, $select, $fieldValue, $fieldTitle) {
             $data = [
                 'value' => $value->$fieldValue,
-                'title' => $value->document.' - '.$value->$fieldTitle,
+                'title' => $value->document . ' - ' . $value->$fieldTitle,
                 'id' => $value->id,
                 'type_document' => new TypeDocumentSelectResource($value->typeDocument),
                 'document' => $value->document,
