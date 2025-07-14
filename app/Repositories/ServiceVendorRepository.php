@@ -58,6 +58,7 @@ class ServiceVendorRepository extends BaseRepository
 
                 if (isset($request['searchQueryInfinite']) && ! empty($request['searchQueryInfinite'])) {
                     $query->orWhere('name', 'like', '%'.$request['searchQueryInfinite'].'%');
+                    $query->orWhere('nit', 'like', '%'.$request['searchQueryInfinite'].'%');
                 }
 
                 if (! empty($request['company_id'])) {

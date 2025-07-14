@@ -54,6 +54,7 @@ class Furips2Controller extends Controller
             $invoice = [
                 'id' => $invoice->id,
                 'furips1_consecutiveClaimNumber' => $invoice->furips1?->consecutiveClaimNumber,
+                'cod_habilitacion' => $invoice?->serviceVendor?->ipsable?->codigo,
             ];
 
             $decreto780de2026 = $this->queryController->selectInfiniteDecreto780de2026(request());
@@ -126,6 +127,7 @@ class Furips2Controller extends Controller
             $invoice = [
                 'id' => $invoice->id,
                 'furips1_consecutiveClaimNumber' => $invoice->furips1?->consecutiveClaimNumber,
+                'cod_habilitacion' => $invoice?->serviceVendor?->ipsable?->codigo,
             ];
 
             $decreto780de2026 = $this->queryController->selectInfiniteDecreto780de2026(request());
