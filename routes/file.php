@@ -28,3 +28,7 @@ Route::post('/file/massUpload', [FileController::class, 'massUpload']);
 Route::get('/file/paginate', [FileController::class, 'paginate']);
 
 Route::get('/file/getUrlS3', [FileController::class, 'getUrlS3']);
+
+Route::get('/file/downloadProgress', [FileController::class, 'downloadProgress']);
+
+Route::post('/file/uploadMasive', [FileController::class, 'uploadMasive']);

@@ -90,7 +90,7 @@ class FileController extends Controller
                 $modelId = $request->input('fileable_id');
                 $path = "companies/company_{$validatedData['company_id']}/{$modelType}/{$modelId}/files";
 
-                $validatedData['fileable_type'] = 'App\\Models\\'.$validatedData['fileable_type'];
+                $validatedData['fileable_type'] = 'App\\Models\\' . $validatedData['fileable_type'];
 
                 // Guardar el archivo en el almacenamiento de Laravel
                 $path = $file->store($path, Constants::DISK_FILES);
@@ -126,7 +126,7 @@ class FileController extends Controller
                 $modelId = $request->input('fileable_id');
                 $path = "companies/company_{$validatedData['company_id']}/{$modelType}/{$modelId}/files";
 
-                $validatedData['fileable_type'] = 'App\\Models\\'.$validatedData['fileable_type'];
+                $validatedData['fileable_type'] = 'App\\Models\\' . $validatedData['fileable_type'];
 
                 // Guardar el archivo en el almacenamiento de Laravel
                 $path = $file->store($path, Constants::DISK_FILES);
@@ -184,10 +184,10 @@ class FileController extends Controller
             $sanitizedFileName = preg_replace('/[\/\\\\?%*:|"<>]/', '_', $file);
 
             // Construye la ruta completa del archivo
-            $filePath = storage_path('app/public/'.$file);
+            $filePath = storage_path('app/public/' . $file);
 
             // Verifica si el archivo existe en el almacenamiento
-            if (! Storage::exists('public/'.$file)) {
+            if (! Storage::exists('public/' . $file)) {
                 return response()->json([
                     'code' => 500,
                     'message' => 'El archivo no existe en el almacenamiento',
@@ -208,7 +208,7 @@ class FileController extends Controller
             // Maneja cualquier excepción inesperada
             return response()->json([
                 'code' => 500,
-                'message' => 'Ocurrió un error inesperado: '.$e->getMessage(),
+                'message' => 'Ocurrió un error inesperado: ' . $e->getMessage(),
             ], 500);
         }
     }
@@ -216,10 +216,13 @@ class FileController extends Controller
     public function massUpload(Request $request)
     {
         try {
-
-            if (! $request->hasFile('files')) {
-                return response()->json(['code' => 400, 'message' => 'No se encontraron archivos'], 400);
-            }
+            $request->validate([
+                'files.*' => 'required|file|max:30720',
+                'user_id' => 'required',
+                'company_id' => 'required',
+                'fileable_type' => 'required',
+                'fileable_id' => 'required',
+            ]);
 
             $user_id = $request->input('user_id');
             $company_id = $request->input('company_id');
@@ -233,11 +236,9 @@ class FileController extends Controller
 
             $files = $request->file('files');
             $files = is_array($files) ? $files : [$files];
-            $fileCount = count($files);
-            $uploadId = uniqid();
 
             // Resolver el modelo completo
-            $modelClass = 'App\\Models\\'.$modelType;
+            $modelClass = 'App\\Models\\' . $modelType;
             if (! class_exists($modelClass)) {
                 return response()->json(['code' => 400, 'message' => 'Modelo no válido'], 400);
             }
@@ -246,7 +247,10 @@ class FileController extends Controller
                 return response()->json(['code' => 404, 'message' => 'Instancia no encontrada'], 404);
             }
 
-            foreach ($files as $index => $file) {
+            $uploadedFiles = [];
+
+            foreach ($request->file('files') as $index => $file) {
+
                 $tempPath = $file->store('temp', Constants::DISK_FILES);
                 $originalName = $file->getClientOriginalName();
                 $extension = $file->getClientOriginalExtension();
@@ -267,30 +271,43 @@ class FileController extends Controller
                     'company_id' => $company_id,
                     'fileable_type' => $modelClass,
                     'fileable_id' => $modelId,
-                    'channel' => 'filing_invoice.'.$modelId,
+                    'channel' => 'filing_invoice.' . $modelId,
                 ];
 
-                ProcessMassUpload::dispatch(
-                    $tempPath,
-                    $buildFile['finalName'],
-                    $uploadId,
-                    $index + 1,
-                    $fileCount,
-                    $buildFile['basePath'],
-                    $data
-                );
+                // Usar la ruta relativa del disco, no la absoluta
+                $disk = Constants::DISK_FILES;
+                $finalPath = $buildFile['basePath'];
+                $fileName = $buildFile['finalName'];
+
+                // Crear el directorio destino si no existe
+                $directory = dirname($finalPath);
+                if (! Storage::disk($disk)->exists($directory)) {
+                    Storage::disk($disk)->makeDirectory($directory);
+                }
+
+                // Mover el archivo usando rutas relativas
+                $moved = Storage::disk($disk)->move($tempPath, $finalPath);
+
+                if (! $moved) {
+                    throw new \Exception('No se pudo mover el archivo');
+                }
+
+                $this->fileRepository->store([
+                    'user_id' => $data['user_id'],
+                    'company_id' => $data['company_id'],
+                    'fileable_type' => $data['fileable_type'],
+                    'fileable_id' => $data['fileable_id'],
+                    'pathname' => $finalPath,
+                    'filename' => $fileName,
+                ]);
             }
 
-            $this->dispatchEventFinal($modelType, $modelId);
-
             return response()->json([
-                'code' => 200,
-                'message' => "Se enviaron {$fileCount} archivos a la cola",
-                'upload_id' => $uploadId,
-                'count' => $fileCount,
-            ], 202);
+                'success' => true,
+                'files' => $uploadedFiles
+            ]);
         } catch (\Exception $e) {
-            return response()->json(['code' => 500, 'message' => 'Error: '.$e->getMessage()], 500);
+            return response()->json(['code' => 500, 'message' => 'Error: ' . $e->getMessage()], 500);
         }
     }
 
@@ -381,16 +398,16 @@ class FileController extends Controller
                     ];
                 }
             } catch (\Exception $e) {
-                \Log::error('S3 Existence Check Error: '.$e->getMessage());
+                \Log::error('S3 Existence Check Error: ' . $e->getMessage());
 
                 return [
                     'code' => 500,
-                    'error' => 'Error checking file existence: '.$e->getMessage(),
+                    'error' => 'Error checking file existence: ' . $e->getMessage(),
                 ];
             }
 
             // Generate a cache key based on the file path
-            $cacheKey = 's3_presigned_url_'.md5($fileKey);
+            $cacheKey = 's3_presigned_url_' . md5($fileKey);
 
             // Check if a valid presigned URL exists in Redis
             $cachedUrlData = Redis::get($cacheKey);
@@ -433,5 +450,29 @@ class FileController extends Controller
                 'fileUrlS3' => $fileUrlS3,
             ];
         });
+    }
+
+    public function uploadMasive(Request $request)
+    {
+        $request->validate([
+            'files.*' => 'required|file|max:1024',
+        ]);
+
+        $uploadedFiles = [];
+
+        foreach ($request->file('files') as $file) {
+            $path = $file->store('uploads', 'public');
+            $uploadedFiles[] = [
+                'name' => $file->getClientOriginalName(),
+                'path' => $path,
+                'size' => $file->getSize(),
+                'mime' => $file->getMimeType()
+            ];
+        }
+
+        return response()->json([
+            'success' => true,
+            'files' => $uploadedFiles
+        ]);
     }
 }
