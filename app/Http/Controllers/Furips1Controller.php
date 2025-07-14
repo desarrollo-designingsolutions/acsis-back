@@ -76,6 +76,7 @@ class Furips1Controller extends Controller
             $pais = $this->queryController->selectInfinitePais(request());
             $municipio = $this->queryController->selectInfiniteMunicipio(request());
             $departamento = $this->queryController->selectInfiniteDepartamento(request());
+            $cie10s = $this->queryController->selectInfiniteCie10(request());
             $cupsRips = $this->queryController->selectInfiniteCupsRips(request());
 
             $newRequest = new Request(['codigo_in' => Constants::CODS_SELECT_FORM_FURIPS1_OWNERDOCUMENTTYPE]);
@@ -110,6 +111,7 @@ class Furips1Controller extends Controller
                 ...$pais,
                 ...$municipio,
                 ...$departamento,
+                ...$cie10s,
                 ...$cupsRips,
             ];
         });
