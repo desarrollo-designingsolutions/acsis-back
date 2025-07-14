@@ -6,6 +6,7 @@ use App\Helpers\Constants;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Validation\Rule;
 
 class EntityStoreRequest extends FormRequest
 {
@@ -24,10 +25,17 @@ class EntityStoreRequest extends FormRequest
             'type_entity_id' => 'required',
         ];
 
-        if (! empty($this->email) || $this->email != 'null' || $this->email != null) {
-            $rules['email'] = 'required|unique:entities,email,'.$this->id.',id';
+        // Validar email solo si no está vacío o no es null
+        if (!empty($this->email) && $this->email !== 'null' && $this->email !== null) {
+            $rules['email'] = [
+                'required',
+                'email', // Valida que sea un correo válido
+                Rule::unique('entities', 'email')->where(function ($query) {
+                    return $query->where('company_id', $this->company_id)
+                        ->where('id', '!=', $this->id); // Excluye el ID actual en caso de actualización
+                }),
+            ];
         }
-
         return $rules;
     }
 
