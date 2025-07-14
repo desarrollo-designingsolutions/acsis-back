@@ -143,12 +143,24 @@ class Furips1Controller extends Controller
             $furips1 = $this->furips1Repository->find($id);
             $form = new Furips1FormResource($furips1);
 
-            $invoice = $this->invoiceRepository->find($furips1->invoice_id, with: ['typeable:id,insurance_statuse_id', 'typeable.insurance_statuse:id,code'], select: ['id', 'type', 'typeable_type', 'typeable_id', 'invoice_date']);
+            $invoice = $this->invoiceRepository->find($furips1->invoice_id, with: [
+                'typeable:id,insurance_statuse_id',
+                'typeable.insurance_statuse:id,code',
+                'serviceVendor:id,ipsable_type,ipsable_id',
+                'serviceVendor.ipsable:id,codigo',
+            ], select: [
+                'id',
+                'type',
+                'typeable_type',
+                'typeable_id',
+                'invoice_date',
+                'service_vendor_id',
+            ]);
             $invoice = [
                 'id' => $invoice->id,
                 'invoice_date' => $invoice->invoice_date,
                 'insurance_statuse_code' => $invoice->typeable?->insurance_statuse?->code,
-                'cod_habilitacion' => $invoice?->serviceVendor?->ipsable?->codigo,
+                'serviceVendor_ipsable_codigo' => $invoice?->serviceVendor?->ipsable?->codigo,
             ];
 
             $rgoResponseEnum = $this->queryController->selectRgoResponseEnum(request());
@@ -415,19 +427,6 @@ class Furips1Controller extends Controller
         $services = Service::where('invoice_id', $furips1->invoice?->id)
             ->whereIn('type', $serviceTypes)
             ->first();
-
-        $serviceTypes = [
-            TypeServiceEnum::SERVICE_TYPE_002->value,
-        ];
-
-        $procedure = Service::where('invoice_id', $furips1->invoice?->id)
-            ->whereIn('type', $serviceTypes)
-            ->first();
-
-        // return $procedure->serviceable->codProcedimiento->codigo;
-
-        $newRequest = new Request(['codigo_in' => Constants::CODS_TXT_FORM_FURIPS1_UCI]);
-        $cupsRips_arrayInfo = $this->queryController->selectInfiniteCupsRips($newRequest);
 
         $data = [
             'previousFilingNumber' => $furips1->previousFilingNumber,
