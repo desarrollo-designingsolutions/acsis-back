@@ -117,11 +117,22 @@ class FurtranController extends Controller
             $furtran = $this->furtranRepository->find($id);
             $form = new FurtranFormResource($furtran);
 
-            $invoice = $this->invoiceRepository->find($furtran->invoice_id, with: ['typeable:id,insurance_statuse_id', 'typeable.insurance_statuse:id,code'], select: ['id', 'type', 'typeable_type', 'typeable_id']);
+            $invoice = $this->invoiceRepository->find($furtran->invoice_id, with: [
+                'typeable:id,insurance_statuse_id',
+                'typeable.insurance_statuse:id,code',
+                'serviceVendor:id,ipsable_type,ipsable_id',
+                'serviceVendor.ipsable:id,codigo',
+            ], select: [
+                'id',
+                'type',
+                'typeable_type',
+                'typeable_id',
+                'service_vendor_id',
+            ]);
             $invoice = [
                 'id' => $invoice->id,
                 'insurance_statuse_code' => $invoice->typeable?->insurance_statuse?->code,
-                'cod_habilitacion' => $invoice?->serviceVendor?->ipsable?->codigo,
+                'serviceVendor_ipsable_codigo' => $invoice?->serviceVendor?->ipsable?->codigo,
             ];
 
             $rgResponseEnum = $this->queryController->selectRgResponseEnum(request());
