@@ -12,9 +12,27 @@ class Patient extends Model
 {
     use Cacheable, HasFactory, HasUuids, SoftDeletes;
 
+    protected $fillable = [
+        'tipo_id_pisi_id',
+        'document',
+        'rips_tipo_usuario_version2_id',
+        'birth_date',
+        'sexo_id',
+        'pais_residency_id',
+        'municipio_residency_id',
+        'zona_version2_id',
+        'incapacity',
+        'pais_origin_id',
+        'first_name',
+        'second_name',
+        'first_surname',
+        'second_surname',
+        'company_id',
+    ];
+
     public function getFullNameAttribute()
     {
-        return $this->first_name.' '.$this->second_name.' '.$this->first_surname.' '.$this->second_surname;
+        return $this->first_name . ' ' . $this->second_name . ' ' . $this->first_surname . ' ' . $this->second_surname;
     }
 
     public function company()

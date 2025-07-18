@@ -6,6 +6,7 @@ use App\Helpers\Constants;
 use App\Http\Resources\TypeDocument\TypeDocumentSelectResource;
 use App\Models\Patient;
 use App\QueryBuilder\Sort\DynamicConcatSort;
+use Illuminate\Support\Facades\Redis;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\AllowedSort;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -133,5 +134,21 @@ class PatientRepository extends BaseRepository
         });
 
         return $data;
+    }
+    
+    public function getValidationsErrorMessages($user_id)
+    {
+        // Recuperar y mostrar los errores almacenados en Redis
+        $errorListKey = "paginate:patients_import_errors_{$user_id}";
+        $errors = Redis::lrange($errorListKey, 0, -1); // Obtener todos los elementos de la lista
+        $errorsFormatted = [];
+
+        if (! empty($errors)) {
+            foreach ($errors as $index => $errorJson) {
+                $errorsFormatted[] = json_decode($errorJson, true); // Decodificar el JSON
+            }
+        }
+
+        return $errorsFormatted;
     }
 }
