@@ -47,12 +47,14 @@ class DashboardController extends Controller
     public function getInvoiceTrend(Request $request)
     {
         $year = $request->input('year', date('Y')); // Por defecto, el año actual
+        $company_id = $request->input('company_id');
 
         $trends = Invoice::selectRaw("DATE_FORMAT(invoice_date, '%Y-%m') as month")
             ->selectRaw('SUM(total) as total_amount')
             ->selectRaw('COUNT(*) as invoice_count')
             ->whereNotNull('invoice_date')
             ->whereYear('invoice_date', $year) // Filtrar por año
+            ->where('company_id', $company_id)
             ->groupByRaw("DATE_FORMAT(invoice_date, '%Y-%m')")
             ->orderBy('month', 'asc')
             ->get();
@@ -102,9 +104,12 @@ class DashboardController extends Controller
 
     public function getStatusDistribution(Request $request)
     {
+        $company_id = $request->input('company_id');
+        
         // Obtener la distribución de facturas por estado
         $distribution = Invoice::selectRaw('status, COUNT(*) as count')
             ->whereNotNull('status') // Solo facturas con estado definido
+            ->where('company_id', $company_id)
             ->groupBy('status')
             ->get();
 
