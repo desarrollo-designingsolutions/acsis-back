@@ -50,11 +50,19 @@ class Furips2Controller extends Controller
     {
         return $this->execute(function () use ($invoice_id) {
 
-            $invoice = $this->invoiceRepository->find($invoice_id, with: ['furips1:id,invoice_id,consecutiveClaimNumber'], select: ['id']);
+            $invoice = $this->invoiceRepository->find($invoice_id, with: [
+                'furips1:id,invoice_id,consecutiveClaimNumber',
+                'serviceVendor:id,ipsable_type,ipsable_id',
+                'serviceVendor.ipsable:id,codigo',
+            ], select: [
+                'id',
+                'service_vendor_id',
+            ]);
             $invoice = [
                 'id' => $invoice->id,
                 'furips1_consecutiveClaimNumber' => $invoice->furips1?->consecutiveClaimNumber,
-                'cod_habilitacion' => $invoice?->serviceVendor?->ipsable?->codigo,
+                'serviceVendor_ipsable_codigo' => $invoice?->serviceVendor?->ipsable?->codigo,
+
             ];
 
             $decreto780de2026 = $this->queryController->selectInfiniteDecreto780de2026(request());
