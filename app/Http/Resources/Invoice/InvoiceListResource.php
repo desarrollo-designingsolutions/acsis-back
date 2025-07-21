@@ -15,6 +15,7 @@ class InvoiceListResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $radication_date = $this->radication_date ? Carbon::parse($this->radication_date)->format('d-m-Y') : null;
         return [
             'id' => $this->id,
             'serviceVendor_nit' => $this->serviceVendor?->nit,
@@ -25,7 +26,7 @@ class InvoiceListResource extends JsonResource
             'type_description' => $this->type?->description(),
             'value_paid' => formatNumber($this->value_paid),
             'value_glosa' => formatNumber($this->value_glosa),
-            'radication_date' => Carbon::parse($this->radication_date)->format('d-m-Y'),
+            'radication_date' => $radication_date,
             'patient_name' => $this->patient?->full_name,
 
             'status' => $this->status,

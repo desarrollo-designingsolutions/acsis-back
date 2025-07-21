@@ -25,7 +25,7 @@ class DashboardController extends Controller
             $pendingPaymentsData = $this->invoiceRepository->countPendingPayments($request->all());
 
             $request['status'] = StatusInvoiceEnum::INVOICE_STATUS_008->value;
-            $countPendingPaymentDataStatusPending = $this->invoiceRepository->countPendingPayments($request->all());
+            $countPendingPaymentDataStatusPending = $this->invoiceRepository->countPendingPayments($request->all(),"Montos pendientes de radicación");
             $averageResponseTimeData = $this->invoiceRepository->countAverageResponseTime($request->all());
             $recoveredGlosasData = $this->invoiceRepository->countRecoveredGlosas($request->all());
 

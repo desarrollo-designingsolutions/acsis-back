@@ -573,14 +573,15 @@ class InvoiceController extends Controller
                 $jsonContents = openFileJson($invoice->path_json);
                 $file = $request->file('archiveXml');
 
-                $data = [
+                   $data = [
                     'numInvoice' => $invoice->invoice_number,
                     'file_name' => $file->getClientOriginalName(),
                     'jsonContents' => $jsonContents,
+                    'service_vendor_nit' => $invoice->serviceVendor?->nit,
                 ];
 
                 // Validar datos del XML
-                $infoValidation = validateDataFilesXml($request->file('archiveXml')->path(), $data);
+                  $infoValidation = validateDataFilesXml($request->file('archiveXml')->path(), $data);
 
                 // Determinar el estado y la ruta del archivo XML
                 if ($infoValidation['totalErrorMessages'] == 0) {

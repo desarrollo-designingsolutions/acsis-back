@@ -274,7 +274,7 @@ class InvoiceRepository extends BaseRepository
         $secondary_data = formatNumber($inReviewSum).'  en revisión / '.formatNumber($pendingSum).'pendientes';
 
         return [
-            'title' => 'Facturas en Revisión / Pendientes',
+            'title' => 'Facturas en revisión / Pendientes de radicación',
             'value' => $value,
             'secondary_data' => $secondary_data,
             'icon' => 'tabler-file-search',
@@ -284,7 +284,7 @@ class InvoiceRepository extends BaseRepository
         ];
     }
 
-    public function countPendingPayments($request = [])
+    public function countPendingPayments($request = [],$title = 'Montos pendientes de pago')
     {
         $query = $this->model->where(function ($query) use ($request) {
             if (! empty($request['company_id'])) {
@@ -315,7 +315,7 @@ class InvoiceRepository extends BaseRepository
         $secondary_data = "$pendingCount facturas pendientes de pago";
 
         return [
-            'title' => 'Montos Pendientes de Pago',
+            'title' => $title,
             'value' => $value,
             'secondary_data' => $secondary_data,
             'icon' => 'tabler-currency-dollar',
@@ -333,7 +333,7 @@ class InvoiceRepository extends BaseRepository
         $secondary_data = 'Tiempo de respuesta de aseguradoras';
 
         return [
-            'title' => 'Tiempo Promedio de Respuesta',
+            'title' => 'Tiempo promedio de respuesta',
             'value' => $value,
             'secondary_data' => $secondary_data,
             'icon' => 'tabler-clock',
@@ -350,7 +350,7 @@ class InvoiceRepository extends BaseRepository
         $secondary_data = '$184,679,381 recuperados de $269,604,936 glosados';
 
         return [
-            'title' => '% Glosas Recuperadas',
+            'title' => '% Glosas recuperadas',
             'value' => $value,
             'secondary_data' => $secondary_data,
             'icon' => 'tabler-percentage',
