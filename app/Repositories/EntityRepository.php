@@ -25,7 +25,7 @@ class EntityRepository extends BaseRepository
         return $this->cacheService->remember($cacheKey, function () use ($request) {
             $query = QueryBuilder::for($this->model->query())
                 ->with(['typeEntity:id,name'])
-                ->select(['entities.id', 'entities.corporate_name', 'nit', 'address', 'phone', 'email', 'entities.is_active', 'type_entity_id'])
+                ->select(['entities.id', 'entities.corporate_name', 'entities.company_id', 'nit', 'address', 'phone', 'email', 'entities.is_active', 'type_entity_id'])
                 ->allowedFilters([
                     'is_active',
                     AllowedFilter::callback('inputGeneral', function ($query, $value) {
