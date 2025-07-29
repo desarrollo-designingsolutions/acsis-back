@@ -481,7 +481,7 @@
             </div>
             <div class="form-group">
                 <label style="width: 100px;">Código de la aseguradora</label>
-                <input type="text" style="width: 250px; height: 14px;">
+                <input type="text" value="{{ $data['insurance_code'] }}" style="width: 250px; height: 14px;">
             </div>
             <div class="form-group">
                 <label style="width: 60px;">No. de la Póliza</label>
@@ -821,31 +821,51 @@
 
             <div class="form-group">
                 <label style="width: 50px;">1er Apellido</label>
-                <input type="text" style="width: 241px; height: 14px;">
+                <input type="text" value="{{ $data['doctorFirstLastName'] }}" style="width: 241px; height: 14px;">
                 <label style="width: 50px; margin-left: 10px;">2do Apellido</label>
-                <input type="text" style="width: 241px; height: 14px;">
+                <input type="text" value="{{ $data['doctorSecondLastName'] }}" style="width: 241px; height: 14px;">
             </div>
             <div class="form-group">
                 <label style="width: 50px;">1er Nombre</label>
-                <input type="text" style="width: 241px; height: 14px;">
+                <input type="text" value="{{ $data['doctorFirstName'] }}" style="width: 241px; height: 14px;">
                 <label style="width: 50px; margin-left: 10px;">2do Nombre</label>
-                <input type="text" style="width: 241px; height: 14px;">
+                <input type="text" value="{{ $data['doctorSecondName'] }}" style="width: 241px; height: 14px;">
             </div>
 
             <div class="form-group">
                 <label style="width: 130px;">Tipo de Documento</label>
-                @for ($i = 0; $i < 3; $i++)
-                    <input type="text" value="{{ $i }}" maxlength="1"
-                    style="width: 14px; height: 14px; border: 1px solid #000; text-align: center; vertical-align: middle; padding: 0; margin: 0; box-sizing: border-box;">
-                    @endfor
-                    <label style="width: 100px; margin-left: 170px;">No. Documento</label>
-                    <input type="text" style="width: 150px; height: 14px;">
+                @foreach ($data['doctor_documents'] as $digit)
+                <div style="
+            display: inline-block;
+            width: 14px;
+            height: 14px;
+            border: 1px solid #000;
+            position: relative;
+            text-align: center;
+            vertical-align: middle;
+            font-size: 10px;
+            line-height: 14px;
+            box-sizing: border-box;
+        ">
+                    <!-- Marca de agua (letra M, F, etc.) -->
+                    <span style="color: #ccc; position: absolute; left: 0; right: 0; top: 0; bottom: 0; text-align: center; line-height: 14px;">
+                        {{ $digit }}
+                    </span>
+
+                    <!-- Si se cumple la condición, sobreescribe con X -->
+                    @if ($digit == $data['doctor_document'])
+                    <span style="position: relative; z-index: 2; color: black;">X</span>
+                    @endif
+                </div>
+                @endforeach
+                <label style="width: 100px; margin-left: 90px;">No. Documento</label>
+                <input type="text" value="{{ $data['doctorIdNumber'] }}" style="width: 150px; height: 14px;">
             </div>
 
             <div class="form-group">
                 <label style="width: 355px;"></label>
                 <label style="width: 100px;">Número de registro médico</label>
-                <input type="text" style="width: 150px; height: 14px;">
+                <input type="text" value="{{ $data['doctorRegistrationNumber'] }}" style="width: 150px; height: 14px;">
             </div>
         </div>
 
@@ -859,13 +879,13 @@
                 </tr>
                 <tr>
                     <td style="width: 250px; border: 1px solid #000;">Gastos médicos quirúrgicos</td>
-                    <td style="width: 150px; border: 1px solid #000;">{{ $data['totalBilledMedicalSurgical']  }}</td>
-                    <td style="width: 150px; border: 1px solid #000;">{{ $data['totalClaimedMedicalSurgical']  }}</td>
+                    <td style="width: 150px; border: 1px solid #000; text-align: right;">{{ $data['totalBilledMedicalSurgical']  }}</td>
+                    <td style="width: 150px; border: 1px solid #000; text-align: right;">{{ $data['totalClaimedMedicalSurgical']  }}</td>
                 </tr>
                 <tr>
                     <td style="width: 250px; border: 1px solid #000;">Gastos de transporte y movilización de la víctima</td>
-                    <td style="width: 150px; border: 1px solid #000;">{{ $data['totalBilledTransport']  }}</td>
-                    <td style="width: 150px; border: 1px solid #000;">{{ $data['totalClaimedTransport']  }}</td>
+                    <td style="width: 150px; border: 1px solid #000; text-align: right;">{{ $data['totalBilledTransport']  }}</td>
+                    <td style="width: 150px; border: 1px solid #000; text-align: right;">{{ $data['totalClaimedTransport']  }}</td>
                 </tr>
             </table>
             <p style="margin-left: 0; margin-top: 5px; font-size: 7px; text-align: justify; width: 655px;">

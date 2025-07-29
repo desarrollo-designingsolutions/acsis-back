@@ -20,7 +20,7 @@ class TypeDocumentRepository extends BaseRepository
 
         return $this->cacheService->remember($cacheKey, function () use ($request) {
             $query = QueryBuilder::for($this->model->query())
-                ->select(['id', 'name'])
+                ->select(['id', 'name', 'company_id'])
                 ->allowedFilters([
                     AllowedFilter::callback('inputGeneral', function ($query, $value) {
                         $query->where(function ($subQuery) use ($value) {
@@ -31,15 +31,13 @@ class TypeDocumentRepository extends BaseRepository
                 ->allowedSorts([
                     'name',
                 ])->where(function ($query) use ($request) {
-
                     if (isset($request['searchQueryInfinite']) && ! empty($request['searchQueryInfinite'])) {
-                        $query->orWhere('name', 'like', '%'.$request['searchQueryInfinite'].'%');
+                        $query->orWhere('name', 'like', '%' . $request['searchQueryInfinite'] . '%');
                     }
-
+                })->where(function ($query) use ($request) {
                     if (! empty($request['company_id'])) {
                         $query->where('company_id', $request['company_id']);
                     }
-
                 });
 
             if (empty($request['typeData'])) {
@@ -81,7 +79,7 @@ class TypeDocumentRepository extends BaseRepository
                 $query->whereIn('id', $request['idsAllowed']);
             }
             if (! empty($request['string'])) {
-                $query->where('name', 'like', '%'.$request['string'].'%');
+                $query->where('name', 'like', '%' . $request['string'] . '%');
             }
         });
 

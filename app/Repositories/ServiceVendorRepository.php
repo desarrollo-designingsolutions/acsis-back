@@ -25,7 +25,7 @@ class ServiceVendorRepository extends BaseRepository
         // return $this->cacheService->remember($cacheKey, function ($request) {
         $query = QueryBuilder::for($this->model->query())
             ->with(['type_vendor:id,name'])
-            ->select(['service_vendors.id', 'service_vendors.name', 'nit', 'address', 'phone', 'email', 'service_vendors.is_active', 'type_vendor_id'])
+            ->select(['service_vendors.id', 'service_vendors.name', 'service_vendors.company_id', 'nit', 'address', 'phone', 'email', 'service_vendors.is_active', 'type_vendor_id'])
             ->allowedFilters([
                 'is_active',
                 'nit',
@@ -57,12 +57,12 @@ class ServiceVendorRepository extends BaseRepository
             ])->where(function ($query) use ($request) {
 
                 if (isset($request['searchQueryInfinite']) && ! empty($request['searchQueryInfinite'])) {
-                    $query->orWhere('name', 'like', '%'.$request['searchQueryInfinite'].'%');
-                    $query->orWhere('nit', 'like', '%'.$request['searchQueryInfinite'].'%');
+                    $query->orWhere('name', 'like', '%' . $request['searchQueryInfinite'] . '%');
+                    $query->orWhere('nit', 'like', '%' . $request['searchQueryInfinite'] . '%');
                 }
-
+            })->where(function ($query) use ($request) {
                 if (! empty($request['company_id'])) {
-                    $query->where('company_id', $request['company_id']);
+                    $query->where('service_vendors.company_id', $request['company_id']);
                 }
             });
 

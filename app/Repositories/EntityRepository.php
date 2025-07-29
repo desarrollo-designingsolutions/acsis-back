@@ -58,8 +58,9 @@ class EntityRepository extends BaseRepository
                         $query->orWhere('nit', 'like', '%'.$request['searchQueryInfinite'].'%');
                     }
 
+                })->where(function ($query) use ($request) {
                     if (! empty($request['company_id'])) {
-                        $query->where('company_id', $request['company_id']);
+                        $query->where('entities.company_id', $request['company_id']);
                     }
 
                 });

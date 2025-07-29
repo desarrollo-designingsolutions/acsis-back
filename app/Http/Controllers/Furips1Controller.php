@@ -300,6 +300,9 @@ class Furips1Controller extends Controller
 
             $driver_documents = Constants::CODS_PDF_FURIPS1_DRIVERDOCUMENTTYPE;
 
+            
+            $doctor_documents = Constants::CODS_SELECT_FORM_FURIPS1_DOCTORIDTYPE;
+
             $data = [
                 'radication_date' => formatDateToArray($invoice->radication_date),
                 'radication_number_previous' => $invoice->furips1?->victimPhone,
@@ -393,7 +396,6 @@ class Furips1Controller extends Controller
                 'policy_number' => $invoice?->typeable?->policy_number,
                 'incident_start_date' => formatDateToArray($invoice?->typeable?->start_date),
                 'incident_end_date' => formatDateToArray($invoice?->typeable?->end_date),
-
                 'medicalAdmissionDate' => formatDateToArray($invoice?->furips1?->medicalAdmissionDate),
                 'medicalAdmissionTime' => formatTimeToArray($invoice?->furips1?->medicalAdmissionTime),
                 'medicalDischargeDate' => formatDateToArray($invoice?->furips1?->medicalDischargeDate),
@@ -407,6 +409,16 @@ class Furips1Controller extends Controller
                 'authorityIntervention_code' => $invoice->furips1?->authorityIntervention,
                 'policyExcessCharge' => $invoice->furips1?->policyExcessCharge,
                 'referralRecipientCharge' => $invoice->furips1?->referralRecipientCharge,
+
+                'insurance_code' => $invoice->entity?->insuranceCode,
+                'doctor_documents' => $doctor_documents,
+                'doctor_document' => $invoice->furips1?->doctorIdType?->codigo,
+                'doctorIdNumber' => $invoice->furips1?->doctorIdNumber,
+                'doctorFirstLastName' => $invoice->furips1?->doctorFirstLastName,
+                'doctorSecondLastName' => $invoice->furips1?->doctorSecondLastName,
+                'doctorFirstName' => $invoice->furips1?->doctorFirstName,
+                'doctorSecondName' => $invoice->furips1?->doctorSecondName,
+                'doctorRegistrationNumber' => $invoice->furips1?->doctorRegistrationNumber,
 
             ];
 
@@ -472,7 +484,7 @@ class Furips1Controller extends Controller
             'vehicleBrand' => $furips1->vehicleBrand,
             'vehiclePlate' => $furips1->vehiclePlate,
             'vehicleType' => $furips1->vehicleType?->value(),
-            'entity_code' => $furips1->invoice?->entity?->nit,
+            'entity_code' => $furips1->invoice?->entity?->insuranceCode,
             'soat_policy_number' => $furips1->invoice?->typeable->policy_number,
             'soat_start_date' => $furips1->invoice?->typeable->start_date,
             'soat_end_date' => $furips1->invoice?->typeable->end_date,
