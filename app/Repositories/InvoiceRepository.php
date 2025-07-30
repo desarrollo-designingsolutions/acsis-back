@@ -43,7 +43,7 @@ class InvoiceRepository extends BaseRepository
                             });
 
                             $subQuery->orWhereHas('patient', function ($subQuery2) use ($value) {
-                                $subQuery2->whereRaw("CONCAT(patients.first_name, ' ', patients.second_name, ' ', patients.first_surname, ' ', patients.second_surname) LIKE ?", ["%{$value}%"]);
+                                $subQuery2->whereRaw("CONCAT_WS(' ', patients.first_name, patients.second_name, patients.first_surname, patients.second_surname) LIKE ?", ["%{$value}%"]);
                             });
 
                             $subQuery->orWhereHas('entity', function ($subQuery2) use ($value) {
