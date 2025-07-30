@@ -42,7 +42,8 @@ class PatientRepository extends BaseRepository
                         $query->orWhere('document', 'like', "%$searchValue%");
                         $query->orWhereRaw("CONCAT_WS(' ', first_name, second_name, first_surname, second_surname) LIKE ?", ["%{$searchValue}%"]);
                     }
-
+                })
+                ->where(function ($query) use ($request) {
                     if (!empty($request['company_id'])) {
                         $query->where('company_id', $request['company_id']);
                     }
@@ -135,7 +136,7 @@ class PatientRepository extends BaseRepository
 
         return $data;
     }
-    
+
     public function getValidationsErrorMessages($user_id)
     {
         // Recuperar y mostrar los errores almacenados en Redis
