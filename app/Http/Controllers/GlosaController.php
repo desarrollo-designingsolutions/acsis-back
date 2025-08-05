@@ -65,7 +65,11 @@ class GlosaController extends Controller
             ];
 
             $invoice = $this->invoiceRepository->find($request->input('invoice_id'));
-            $radication_date = Carbon::parse($invoice->radication_date)->format('Y-m-d H:i');
+
+            $radication_date = null;
+            if ($invoice->radication_date) {
+                $radication_date = Carbon::parse($invoice->radication_date)->format('Y-m-d H:i');
+            }
 
             return [
                 'code' => 200,
@@ -85,7 +89,7 @@ class GlosaController extends Controller
 
             if ($request->file('file')) {
                 $file = $request->file('file');
-                $ruta = 'companies/company_'.$glosa->company_id.'/glosas/glosa_'.$glosa->id.$request->input('file');
+                $ruta = 'companies/company_' . $glosa->company_id . '/glosas/glosa_' . $glosa->id . $request->input('file');
 
                 $file = $file->store($ruta, Constants::DISK_FILES);
                 $glosa->file = $file;
@@ -159,7 +163,7 @@ class GlosaController extends Controller
 
             if ($request->file('file')) {
                 $file = $request->file('file');
-                $ruta = 'companies/company_'.$glosa->company_id.'/glosas/glosa_'.$glosa->id.$request->input('file');
+                $ruta = 'companies/company_' . $glosa->company_id . '/glosas/glosa_' . $glosa->id . $request->input('file');
 
                 $file = $file->store($ruta, Constants::DISK_FILES);
                 $glosa->file = $file;
@@ -227,9 +231,9 @@ class GlosaController extends Controller
 
                     $glosa = $this->glosaRepository->store($data);
 
-                    if ($request->file('file_file'.$key)) {
-                        $file = $request->file('file_file'.$key);
-                        $ruta = 'companies/company_'.$glosa->company_id.'/glosas/glosa_'.$glosa->id.$request->input('file_file'.$key);
+                    if ($request->file('file_file' . $key)) {
+                        $file = $request->file('file_file' . $key);
+                        $ruta = 'companies/company_' . $glosa->company_id . '/glosas/glosa_' . $glosa->id . $request->input('file_file' . $key);
 
                         $file = $file->store($ruta, Constants::DISK_FILES);
                         $glosa->file = $file;
