@@ -127,7 +127,11 @@ class GlosaController extends Controller
             $typeCodeGlosa = $this->queryController->selectInfiniteTypeCodeGlosa(request());
 
             $invoice = $this->invoiceRepository->find($request->input('invoice_id'));
-            $radication_date = Carbon::parse($invoice->radication_date)->format('d-m-Y H:i');
+
+            $radication_date = null;
+            if ($invoice->radication_date) {
+                $radication_date = Carbon::parse($invoice->radication_date)->format('Y-m-d H:i');
+            }
 
             return [
                 'code' => 200,

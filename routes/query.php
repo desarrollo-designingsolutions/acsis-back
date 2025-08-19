@@ -77,3 +77,4 @@ Route::post('/selectRgResponseEnum', [QueryController::class, 'selectRgResponseE
 Route::post('/selectVehicleServiceTypeEnum', [QueryController::class, 'selectVehicleServiceTypeEnum']);
 Route::post('/selectGenderEnum', [QueryController::class, 'selectGenderEnum']);
 Route::post('/selectEventTypeEnum', [QueryController::class, 'selectEventTypeEnum']);
+Route::post('/selectCodeGlosaAnswer', [QueryController::class, 'selectCodeGlosaAnswer']);

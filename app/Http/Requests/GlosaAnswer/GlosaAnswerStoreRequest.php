@@ -58,10 +58,21 @@ class GlosaAnswerStoreRequest extends FormRequest
 
     protected function prepareForValidation(): void
     {
-        $this->merge([
-            'value_approved' => ! is_numeric($this->value_approved) ? floatval($this->value_approved) : $this->value_approved,
-            'value_accepted' => ! is_numeric($this->value_accepted) ? floatval($this->value_accepted) : $this->value_accepted,
-        ]);
+        $merge = [];
+
+        if ($this->has('code_glosa_answer_id')) {
+            $merge['code_glosa_answer_id'] = getValueSelectInfinite($this->code_glosa_answer_id);
+        }
+
+        if ($this->has('value_approved')) {
+            $merge['value_approved'] = ! is_numeric($this->value_approved) ? floatval($this->value_approved) : $this->value_approved;
+        }
+
+        if ($this->has('value_accepted')) {
+            $merge['value_accepted'] = ! is_numeric($this->value_accepted) ? floatval($this->value_accepted) : $this->value_accepted;
+        }
+
+        $this->merge($merge);
     }
 
     public function failedValidation(Validator $validator)

@@ -172,7 +172,7 @@
 
                 <!-- Nro Factura -->
                 <span style="display: inline-block; width: 130px; vertical-align: middle; margin-left: 10px;">No. Factura</span>
-                <input type="text"
+                <input type="text" value="{{ $data['invoice_number'] }}"
                     style="width: 150px; height: 10px; border: 1px solid #000; vertical-align: middle; box-sizing: border-box;">
             </div>
 

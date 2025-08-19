@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\GlosaAnswer;
 
+use App\Http\Resources\CodeGlosaAnswer\CodeGlosaAnswerSelectResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -24,6 +25,7 @@ class GlosaAnswerFormResource extends JsonResource
             'value_approved' => $this->value_approved,
             'value_accepted' => $this->value_accepted,
             'status_id' => $this->status,
+            'code_glosa_answer_id' => new CodeGlosaAnswerSelectResource($this->codeGlosaAnswer),
         ];
     }
 }

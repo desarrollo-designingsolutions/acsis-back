@@ -19,4 +19,9 @@ class GlosaAnswer extends Model
     protected $casts = [
         'status' => StatusGlosaAnswerEnum::class,
     ];
+
+    public function codeGlosaAnswer()
+    {
+        return $this->belongsTo(CodeGlosaAnswer::class, 'code_glosa_answer_id');
+    }
 }

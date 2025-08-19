@@ -20,6 +20,7 @@ use App\Enums\ZoneEnum;
 use App\Http\Resources\CatalogoCum\CatalogoCumSelectResource;
 use App\Http\Resources\Cie10\Cie10SelectInfiniteResource;
 use App\Http\Resources\CodeGlosa\CodeGlosaSelectInfiniteResource;
+use App\Http\Resources\CodeGlosaAnswer\CodeGlosaAnswerSelectResource;
 use App\Http\Resources\ConceptoRecaudo\ConceptoRecaudoSelectResource;
 use App\Http\Resources\CondicionyDestinoUsuarioEgreso\CondicionyDestinoUsuarioEgresoSelectInfiniteResource;
 use App\Http\Resources\Country\CountrySelectResource;
@@ -58,6 +59,7 @@ use App\Http\Resources\ZonaVersion2\ZonaVersion2SelectResource;
 use App\Repositories\CatalogoCumRepository;
 use App\Repositories\Cie10Repository;
 use App\Repositories\CityRepository;
+use App\Repositories\CodeGlosaAnswerRepository;
 use App\Repositories\CodeGlosaRepository;
 use App\Repositories\ConceptoRecaudoRepository;
 use App\Repositories\CondicionyDestinoUsuarioEgresoRepository;
@@ -149,6 +151,7 @@ class QueryController extends Controller
         protected IumRepository $iumRepository,
         protected DepartamentoRepository $departamentoRepository,
         protected Decreto780de2026Repository $decreto780de2026Repository,
+        protected CodeGlosaAnswerRepository $codeGlosaAnswerRepository,
     ) {}
 
     public function selectInfiniteCountries(Request $request)
@@ -975,12 +978,12 @@ class QueryController extends Controller
             'decreto780de2026_countLinks' => $decreto780de2026->lastPage(),
         ];
     }
-
+    
     public function selectRgResponseEnum(Request $request)
     {
         // Obtener todos los casos del enum
         $status = RgResponseEnum::cases();
-
+        
         // Mapear los casos a un formato con value y title
         $status = collect($status)->map(function ($item) {
             return [
@@ -996,7 +999,7 @@ class QueryController extends Controller
                 return str_contains(strtolower($item['title']), $searchTerm);
             });
         }
-
+        
         return [
             'code' => 200,
             'rgResponseEnum_arrayInfo' => $status->values()->toArray(), // Convertir a array y resetear índices
@@ -1016,7 +1019,7 @@ class QueryController extends Controller
                 'title' => $item->description(),
             ];
         });
-
+        
         // Filtrar por descripción si se envía un parámetro de búsqueda
         if ($request->has('searchQueryInfinite') && ! empty($request->input('searchQueryInfinite'))) {
             $searchTerm = strtolower($request->input('searchQueryInfinite'));
@@ -1024,14 +1027,14 @@ class QueryController extends Controller
                 return str_contains(strtolower($item['title']), $searchTerm);
             });
         }
-
+        
         return [
             'code' => 200,
             'vehicleServiceTypeEnum_arrayInfo' => $status->values()->toArray(), // Convertir a array y resetear índices
             'vehicleServiceTypeEnum_countLinks' => 1,
         ];
     }
-
+    
     public function selectGenderEnum(Request $request)
     {
         // Obtener todos los casos del enum
@@ -1059,12 +1062,12 @@ class QueryController extends Controller
             'genderEnum_countLinks' => 1,
         ];
     }
-
+    
     public function selectEventTypeEnum(Request $request)
     {
         // Obtener todos los casos del enum
         $status = EventTypeEnum::cases();
-
+        
         // Mapear los casos a un formato con value y title
         $status = collect($status)->map(function ($item) {
             return [
@@ -1072,7 +1075,7 @@ class QueryController extends Controller
                 'title' => $item->description(),
             ];
         });
-
+        
         // Filtrar por descripción si se envía un parámetro de búsqueda
         if ($request->has('searchQueryInfinite') && ! empty($request->input('searchQueryInfinite'))) {
             $searchTerm = strtolower($request->input('searchQueryInfinite'));
@@ -1080,11 +1083,23 @@ class QueryController extends Controller
                 return str_contains(strtolower($item['title']), $searchTerm);
             });
         }
-
+        
         return [
             'code' => 200,
             'eventTypeEnum_arrayInfo' => $status->values()->toArray(), // Convertir a array y resetear índices
             'eventTypeEnum_countLinks' => 1,
         ];
     }
+    
+        public function selectCodeGlosaAnswer(Request $request)
+        {
+            $codeGlosaAnswer = $this->codeGlosaAnswerRepository->list($request->all());
+    
+            $codeGlosaAnswers = CodeGlosaAnswerSelectResource::collection($codeGlosaAnswer);
+    
+            return [
+                'codeGlosaAnswer_arrayInfo' => $codeGlosaAnswers,
+                'codeGlosaAnswer_countLinks' => $codeGlosaAnswer->lastPage(),
+            ];
+        }
 }

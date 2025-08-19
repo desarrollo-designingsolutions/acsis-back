@@ -56,10 +56,13 @@ class GlosaAnswerController extends Controller
             $glosa = $this->glosaRepository->find($request->input('glosa_id'));
             $glosa_date = Carbon::parse($glosa->date)->format('Y-m-d H:i');
 
+            $codeGlosaAnswer = $this->queryController->selectCodeGlosaAnswer(request());
+
             return [
                 'code' => 200,
                 'statusGlosaAnswerEnumValues' => $statusGlosaAnswerEnumValues,
                 'glosa_date' => $glosa_date,
+                ...$codeGlosaAnswer,
             ];
         });
     }
@@ -72,7 +75,7 @@ class GlosaAnswerController extends Controller
 
             if ($request->file('file')) {
                 $file = $request->file('file');
-                $ruta = 'companies/company_'.$answer->company_id.'/respuestas/respuesta_'.$answer->id.$request->input('file');
+                $ruta = 'companies/company_' . $answer->company_id . '/respuestas/respuesta_' . $answer->id . $request->input('file');
 
                 $file = $file->store($ruta, Constants::DISK_FILES);
                 $answer->file = $file;
@@ -101,12 +104,15 @@ class GlosaAnswerController extends Controller
             }, StatusGlosaAnswerEnum::cases());
             $glosa = $this->glosaRepository->find($request->input('glosa_id'));
             $glosa_date = Carbon::parse($glosa->date)->format('Y-m-d H:i');
+            
+            $codeGlosaAnswer = $this->queryController->selectCodeGlosaAnswer(request());
 
             return [
                 'code' => 200,
                 'form' => $form,
                 'statusGlosaAnswerEnumValues' => $statusGlosaAnswerEnumValues,
                 'glosa_date' => $glosa_date,
+                ...$codeGlosaAnswer,
             ];
         });
     }
@@ -120,7 +126,7 @@ class GlosaAnswerController extends Controller
 
             if ($request->file('file')) {
                 $file = $request->file('file');
-                $ruta = 'companies/company_'.$answer->company_id.'/respuestas/respuesta_'.$answer->id.$request->input('file');
+                $ruta = 'companies/company_' . $answer->company_id . '/respuestas/respuesta_' . $answer->id . $request->input('file');
 
                 $file = $file->store($ruta, Constants::DISK_FILES);
                 $answer->file = $file;
