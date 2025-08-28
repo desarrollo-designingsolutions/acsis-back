@@ -212,6 +212,8 @@ class InvoiceController extends Controller
             $invoice = $this->invoiceRepository->find($id);
             $form = new InvoiceFormResource($invoice);
 
+            $lastService = $invoice->services()->latest()->first();
+
             $infoDataExtra = null;
             // Recuperamos informacion extra dependiendo del tipo de factura
             if ($invoice->type->value == 'INVOICE_TYPE_002') {
@@ -247,6 +249,7 @@ class InvoiceController extends Controller
                 ...$patients,
                 ...$insuranceStatus,
                 'typeInvoiceEnumValues' => $typeInvoiceEnumValues,
+                'service_date' => $lastService?->created_at ? Carbon::parse($lastService?->created_at)->format('Y-m-d') : '',
             ];
         });
     }
