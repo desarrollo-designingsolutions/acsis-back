@@ -185,11 +185,11 @@
             </h2>
             <div class="form-group">
                 <label style="width: 200px;">Nombre Empresa de Transporte Especial o Reclamante</label>
-                <input type="text" style="width: 420px; height: 14px;">
+                <input type="text" value="{{ $data['nameHabilitationServiceVendor'] }}" style="width: 420px; height: 14px;">
             </div>
             <div class="form-group">
                 <label style="width: 200px;">Código de habilitación Empresa de Transporte Especial</label>
-                <input type="text" style="width: 250px; height: 14px;">
+                <input type="text" value="{{ $data['codeHabilitationServiceVendor'] }}" style="width: 250px; height: 14px;">
             </div>
             <div class="form-group">
                 <label style="width: 50px;">1er Apellido</label>

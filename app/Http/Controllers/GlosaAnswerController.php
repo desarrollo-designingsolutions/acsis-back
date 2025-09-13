@@ -159,4 +159,45 @@ class GlosaAnswerController extends Controller
             ];
         }, 200);
     }
+
+    
+    public function downloadPDF($glosa_answer_id)
+    {
+        return $this->execute(function () use ($glosa_answer_id) {
+
+            $answer = $this->answerRepository->find($glosa_answer_id);
+            
+            $data = [
+                'entity_name' => $answer?->glosa?->service?->invoice?->entity?->corporate_name,
+                'entity_nit' => $answer?->glosa?->service?->invoice?->entity?->nit,
+                'service_vendor_name' => $answer?->glosa?->service?->invoice?->serviceVendor?->name,
+                'date_answer' => $answer?->date_answer,
+                'invoice_number' => $answer?->glosa?->service?->invoice?->invoice_number,
+                'patient_name' => $answer?->glosa?->service?->invoice?->patient?->full_name,
+                'patient_document' => $answer?->glosa?->service?->invoice?->patient?->document,
+                'invoice_value' => $answer?->glosa?->service?->invoice?->total,
+                'glosa_value' => $answer?->glosa?->glosa_value,
+                'reason' => $answer?->codeGlosaAnswer?->name,
+                'value_accepted' => $answer?->value_accepted,
+                'value_approved' => $answer?->value_approved,
+                'observation' => $answer?->observation,
+                'left_logo' => 'storage/logos/'.$answer?->glosa?->service?->invoice?->serviceVendor?->nit.'.png',
+                'right_logo' => 'storage/logos/Acsis.png',
+            ];
+
+            $pdf = $this->answerRepository
+                ->pdf('Exports.GlosaAnswer.GlosaAnswerExportPdf', $data, is_stream: true);
+
+            if (empty($pdf)) {
+                throw new \Exception('Error al generar el PDF');
+            }
+
+            $path = base64_encode($pdf);
+
+            return [
+                'code' => 200,
+                'path' => $path,
+            ];
+        });
+    }
 }

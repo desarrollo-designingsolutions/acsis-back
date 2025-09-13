@@ -29,4 +29,6 @@ Route::middleware(['check.permission:menu.invoice'])->group(function () {
     Route::get('/glosaAnswer/createMasive', [GlosaAnswerController::class, 'createMasive']);
 
     Route::post('/glosaAnswer/storeMasive', [GlosaAnswerController::class, 'storeMasive']);
+
+    Route::get('/glosaAnswer/{invoice_id}/downloadPDF', [GlosaAnswerController::class, 'downloadPDF']);
 });

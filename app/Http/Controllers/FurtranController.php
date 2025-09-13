@@ -245,6 +245,8 @@ class FurtranController extends Controller
                 'tipo_nota_id' => $invoice->tipo_nota_id,
                 'note_number' => $invoice->note_number,
                 'invoice_number' => $invoice->invoice_number,
+                'nameHabilitationServiceVendor' => $invoice?->serviceVendor?->ipsable?->nombre,
+                'codeHabilitationServiceVendor' => $invoice?->serviceVendor?->ipsable?->codigo,
                 'firstLastNameClaimant' => $invoice->furtran?->firstLastNameClaimant,
                 'secondLastNameClaimant' => $invoice->furtran?->secondLastNameClaimant,
                 'firstNameClaimant' => $invoice->furtran?->firstNameClaimant,

@@ -24,4 +24,9 @@ class GlosaAnswer extends Model
     {
         return $this->belongsTo(CodeGlosaAnswer::class, 'code_glosa_answer_id');
     }
+
+    public function glosa()
+    {
+        return $this->belongsTo(Glosa::class, 'glosa_id');
+    }
 }
