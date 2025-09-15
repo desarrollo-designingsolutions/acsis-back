@@ -57,7 +57,7 @@
         </div>
 
         <h1>{{$data['service_vendor_name']}} </h1>
-        <p><strong>NIT. 000.000195.217-1</strong></p>
+        <p><strong>NIT. {{$data['service_vendor_nit']}}</strong></p>
         <p><strong>Calle 24 No 17-30 Yopal - Casanare</strong></p>
         <p><strong>ÁREA DE AUDITORÍA DE CUENTAS</strong></p>
         <p><strong>FORMATO RESPUESTA DE GLOSAS Y/O DEVOLUCIONES</strong></p>
@@ -95,7 +95,7 @@
                     $sumFactura += (float)($data['invoice_value'] ?? 0);
                     $sumGlosa   += (float)($data['glosa_value'] ?? 0);
                     $sumAceptado+= (float)($data['value_accepted'] ?? 0);
-                    $sumERP     += (float)($data['value_approved'] ?? 0);
+                    $sumERP     += (float)($data['value_erp'] ?? 0);
                 @endphp
                 <tr>
                     <td class="text-center">{{ $data['invoice_number'] ?? '' }}</td>
@@ -105,7 +105,7 @@
                     <td class="text-right">{{ number_format($data['glosa_value'] ?? 0, 0, ',', '.') }}</td>
                     <td class="text-justify">{{ $data['reason'] ?? '' }}</td>
                     <td class="text-right">{{ number_format($data['value_accepted'] ?? 0, 0, ',', '.') }}</td>
-                    <td class="text-right">{{ number_format($data['value_approved'] ?? 0, 0, ',', '.') }}</td>
+                    <td class="text-right">{{ number_format($data['value_erp'] ?? 0, 0, ',', '.') }}</td>
                     <td class="text-justify">{{ $data['observation'] ?? '' }}</td>
                 </tr>
         </tbody>
