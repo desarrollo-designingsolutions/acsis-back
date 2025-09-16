@@ -104,7 +104,7 @@ class GlosaAnswerController extends Controller
             }, StatusGlosaAnswerEnum::cases());
             $glosa = $this->glosaRepository->find($request->input('glosa_id'));
             $glosa_date = Carbon::parse($glosa->date)->format('Y-m-d H:i');
-            
+
             $codeGlosaAnswer = $this->queryController->selectCodeGlosaAnswer(request());
 
             return [
@@ -160,18 +160,29 @@ class GlosaAnswerController extends Controller
         }, 200);
     }
 
-    
+
     public function downloadPDF($glosa_answer_id)
     {
         return $this->execute(function () use ($glosa_answer_id) {
 
             $answer = $this->answerRepository->find($glosa_answer_id);
-            
+
+            $vendorNit  = $answer?->glosa?->service?->invoice?->serviceVendor?->nit;
+
+            $siglasPorNit = [
+                '832000539' => 'CBBV',   // Cuerpo de Bomberos Voluntarios de Villanueva
+                '800195217' => 'CBVY',   // Cuerpo de Bomberos Voluntarios de Yopal
+                '891856331' => 'CBVA',   // Cuerpo de Bomberos Voluntarios de Aguazul
+                '891800439' => 'CBVT',   // Cuerpo de Bomberos Voluntarios de Tunja
+                '800100542' => 'CRCSC',  // Cruz Roja Colombiana Seccional Casanare
+            ];
+
             $data = [
                 'entity_name' => $answer?->glosa?->service?->invoice?->entity?->corporate_name,
                 'entity_nit' => $answer?->glosa?->service?->invoice?->entity?->nit,
                 'service_vendor_name' => $answer?->glosa?->service?->invoice?->serviceVendor?->name,
-                'service_vendor_nit' => $answer?->glosa?->service?->invoice?->serviceVendor?->nit,
+                'service_vendor_nit' => $vendorNit,
+                'service_vendor_siglas' => $siglasPorNit[$vendorNit] ?? '',
                 'date_answer' => $answer?->date_answer,
                 'invoice_number' => $answer?->glosa?->service?->invoice?->invoice_number,
                 'patient_name' => $answer?->glosa?->service?->invoice?->patient?->full_name,
@@ -182,7 +193,7 @@ class GlosaAnswerController extends Controller
                 'value_accepted' => $answer?->value_accepted,
                 'value_erp' => $answer?->glosa?->glosa_value - $answer?->value_accepted,
                 'observation' => $answer?->observation,
-                'left_logo' => 'storage/logos/'.$answer?->glosa?->service?->invoice?->serviceVendor?->nit.'.png',
+                'left_logo' => 'storage/logos/' . $answer?->glosa?->service?->invoice?->serviceVendor?->nit . '.png',
                 'right_logo' => 'storage/logos/Acsis.png',
             ];
 

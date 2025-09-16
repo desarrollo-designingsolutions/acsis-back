@@ -82,7 +82,7 @@
                 <th style="width:9%">Vr. Factura</th>
                 <th style="width:9%">Vr. Glosa</th>
                 <th style="width:18%">Motivo de Objeción</th>
-                <th style="width:9%">Vr Aceptado<br>por CBVY</th>
+                <th style="width:9%">Vr Aceptado<br>por {{ $data['service_vendor_siglas'] }}</th>
                 <th style="width:9%">Vr Soportado<br>a Pagar ERP</th>
                 <th style="width:13%">Respuesta a la Objeción</th>
             </tr>
