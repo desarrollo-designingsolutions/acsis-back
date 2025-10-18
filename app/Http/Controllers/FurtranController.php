@@ -345,7 +345,7 @@ class FurtranController extends Controller
             '14' => $furtran->claimantPhone,
             '15' => $furtran->claimantDepartmentCode?->codigo,
             '16' => $furtran->claimantMunicipalityCode?->codigo,
-            '17' => $furtran->invoice?->patient?->typeDocument?->codigo,
+            '17' => $furtran->invoice?->patient?->tipo_id_pisi?->codigo,
             '18' => $furtran->invoice?->patient?->document,
             '19' => $furtran->invoice?->patient?->first_name,
             '20' => $furtran->invoice?->patient?->second_name,

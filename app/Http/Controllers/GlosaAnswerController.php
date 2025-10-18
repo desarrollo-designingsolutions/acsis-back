@@ -189,7 +189,7 @@ class GlosaAnswerController extends Controller
                 'patient_document' => $answer?->glosa?->service?->invoice?->patient?->document,
                 'invoice_value' => $answer?->glosa?->service?->invoice?->total,
                 'glosa_value' => $answer?->glosa?->glosa_value,
-                'reason' => $answer?->codeGlosaAnswer?->name,
+                'reason' => $answer?->glosa?->observation,
                 'value_accepted' => $answer?->value_accepted,
                 'value_erp' => $answer?->glosa?->glosa_value - $answer?->value_accepted,
                 'observation' => $answer?->observation,

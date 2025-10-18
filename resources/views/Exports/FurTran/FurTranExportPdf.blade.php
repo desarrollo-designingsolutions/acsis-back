@@ -582,9 +582,9 @@
                 <h2>VIII. MANIFESTACION DEL SERVICIO HABILITADO DEL PRESTADOR DE SERVICIOS DE SALUD</h2>
                 <label style="width: 150px;">Manifestación de servicios habilitados</label>
                 <label style="width: 10px; margin-left: 20px;">Si</label>
-                <input type="text" value="{{ $data['serviceEnabledIndication']?->value === "YES_NO_001" ? 'X' : '' }}" maxlength="1" style="width: 14px; height: 14px; border: 1px solid #000; text-align: center; vertical-align: middle; padding: 0; margin: 0; box-sizing: border-box;">
-                <label style="width: 10px; margin-left: 20px;">No</label>
                 <input type="text" value="{{ $data['serviceEnabledIndication']?->value === "YES_NO_002" ? 'X' : '' }}" maxlength="1" style="width: 14px; height: 14px; border: 1px solid #000; text-align: center; vertical-align: middle; padding: 0; margin: 0; box-sizing: border-box;">
+                <label style="width: 10px; margin-left: 20px;">No</label>
+                <input type="text" value="{{ $data['serviceEnabledIndication']?->value === "YES_NO_001" ? 'X' : '' }}" maxlength="1" style="width: 14px; height: 14px; border: 1px solid #000; text-align: center; vertical-align: middle; padding: 0; margin: 0; box-sizing: border-box;">
                 <p style="margin-left: 0; margin-top: 5px; font-size: 7px; text-align: justify; width: 655px;">
                     Como representante legal o Gerente de la Institución Prestadora de Servicios de Salud, declaró bajo la gavedad de juramento que toda la información contenidad en este formulario es cierta y
                     podrá se verificada por la Compañía de Seguros, por la Dirección de Administracion de Fondos de la Protección Social o quien haga sus veces, por el Administrador Fiduciario del Fondo de

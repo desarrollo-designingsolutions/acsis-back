@@ -261,7 +261,7 @@ class JsonDataValidation
             $value = Arr::get($jsonData, $fieldPath);
             // Log::info("Validando campo {$fieldPath}", ['value' => $value, 'rule' => $rule]);
 
-            if ($value === null) {
+            if ($fieldPath === 'numDocumentoIdObligado' && empty($value)) {
 
                 $this->errors[] = [
                     'type' => self::TYPE_VALIDATION,
@@ -280,6 +280,12 @@ class JsonDataValidation
             }
 
             if ($rule['type'] === 'exists') {
+
+                if(empty($value))
+                {
+                    return;
+                }
+
                 $result = $this->existsInDatabase($value, $rule['table'], $rule['column'], $rule['select'] ?? ['id'], $rule["withCompanyId"]);
                 if ($result === false) {
                     $errorMessage = is_callable($rule['error_message'])
