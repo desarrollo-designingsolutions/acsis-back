@@ -893,21 +893,33 @@
                 técnico numero 2
             </p>
         </div>
-        <div class="section">
+        <div class="section" style="position: relative;">
             <h2>XI. DECLARACIONES DE LA INSTITUCION PRESTADORA DE SERVICIOS DE SALUD</h2>
-            <p style="margin-left: 0; margin-top: 5px; font-size: 7px; text-align: justify; width: 655px;">
-                Como representante legal o Gerente de la Institución Prestadora de Servicios de Salud, declaró bajo la gavedad de juramento que toda la información contenidad en este formulario es cierta y
-                podrá se verificada por la Compañía de Seguros, por la Dirección de Administracion de Fondos de la Protección Social o quien haga sus veces, por el Administrador Fiduciario del Fondo de
-                Solidaridad y Garantía Fosyga, por la Superintendencia Nacional de Salud o la Contraloria General de la República de no ser así, acepto todas las consecuencias legales que produzca esta
-                situación. Adicionalmente, manifiesto que la reclamación no ha sido presentada con anterioridad ni se ha recibido pago alguno por las sumas reclamadas.
+            <p style="margin: 5px 0 0; font-size: 7px; text-align: justify; width: 655px;">
+                Como representante legal o Gerente de la Institución Prestadora de Servicios de Salud, declaró bajo la gravedad de juramento que toda la información contenida en este formulario es cierta y podrá ser verificada por la Compañía de Seguros, por la Dirección de Administración de Fondos de la Protección Social o quien haga sus veces, por el Administrador Fiduciario del Fondo de Solidaridad y Garantía Fosyga, por la Superintendencia Nacional de Salud o la Contraloría General de la República. De no ser así, acepto todas las consecuencias legales que produzca esta situación. Adicionalmente, manifiesto que la reclamación no ha sido presentada con anterioridad ni se ha recibido pago alguno por las sumas reclamadas.
             </p>
-            <div style="margin-left: 0; margin-top: 5px; font-size: 8px;">
-                <p style="display: inline-block; border-bottom: 1px solid #000; height: 16px; width: 200px; padding-left: 10px; margin-left: 20px; vertical-align: top;"></p>
-                <p style="display: inline-block; border-bottom: 1px solid #000; height: 16px; width: 200px; padding-left: 10px; margin-left: 180px; vertical-align: top;"></p>
-                <div style="margin-top: 2px;">
-                    <span style="display: inline-block; width: 100px; margin-left: 100px;">NOMBRE</span>
-                    <span style="display: inline-block; width: 200px; margin-left: 220px;">FIRMA DEL REPRESENTANTE LEGAL O GERENTE</span>
+
+            <!-- Contenedor de firma y líneas -->
+            <div style="position: relative; margin-top: 10px; height: 50px;">
+                <!-- Línea para nombre -->
+                <div style="position: absolute; left: 20px; top: 0; width: 200px; border-bottom: 1px solid #000; height: 16px; padding-left: 10px;"></div>
+
+                <!-- Línea para firma -->
+                <div style="position: absolute; right: 20px; top: 0; width: 200px; border-bottom: 1px solid #000; height: 16px;"></div>
+
+                <!-- Nombre del representante -->
+                <div style="position: absolute; left: 20px; top: 20px; width: 200px; font-size: 8px; text-align: center;">NOMBRE</div>
+
+                <!-- Etiqueta "FIRMA" -->
+                <div style="position: absolute; right: 20px; top: 20px; width: 200px; font-size: 8px; text-align: center;">FIRMA DEL REPRESENTANTE LEGAL O GERENTE</div>
+
+                <!-- Imagen de la firma (centrada sobre la línea de firma) -->
+                @if(isset($data['signature']))
+                <div style="position: absolute; right: 0px; top: -30px; width: 200px; height: 50px; display: flex; justify-content: center; align-items: flex-start;">
+                    <img src="{{ public_path('storage/'.$data['signature']) }}"
+                        style="max-height: 50px; max-width: 200px; height: auto; width: auto;">
                 </div>
+                @endif
             </div>
         </div>
 

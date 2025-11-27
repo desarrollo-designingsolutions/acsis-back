@@ -305,6 +305,8 @@ class FurtranController extends Controller
                 'ipsPhone' => $invoice->furtran?->ipsPhone,
 
                 'insurance_status' => $invoice?->typeable?->insurance_statuse?->code,
+
+                'signature' => $invoice->serviceVendor?->signature,
             ];
 
             $pdf = $this->invoiceRepository

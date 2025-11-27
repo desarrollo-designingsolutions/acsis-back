@@ -26,8 +26,10 @@ class DashboardController extends Controller
 
             $request['status'] = StatusInvoiceEnum::INVOICE_STATUS_008->value;
             $countPendingPaymentDataStatusPending = $this->invoiceRepository->countPendingPayments($request->all(),"Montos pendientes de radicación");
-            $averageResponseTimeData = $this->invoiceRepository->countAverageResponseTime($request->all());
+            $calculateAverageInvoiceTotal = $this->invoiceRepository->calculateAverageInvoiceTotal($request->all());
             $recoveredGlosasData = $this->invoiceRepository->countRecoveredGlosas($request->all());
+            $getPendingGlosses = $this->invoiceRepository->getPendingGlosses($request->all());
+            $getCollectedPortfolio = $this->invoiceRepository->getCollectedPortfolio($request->all());
 
             return response()->json([
                 'code' => 200,
@@ -36,8 +38,10 @@ class DashboardController extends Controller
                 'countPendingPaymentDataStatusPending' => $countPendingPaymentDataStatusPending,
                 'pendingPaymentsData' => $pendingPaymentsData,
                 'inReviewVsPendingData' => $inReviewVsPendingData,
-                'averageResponseTimeData' => $averageResponseTimeData,
+                'calculateAverageInvoiceTotal' => $calculateAverageInvoiceTotal,
                 'recoveredGlosasData' => $recoveredGlosasData,
+                'getPendingGlosses' => $getPendingGlosses,
+                'getCollectedPortfolio' => $getCollectedPortfolio,
             ]);
         } catch (Throwable $th) {
             return response()->json(['code' => 500, 'message' => $th->getMessage()]);

@@ -420,6 +420,8 @@ class Furips1Controller extends Controller
                 'doctorSecondName' => $invoice->furips1?->doctorSecondName,
                 'doctorRegistrationNumber' => $invoice->furips1?->doctorRegistrationNumber,
 
+                'signature' => $invoice->serviceVendor?->signature,
+
             ];
 
             $pdf = $this->invoiceRepository

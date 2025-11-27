@@ -585,20 +585,37 @@
                 <input type="text" value="{{ $data['serviceEnabledIndication']?->value === "YES_NO_002" ? 'X' : '' }}" maxlength="1" style="width: 14px; height: 14px; border: 1px solid #000; text-align: center; vertical-align: middle; padding: 0; margin: 0; box-sizing: border-box;">
                 <label style="width: 10px; margin-left: 20px;">No</label>
                 <input type="text" value="{{ $data['serviceEnabledIndication']?->value === "YES_NO_001" ? 'X' : '' }}" maxlength="1" style="width: 14px; height: 14px; border: 1px solid #000; text-align: center; vertical-align: middle; padding: 0; margin: 0; box-sizing: border-box;">
-                <p style="margin-left: 0; margin-top: 5px; font-size: 7px; text-align: justify; width: 655px;">
+                <p style="margin-left: 0; margin-top: 5px; font-size: 7px; text-align: justify; width: 650px;">
                     Como representante legal o Gerente de la Institución Prestadora de Servicios de Salud, declaró bajo la gavedad de juramento que toda la información contenidad en este formulario es cierta y
                     podrá se verificada por la Compañía de Seguros, por la Dirección de Administracion de Fondos de la Protección Social o quien haga sus veces, por el Administrador Fiduciario del Fondo de
                     Solidaridad y Garantía Fosyga, por la Superintendencia Nacional de Salud o la Contraloria General de la República de no ser así, acepto todas las consecuencias legales que produzca esta
                     situación. Adicionalmente, manifiesto que la reclamación no ha sido presentada con anterioridad ni se ha recibido pago alguno por las sumas reclamadas.
                 </p>
-                <div style="margin-left: 0; margin-top: 5px; font-size: 8px;">
-                    <p style="display: inline-block; border-bottom: 1px solid #000; height: 16px; width: 200px; padding-left: 10px; margin-left: 20px; vertical-align: top;"></p>
-                    <p style="display: inline-block; border-bottom: 1px solid #000; height: 16px; width: 200px; padding-left: 10px; margin-left: 180px; vertical-align: top;"></p>
-                    <div style="margin-top: 2px;">
-                        <span style="display: inline-block; width: 190px; margin-left: 30px; text-align: center;">NOMBRE REPRESENTANTE LEGAL O PERSONA RESPONSABLE PARA TRAMITE DE ADMISIONES DE LA IPS</span>
-                        <span style="display: inline-block; width: 200px; margin-left: 195px; text-align: center;">FIRMA DEL REPRESENTANTE LEGAL O PERSONA RESPONSABLE PARA TRAMITE DE ADMISIONES DE LA IPS</span>
-                    </div>
+
+                <!-- Contenedor de firma y líneas -->
+            <div style="position: relative; margin-top: 10px; height: 50px;">
+                <!-- Línea para nombre -->
+                <div style="position: absolute; left: 20px; top: 0; width: 200px; border-bottom: 1px solid #000; height: 16px; padding-left: 10px;"></div>
+
+                <!-- Línea para firma -->
+                <div style="position: absolute; right: 20px; top: 0; width: 200px; border-bottom: 1px solid #000; height: 16px;"></div>
+
+                <!-- Nombre del representante -->
+                <div style="position: absolute; left: 20px; top: 20px; width: 200px; font-size: 8px; text-align: center;">NOMBRE REPRESENTANTE LEGAL O PERSONA RESPONSABLE PARA TRAMITE DE ADMISIONES DE LA IPS</div>
+
+                <!-- Etiqueta "FIRMA" -->
+                <div style="position: absolute; right: 20px; top: 20px; width: 200px; font-size: 8px; text-align: center;">FIRMA DEL REPRESENTANTE LEGAL O PERSONA RESPONSABLE PARA TRAMITE DE ADMISIONES DE LA IPS</div>
+
+                <!-- Imagen de la firma (centrada sobre la línea de firma) -->
+                @if(isset($data['signature']))
+                <div style="position: absolute; right: 0px; top: -30px; width: 200px; height: 50px; display: flex; justify-content: center; align-items: flex-start;">
+                    <img src="{{ public_path('storage/'.$data['signature']) }}"
+                        style="max-height: 50px; max-width: 200px; height: auto; width: auto;">
                 </div>
+                @endif
+            </div>
+
+
                 <div style="margin-left: 0; margin-top: 5px; font-size: 8px;">
                     <p style="display: inline-block; border-bottom: 1px solid #000; height: 16px; width: 200px; padding-left: 10px; margin-left: 20px; vertical-align: top;"></p>
                     <p style="display: inline-block; border-bottom: 1px solid #000; height: 16px; width: 200px; padding-left: 10px; margin-left: 180px; vertical-align: top;"></p>

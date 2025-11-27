@@ -30,6 +30,7 @@ class ServiceVendorFormResource extends JsonResource
                 'codigo' => $this->ipsable?->codigo,
                 'nit' => $this->ipsable?->nroIDPrestador ?? $this->ipsable?->nit,
             ],
+            'signature' => $this->signature,
         ];
     }
 

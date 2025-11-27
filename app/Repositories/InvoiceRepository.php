@@ -201,7 +201,7 @@ class InvoiceRepository extends BaseRepository
             'color' => 'success',
             'title' => $title,
             'value' => $value,
-            'secondary_data' => $invoiceCount.' facturas',
+            'secondary_data' => $invoiceCount . ' facturas',
             'isHover' => false,
             'type' => 1,
             'to' => [],
@@ -231,8 +231,8 @@ class InvoiceRepository extends BaseRepository
         $approvedPercentage = $totalSum > 0 ? ($approvedSum / $totalSum) * 100 : 0;
         $glosaPercentage = $totalSum > 0 ? ($glosaSum / $totalSum) * 100 : 0;
 
-        $value = round($approvedPercentage, 2).'% / '.round($glosaPercentage, 2).'%';
-        $secondary_data = formatNumber($approvedSum).' aprobados / '.formatNumber($glosaSum).' glosados';
+        $value = round($approvedPercentage, 2) . '% / ' . round($glosaPercentage, 2) . '%';
+        $secondary_data = formatNumber($approvedSum) . ' aprobados / ' . formatNumber($glosaSum) . ' glosados';
 
         return [
             'title' => 'Facturación Aprobada vs Glosada',
@@ -270,8 +270,8 @@ class InvoiceRepository extends BaseRepository
         $pendingCount = $pendingQuery->count();
         $pendingSum = $pendingQuery->sum('total');
 
-        $value = $inReviewCount.' / '.$pendingCount;
-        $secondary_data = formatNumber($inReviewSum).'  en revisión / '.formatNumber($pendingSum).'pendientes';
+        $value = $inReviewCount . ' / ' . $pendingCount;
+        $secondary_data = formatNumber($inReviewSum) . '  en revisión / ' . formatNumber($pendingSum) . 'pendientes';
 
         return [
             'title' => 'Facturas en revisión / Pendientes de radicación',
@@ -284,7 +284,7 @@ class InvoiceRepository extends BaseRepository
         ];
     }
 
-    public function countPendingPayments($request = [],$title = 'Montos pendientes de pago')
+    public function countPendingPayments($request = [], $title = 'Montos pendientes de pago')
     {
         $query = $this->model->where(function ($query) use ($request) {
             if (! empty($request['company_id'])) {
@@ -325,23 +325,46 @@ class InvoiceRepository extends BaseRepository
         ];
     }
 
-    public function countAverageResponseTime($request = [])
+    public function calculateAverageInvoiceTotal($request = [])
     {
+        // 1. Armas el query base con tus filtros
+        $query = $this->model->where(function ($query) use ($request) {
+            if (! empty($request['company_id'])) {
+                $query->where('company_id', $request['company_id']);
+            }
 
-        // Formatear los datos como espera el frontend
-        $value = '15.3 días';
-        $secondary_data = 'Tiempo de respuesta de aseguradoras';
+            if (! empty($request['start_date']) && ! empty($request['end_date'])) {
+                $query->whereBetween('invoice_date', [$request['start_date'], $request['end_date']]);
+            }
+
+            // OJO: si quieres EXCLUIR siempre INVOICE_STATUS_001,
+            // mejor NO usar aquí el filtro directo de status del request
+            if (! empty($request['service_vendor_id'])) {
+                $query->where('service_vendor_id', $request['service_vendor_id']);
+            }
+        });
+
+        // 2. Sobre el query ya filtrado, aplicas las condiciones de status
+        $averageTotal = (clone $query)   // clone por si luego reutilizas $query
+            ->whereNotNull('status')
+            ->where('status', '!=', '')
+            ->where('status', '!=', StatusInvoiceEnum::INVOICE_STATUS_001)
+            ->avg('total');
+
+        // 3. Formateas el valor para el frontend
+        $value = formatNumber($averageTotal);
 
         return [
-            'title' => 'Tiempo promedio de respuesta',
+            'title' => 'Promedio del valor total',
             'value' => $value,
-            'secondary_data' => $secondary_data,
-            'icon' => 'tabler-clock',
+            'secondary_data' => 'Promedio de total por facturas con estado válido',
+            'icon' => 'tabler-currency-dollar',
             'color' => 'success',
             'isHover' => false,
             'to' => [],
         ];
     }
+
 
     public function countRecoveredGlosas($request = [])
     {
@@ -355,6 +378,40 @@ class InvoiceRepository extends BaseRepository
             'secondary_data' => $secondary_data,
             'icon' => 'tabler-percentage',
             'color' => 'success',
+            'isHover' => false,
+            'to' => [],
+        ];
+    }
+
+    public function getPendingGlosses($request = [])
+    {
+        // Valor quemado temporal (luego lo reemplazas con tu query real)
+        $value = '120';
+        $secondary_data = 'Hay 120 Glosas pendientes por contestar.';
+
+        return [
+            'title' => 'Glosas pendientes por contestar',
+            'value' => $value,
+            'secondary_data' => $secondary_data,
+            'icon' => 'tabler-alert-circle',
+            'color' => 'warning',
+            'isHover' => false,
+            'to' => [],
+        ];
+    }
+
+    public function getCollectedPortfolio($request = [])
+    {
+        // Valor quemado temporal (luego lo reemplazas con tu query real)
+        $value = '$ 48.500.000';
+        $secondary_data = 'Cartera recaudada en el periodo';
+
+        return [
+            'title' => 'Cartera recaudada',
+            'value' => $value,
+            'secondary_data' => $secondary_data,
+            'icon' => 'tabler-cash',
+            'color' => 'info',
             'isHover' => false,
             'to' => [],
         ];

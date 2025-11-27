@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exports\ServiceVendorExcelExport;
+use App\Helpers\Constants;
 use App\Http\Requests\ServiceVendor\ServiceVendorStoreRequest;
 use App\Http\Resources\ServiceVendor\ServiceVendorFormResource;
 use App\Http\Resources\ServiceVendor\ServiceVendorPaginateResource;
@@ -81,6 +82,15 @@ class ServiceVendorController extends Controller
             $post = $request->except([]);
             $serviceVendor = $this->serviceVendorRepository->store($post);
 
+            if ($request->file('signature')) {
+                $file = $request->file('signature');
+                $ruta = 'companies/company_'.$serviceVendor->company_id.'/service_vendor_'.$serviceVendor->id.$request->input('signature');
+
+                $signature = $file->store($ruta, Constants::DISK_FILES);
+                $serviceVendor->signature = $signature;
+                $serviceVendor->save();
+            }
+
             return [
                 'code' => 200,
                 'message' => 'Proveedor agregado correctamente',
@@ -136,6 +146,15 @@ class ServiceVendorController extends Controller
 
             $post = $request->except([]);
             $serviceVendor = $this->serviceVendorRepository->store($post, $id);
+
+            if ($request->file('signature')) {
+                $file = $request->file('signature');
+                $ruta = 'companies/company_'.$serviceVendor->company_id.'/service_vendor_'.$serviceVendor->id.$request->input('signature');
+
+                $signature = $file->store($ruta, Constants::DISK_FILES);
+                $serviceVendor->signature = $signature;
+                $serviceVendor->save();
+            }
 
             return [
                 'code' => 200,
