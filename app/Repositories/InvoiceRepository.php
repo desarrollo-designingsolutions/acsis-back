@@ -7,6 +7,7 @@ use App\Enums\Invoice\StatusXmlInvoiceEnum;
 use App\Enums\Invoice\TypeInvoiceEnum;
 use App\Helpers\Constants;
 use App\Models\Invoice;
+use App\Models\InvoicePayment;
 use App\QueryBuilder\Filters\DataSelectFilter;
 use App\QueryBuilder\Filters\DateRangeFilter;
 use App\QueryBuilder\Filters\QueryFilters;
@@ -29,7 +30,7 @@ class InvoiceRepository extends BaseRepository
         return $this->cacheService->remember($cacheKey, function () use ($request) {
             $query = QueryBuilder::for($this->model->query())
                 ->with(['patient', 'entity', 'serviceVendor', 'furips1', 'furtran'])
-                ->select(['invoices.id', 'invoices.entity_id', 'invoices.type', 'invoices.patient_id', 'invoices.invoice_number', 'invoices.radication_number', 'invoices.value_glosa', 'invoices.value_paid', 'invoices.invoice_date', 'invoices.radication_date', 'invoices.is_active', 'invoices.status', 'invoices.status_xml', 'invoices.path_xml', 'invoices.service_vendor_id'])
+                ->select(['invoices.id', 'invoices.entity_id', 'invoices.type', 'invoices.patient_id', 'invoices.invoice_number', 'invoices.radication_number', 'invoices.value_glosa', 'invoices.value_paid', 'invoices.invoice_date', 'invoices.radication_date', 'invoices.is_active', 'invoices.status', 'invoices.status_xml', 'invoices.path_xml', 'invoices.service_vendor_id', "invoices.total"])
                 ->allowedFilters([
 
                     AllowedFilter::callback('inputGeneral', function ($query, $value) {
@@ -48,6 +49,9 @@ class InvoiceRepository extends BaseRepository
 
                             $subQuery->orWhereHas('entity', function ($subQuery2) use ($value) {
                                 $subQuery2->where('entities.corporate_name', 'like', "%$value%");
+                            });
+                            $subQuery->orWhereHas('serviceVendor', function ($subQuery2) use ($value) {
+                                $subQuery2->where('service_vendors.name', 'like', "%$value%");
                             });
 
                             QueryFilters::filterByDMYtoYMD($subQuery, $value, 'radication_date');
@@ -78,11 +82,13 @@ class InvoiceRepository extends BaseRepository
                     'radication_date',
                     'invoice_number',
                     'type',
+                    'total',
                     'value_glosa',
                     'value_paid',
                     'status',
                     'status_xml',
                     AllowedSort::custom('entity_name', new RelatedTableSort('invoices', 'entities', 'corporate_name', 'entity_id')),
+                    AllowedSort::custom('service_vendor_name', new RelatedTableSort('invoices', 'service_vendors', 'name', 'service_vendor_id')),
                     AllowedSort::custom('patient_name', new RelatedTableSort('invoices', 'patients', 'first_name', 'patient_id')),
                 ])->where(function ($query) use ($request) {
                     if (! empty($request['company_id'])) {
@@ -402,13 +408,29 @@ class InvoiceRepository extends BaseRepository
 
     public function getCollectedPortfolio($request = [])
     {
+        // $value = InvoicePayment::with(["invoice" => function ($query) use ($request) {
+        //     if (!empty($request['company_id'])) {
+        //         $query->where("company_id", $request['company_id']);
+        //     }
+        //     if (!empty($request['service_vendor_id'])) {
+        //         $query->where("service_vendor_id", $request['service_vendor_id']);
+        //     }
+        // }])->where(function ($query) use ($request) {
+        //     if (!empty($request['start_date'])) {
+        //         $query->where("date_payment", '>=', $request['start_date']);
+        //     }
+        //     if (!empty($request['end_date'])) {
+        //         $query->where("date_payment", '<=', $request['end_date']);
+        //     }
+        // })
+        //     ->sum();
         // Valor quemado temporal (luego lo reemplazas con tu query real)
-        $value = '$ 48.500.000';
+        $value = '48500000';
         $secondary_data = 'Cartera recaudada en el periodo';
 
         return [
             'title' => 'Cartera recaudada',
-            'value' => $value,
+            'value' => formatNumber($value),
             'secondary_data' => $secondary_data,
             'icon' => 'tabler-cash',
             'color' => 'info',

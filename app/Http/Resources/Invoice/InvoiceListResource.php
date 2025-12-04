@@ -20,6 +20,7 @@ class InvoiceListResource extends JsonResource
             'id' => $this->id,
             'serviceVendor_nit' => $this->serviceVendor?->nit,
 
+            'service_vendor_name' => $this->serviceVendor?->name,
             'entity_name' => $this->entity?->corporate_name,
             'invoice_number' => $this->invoice_number,
             'type' => $this->type,
@@ -41,6 +42,7 @@ class InvoiceListResource extends JsonResource
             'furips1_id' => $this->furips1?->id,
             'furips2_id' => $this->furips2?->id,
             'furtran_id' => $this->furtran?->id,
+            'total' => formatNumber($this->total),
 
         ];
     }
