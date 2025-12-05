@@ -24,7 +24,7 @@ class prueba1Seeder extends Seeder
 
         try {
             $sheet = $excelService
-                ->getSpreadsheetFromExcel(database_path('db/prueba_registros_yopal.xlsx'))
+                ->getSpreadsheetFromExcel(database_path('db/prueba_registros_villanueva.xlsx'))
                 ->getSheetByName('Sheet1')
                 ->toArray();
         } catch (Exception $e) {
