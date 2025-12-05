@@ -6,6 +6,7 @@ use App\Enums\Invoice\StatusInvoiceEnum;
 use App\Enums\Invoice\StatusXmlInvoiceEnum;
 use App\Enums\Invoice\TypeInvoiceEnum;
 use App\Helpers\Constants;
+use App\Models\Glosa;
 use App\Models\Invoice;
 use App\Models\InvoicePayment;
 use App\QueryBuilder\Filters\DataSelectFilter;
@@ -343,8 +344,6 @@ class InvoiceRepository extends BaseRepository
                 $query->whereBetween('invoice_date', [$request['start_date'], $request['end_date']]);
             }
 
-            // OJO: si quieres EXCLUIR siempre INVOICE_STATUS_001,
-            // mejor NO usar aquí el filtro directo de status del request
             if (! empty($request['service_vendor_id'])) {
                 $query->where('service_vendor_id', $request['service_vendor_id']);
             }
@@ -391,9 +390,25 @@ class InvoiceRepository extends BaseRepository
 
     public function getPendingGlosses($request = [])
     {
-        // Valor quemado temporal (luego lo reemplazas con tu query real)
-        $value = '120';
-        $secondary_data = 'Hay 120 Glosas pendientes por contestar.';
+        $query = Glosa::query();
+
+        $query->doesntHave('answers');
+
+        $query->whereHas('service.invoice', function ($q) use ($request) {
+
+            if (!empty($request['start_date']) && !empty($request['end_date'])) {
+                $q->whereBetween('invoice_date', [$request['start_date'], $request['end_date']]);
+            }
+
+            if (!empty($request['service_vendor_id'])) {
+                $q->where('service_vendor_id', $request['service_vendor_id']);
+            }
+        });
+
+        $count = $query->count();
+
+        $value = (string) $count;
+        $secondary_data = "Hay {$value} Glosas pendientes por contestar.";
 
         return [
             'title' => 'Glosas pendientes por contestar',
@@ -408,24 +423,34 @@ class InvoiceRepository extends BaseRepository
 
     public function getCollectedPortfolio($request = [])
     {
-        // $value = InvoicePayment::with(["invoice" => function ($query) use ($request) {
-        //     if (!empty($request['company_id'])) {
-        //         $query->where("company_id", $request['company_id']);
-        //     }
-        //     if (!empty($request['service_vendor_id'])) {
-        //         $query->where("service_vendor_id", $request['service_vendor_id']);
-        //     }
-        // }])->where(function ($query) use ($request) {
-        //     if (!empty($request['start_date'])) {
-        //         $query->where("date_payment", '>=', $request['start_date']);
-        //     }
-        //     if (!empty($request['end_date'])) {
-        //         $query->where("date_payment", '<=', $request['end_date']);
-        //     }
-        // })
-        //     ->sum();
-        // Valor quemado temporal (luego lo reemplazas con tu query real)
-        $value = '48500000';
+        $value = InvoicePayment::with(["invoice" => function ($query) use ($request) {
+            if (!empty($request['company_id'])) {
+                $query->where("company_id", $request['company_id']);
+            }
+            if (!empty($request['service_vendor_id'])) {
+                $query->where("service_vendor_id", $request['service_vendor_id']);
+            }
+        }])->where(function ($query) use ($request) {
+            if (!empty($request['start_date'])) {
+                $query->where("date_payment", '>=', $request['start_date']);
+            }
+            if (!empty($request['end_date'])) {
+                $query->where("date_payment", '<=', $request['end_date']);
+            }
+            if (!empty($request['service_vendor_id'])) {
+                $query->whereHas("invoice", function ($q) use ($request) {
+                    $q->where("service_vendor_id", $request['service_vendor_id']);
+                });
+            }
+            if (!empty($request['company_id'])) {
+                $query->whereHas("invoice", function ($q) use ($request) {
+                    $q->where("company_id", $request['company_id']);
+                });
+            }
+        })
+            ->sum("value_paid");
+
+
         $secondary_data = 'Cartera recaudada en el periodo';
 
         return [

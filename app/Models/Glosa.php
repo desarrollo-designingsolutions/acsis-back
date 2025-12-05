@@ -56,4 +56,9 @@ class Glosa extends Model
     {
         return $this->belongsTo(CodeGlosa::class);
     }
+
+    public function answers()
+    {
+        return $this->hasMany(GlosaAnswer::class, 'glosa_id');
+    }
 }

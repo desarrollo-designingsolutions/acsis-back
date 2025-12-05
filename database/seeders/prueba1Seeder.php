@@ -11,7 +11,6 @@ use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use PhpOffice\PhpSpreadsheet\Reader\Exception;
 
-use function Psl\PseudoRandom\float;
 
 class prueba1Seeder extends Seeder
 {
@@ -25,7 +24,7 @@ class prueba1Seeder extends Seeder
 
         try {
             $sheet = $excelService
-                ->getSpreadsheetFromExcel(database_path('db/prueba_2_acssis.xlsx'))
+                ->getSpreadsheetFromExcel(database_path('db/prueba_registros_yopal.xlsx'))
                 ->getSheetByName('Sheet1')
                 ->toArray();
         } catch (Exception $e) {
