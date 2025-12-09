@@ -6,19 +6,28 @@ use App\Helpers\Constants;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Validation\Rule; // <--- IMPORTANTE: Importar Rule
 
 class PatientStoreRequest extends FormRequest
 {
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
-     */
     public function rules(): array
     {
+        // 1. Obtener el ID de la empresa.
+        // Si viene en el request usa: $this->company_id
+        $companyId = $this->company_id;
+
         $rules = [
             'tipo_id_pisi_id' => 'required',
-            'document' => 'required',
+            'document' => [
+                'required',
+                // 2. Regla compuesta
+                Rule::unique('patients', 'document') // 'patients' es la tabla
+                    ->where(function ($query) use ($companyId) {
+                        return $query->where('tipo_id_pisi_id', $this->tipo_id_pisi_id)
+                                     ->where('company_id', $companyId)
+                                     ->whereNull('deleted_at'); // Si usas SoftDeletes, agrega esto
+                    }),
+            ],
             'rips_tipo_usuario_version2_id' => 'required',
             'birth_date' => 'required|date',
             'sexo_id' => 'required',
@@ -35,8 +44,13 @@ class PatientStoreRequest extends FormRequest
     public function messages(): array
     {
         return [
+            // ... tus mensajes existentes ...
             'tipo_id_pisi_id.required' => 'El campo es obligatorio',
             'document.required' => 'El campo es obligatorio',
+
+            // 3. Mensaje personalizado para el error de duplicado
+            'document.unique' => 'Ya existe un paciente con este número de documento y tipo de identificación en la empresa.',
+
             'rips_tipo_usuario_version2_id.required' => 'El campo es obligatorio',
             'birth_date.required' => 'El campo es obligatorio',
             'birth_date.date' => 'El campo debe ser una fecha',
@@ -82,7 +96,6 @@ class PatientStoreRequest extends FormRequest
 
     public function failedValidation(Validator $validator)
     {
-
         throw new HttpResponseException(response()->json([
             'code' => 422,
             'message' => Constants::ERROR_MESSAGE_VALIDATION_BACK,

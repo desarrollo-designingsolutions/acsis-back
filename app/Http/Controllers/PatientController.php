@@ -191,7 +191,7 @@ class PatientController extends Controller
             ];
         });
     }
-    
+
     public function exportDataToPatientImportExcel(Request $request)
     {
         return $this->execute(function () use ($request) {
@@ -237,7 +237,7 @@ class PatientController extends Controller
             ];
         });
     }
-    
+
     public function exportFormatPatientImportExcel(Request $request)
     {
         return $this->execute(function () use ($request) {
@@ -252,7 +252,7 @@ class PatientController extends Controller
             ];
         });
     }
-    
+
     public function uploadXlsxPatient(PatientUploadXlsxRequest $request)
     {
         return $this->runTransaction(function () use ($request) {
@@ -290,7 +290,7 @@ class PatientController extends Controller
 
             $file_path = $file->getRealPath();
 
-            if (!ImportXlsxValidator::validate($user_id, $keyErrorRedis, $file_path, 14, 'patient')) { 
+            if (!ImportXlsxValidator::validate($user_id, $keyErrorRedis, $file_path, 14, 'patient')) {
                 ProgressCircular::dispatch("xlsx_import_progress_patient.{$user_id}", 100);
                 $errors = ErrorCollector::getErrors($keyErrorRedis);  // Obtener lista de errores
 
@@ -333,7 +333,7 @@ class PatientController extends Controller
         });
     }
 
-    
+
     private function sendNotification($userId, $data)
     {
         // Obtener el objeto User a partir del ID
@@ -363,7 +363,7 @@ class PatientController extends Controller
             );
         }
     }
-    
+
     public function getContentJson(Request $request)
     {
         return $this->execute(function () use ($request) {
@@ -376,7 +376,7 @@ class PatientController extends Controller
             ];
         });
     }
-    
+
     public function excelErrorsValidation(Request $request)
     {
         return $this->execute(function () use ($request) {
@@ -401,7 +401,7 @@ class PatientController extends Controller
             ];
         });
     }
-    
+
     public function exportExcelErrorsValidation(Request $request)
     {
         return $this->execute(function () use ($request) {
