@@ -109,7 +109,7 @@ class DashboardController extends Controller
     public function getStatusDistribution(Request $request)
     {
         $company_id = $request->input('company_id');
-        
+
         // Obtener la distribución de facturas por estado
         $distribution = Invoice::selectRaw('status, COUNT(*) as count')
             ->whereNotNull('status') // Solo facturas con estado definido

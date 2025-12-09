@@ -403,6 +403,9 @@ class InvoiceRepository extends BaseRepository
             if (!empty($request['service_vendor_id'])) {
                 $q->where('service_vendor_id', $request['service_vendor_id']);
             }
+            if (!empty($request['company_id'])) {
+                $q->where('company_id', $request['company_id']);
+            }
         });
 
         $count = $query->count();
