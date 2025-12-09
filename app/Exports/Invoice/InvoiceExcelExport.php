@@ -25,9 +25,11 @@ class InvoiceExcelExport implements FromView, ShouldAutoSize, WithEvents
         $data = collect($this->data)->map(function ($value) {
 
             return [
+                'serviceVendor_name' => $value->serviceVendor?->name,
                 'entity_name' => $value->entity?->corporate_name,
                 'invoice_number' => $value->invoice_number,
                 'type_name' => $value->type?->description() ?? 'Desconocido',
+                'total' => formatNumber($value->total),
                 'value_paid' => formatNumber($value->value_paid),
                 'value_glosa' => formatNumber($value->value_glosa),
                 'radication_date' => $value->radication_date,
