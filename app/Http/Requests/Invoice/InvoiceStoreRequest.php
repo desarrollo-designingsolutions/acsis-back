@@ -6,16 +6,15 @@ use App\Helpers\Constants;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Validation\Rule; // <--- 1. Importar Rule
 
 class InvoiceStoreRequest extends FormRequest
 {
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
-     */
     public function rules(): array
     {
+        // Obtener el ID de la empresa del request
+        $companyId =  $this->company_id;
+
         $rules = [
             'service_vendor_id' => 'required',
             'entity_id' => 'required',
@@ -25,10 +24,21 @@ class InvoiceStoreRequest extends FormRequest
             'status' => 'required',
         ];
 
-        // si no se selecciona el tipo de nota y no se ingresa el numero de nota entonces el numero de factura es obligatorio
+        // LOGICA PRINCIPAL AQUÍ:
+        // Si no es nota (crédito/débito), validamos la factura
         if (! $this->tipo_nota_id) {
             $rules2 = [
-                'invoice_number' => 'required',
+                'invoice_number' => [
+                    'required',
+                    // Validar unicidad compuesta: invoice_number + company_id + service_vendor_id
+                    Rule::unique('invoices', 'invoice_number')
+                        ->where(function ($query) use ($companyId) {
+                            return $query->where('company_id', $companyId)
+                                         // Usamos $this->service_vendor_id porque prepareForValidation ya lo convirtió al ID
+                                         ->where('service_vendor_id', $this->service_vendor_id)
+                                         ->whereNull('deleted_at'); // Asumiendo que usas SoftDeletes
+                        })
+                ],
             ];
             $rules = array_merge($rules, $rules2);
         }
@@ -41,7 +51,7 @@ class InvoiceStoreRequest extends FormRequest
             $rules = array_merge($rules, $rules2);
         }
 
-        // si el tipo de nota se leecciona entonces el numero de nota es obligatorio
+        // si el tipo de nota se selecciona entonces el numero de nota es obligatorio
         if ($this->tipo_nota_id) {
             $rules2 = [
                 'note_number' => 'required',
@@ -84,7 +94,11 @@ class InvoiceStoreRequest extends FormRequest
             'service_vendor_id.required' => 'El campo es obligatorio',
             'entity_id.required' => 'El campo es obligatorio',
             'patient_id.required' => 'El campo es obligatorio',
+
             'invoice_number.required' => 'El campo es obligatorio',
+            // Mensaje personalizado para el error de duplicado
+            'invoice_number.unique' => 'Este número de factura ya existe para este proveedor en esta empresa.',
+
             'radication_number.required' => 'El campo es obligatorio',
             'invoice_date.required' => 'El campo es obligatorio',
             'type.required' => 'El campo es obligatorio',
@@ -105,6 +119,7 @@ class InvoiceStoreRequest extends FormRequest
 
     protected function prepareForValidation(): void
     {
+        // ... (Tu código prepareForValidation se mantiene igual)
         $merge = [];
 
         if ($this->has('service_vendor_id')) {
@@ -120,14 +135,17 @@ class InvoiceStoreRequest extends FormRequest
             $merge['tipo_nota_id'] = getValueSelectInfinite($this->tipo_nota_id);
         }
         if ($this->has('soat.insurance_statuse_id')) {
-            $merge['soat.insurance_statuse_id'] = getValueSelectInfinite($this->soat['insurance_statuse_id']);
+             // Nota: aquí corregí el acceso al array, asegúrate que $this->soat sea accesible así
+             // Si $this->soat es un array, esto está bien si viene como input.
+             if(isset($this->soat['insurance_statuse_id'])){
+                 $merge['soat.insurance_statuse_id'] = getValueSelectInfinite($this->soat['insurance_statuse_id']);
+             }
         }
         $this->merge($merge);
     }
 
     public function failedValidation(Validator $validator)
     {
-
         throw new HttpResponseException(response()->json([
             'code' => 422,
             'message' => Constants::ERROR_MESSAGE_VALIDATION_BACK,
