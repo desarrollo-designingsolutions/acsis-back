@@ -36,8 +36,10 @@ class InvoiceStoreRequest extends FormRequest
                             return $query->where('company_id', $companyId)
                                          // Usamos $this->service_vendor_id porque prepareForValidation ya lo convirtió al ID
                                          ->where('service_vendor_id', $this->service_vendor_id)
+                                         ->where('entity_id', $this->entity_id)
                                          ->whereNull('deleted_at'); // Asumiendo que usas SoftDeletes
                         })
+                        ->ignore($this->id)
                 ],
             ];
             $rules = array_merge($rules, $rules2);
@@ -97,7 +99,7 @@ class InvoiceStoreRequest extends FormRequest
 
             'invoice_number.required' => 'El campo es obligatorio',
             // Mensaje personalizado para el error de duplicado
-            'invoice_number.unique' => 'Este número de factura ya existe para este proveedor en esta empresa.',
+            'invoice_number.unique' => 'Este número de factura ya existe para este prestador y entidad en esta empresa.',
 
             'radication_number.required' => 'El campo es obligatorio',
             'invoice_date.required' => 'El campo es obligatorio',

@@ -24,7 +24,11 @@ class prueba1Seeder extends Seeder
 
         try {
             $sheet = $excelService
-                ->getSpreadsheetFromExcel(database_path('db/prueba_registros_tunja.xlsx'))
+                // ->getSpreadsheetFromExcel(database_path('db/prueba1_registros_AGUAZUL.xlsx'))
+                // ->getSpreadsheetFromExcel(database_path('db/prueba2_registros_tunja.xlsx'))
+                // ->getSpreadsheetFromExcel(database_path('db/prueba3_registros_villanueva.xlsx'))
+                // ->getSpreadsheetFromExcel(database_path('db/prueba4_registros_yopal.xlsx'))
+                // ->getSpreadsheetFromExcel(database_path('db/prueba5_registros_CRCSC.xlsx'))
                 ->getSheetByName('Sheet1')
                 ->toArray();
         } catch (Exception $e) {
@@ -68,6 +72,8 @@ class prueba1Seeder extends Seeder
                         'total' => floatval($dataSheet[11]),
                         'status' => "INVOICE_STATUS_002",
                         'status_xml' => "INVOICE_STATUS_XML_001",
+                        'invoice_date' => $dataSheet[13] ? Carbon::parse($dataSheet[13])->format('Y-m-d') : null,
+
 
                     ]
                 );
