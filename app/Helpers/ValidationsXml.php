@@ -26,7 +26,7 @@ function validateDataFilesXml($archivo, $data)
     $numFac = $attachedDocument['cbc:ID'];
     $arrayExito[] = RVC004($data['jsonContents'], $numFac, $errorMessages);
 
-    $nitSenderVendor = $attachedDocument['cac:SenderParty']['cac:PartyTaxScheme']['cbc:CompanyID'];     
+    $nitSenderVendor = $attachedDocument['cac:SenderParty']['cac:PartyTaxScheme']['cbc:CompanyID'];
     $arrayExito[] = validationNitSenderVendor($data, $nitSenderVendor, $errorMessages);
 
 
@@ -113,19 +113,21 @@ function RVC004($dataTxt, $value2, &$errorMessages)
 {
     $validation = true;
 
-    if ($dataTxt[Constants::KEY_NUMFACT] != $value2) {
-        $errorMessages[] = [
-            'validacion' => 'RVC004',
-            'validacion_type_Y' => 'R',
-            'num_invoice' => $dataTxt[Constants::KEY_NUMFACT] ?? $dataTxt['numFEVPagoModerador'] ?? null,
-            'file' => $dataTxt['file_name'] ?? null,
-            'row' => $dataTxt['row'] ?? null,
-            'column' => Constants::KEY_NUMFACT,
-            'data' => $value2,
-            'error' => 'El número de la factura informado en RIPS no coincide con el informado en la factura electrónica de venta.',
-        ];
+    if (is_array($dataTxt) && isset($dataTxt[Constants::KEY_NUMFACT])) {
+        if ($dataTxt[Constants::KEY_NUMFACT] != $value2) {
+            $errorMessages[] = [
+                'validacion' => 'RVC004',
+                'validacion_type_Y' => 'R',
+                'num_invoice' => $dataTxt[Constants::KEY_NUMFACT] ?? $dataTxt['numFEVPagoModerador'] ?? null,
+                'file' => $dataTxt['file_name'] ?? null,
+                'row' => $dataTxt['row'] ?? null,
+                'column' => Constants::KEY_NUMFACT,
+                'data' => $value2,
+                'error' => 'El número de la factura informado en RIPS no coincide con el informado en la factura electrónica de venta.',
+            ];
 
-        $validation = false;
+            $validation = false;
+        }
     }
 
     return [

@@ -482,7 +482,7 @@ class Furips1Controller extends Controller
             'eventDepartmentCode' => $furips1->eventDepartmentCode?->codigo,
             'eventMunicipalityCode' => $furips1->eventMunicipalityCode?->codigo,
             'eventZone' => $furips1->eventZone?->value(),
-            'insurance_statuse' => $furips1->invoice?->typeable->insurance_statuse->code,
+            'insurance_statuse' => $furips1->invoice?->typeable?->insurance_statuse?->code,
             'vehicleBrand' => $furips1->vehicleBrand,
             'vehiclePlate' => $furips1->vehiclePlate,
             'vehicleType' => $furips1->vehicleType?->value(),

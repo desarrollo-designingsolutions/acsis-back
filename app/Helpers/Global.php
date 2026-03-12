@@ -68,7 +68,7 @@ function generatePastelColor($opacity = 1.0)
 function truncate_text($text, $maxLength = 15)
 {
     if (strlen($text) > $maxLength) {
-        return substr($text, 0, $maxLength).'...';
+        return substr($text, 0, $maxLength) . '...';
     }
 
     return $text;
@@ -79,7 +79,7 @@ function formatNumber($number, $currency_symbol = '$ ', $decimal = 2)
     // Asegúrate de que el número es un número flotante
     $formattedNumber = number_format((float) $number, $decimal, ',', '.');
 
-    return $currency_symbol.$formattedNumber;
+    return $currency_symbol . $formattedNumber;
 }
 
 function formattedElement($element)
@@ -160,7 +160,7 @@ function updateInvoiceServicesJson(string $invoice_id, TypeServiceEnum $serviceT
     $invoice = Invoice::select(['id', 'path_json', 'invoice_number', 'company_id'])->find($invoice_id);
 
     // Define file path
-    $nameFile = $invoice->id.'.json';
+    $nameFile = $invoice->id . '.json';
     $path = "companies/company_{$invoice->company_id}/invoices/invoice_{$invoice->id}/{$nameFile}";
     $disk = Constants::DISK_FILES;
 
@@ -218,7 +218,7 @@ function updateInvoiceServicesJson(string $invoice_id, TypeServiceEnum $serviceT
             }
             $jsonData['usuarios'][0]['servicios'][$serviceType->elementJson()] = array_filter(
                 $jsonData['usuarios'][0]['servicios'][$serviceType->elementJson()],
-                fn ($service) => $service['consecutivo'] !== $consecutivo
+                fn($service) => $service['consecutivo'] !== $consecutivo
             );
             // Reindex consecutivos in JSON
             $newServices = [];
@@ -255,7 +255,7 @@ function getNextConsecutivo(string $invoice_id, TypeServiceEnum $typeService)
     $maxConsecutivo = 0;
     if (Storage::disk($disk)->exists($path)) {
         $jsonData = json_decode(Storage::disk($disk)->get($path), true);
-        if (! empty($jsonData['usuarios'][0]['servicios'][$typeService->elementJson()])) {
+        if (!empty($jsonData['usuarios'][0]['servicios'][$typeService->elementJson()])) {
             $maxConsecutivo = max(array_column($jsonData['usuarios'][0]['servicios'][$typeService->elementJson()], 'consecutivo'));
         }
     }
@@ -293,6 +293,10 @@ function reindexConsecutivos(string $invoice_id, TypeServiceEnum $typeService)
 
 function openFileJson($path_json)
 {
+    if (!is_string($path_json) || empty($path_json)) {
+        return null;
+    }
+
     $disk = Constants::DISK_FILES;
     $storage = Storage::disk($disk);
     $jsonContents = null;
@@ -307,13 +311,13 @@ function openFileJson($path_json)
 function getModelByTableName($tableName)
 {
     $path = app_path('Models');
-    if (! File::exists($path)) {
+    if (!File::exists($path)) {
         return null;
     }
 
     foreach (File::allFiles($path) as $file) {
         $relativePath = $file->getRelativePathname();
-        $class = 'App\\Models\\'.str_replace(['/', '.php'], ['\\', ''], $relativePath);
+        $class = 'App\\Models\\' . str_replace(['/', '.php'], ['\\', ''], $relativePath);
 
         if (class_exists($class) && is_subclass_of($class, \Illuminate\Database\Eloquent\Model::class)) {
             if ((new $class)->getTable() === $tableName) {
