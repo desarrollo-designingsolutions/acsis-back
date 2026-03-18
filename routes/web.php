@@ -15,13 +15,13 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
 
-    $user = User::first();
+    // $user = User::first();
 
-    // Enviar notificación
-    $user->notify(new BellNotification([
-        'title' => 'hola',
-        'subtitle' => 'chao',
-    ]));
+    // // Enviar notificación
+    // $user->notify(new BellNotification([
+    //     'title' => 'hola',
+    //     'subtitle' => 'chao',
+    // ]));
 
     return view('welcome');
 });
